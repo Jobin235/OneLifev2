@@ -8,3 +8,4 @@ coverage/
 .DS_Store
 tools/wiki-ingest/out/
 apps/mobile/dist/
+.shots/
