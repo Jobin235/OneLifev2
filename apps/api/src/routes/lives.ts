@@ -1,0 +1,254 @@
+import type { FastifyInstance } from 'fastify';
+import { z } from 'zod';
+import { ChoiceRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
+import { InvariantViolation } from '@lineage/simulation';
+import { NEUTRAL_INDICATORS } from '@lineage/world';
+import type { LifeRepository, WorldRepository } from '../store/repository.js';
+
+const NewLifeBody = z.object({
+  firstName: z.string().min(1).max(40).optional(),
+  lastName: z.string().min(1).max(40).optional(),
+  sex: z.enum(['male', 'female']).optional(),
+  countryId: z.string().min(1),
+  cityId: z.string().min(1).optional(),
+  upbringing: z.enum(['rough', 'getting_by', 'comfortable']),
+});
+
+const ChooseBody = z.object({ choiceId: z.string().min(1) });
+const ActBody = z.object({ activityId: z.string().min(1) });
+const SucceedBody = z.object({ heirNpcId: z.string().nullable() });
+
+/**
+ * Everything here is server-authoritative (spec §82). No route accepts an age, a
+ * balance, or an outcome from the client — only the *intent*, which the engine
+ * then validates against state the client cannot reach.
+ */
+export const registerLifeRoutes = (
+  app: FastifyInstance,
+  game: Game,
+  lives: LifeRepository,
+  world: WorldRepository,
+): void => {
+  const userOf = (request: { headers: Record<string, unknown> }): string => {
+    // Placeholder for real auth (spec §77). Swapped for a verified token subject.
+    const header = request.headers['x-user-id'];
+    return typeof header === 'string' && header.length > 0 ? header : 'dev-user';
+  };
+
+  const currentWorld = async () => (await world.latest())?.indicators ?? NEUTRAL_INDICATORS;
+
+  const load = async (userId: string, lifeId: string) => {
+    const state = await lives.get(userId, lifeId);
+    if (!state) {
+      const error = new Error('life not found') as Error & { statusCode?: number };
+      error.statusCode = 404;
+      throw error;
+    }
+    return state;
+  };
+
+  app.get('/content/countries', async () => ({
+    countries: game.content.countries.map((c) => ({
+      id: c.id,
+      name: c.name,
+      flag: c.flag,
+      region: c.region,
+      changes: c.changes,
+      cities: c.cities.map((city) => ({ id: city.id, name: city.name, blurb: city.blurb })),
+    })),
+  }));
+
+  app.get('/lives', async (request) => ({ lives: await lives.listForUser(userOf(request)) }));
+
+  app.post('/lives', async (request, reply) => {
+    const body = NewLifeBody.parse(request.body);
+    const userId = userOf(request);
+
+    if (!game.content.countriesById.has(body.countryId)) {
+      return reply.code(400).send({ error: 'unknown country' });
+    }
+
+    // The seed is generated here, never accepted from the client — otherwise a
+    // player could reroll their starting conditions until they liked them.
+    const seed = `${userId}:${Date.now()}:${Math.random().toString(36).slice(2)}`;
+    const state = game.newLife({ ...body, seed });
+    await lives.create(userId, state);
+
+    return reply.code(201).send({ life: lifeView(state, game.content) });
+  });
+
+  app.get('/lives/:lifeId', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return { life: lifeView(state, game.content) };
+  });
+
+  /**
+   * Idempotent (spec §84): a client that retries after a dropped connection gets
+   * the first result back rather than ageing the character twice.
+   */
+  app.post('/lives/:lifeId/age-up', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const userId = userOf(request);
+    const idempotencyKey = request.headers['idempotency-key'];
+
+    if (typeof idempotencyKey === 'string') {
+      const cached = await lives.recallResult<unknown>(`${userId}:${lifeId}:${idempotencyKey}`);
+      if (cached) return reply.header('idempotent-replay', 'true').send(cached);
+    }
+
+    const indicators = await currentWorld();
+
+    try {
+      const payload = await lives.withLock(userId, lifeId, (state) => {
+        const result = game.ageUp(state, indicators);
+        return {
+          life: lifeView(result.state, game.content),
+          recap: result.recap,
+          died: result.died,
+        };
+      });
+
+      if (typeof idempotencyKey === 'string') {
+        await lives.rememberResult(`${userId}:${lifeId}:${idempotencyKey}`, payload);
+      }
+      return payload;
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.post('/lives/:lifeId/events/:eventId/choose', async (request, reply) => {
+    const { lifeId, eventId } = request.params as { lifeId: string; eventId: string };
+    const { choiceId } = ChooseBody.parse(request.body);
+    const userId = userOf(request);
+    const indicators = await currentWorld();
+
+    try {
+      const payload = await lives.withLock(userId, lifeId, (state) => {
+        game.choose(state, eventId, choiceId, indicators);
+        return { life: lifeView(state, game.content) };
+      });
+      return payload;
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.post('/lives/:lifeId/dismiss', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        game.dismiss(state);
+        return { life: lifeView(state, game.content) };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.post('/lives/:lifeId/act', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { activityId } = ActBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        game.act(state, activityId);
+        return { life: lifeView(state, game.content) };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.post('/lives/:lifeId/succeed', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { heirNpcId } = SucceedBody.parse(request.body);
+    const userId = userOf(request);
+    const previous = await load(userId, lifeId);
+
+    try {
+      const seed = `${userId}:${Date.now()}:${Math.random().toString(36).slice(2)}`;
+      const next = game.succeed(previous, heirNpcId, seed);
+      await lives.create(userId, next);
+      return reply.code(201).send({ life: lifeView(next, game.content) });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/people', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return peopleView(await load(userOf(request), lifeId));
+  });
+
+  app.get('/lives/:lifeId/people/:npcId', async (request, reply) => {
+    const { lifeId, npcId } = request.params as { lifeId: string; npcId: string };
+    const state = await load(userOf(request), lifeId);
+    const person = personView(state, npcId, game.config);
+    if (!person) return reply.code(404).send({ error: 'no such person in this life' });
+    return person;
+  });
+
+  app.get('/lives/:lifeId/actions', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return { actions: actionsView(state, game.content), remaining: state.actionsRemaining };
+  });
+
+  app.get('/lives/:lifeId/money', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return moneyView(await load(userOf(request), lifeId), game.config);
+  });
+
+  app.get('/lives/:lifeId/work', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const view = workView(await load(userOf(request), lifeId), game.content);
+    if (!view) return reply.code(404).send({ error: 'not working' });
+    return view;
+  });
+
+  app.get('/lives/:lifeId/school', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const view = schoolView(await load(userOf(request), lifeId));
+    if (!view) return reply.code(404).send({ error: 'not enrolled' });
+    return view;
+  });
+
+  app.get('/lives/:lifeId/more', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return moreView(await load(userOf(request), lifeId));
+  });
+
+  app.get('/lives/:lifeId/legacy', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    if (!state.legacy) return reply.code(404).send({ error: 'this life is not over' });
+    return state.legacy;
+  });
+
+  app.get('/lives/:lifeId/history', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return {
+      entries: state.history.map((e) => ({ atAge: e.atAge, icon: e.icon, line: e.line })),
+    };
+  });
+};
+
+const statusFor = (error: unknown): number => {
+  if (error instanceof ChoiceRejected) return 409;
+  if (error instanceof InvariantViolation) return 500;
+  const withCode = error as { statusCode?: number; message?: string };
+  if (typeof withCode.statusCode === 'number') return withCode.statusCode;
+  if (withCode.message?.includes('not found')) return 404;
+  if (withCode.message?.includes('open decision') || withCode.message?.includes('dead')) return 409;
+  return 400;
+};
+
+const messageFor = (error: unknown): string => {
+  if (error instanceof InvariantViolation) {
+    // Never leak internal invariant detail to a client (§183).
+    return 'That could not be completed. Nothing was changed.';
+  }
+  return error instanceof Error ? error.message : 'Something went wrong.';
+};

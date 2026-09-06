@@ -108,6 +108,7 @@ export const jobLine = (state: LifeState): string => {
   const job = state.career.current;
   if (job) return `${job.title}, ${job.employerName}`;
   if (state.education.current) return state.education.current.institutionName;
-  if (state.character.age < 16) return 'At school';
+  if (state.character.age < 5) return 'Too young for any of this';
+  if (state.character.age < 18) return 'At school';
   return 'Not working';
 };

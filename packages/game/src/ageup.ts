@@ -24,6 +24,7 @@ import {
 import { advanceNpcYear } from '@lineage/npc-engine';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred } from './deferred.js';
+import { quietYearLine } from '@lineage/narrative';
 import { buildLegacy } from './death.js';
 import { advanceSchooling, graduationLine } from './schooling.js';
 
@@ -275,12 +276,15 @@ export const pushHistory = (
  * what is coming — so the next Age Up has a pull.
  */
 const buildRecap = (state: LifeState, before: LifeState, ofAge: number): AgeUpResult['recap'] => {
-  const lines = before.currentYearEntryIds
+  const recorded = before.currentYearEntryIds
     .map((id) => before.history.find((e) => e.id === id))
     .filter((entry): entry is NonNullable<typeof entry> => !!entry)
     .sort((a, b) => b.significance - a.significance)
     .slice(0, 4)
     .map((entry) => ({ icon: entry.icon, text: entry.line }));
+
+  // The reward screen always says something. See quietYearLine.
+  const lines = recorded.length > 0 ? recorded : [quietYearLine(ofAge)];
 
   const statDeltas = Object.entries(state.character.stats)
     .map(([key, value]) => ({

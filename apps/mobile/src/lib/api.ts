@@ -1,0 +1,256 @@
+/**
+ * The only place the client talks to the server.
+ *
+ * The client holds no game rules: it sends an intent, and renders whatever comes
+ * back. Nothing here computes a stat, a balance, or an outcome (spec §80-81).
+ */
+
+const BASE = import.meta.env.VITE_API_URL ?? '/api';
+
+/** Stands in for a real auth token until Apple/Google sign-in is wired up (§77). */
+const userId = (): string => {
+  const stored = localStorage.getItem('onelife.user');
+  if (stored) return stored;
+  const fresh = `guest_${Math.random().toString(36).slice(2, 10)}`;
+  localStorage.setItem('onelife.user', fresh);
+  return fresh;
+};
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public readonly status: number,
+  ) {
+    super(message);
+  }
+}
+
+const request = async <T>(
+  path: string,
+  init: RequestInit & { idempotencyKey?: string } = {},
+): Promise<T> => {
+  const headers: Record<string, string> = {
+    'x-user-id': userId(),
+    ...((init.headers as Record<string, string>) ?? {}),
+  };
+  // Only declare a JSON body when there actually is one — several endpoints
+  // (age-up, dismiss) take no body at all.
+  if (init.body !== undefined) headers['content-type'] = 'application/json';
+  if (init.idempotencyKey) headers['idempotency-key'] = init.idempotencyKey;
+
+  let response: Response;
+  try {
+    response = await fetch(`${BASE}${path}`, { ...init, headers });
+  } catch {
+    // Spec §116: the client may be offline. It never guesses what would have
+    // happened — it says so and stops.
+    throw new ApiError('You are offline. Your life is safe on the server.', 0);
+  }
+
+  if (!response.ok) {
+    const body = (await response.json().catch(() => ({}))) as { error?: string };
+    throw new ApiError(body.error ?? 'Something went wrong.', response.status);
+  }
+  return (await response.json()) as T;
+};
+
+/* ---------------- Types the server actually returns ---------------- */
+
+export interface StatBar {
+  key: string;
+  icon: string;
+  label: string;
+  value: number;
+  color: string;
+}
+
+export interface EventChoice {
+  id: string;
+  label: string;
+  note?: string;
+}
+
+export interface ActiveEvent {
+  id: string;
+  definitionId: string;
+  card: { icon: string; label: string; tint: string; color: string };
+  title: string;
+  body: string;
+  choices: EventChoice[];
+  outcomeText: string | null;
+  deltas: Array<{ text: string; positive: boolean }>;
+}
+
+export interface ActionCard {
+  id: string;
+  icon: string;
+  label: string;
+  note: string;
+  group: string;
+  tint: string;
+  noteColor: string;
+  available: boolean;
+  blockedReason: string | null;
+}
+
+export interface LifeView {
+  lifeId: string;
+  generation: number;
+  dateLine: string;
+  name: string;
+  age: number;
+  avatarEmoji: string;
+  subtitle: string;
+  stats: StatBar[];
+  jobLine: string;
+  money: string;
+  gameState: string;
+  activeEvent: ActiveEvent | null;
+  resolvedEvent: ActiveEvent | null;
+  earlierThisYear: Array<{ icon: string; text: string }>;
+  quickActions: ActionCard[];
+  actionsRemaining: number;
+  actionsPerYear: number;
+  canAgeUp: boolean;
+  ageUpLabel: string;
+  incarcerated: boolean;
+  legacy: Legacy | null;
+}
+
+export interface Recap {
+  age: number;
+  lines: Array<{ icon: string; text: string }>;
+  statDeltas: Array<{ key: string; icon: string; label: string; value: number; delta: number }>;
+  foreshadow: string | null;
+}
+
+export interface Legacy {
+  name: string;
+  bornYear: number;
+  diedYear: number;
+  age: number;
+  cityName: string;
+  epitaph: string;
+  chapters: Array<{ fromAge: number; toAge: number; title: string; body: string }>;
+  howPeopleSawYou: Array<{ who: string; verdict: string; line: string; score: number }>;
+  whatYouChanged: Array<{ icon: string; line: string }>;
+  numbers: Array<{ value: string; label: string }>;
+  comparison: string;
+  whatYouLeft: string[];
+  heirs: Array<{ npcId: string | null; name: string; emoji: string; pitch: string }>;
+}
+
+export interface PersonRow {
+  npcId: string;
+  name: string;
+  emoji: string;
+  subtitle: string;
+  band: 'close' | 'around' | 'drifted';
+  scoreIcon: string;
+  score: number;
+  scoreColor: string;
+}
+
+export interface PeopleView {
+  total: number;
+  headline: string;
+  close: PersonRow[];
+  around: PersonRow[];
+  driftedCount: number;
+  driftedLine: string | null;
+  drifted: PersonRow[];
+}
+
+export interface PersonView {
+  npcId: string;
+  name: string;
+  emoji: string;
+  header: string;
+  descriptor: string;
+  meters: Array<{ icon: string; label: string; value: number }>;
+  memories: Array<{ atAge: number; line: string }>;
+  onTheirMind: string | null;
+  stats: Array<{ icon: string; label: string; value: number }>;
+}
+
+export interface MoneyView {
+  netWorth: string;
+  monthlyNet: string;
+  debtCount: number;
+  owned: Array<{ emoji: string; label: string; detail: string }>;
+  monthly: Array<{ icon: string; label: string; amount: string; positive: boolean }>;
+  note: string | null;
+}
+
+export interface MoreView {
+  tiles: Array<{ id: string; icon: string; label: string; value: string }>;
+  storySoFar: string;
+  family: { name: string; line: string };
+}
+
+export interface CountryOption {
+  id: string;
+  name: string;
+  flag: string;
+  region: string;
+  changes: Array<{ icon: string; text: string }>;
+  cities: Array<{ id: string; name: string; blurb: string }>;
+}
+
+/* ---------------- Calls ---------------- */
+
+export const api = {
+  countries: () => request<{ countries: CountryOption[] }>('/content/countries'),
+
+  listLives: () =>
+    request<{ lives: Array<{ id: string; name: string; age: number; alive: boolean }> }>('/lives'),
+
+  newLife: (body: {
+    firstName?: string;
+    lastName?: string;
+    countryId: string;
+    cityId?: string;
+    upbringing: 'rough' | 'getting_by' | 'comfortable';
+  }) => request<{ life: LifeView }>('/lives', { method: 'POST', body: JSON.stringify(body) }),
+
+  life: (lifeId: string) => request<{ life: LifeView }>(`/lives/${lifeId}`),
+
+  /**
+   * Carries an idempotency key so a retry after a dropped connection cannot age
+   * the character twice (spec §84, §117).
+   */
+  ageUp: (lifeId: string, idempotencyKey: string) =>
+    request<{ life: LifeView; recap: Recap; died: boolean }>(`/lives/${lifeId}/age-up`, {
+      method: 'POST',
+      idempotencyKey,
+    }),
+
+  choose: (lifeId: string, eventId: string, choiceId: string) =>
+    request<{ life: LifeView }>(`/lives/${lifeId}/events/${eventId}/choose`, {
+      method: 'POST',
+      body: JSON.stringify({ choiceId }),
+    }),
+
+  dismiss: (lifeId: string) =>
+    request<{ life: LifeView }>(`/lives/${lifeId}/dismiss`, { method: 'POST' }),
+
+  act: (lifeId: string, activityId: string) =>
+    request<{ life: LifeView }>(`/lives/${lifeId}/act`, {
+      method: 'POST',
+      body: JSON.stringify({ activityId }),
+    }),
+
+  succeed: (lifeId: string, heirNpcId: string | null) =>
+    request<{ life: LifeView }>(`/lives/${lifeId}/succeed`, {
+      method: 'POST',
+      body: JSON.stringify({ heirNpcId }),
+    }),
+
+  people: (lifeId: string) => request<PeopleView>(`/lives/${lifeId}/people`),
+  person: (lifeId: string, npcId: string) => request<PersonView>(`/lives/${lifeId}/people/${npcId}`),
+  actions: (lifeId: string) =>
+    request<{ actions: ActionCard[]; remaining: number }>(`/lives/${lifeId}/actions`),
+  money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
+  more: (lifeId: string) => request<MoreView>(`/lives/${lifeId}/more`),
+  legacy: (lifeId: string) => request<Legacy>(`/lives/${lifeId}/legacy`),
+};

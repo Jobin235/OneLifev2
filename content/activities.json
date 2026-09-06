@@ -1,27 +1,509 @@
 [
-  { "id": "get_in_shape", "icon": "🏋️", "label": "Get in shape", "group": "body_and_head", "minAge": 12, "cost": 0, "costsAction": true, "note": "💪 +8 · ❤️ +4", "effects": [{ "op": "stat", "stat": "fitness", "delta": 8 }, { "op": "stat", "stat": "health", "delta": 4 }] },
-  { "id": "see_a_doctor", "icon": "🩺", "label": "See a doctor", "group": "body_and_head", "minAge": 5, "cost": 18000, "costsAction": true, "note": "$180", "effects": [{ "op": "stat", "stat": "health", "delta": 3 }] },
-  { "id": "take_a_course", "icon": "📚", "label": "Take a course", "group": "body_and_head", "minAge": 16, "cost": 90000, "costsAction": true, "note": "🧠 +6 · $900", "effects": [{ "op": "stat", "stat": "smarts", "delta": 6 }, { "op": "hidden", "attr": "discipline", "delta": 2 }] },
-  { "id": "sort_your_head_out", "icon": "🧘", "label": "Sort your head out", "group": "body_and_head", "minAge": 14, "cost": 12000, "costsAction": true, "note": "😊 +9", "effects": [{ "op": "stat", "stat": "happiness", "delta": 9 }, { "op": "stat", "stat": "health", "delta": 2 }] },
-  { "id": "go_out", "icon": "🎉", "label": "Go out", "group": "fun_and_trouble", "minAge": 15, "cost": 9000, "costsAction": true, "note": "😊 +6 · ❤️ −2", "effects": [{ "op": "stat", "stat": "happiness", "delta": 6 }, { "op": "stat", "stat": "health", "delta": -2 }, { "op": "stat", "stat": "charm", "delta": 2 }] },
-  { "id": "travel", "icon": "✈️", "label": "Travel", "group": "fun_and_trouble", "minAge": 16, "cost": 110000, "costsAction": true, "note": "from $1,100", "effects": [{ "op": "stat", "stat": "happiness", "delta": 11 }, { "op": "stat", "stat": "smarts", "delta": 2 }] },
-  { "id": "gamble", "icon": "🎲", "label": "Gamble", "group": "fun_and_trouble", "minAge": 18, "cost": 20000, "costsAction": true, "note": "who knows", "effects": [] },
-  { "id": "something_illegal", "icon": "🕶️", "label": "Something illegal", "group": "fun_and_trouble", "minAge": 14, "cost": 0, "costsAction": true, "note": "risky", "effects": [] },
-  { "id": "look_at_houses", "icon": "🏠", "label": "Look at houses", "group": "bigger_moves", "minAge": 20, "cost": 0, "costsAction": true, "note": "", "effects": [] },
-  { "id": "start_something", "icon": "🚀", "label": "Start something of your own", "group": "bigger_moves", "minAge": 18, "cost": 1400000, "costsAction": true, "note": "$14,000", "effects": [] },
-  { "id": "get_involved_locally", "icon": "🏛️", "label": "Get involved locally", "group": "bigger_moves", "minAge": 18, "cost": 0, "costsAction": true, "note": "slow burn", "effects": [{ "op": "flag", "key": "in_politics", "value": true }, { "op": "stat", "stat": "charm", "delta": 3 }] },
-  { "id": "work_harder", "icon": "🔥", "label": "Work harder", "group": "work", "minAge": 16, "cost": 0, "costsAction": true, "note": "performance up, health down", "effects": [{ "op": "career_performance", "delta": 9 }, { "op": "stat", "stat": "health", "delta": -3 }, { "op": "stat", "stat": "happiness", "delta": -2 }] },
-  { "id": "ask_for_a_raise", "icon": "💬", "label": "Ask for a raise", "group": "work", "minAge": 16, "cost": 0, "costsAction": true, "note": "", "effects": [] },
-  { "id": "get_closer_to_boss", "icon": "🤝", "label": "Get closer to your manager", "group": "work", "minAge": 16, "cost": 0, "costsAction": true, "note": "", "effects": [{ "op": "relationship", "target": "boss", "dimension": "closeness", "delta": 9 }, { "op": "relationship", "target": "boss", "dimension": "trust", "delta": 6 }] },
-  { "id": "look_elsewhere", "icon": "🚪", "label": "Look elsewhere", "group": "work", "minAge": 16, "cost": 0, "costsAction": true, "note": "", "effects": [] },
-  { "id": "study", "icon": "📖", "label": "Study", "group": "school", "minAge": 6, "maxAge": 30, "cost": 0, "costsAction": true, "note": "🧠 +5", "effects": [{ "op": "stat", "stat": "smarts", "delta": 5 }, { "op": "hidden", "attr": "discipline", "delta": 3 }] },
-  { "id": "party", "icon": "🍻", "label": "Party", "group": "school", "minAge": 16, "maxAge": 30, "cost": 6000, "costsAction": true, "note": "😊 +7 · 🧠 −2", "effects": [{ "op": "stat", "stat": "happiness", "delta": 7 }, { "op": "stat", "stat": "smarts", "delta": -2 }, { "op": "stat", "stat": "charm", "delta": 3 }] },
-  { "id": "campus_job", "icon": "💼", "label": "Campus job", "group": "school", "minAge": 17, "maxAge": 30, "cost": 0, "costsAction": true, "note": "+$740 / mo", "effects": [{ "op": "money", "delta": 888000 }, { "op": "stat", "stat": "happiness", "delta": -2 }] },
-  { "id": "research_lab", "icon": "🔬", "label": "Research lab", "group": "school", "minAge": 18, "maxAge": 30, "cost": 0, "costsAction": true, "note": "opens doors", "effects": [{ "op": "stat", "stat": "smarts", "delta": 7 }, { "op": "flag", "key": "did_research", "value": true }] },
-  { "id": "join_a_club", "icon": "🎸", "label": "Join a club", "group": "school", "minAge": 8, "maxAge": 22, "cost": 0, "costsAction": true, "note": "😊 +5", "effects": [{ "op": "stat", "stat": "happiness", "delta": 5 }, { "op": "stat", "stat": "charm", "delta": 3 }] },
-  { "id": "call_your_mom", "icon": "👵", "label": "Call your mom", "group": "relationship", "minAge": 12, "cost": 0, "costsAction": false, "note": "free", "effects": [{ "op": "relationship", "target": "mother", "dimension": "closeness", "delta": 7 }, { "op": "relationship", "target": "mother", "dimension": "affection", "delta": 5 }, { "op": "stat", "stat": "happiness", "delta": 2 }] },
-  { "id": "spend_evening_in", "icon": "🍜", "label": "Just spend the evening in", "group": "relationship", "minAge": 16, "cost": 0, "costsAction": false, "note": "free", "effects": [{ "op": "relationship", "target": "partner", "dimension": "closeness", "delta": 6 }, { "op": "relationship", "target": "partner", "dimension": "romance", "delta": 4 }] },
-  { "id": "trip_together", "icon": "✈️", "label": "Take a trip together", "group": "relationship", "minAge": 18, "cost": 240000, "costsAction": true, "note": "$2,400", "effects": [{ "op": "relationship", "target": "partner", "dimension": "romance", "delta": 12 }, { "op": "relationship", "target": "partner", "dimension": "affection", "delta": 9 }, { "op": "stat", "stat": "happiness", "delta": 8 }] },
-  { "id": "lift", "icon": "🏋️", "label": "Lift", "group": "body_and_head", "minAge": 14, "cost": 0, "costsAction": true, "note": "💪 +14", "effects": [{ "op": "stat", "stat": "fitness", "delta": 14 }] },
-  { "id": "finish_your_degree", "icon": "📚", "label": "Finish your degree", "group": "school", "minAge": 18, "cost": 0, "costsAction": true, "note": "🧠 +11", "effects": [{ "op": "stat", "stat": "smarts", "delta": 11 }] }
+  {
+    "id": "get_in_shape",
+    "icon": "🏋️",
+    "label": "Get in shape",
+    "group": "body_and_head",
+    "minAge": 12,
+    "cost": 0,
+    "costsAction": true,
+    "note": "💪 +8 · ❤️ +4",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "fitness",
+        "delta": 8
+      },
+      {
+        "op": "stat",
+        "stat": "health",
+        "delta": 4
+      }
+    ]
+  },
+  {
+    "id": "see_a_doctor",
+    "icon": "🩺",
+    "label": "See a doctor",
+    "group": "body_and_head",
+    "minAge": 5,
+    "cost": 18000,
+    "costsAction": true,
+    "note": "$180",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "health",
+        "delta": 3
+      }
+    ]
+  },
+  {
+    "id": "take_a_course",
+    "icon": "📚",
+    "label": "Take a course",
+    "group": "body_and_head",
+    "minAge": 16,
+    "cost": 90000,
+    "costsAction": true,
+    "note": "🧠 +6 · $900",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "smarts",
+        "delta": 6
+      },
+      {
+        "op": "hidden",
+        "attr": "discipline",
+        "delta": 2
+      }
+    ]
+  },
+  {
+    "id": "sort_your_head_out",
+    "icon": "🧘",
+    "label": "Sort your head out",
+    "group": "body_and_head",
+    "minAge": 14,
+    "cost": 12000,
+    "costsAction": true,
+    "note": "😊 +9",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 9
+      },
+      {
+        "op": "stat",
+        "stat": "health",
+        "delta": 2
+      }
+    ]
+  },
+  {
+    "id": "go_out",
+    "icon": "🎉",
+    "label": "Go out",
+    "group": "fun_and_trouble",
+    "minAge": 15,
+    "cost": 9000,
+    "costsAction": true,
+    "note": "😊 +6 · ❤️ −2",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 6
+      },
+      {
+        "op": "stat",
+        "stat": "health",
+        "delta": -2
+      },
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 2
+      }
+    ]
+  },
+  {
+    "id": "travel",
+    "icon": "✈️",
+    "label": "Travel",
+    "group": "fun_and_trouble",
+    "minAge": 16,
+    "cost": 110000,
+    "costsAction": true,
+    "note": "from $1,100",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 11
+      },
+      {
+        "op": "stat",
+        "stat": "smarts",
+        "delta": 2
+      }
+    ]
+  },
+  {
+    "id": "gamble",
+    "icon": "🎲",
+    "label": "Gamble",
+    "group": "fun_and_trouble",
+    "minAge": 18,
+    "cost": 20000,
+    "costsAction": true,
+    "note": "who knows",
+    "effects": []
+  },
+  {
+    "id": "something_illegal",
+    "icon": "🕶️",
+    "label": "Something illegal",
+    "group": "fun_and_trouble",
+    "minAge": 14,
+    "cost": 0,
+    "costsAction": true,
+    "note": "risky",
+    "effects": []
+  },
+  {
+    "id": "look_at_houses",
+    "icon": "🏠",
+    "label": "Look at houses",
+    "group": "bigger_moves",
+    "minAge": 20,
+    "cost": 0,
+    "costsAction": true,
+    "note": "",
+    "effects": []
+  },
+  {
+    "id": "start_something",
+    "icon": "🚀",
+    "label": "Start something of your own",
+    "group": "bigger_moves",
+    "minAge": 18,
+    "cost": 1400000,
+    "costsAction": true,
+    "note": "$14,000",
+    "effects": []
+  },
+  {
+    "id": "get_involved_locally",
+    "icon": "🏛️",
+    "label": "Get involved locally",
+    "group": "bigger_moves",
+    "minAge": 18,
+    "cost": 0,
+    "costsAction": true,
+    "note": "slow burn",
+    "effects": [
+      {
+        "op": "flag",
+        "key": "in_politics",
+        "value": true
+      },
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 3
+      }
+    ]
+  },
+  {
+    "id": "work_harder",
+    "icon": "🔥",
+    "label": "Work harder",
+    "group": "work",
+    "minAge": 16,
+    "cost": 0,
+    "costsAction": true,
+    "note": "performance up, health down",
+    "effects": [
+      {
+        "op": "career_performance",
+        "delta": 9
+      },
+      {
+        "op": "stat",
+        "stat": "health",
+        "delta": -3
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": -2
+      }
+    ]
+  },
+  {
+    "id": "ask_for_a_raise",
+    "icon": "💬",
+    "label": "Ask for a raise",
+    "group": "work",
+    "minAge": 16,
+    "cost": 0,
+    "costsAction": true,
+    "note": "",
+    "effects": []
+  },
+  {
+    "id": "get_closer_to_boss",
+    "icon": "🤝",
+    "label": "Get closer to your manager",
+    "group": "work",
+    "minAge": 16,
+    "cost": 0,
+    "costsAction": true,
+    "note": "",
+    "effects": [
+      {
+        "op": "relationship",
+        "target": "boss",
+        "dimension": "closeness",
+        "delta": 9
+      },
+      {
+        "op": "relationship",
+        "target": "boss",
+        "dimension": "trust",
+        "delta": 6
+      }
+    ]
+  },
+  {
+    "id": "look_elsewhere",
+    "icon": "🚪",
+    "label": "Look elsewhere",
+    "group": "work",
+    "minAge": 16,
+    "cost": 0,
+    "costsAction": true,
+    "note": "",
+    "effects": []
+  },
+  {
+    "id": "study",
+    "icon": "📖",
+    "label": "Study",
+    "group": "school",
+    "minAge": 6,
+    "maxAge": 30,
+    "cost": 0,
+    "costsAction": true,
+    "note": "🧠 +5",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "smarts",
+        "delta": 5
+      },
+      {
+        "op": "hidden",
+        "attr": "discipline",
+        "delta": 3
+      }
+    ]
+  },
+  {
+    "id": "party",
+    "icon": "🍻",
+    "label": "Party",
+    "group": "school",
+    "minAge": 16,
+    "maxAge": 30,
+    "cost": 6000,
+    "costsAction": true,
+    "note": "😊 +7 · 🧠 −2",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 7
+      },
+      {
+        "op": "stat",
+        "stat": "smarts",
+        "delta": -2
+      },
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 3
+      }
+    ]
+  },
+  {
+    "id": "campus_job",
+    "icon": "💼",
+    "label": "Campus job",
+    "group": "school",
+    "minAge": 17,
+    "maxAge": 30,
+    "cost": 0,
+    "costsAction": true,
+    "note": "+$740 / mo",
+    "effects": [
+      {
+        "op": "money",
+        "delta": 888000
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": -2
+      }
+    ]
+  },
+  {
+    "id": "research_lab",
+    "icon": "🔬",
+    "label": "Research lab",
+    "group": "school",
+    "minAge": 18,
+    "maxAge": 30,
+    "cost": 0,
+    "costsAction": true,
+    "note": "opens doors",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "smarts",
+        "delta": 7
+      },
+      {
+        "op": "flag",
+        "key": "did_research",
+        "value": true
+      }
+    ]
+  },
+  {
+    "id": "join_a_club",
+    "icon": "🎸",
+    "label": "Join a club",
+    "group": "school",
+    "minAge": 8,
+    "maxAge": 22,
+    "cost": 0,
+    "costsAction": true,
+    "note": "😊 +5",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 5
+      },
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 3
+      }
+    ]
+  },
+  {
+    "id": "call_your_mom",
+    "icon": "👵",
+    "label": "Call your mom",
+    "group": "relationship",
+    "minAge": 12,
+    "cost": 0,
+    "costsAction": false,
+    "note": "free",
+    "effects": [
+      {
+        "op": "relationship",
+        "target": "mother",
+        "dimension": "closeness",
+        "delta": 7
+      },
+      {
+        "op": "relationship",
+        "target": "mother",
+        "dimension": "affection",
+        "delta": 5
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 2
+      }
+    ]
+  },
+  {
+    "id": "spend_evening_in",
+    "icon": "🍜",
+    "label": "Just spend the evening in",
+    "group": "relationship",
+    "minAge": 16,
+    "cost": 0,
+    "costsAction": false,
+    "note": "free",
+    "effects": [
+      {
+        "op": "relationship",
+        "target": "partner",
+        "dimension": "closeness",
+        "delta": 6
+      },
+      {
+        "op": "relationship",
+        "target": "partner",
+        "dimension": "romance",
+        "delta": 4
+      }
+    ]
+  },
+  {
+    "id": "trip_together",
+    "icon": "✈️",
+    "label": "Take a trip together",
+    "group": "relationship",
+    "minAge": 18,
+    "cost": 240000,
+    "costsAction": true,
+    "note": "$2,400",
+    "effects": [
+      {
+        "op": "relationship",
+        "target": "partner",
+        "dimension": "romance",
+        "delta": 12
+      },
+      {
+        "op": "relationship",
+        "target": "partner",
+        "dimension": "affection",
+        "delta": 9
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 8
+      }
+    ]
+  },
+  {
+    "id": "lift",
+    "icon": "🏋️",
+    "label": "Lift",
+    "group": "body_and_head",
+    "minAge": 14,
+    "cost": 0,
+    "costsAction": true,
+    "note": "💪 +14",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "fitness",
+        "delta": 14
+      }
+    ],
+    "onlyWhen": "incarcerated"
+  },
+  {
+    "id": "finish_your_degree",
+    "icon": "📚",
+    "label": "Finish your degree",
+    "group": "school",
+    "minAge": 18,
+    "cost": 0,
+    "costsAction": true,
+    "note": "🧠 +11",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "smarts",
+        "delta": 11
+      }
+    ],
+    "onlyWhen": "incarcerated"
+  }
 ]

@@ -2,19 +2,24 @@
   "name": "lineage",
   "private": true,
   "version": "0.1.0",
-  "description": "Lineage — a life simulator. Server-authoritative simulation, data-driven event engine, mobile client.",
+  "description": "Lineage \u2014 a life simulator. Server-authoritative simulation, data-driven event engine, mobile client.",
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "pnpm -r --filter './packages/*' run build",
     "typecheck": "tsc -b --pretty",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:api": "pnpm --filter @lineage/api dev",
+    "dev:mobile": "pnpm --filter @lineage/mobile dev"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
+    "playwright": "1.49.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }

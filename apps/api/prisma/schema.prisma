@@ -1,0 +1,130 @@
+// Production persistence (spec §61, §72).
+//
+// A hybrid, deliberately: the life aggregate is stored as one validated JSON
+// document because it is only ever read and written whole, while the things we
+// need to query, index or analyse across players get real columns.
+// Modelling every game object as a table would produce forty joins to render
+// one screen, which spec §62 warns against.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  // Apple / Google subject, or an email identity. Never a client-supplied id.
+  provider  String
+  subject   String
+  email     String?
+  createdAt DateTime @default(now())
+
+  lives     Life[]
+
+  @@unique([provider, subject])
+}
+
+model Life {
+  id             String   @id
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // The whole aggregate, validated against LifeStateSchema on read and write.
+  state          Json
+
+  // Projected from `state` on every save, so lists and analytics never parse JSON.
+  characterName  String
+  age            Int
+  alive          Boolean
+  generation     Int
+  lineageId      String
+  countryId      String
+  netWorthCents  BigInt
+  schemaVersion  Int
+  contentVersion Int
+
+  // Optimistic concurrency: a write asserts the version it read (spec §85).
+  version        Int      @default(0)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  events         EventInstanceRecord[]
+  history        LifeHistoryRecord[]
+
+  @@index([userId, alive])
+  @@index([lineageId])
+}
+
+// Spec §64: the definition is content; the instance is what happened to someone.
+// Kept relational so live-ops can answer "how do players actually answer this?"
+model EventInstanceRecord {
+  id                String   @id
+  lifeId            String
+  life              Life     @relation(fields: [lifeId], references: [id], onDelete: Cascade)
+
+  definitionId      String
+  // Spec §65: old records stay interpretable after a definition changes.
+  definitionVersion Int
+
+  atAge             Int
+  chosenChoiceId    String?
+  outcomeId         String?
+  participants      Json
+  createdAt         DateTime @default(now())
+  resolvedAt        DateTime?
+
+  @@index([lifeId, atAge])
+  @@index([definitionId, definitionVersion])
+}
+
+// Append-only (spec §70). The spine of the recap, the person screens and the
+// legacy chapters.
+model LifeHistoryRecord {
+  id           String   @id
+  lifeId       String
+  life         Life     @relation(fields: [lifeId], references: [id], onDelete: Cascade)
+
+  atAge        Int
+  category     String
+  icon         String
+  line         String
+  significance Int
+  npcIds       String[]
+  createdAt    DateTime @default(now())
+
+  @@index([lifeId, atAge])
+}
+
+model WorldSnapshotRecord {
+  id           String   @id
+  tick         Int      @unique
+  capturedAt   DateTime
+  indicators   Json
+  activeEvents Json
+
+  @@index([capturedAt])
+}
+
+// Spec §84. A retried request returns its first result instead of applying twice.
+model IdempotencyRecord {
+  key       String   @id
+  userId    String
+  result    Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
+// Spec §120: gradual rollout, without a deploy.
+model FeatureFlag {
+  key         String  @id
+  enabled     Boolean @default(false)
+  rolloutPct  Int     @default(0)
+  description String?
+}

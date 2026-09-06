@@ -193,6 +193,12 @@ export const actionsView = (state: LifeState, content: ContentPack) => {
   return content.activities
     .filter((a) => state.character.age >= a.minAge && state.character.age <= a.maxAge)
     .filter((a) => {
+      const inside = state.character.record.incarceration !== null;
+      if (a.onlyWhen === 'incarcerated') return inside;
+      // Design 5D: inside, almost nothing else is on offer.
+      if (inside) return a.group === 'body_and_head' || a.id === 'study';
+      if (a.onlyWhen === 'enrolled') return state.education.current !== null;
+      if (a.onlyWhen === 'employed') return state.career.current !== null;
       if (a.group === 'work') return state.career.current !== null;
       if (a.group === 'school') return state.education.current !== null;
       if (a.group === 'relationship') {

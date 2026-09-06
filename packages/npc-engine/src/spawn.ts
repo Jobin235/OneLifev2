@@ -11,6 +11,7 @@ import type {
 import { clampStat } from '@lineage/shared-types';
 import { makeId, type Rng } from '@lineage/simulation';
 import type { NpcTemplate } from './templates.js';
+import { pickAvatar } from './avatars.js';
 
 const DEFAULT_DIMENSIONS: RelationshipDimensions = {
   affection: 45,
@@ -66,7 +67,7 @@ export const spawnNpc = (input: SpawnInput): { npc: Npc; relationship: Relations
     sex,
     age,
     alive: true,
-    avatarEmoji: rng.pick(template.emojiPool),
+    avatarEmoji: pickAvatar(template.emojiPool, sex, rng),
     tier: template.detailed ? 'tier2' : 'tier3',
     descriptor: rng.pick(template.descriptors),
     traitIds,

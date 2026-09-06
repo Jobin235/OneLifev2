@@ -71,8 +71,19 @@ const emptyDimensions = (overrides: Partial<RelationshipDimensions> = {}): Relat
   ...overrides,
 });
 
-const pickName = (country: CountryPack, sex: Sex, rng: Rng): string =>
-  rng.pick(sex === 'female' ? country.firstNames.female : country.firstNames.male);
+/**
+ * Two people in the same house should not share a first name. Families in this
+ * game are small enough that a collision reads as a bug rather than a coincidence.
+ */
+const pickName = (country: CountryPack, sex: Sex, rng: Rng, taken: Set<string> = new Set()): string => {
+  const pool = sex === 'female' ? country.firstNames.female : country.firstNames.male;
+  const free = pool.filter((name) => !taken.has(name));
+  const chosen = rng.pick(free.length > 0 ? free : pool);
+  taken.add(chosen);
+  return chosen;
+};
+
+const childAvatar = (sex: Sex): string => (sex === 'female' ? '👧' : '👦');
 
 /**
  * A newborn, their family, and nothing else. The character starts at age 0 —
@@ -82,9 +93,11 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
   const rng = makeRng(input.seed, 'creation');
   const profile = UPBRINGING_PROFILE[input.upbringing];
 
+  const usedNames = new Set<string>();
   const sex: Sex = input.sex ?? (rng.chance(0.5) ? 'male' : 'female');
   const lastName = input.lastName ?? input.lineage?.familyName ?? rng.pick(input.country.surnames);
-  const firstName = input.firstName ?? pickName(input.country, sex, rng);
+  const firstName = input.firstName ?? pickName(input.country, sex, rng, usedNames);
+  usedNames.add(firstName);
   const city = input.country.cities.find((c) => c.id === input.cityId) ?? rng.pick(input.country.cities);
 
   const stats: Stats = {
@@ -159,7 +172,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
   ): Npc => {
     const npc: Npc = {
       id: makeId('npc', input.seed, kind, npcs.length),
-      firstName: pickName(input.country, npcSex, rng),
+      firstName: pickName(input.country, npcSex, rng, usedNames),
       lastName,
       sex: npcSex,
       age,
@@ -220,12 +233,13 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     Math.min(4, input.country.family.typicalSiblings + profile.siblingBias + rng.int(-1, 1)),
   );
   for (let i = 0; i < siblingCount; i++) {
+    const siblingSex: Sex = rng.chance(0.5) ? 'male' : 'female';
     addFamily(
       'sibling',
-      rng.chance(0.5) ? 'male' : 'female',
+      siblingSex,
       rng.int(-6, 6) || 2,
       'Grew up in the same house, remembers it differently',
-      rng.chance(0.5) ? '👦' : '👧',
+      childAvatar(siblingSex),
       { affection: 62, trust: 60, closeness: 66, conflict: rng.int(5, 30) },
       null,
     );

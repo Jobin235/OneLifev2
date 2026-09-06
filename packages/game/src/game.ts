@@ -15,6 +15,7 @@ import {
   refreshDerived,
 } from '@lineage/simulation';
 import {
+  InvalidChoiceError,
   applyEffects,
   resolveChoice,
   type ConditionContext,
@@ -204,6 +205,9 @@ export class Game {
     } catch (error) {
       // Never leave half-applied state behind.
       Object.assign(state, before);
+      // The application layer speaks one rejection type, so transports above it
+      // do not need to know that the event engine has its own.
+      if (error instanceof InvalidChoiceError) throw new ChoiceRejected(error.message);
       throw error;
     }
   }

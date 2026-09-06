@@ -1,0 +1,13 @@
+{
+  "appId": "com.onelife.game",
+  "appName": "One Life",
+  "webDir": "dist",
+  "backgroundColor": "#FFF9F2",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#FFF9F2"
+  },
+  "android": {
+    "backgroundColor": "#FFF9F2"
+  }
+}

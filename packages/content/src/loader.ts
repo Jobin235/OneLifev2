@@ -31,7 +31,12 @@ export const ActivitySchema = z.object({
   cost: z.number().int().min(0).default(0),
   /** Whether it consumes one of the year's actions. */
   costsAction: z.boolean().default(true),
-  requires: z.unknown().optional(),
+  /**
+   * The situation this belongs to. Design 5D gives prison its own things to do
+   * with three years; those must not leak into an ordinary Tuesday, where "Lift"
+   * would simply be a better "Get in shape".
+   */
+  onlyWhen: z.enum(['anywhere', 'incarcerated', 'enrolled', 'employed']).default('anywhere'),
   /** Deterministic effects, using the same effect vocabulary as events. */
   effects: z.array(z.unknown()).default([]),
   /** The "💪 +8 · ❤️ +4" note shown on the tile. */

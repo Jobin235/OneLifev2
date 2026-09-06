@@ -65,3 +65,29 @@ const chapterTitle = (fromAge: number, _toAge: number, entries: HistoryEntry[]):
 
 const quietChapter = (fromAge: number, toAge: number): string =>
   `Nothing much is recorded between ${fromAge} and ${toAge}. Most years are like that.`;
+
+/**
+ * Design 1B is the reward screen, and it always has something on it. Most years
+ * of a childhood contain no events at all, so rather than show an empty card we
+ * say what that year was actually like — which is truer to the fiction than a
+ * blank panel, and keeps the Age Up rhythm from feeling hollow.
+ */
+export const quietYearLine = (age: number): { icon: string; text: string } => {
+  if (age <= 1) return { icon: '👶', text: 'You slept, ate, and were carried everywhere.' };
+  if (age <= 4) {
+    return { icon: '🧸', text: 'Nothing much happened. You will not remember any of it.' };
+  }
+  if (age <= 12) {
+    return { icon: '🎒', text: 'School, and the same walk home. It was fine.' };
+  }
+  if (age <= 17) {
+    return { icon: '🎧', text: 'A year of not much, spent mostly in your own head.' };
+  }
+  if (age <= 29) {
+    return { icon: '🌤️', text: 'A quiet year. You worked, and the months went by.' };
+  }
+  if (age <= 59) {
+    return { icon: '📆', text: 'An ordinary year. Most of them are.' };
+  }
+  return { icon: '🪴', text: 'A slow year, and you did not mind.' };
+};

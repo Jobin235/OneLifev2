@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "dist" },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../../packages/shared-types" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/simulation" },
+    { "path": "../../packages/world" },
+    { "path": "../../packages/content" },
+    { "path": "../../packages/game" }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@lineage/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/server.js",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "node --watch --experimental-strip-types src/server.ts",
+    "start": "node dist/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@fastify/rate-limit": "^10.2.1",
+    "@lineage/config": "workspace:*",
+    "@lineage/content": "workspace:*",
+    "@lineage/game": "workspace:*",
+    "@lineage/shared-types": "workspace:*",
+    "@lineage/simulation": "workspace:*",
+    "@lineage/world": "workspace:*",
+    "fastify": "^5.2.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
