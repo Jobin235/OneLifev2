@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Game } from '../game.js';
+import { createGame } from '../node.js';
 import { peopleView } from '../views.js';
 
 /**
@@ -11,7 +11,7 @@ import { peopleView } from '../views.js';
  * generated.
  */
 
-const game = new Game();
+const game = createGame();
 
 /** "{friend}" leaking into a card is the most visible content bug there is. */
 const TOKEN = /\{[a-zA-Z0-9_.]+\}/;

@@ -1,5 +1,5 @@
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
-import { loadContent, type Activity, type ContentPack } from '@lineage/content';
+import type { Activity, ContentPack } from '@lineage/content';
 import type {
   CountryPack,
   LifeState,
@@ -26,7 +26,12 @@ import { advanceYear, applyDeferred, pushHistory, type AgeUpResult } from './age
 import { toAncestor } from './death.js';
 
 export interface GameOptions {
-  content?: ContentPack;
+  /**
+   * Required. The composition root does not reach for a filesystem — the server
+   * reads content from disk and hands it in, the client bundles it and hands it
+   * in. That is what lets the same engine run in both places.
+   */
+  content: ContentPack;
   config?: GameConfig;
 }
 
@@ -55,8 +60,8 @@ export class Game {
   readonly content: ContentPack;
   readonly config: GameConfig;
 
-  constructor(options: GameOptions = {}) {
-    this.content = options.content ?? loadContent();
+  constructor(options: GameOptions) {
+    this.content = options.content;
     this.config = options.config ?? DEFAULT_CONFIG;
   }
 

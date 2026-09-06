@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { checkInvariants, netWorth } from '@lineage/simulation';
 import type { LifeState } from '@lineage/shared-types';
-import { Game } from '../game.js';
+import { createGame } from '../node.js';
 import { lifeView, moneyView, peopleView } from '../views.js';
 
 /**
@@ -14,7 +14,7 @@ import { lifeView, moneyView, peopleView } from '../views.js';
  * a story at all, and that replaying it reproduces it exactly.
  */
 
-const game = new Game();
+const game = createGame();
 
 /** Plays a whole life, always taking the choice at `choiceIndex` when asked. */
 const playLife = (seed: string, choiceIndex = 0) => {

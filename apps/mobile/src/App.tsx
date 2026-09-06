@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ApiError, api } from './lib/api';
+import { ApiError, httpApi } from './lib/api';
+import { createLocalApi } from './lib/localGame';
 import type {
   ActionCard,
   CountryOption,
@@ -10,6 +11,7 @@ import type {
   PersonView,
   Recap,
 } from './lib/api';
+import { safeStorage } from './lib/storage';
 import { Tabs, type Tab } from './components/Tabs';
 import { LifeScreen } from './screens/LifeScreen';
 import { RecapScreen } from './screens/RecapScreen';
@@ -22,6 +24,13 @@ import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
 const LAST_LIFE = 'onelife.lastLife';
+
+/**
+ * VITE_LOCAL builds run the simulation in the browser, so the game can be played
+ * from a link with nothing installed. Everything else talks to the server, which
+ * is the only version that is actually authoritative.
+ */
+const api = import.meta.env.VITE_LOCAL === '1' ? createLocalApi() : httpApi;
 
 export const App = () => {
   const [countries, setCountries] = useState<CountryOption[] | null>(null);
@@ -67,28 +76,33 @@ export const App = () => {
   useEffect(() => {
     void (async () => {
       try {
-        const [{ countries: list }, { lives }] = await Promise.all([
-          api.countries(),
-          api.listLives(),
-        ]);
+        const { countries: list } = await api.countries();
         setCountries(list);
+      } catch {
+        setCountries([]);
+        show('Cannot reach the server. Your life is safe — try again in a moment.');
+        return;
+      }
 
-        const remembered = localStorage.getItem(LAST_LIFE);
+      // Resuming is a convenience. If it fails, the player still gets a new life
+      // rather than a blank screen.
+      try {
+        const { lives } = await api.listLives();
+        const remembered = safeStorage.get(LAST_LIFE);
         const resume = lives.find((l) => l.id === remembered) ?? lives.find((l) => l.alive);
         if (resume) {
           const { life: loaded } = await api.life(resume.id);
           setLife(loaded);
         }
       } catch {
-        setCountries([]);
-        show('Cannot reach the server. Your life is safe — try again in a moment.');
+        /* Nothing to resume. */
       }
     })();
   }, [show]);
 
   const setLifeAndRemember = useCallback((next: LifeView) => {
     setLife(next);
-    localStorage.setItem(LAST_LIFE, next.lifeId);
+    safeStorage.set(LAST_LIFE, next.lifeId);
   }, []);
 
   // Refresh whichever tab is open whenever the life changes underneath it.

@@ -9,3 +9,4 @@ coverage/
 tools/wiki-ingest/out/
 apps/mobile/dist/
 .shots/
+apps/mobile/standalone/

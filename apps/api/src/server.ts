@@ -2,7 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import { DEFAULT_CONFIG } from '@lineage/config';
-import { Game } from '@lineage/game';
+import { createGame } from '@lineage/game/node';
 import { registerLifeRoutes } from './routes/lives.js';
 import { InMemoryLifeRepository, InMemoryWorldRepository } from './store/memory.js';
 import { WorldEngine } from './world-worker.js';
@@ -42,7 +42,7 @@ export const buildServer = async () => {
     keyGenerator: (request) => String(request.headers['x-user-id'] ?? request.ip),
   });
 
-  const game = new Game();
+  const game = createGame();
   const lives = new InMemoryLifeRepository();
   const worldRepo = new InMemoryWorldRepository();
 

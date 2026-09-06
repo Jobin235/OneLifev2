@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { InvariantViolation, checkInvariants } from '@lineage/simulation';
-import { ChoiceRejected, Game } from '../game.js';
+import { createGame } from '../node.js';
+import { ChoiceRejected } from '../game.js';
 
 /** Spec §123–124: the properties that must hold for every life, not just one. */
 
-const game = new Game();
+const game = createGame();
 const newLife = (seed: string) =>
   game.newLife({ seed, countryId: 'us', cityId: 'portland', upbringing: 'getting_by' });
 

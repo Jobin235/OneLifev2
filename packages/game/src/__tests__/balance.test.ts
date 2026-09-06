@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { netWorth } from '@lineage/simulation';
 import { tickWorld, NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeState, WorldIndicators } from '@lineage/shared-types';
-import { Game } from '../game.js';
+import { createGame } from '../node.js';
 
 /**
  * Balance regression guards.
@@ -13,7 +13,7 @@ import { Game } from '../game.js';
  * marry. Wide bands, so tuning stays possible; hard enough to catch a spiral.
  */
 
-const game = new Game();
+const game = createGame();
 
 interface Sample {
   deathAges: number[];

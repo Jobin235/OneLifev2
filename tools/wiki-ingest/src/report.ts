@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { loadContent } from '@lineage/content';
+import { loadContent } from '@lineage/content/node';
 import type { ReferenceIndex } from './extract.ts';
 import { SOURCES } from './sources.ts';
 

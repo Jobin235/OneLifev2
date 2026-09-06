@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { checkInvariants } from '@lineage/simulation';
 import type { LifeState } from '@lineage/shared-types';
-import { Game } from '../game.js';
+import { createGame } from '../node.js';
 
 /**
  * Design 4C. A life ending is a chapter break, not a fail state — the player is
  * offered somebody who was in the last life and carries on as them.
  */
 
-const game = new Game();
+const game = createGame();
 
 /** Plays until death, taking the choice most likely to produce children. */
 const liveUntilDeath = (seed: string): LifeState => {

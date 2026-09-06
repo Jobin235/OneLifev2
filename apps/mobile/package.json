@@ -9,11 +9,18 @@
     "preview": "vite preview",
     "cap:sync": "npm run build && cap sync",
     "cap:ios": "cap open ios",
-    "cap:android": "cap open android"
+    "cap:android": "cap open android",
+    "build:local": "VITE_LOCAL=1 vite build",
+    "build:standalone": "VITE_LOCAL=1 vite build && node scripts/build-standalone.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "@lineage/config": "workspace:*",
+    "@lineage/content": "workspace:*",
+    "@lineage/game": "workspace:*",
+    "@lineage/shared-types": "workspace:*",
+    "@lineage/world": "workspace:*"
   },
   "devDependencies": {
     "@capacitor/android": "^6.2.0",

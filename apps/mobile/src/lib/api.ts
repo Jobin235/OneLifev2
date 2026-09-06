@@ -5,14 +5,16 @@
  * back. Nothing here computes a stat, a balance, or an outcome (spec §80-81).
  */
 
+import { safeStorage } from './storage';
+
 const BASE = import.meta.env.VITE_API_URL ?? '/api';
 
 /** Stands in for a real auth token until Apple/Google sign-in is wired up (§77). */
 const userId = (): string => {
-  const stored = localStorage.getItem('onelife.user');
+  const stored = safeStorage.get('onelife.user');
   if (stored) return stored;
   const fresh = `guest_${Math.random().toString(36).slice(2, 10)}`;
-  localStorage.setItem('onelife.user', fresh);
+  safeStorage.set('onelife.user', fresh);
   return fresh;
 };
 
@@ -199,7 +201,36 @@ export interface CountryOption {
 
 /* ---------------- Calls ---------------- */
 
-export const api = {
+/**
+ * The surface the app talks to. Implemented twice: by `httpApi` against the
+ * authoritative server, and by `createLocalApi` which runs the same engine in
+ * the browser so the game can be played from a link with no backend.
+ */
+export interface Api {
+  countries(): Promise<{ countries: CountryOption[] }>;
+  listLives(): Promise<{ lives: Array<{ id: string; name: string; age: number; alive: boolean }> }>;
+  newLife(body: {
+    firstName?: string;
+    lastName?: string;
+    countryId: string;
+    cityId?: string;
+    upbringing: 'rough' | 'getting_by' | 'comfortable';
+  }): Promise<{ life: LifeView }>;
+  life(lifeId: string): Promise<{ life: LifeView }>;
+  ageUp(lifeId: string, idempotencyKey: string): Promise<{ life: LifeView; recap: Recap; died: boolean }>;
+  choose(lifeId: string, eventId: string, choiceId: string): Promise<{ life: LifeView }>;
+  dismiss(lifeId: string): Promise<{ life: LifeView }>;
+  act(lifeId: string, activityId: string): Promise<{ life: LifeView }>;
+  succeed(lifeId: string, heirNpcId: string | null): Promise<{ life: LifeView }>;
+  people(lifeId: string): Promise<PeopleView>;
+  person(lifeId: string, npcId: string): Promise<PersonView>;
+  actions(lifeId: string): Promise<{ actions: ActionCard[]; remaining: number }>;
+  money(lifeId: string): Promise<MoneyView>;
+  more(lifeId: string): Promise<MoreView>;
+  legacy(lifeId: string): Promise<Legacy>;
+}
+
+export const httpApi: Api = {
   countries: () => request<{ countries: CountryOption[] }>('/content/countries'),
 
   listLives: () =>
