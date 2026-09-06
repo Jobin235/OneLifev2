@@ -204,6 +204,16 @@ importers:
         specifier: workspace:*
         version: link:../shared-types
 
+  tools/wiki-ingest:
+    dependencies:
+      '@lineage/content':
+        specifier: workspace:*
+        version: link:../../packages/content
+    devDependencies:
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@22.20.1)
+
 packages:
 
   '@babel/code-frame@7.29.7':

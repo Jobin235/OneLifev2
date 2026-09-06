@@ -1,0 +1,19 @@
+{
+  "name": "@lineage/wiki-ingest",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Builds a structural reference index from public game wikis. Never emits shippable content.",
+  "scripts": {
+    "fetch": "node --experimental-strip-types src/fetch.ts",
+    "extract": "node --experimental-strip-types src/extract.ts",
+    "report": "node --experimental-strip-types src/report.ts",
+    "all": "npm run fetch && npm run extract && npm run report"
+  },
+  "dependencies": {
+    "@lineage/content": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
