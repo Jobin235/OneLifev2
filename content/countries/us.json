@@ -1,0 +1,38 @@
+[
+  {
+    "id": "us",
+    "name": "United States",
+    "flag": "🇺🇸",
+    "region": "Americas",
+    "populationWeight": 4.2,
+    "cities": [
+      { "id": "portland", "name": "Portland", "costOfLiving": 1.15, "crime": 42, "opportunity": 62, "blurb": "Rain, small houses, and everybody knows a guy with a van." },
+      { "id": "salem", "name": "Salem", "costOfLiving": 0.88, "crime": 34, "opportunity": 44, "blurb": "Quieter, cheaper, an hour from anything." },
+      { "id": "denver", "name": "Denver", "costOfLiving": 1.22, "crime": 45, "opportunity": 71, "blurb": "Where the better job always seems to be." },
+      { "id": "detroit", "name": "Detroit", "costOfLiving": 0.72, "crime": 68, "opportunity": 48, "blurb": "Cheap to live in, hard to leave." },
+      { "id": "new_york", "name": "New York", "costOfLiving": 1.95, "crime": 51, "opportunity": 92, "blurb": "Everything is here and none of it is affordable." },
+      { "id": "san_francisco", "name": "San Francisco", "costOfLiving": 2.1, "crime": 55, "opportunity": 88, "blurb": "Money, fog, and a rent cheque that ruins you." },
+      { "id": "atlanta", "name": "Atlanta", "costOfLiving": 0.98, "crime": 54, "opportunity": 69, "blurb": "Hot, growing, and full of people who just arrived." },
+      { "id": "boise", "name": "Boise", "costOfLiving": 0.92, "crime": 26, "opportunity": 47, "blurb": "Safe and slow, until everyone moved here." }
+    ],
+    "changes": [
+      { "icon": "🏥", "text": "Get sick without insurance and it can take the house." },
+      { "icon": "🎓", "text": "University is expensive. The debt follows you into your thirties." },
+      { "icon": "💼", "text": "Software, logistics, healthcare, retail. Big ladders, long falls." },
+      { "icon": "👨‍👩‍👧", "text": "Your parents expect you to move out and figure it out." },
+      { "icon": "⚖️", "text": "A conviction here closes more doors than almost anywhere else." }
+    ],
+    "healthcare": { "patientShare": 0.35, "screening": "basic", "unavailable": [] },
+    "education": { "universityCost": 3100000, "entranceExam": false, "compulsoryUntilAge": 16 },
+    "law": { "drinkingAge": 21, "marriageAge": 18, "enforcement": 62, "convictionCost": 1.6, "militaryService": false },
+    "family": { "expectationToHouseParents": 25, "typicalSiblings": 1 },
+    "extraTrackIds": [],
+    "wageMultiplier": 1.0,
+    "nationalSportTrackId": "sport_football_us",
+    "surnames": ["Rivera", "Webb", "Okafor", "Chen", "Moreau", "Alvarez", "Nolan", "Bishop", "Ward", "Castellanos", "Hoffman", "Reyes", "Doyle", "Ferris", "Mbeki", "Kowalski", "Nakamura", "Strand", "Abara", "Quinn"],
+    "firstNames": {
+      "male": ["Alex", "Marcus", "Daniel", "Theo", "Elias", "Jonah", "Reuben", "Caleb", "Nathan", "Isaac", "Omar", "Victor", "Miles", "Dean", "Silas"],
+      "female": ["Emma", "Maya", "Rosa", "Priya", "Jules", "Nadia", "Clara", "Iris", "Tessa", "Noor", "Adaeze", "Simone", "Wren", "Lena", "Bea"]
+    }
+  }
+]

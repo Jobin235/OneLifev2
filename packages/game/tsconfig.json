@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "rootDir": "src", "outDir": "dist" },
+  "include": ["src/**/*"],
+  "references": [{"path":"../shared-types"},{"path":"../config"},{"path":"../simulation"},{"path":"../event-engine"},{"path":"../npc-engine"},{"path":"../world"},{"path":"../narrative"},{"path":"../content"}]
+}

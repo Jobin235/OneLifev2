@@ -1,0 +1,832 @@
+[
+  {
+    "id": "career_relocation_offer",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "💼",
+      "label": "WORK",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 78,
+    "minAge": 24,
+    "maxAge": 55,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.performance",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "field": "career.years_in_role",
+          "op": ">=",
+          "value": 2
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "boss",
+        "kinds": [
+          "boss"
+        ],
+        "pick": "closest",
+        "required": false
+      },
+      {
+        "role": "partner",
+        "kinds": [
+          "partner",
+          "spouse"
+        ],
+        "pick": "closest",
+        "required": false
+      }
+    ],
+    "title": "They offered you the senior role — in Denver.",
+    "body": "More money, better title, 1,200 miles away. It is the kind of offer you are supposed to take.",
+    "choices": [
+      {
+        "id": "take_it",
+        "label": "Take it and move",
+        "outcomes": [
+          {
+            "id": "moved_with_partner_strain",
+            "when": {
+              "field": "has.partner",
+              "op": "==",
+              "value": true
+            },
+            "text": "You took it. {partner} said {partner.they}'d visit. {partner.they} visited twice.",
+            "historyLine": "You moved to Denver for work.",
+            "effects": [
+              {
+                "op": "salary",
+                "delta": 2200000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -14
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": -22
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "closeness",
+                "delta": -18
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "you_left_for_a_job",
+                "line": "You moved to Denver. {partner.they} stayed.",
+                "weight": 85
+              },
+              {
+                "op": "move_city",
+                "cityId": "denver"
+              },
+              {
+                "op": "flag",
+                "key": "took_denver",
+                "value": true
+              }
+            ]
+          },
+          {
+            "id": "moved_alone",
+            "text": "You took it. Nobody had to be talked around, which was its own kind of quiet.",
+            "historyLine": "You moved to Denver for work.",
+            "effects": [
+              {
+                "op": "salary",
+                "delta": 2200000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "move_city",
+                "cityId": "denver"
+              },
+              {
+                "op": "flag",
+                "key": "took_denver",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "negotiate",
+        "label": "Ask to do it from here",
+        "outcomes": [
+          {
+            "id": "pushed_through",
+            "chance": 0.6,
+            "text": "{boss} pushed it through, grudgingly. {boss.they} mentions it whenever {boss.they} needs a favour.",
+            "historyLine": "You got the senior role without moving.",
+            "effects": [
+              {
+                "op": "salary",
+                "delta": 1400000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 4
+              },
+              {
+                "op": "remember",
+                "target": "boss",
+                "factKey": "owes_you_nothing_and_knows_it",
+                "line": "{boss} bent a rule for you once and has never forgotten it.",
+                "weight": 70
+              },
+              {
+                "op": "relationship",
+                "target": "boss",
+                "dimension": "dependence",
+                "delta": 18
+              }
+            ]
+          },
+          {
+            "id": "refused",
+            "text": "They said no, and the role went to somebody who said yes.",
+            "historyLine": "You asked to stay and lost the role.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              },
+              {
+                "op": "career_performance",
+                "delta": -5
+              },
+              {
+                "op": "schedule",
+                "eventId": "career_passed_over_again",
+                "inYears": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "turn_it_down",
+        "label": "Turn it down",
+        "outcomes": [
+          {
+            "id": "unspoken",
+            "when": {
+              "field": "has.partner",
+              "op": "==",
+              "value": true
+            },
+            "text": "You said no and didn't explain why. {partner} still doesn't know {partner.they} was the reason.",
+            "historyLine": "You turned down Denver. You never said why.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 2
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "you_gave_something_up_for_them",
+                "line": "You turned down Denver because of {partner.them}. {partner.they} never found out.",
+                "weight": 90
+              },
+              {
+                "op": "flag",
+                "key": "refused_denver_silently",
+                "value": true
+              },
+              {
+                "op": "schedule",
+                "eventId": "relationship_the_thing_you_never_said",
+                "inYears": 8
+              }
+            ]
+          },
+          {
+            "id": "plain_no",
+            "text": "You said no. It was easy, and then for about a year it wasn't.",
+            "historyLine": "You turned down the Denver role.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 2
+              },
+              {
+                "op": "career_performance",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 8,
+    "maxPerLife": 1,
+    "tags": [
+      "ladder"
+    ]
+  },
+  {
+    "id": "career_passed_over_again",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "💼",
+      "label": "WORK",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 72,
+    "minAge": 22,
+    "conditions": {
+      "field": "career.employed",
+      "op": "==",
+      "value": true
+    },
+    "participants": [
+      {
+        "role": "rival",
+        "kinds": [
+          "colleague"
+        ],
+        "pick": "most_conflict",
+        "required": false
+      }
+    ],
+    "title": "It went to someone else again.",
+    "body": "Second time. Nobody said anything to you about it, which is how you know it was discussed.",
+    "choices": [
+      {
+        "id": "ask_why",
+        "label": "Ask why, directly",
+        "outcomes": [
+          {
+            "id": "honest_answer",
+            "text": "You got an honest answer and wished you hadn't. It was fixable, and you had been told before.",
+            "historyLine": "You found out why you keep getting passed over.",
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 12
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "Start looking",
+        "outcomes": [
+          {
+            "id": "left",
+            "text": "You left within the year. The new place was different in exactly the ways that mattered and identical in the rest.",
+            "historyLine": "You left the job that kept passing you over.",
+            "effects": [
+              {
+                "op": "career_leave",
+                "reason": "quit"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "schedule",
+                "eventId": "career_new_job_offer",
+                "inYears": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "swallow_it",
+        "label": "Say nothing",
+        "outcomes": [
+          {
+            "id": "swallowed",
+            "text": "You said nothing and were extremely normal about it for six months.",
+            "historyLine": "You got passed over and said nothing.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -11
+              },
+              {
+                "op": "habit_add",
+                "habitId": "overwork"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 2,
+    "scheduledOnly": false
+  },
+  {
+    "id": "career_new_job_offer",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "📞",
+      "label": "A CALL",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 66,
+    "minAge": 20,
+    "maxAge": 62,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": false
+        },
+        {
+          "field": "education.stage",
+          "op": "!=",
+          "value": "none"
+        }
+      ]
+    },
+    "participants": [],
+    "title": "A recruiter found you.",
+    "body": "Very keen, very vague. There is a job at the end of it if you want to spend three weeks proving you deserve it.",
+    "choices": [
+      {
+        "id": "go_for_it",
+        "label": "Go through the whole process",
+        "outcomes": [
+          {
+            "id": "got_it",
+            "chance": 0.65,
+            "text": "You got it. The first six months were fine and then it was just a job again.",
+            "historyLine": "You started a new job.",
+            "effects": [
+              {
+                "op": "career_join",
+                "trackId": "auto",
+                "rungIndex": 1
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 7
+              }
+            ]
+          },
+          {
+            "id": "rejected",
+            "text": "Four rounds, and then an email with your name spelled wrong.",
+            "historyLine": "You got rejected after four rounds.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "take_anything",
+        "label": "Take whatever is going",
+        "outcomes": [
+          {
+            "id": "took_it",
+            "text": "You took the first thing with a payslip. It paid the rent, which was the entire brief.",
+            "historyLine": "You took a job you didn't want.",
+            "effects": [
+              {
+                "op": "career_join",
+                "trackId": "retail",
+                "rungIndex": 0
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "Wait for something better",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 800000
+        },
+        "outcomes": [
+          {
+            "id": "waited",
+            "text": "You waited. It cost you eight months of savings and you would do it again.",
+            "historyLine": "You held out for a better job.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -800000
+              },
+              {
+                "op": "schedule",
+                "eventId": "career_new_job_offer",
+                "inYears": 1
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 2,
+    "maxPerLife": 6
+  },
+  {
+    "id": "career_layoffs",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "📉",
+      "label": "WORK",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
+    "weightClass": "major",
+    "priority": 80,
+    "minAge": 20,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "world.employment",
+          "op": "<",
+          "value": 96
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "boss",
+        "kinds": [
+          "boss"
+        ],
+        "pick": "closest",
+        "required": false
+      }
+    ],
+    "title": "Your company is letting people go.",
+    "body": "Nobody has said your name. Everyone is being extremely normal in a way that is not normal at all.",
+    "choices": [
+      {
+        "id": "keep_head_down",
+        "label": "Keep your head down",
+        "outcomes": [
+          {
+            "id": "survived",
+            "chance": 0.6,
+            "when": {
+              "field": "career.performance",
+              "op": ">=",
+              "value": 55
+            },
+            "text": "You survived it. Half the people you ate lunch with did not.",
+            "historyLine": "You survived the layoffs.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -7
+              },
+              {
+                "op": "career_performance",
+                "delta": 3
+              }
+            ]
+          },
+          {
+            "id": "cut",
+            "text": "You were in the third round. They gave you a box and a login you could no longer use.",
+            "historyLine": "You were laid off.",
+            "effects": [
+              {
+                "op": "career_leave",
+                "reason": "laid_off"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -16
+              },
+              {
+                "op": "schedule",
+                "eventId": "career_new_job_offer",
+                "inYears": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "volunteer",
+        "label": "Volunteer to go, for the package",
+        "outcomes": [
+          {
+            "id": "took_package",
+            "text": "You took the package and three months off. It was the best summer you'd had since school.",
+            "historyLine": "You took redundancy on purpose.",
+            "effects": [
+              {
+                "op": "career_leave",
+                "reason": "laid_off"
+              },
+              {
+                "op": "money",
+                "delta": 1800000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 9
+              },
+              {
+                "op": "schedule",
+                "eventId": "career_new_job_offer",
+                "inYears": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "defend_team",
+        "label": "Argue for your team instead",
+        "outcomes": [
+          {
+            "id": "saved_one",
+            "chance": 0.5,
+            "text": "You saved one of them. {boss} noticed, and so did everyone whose name you didn't say.",
+            "historyLine": "You argued to save someone else's job.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 6
+              },
+              {
+                "op": "relationship",
+                "target": "boss",
+                "dimension": "respect",
+                "delta": 14
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              }
+            ]
+          },
+          {
+            "id": "saved_nobody",
+            "text": "You saved nobody and put your own name in the room. They remembered that later.",
+            "historyLine": "You spoke up during the layoffs, and it cost you.",
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": -8
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 7,
+    "maxPerLife": 3
+  },
+  {
+    "id": "career_promotion",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "📈",
+      "label": "WORK",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 74,
+    "minAge": 20,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.performance",
+          "op": ">=",
+          "value": 68
+        },
+        {
+          "field": "career.years_in_role",
+          "op": ">=",
+          "value": 2
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "rival",
+        "kinds": [
+          "colleague"
+        ],
+        "pick": "most_conflict",
+        "required": false
+      }
+    ],
+    "title": "The next rung is yours if you want it.",
+    "body": "More of everything, including the parts you don't like. {rival} has been told too.",
+    "choices": [
+      {
+        "id": "accept",
+        "label": "Take it",
+        "outcomes": [
+          {
+            "id": "took",
+            "text": "You took it. The title fit within about four months.",
+            "historyLine": "You were promoted.",
+            "effects": [
+              {
+                "op": "career_promote"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 9
+              },
+              {
+                "op": "relationship",
+                "target": "rival",
+                "dimension": "conflict",
+                "delta": 20
+              },
+              {
+                "op": "remember",
+                "target": "rival",
+                "factKey": "wants_your_job",
+                "line": "You got the role {rival} was up for.",
+                "weight": 75
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "negotiate_hard",
+        "label": "Take it, and ask for more",
+        "outcomes": [
+          {
+            "id": "got_more",
+            "chance": 0.45,
+            "when": {
+              "field": "stats.charm",
+              "op": ">=",
+              "value": 60
+            },
+            "text": "They found the money. It turns out it was always there.",
+            "historyLine": "You negotiated the promotion up.",
+            "effects": [
+              {
+                "op": "career_promote"
+              },
+              {
+                "op": "salary",
+                "multiplier": 1.12
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 4
+              }
+            ]
+          },
+          {
+            "id": "got_it_anyway",
+            "text": "They said no to the money and yes to the title. You took it and were quietly annoyed for a year.",
+            "historyLine": "You were promoted, without the raise you asked for.",
+            "effects": [
+              {
+                "op": "career_promote"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "Say no to it",
+        "outcomes": [
+          {
+            "id": "declined",
+            "text": "You said no. Nobody asks twice, and you knew that when you said it.",
+            "historyLine": "You turned down a promotion.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "career_performance",
+                "delta": -6
+              },
+              {
+                "op": "flag",
+                "key": "declined_promotion",
+                "value": true
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 3,
+    "maxPerLife": 8
+  }
+]

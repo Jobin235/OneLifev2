@@ -1,0 +1,831 @@
+[
+  {
+    "id": "child_first_friend",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🧸",
+      "label": "SCHOOL",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 60,
+    "minAge": 5,
+    "maxAge": 9,
+    "conditions": {
+      "field": "count.friends",
+      "op": "<",
+      "value": 2
+    },
+    "participants": [],
+    "title": "Someone sat next to you at lunch.",
+    "body": "They didn't ask. They just put their tray down and started talking about a dog you have never met.",
+    "choices": [
+      {
+        "id": "talk_back",
+        "label": "Talk back",
+        "outcomes": [
+          {
+            "id": "friend",
+            "text": "That was it. You were friends from then, for reasons neither of you could ever explain.",
+            "historyLine": "You made your first real friend.",
+            "effects": [
+              {
+                "op": "spawn_npc",
+                "role": "friend",
+                "templateId": "school_friend"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 10
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "eat_quietly",
+        "label": "Eat quietly",
+        "outcomes": [
+          {
+            "id": "alone",
+            "text": "They moved on by Thursday. You got very good at eating quickly.",
+            "historyLine": "You kept to yourself at school.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -4
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 3
+              },
+              {
+                "op": "trait_add",
+                "traitId": "introverted"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 3,
+    "maxPerLife": 1
+  },
+  {
+    "id": "child_found_something",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🔍",
+      "label": "YOU'RE {age}",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 55,
+    "minAge": 6,
+    "maxAge": 12,
+    "participants": [],
+    "title": "You found $40 on the pavement.",
+    "body": "No wallet, no name, nobody nearby. It is more money than you have ever held.",
+    "choices": [
+      {
+        "id": "keep",
+        "label": "Keep it",
+        "outcomes": [
+          {
+            "id": "kept",
+            "text": "You kept it and felt strange about it for about a week, and then not at all.",
+            "historyLine": "You found $40 and kept it.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 4000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hand_in",
+        "label": "Hand it in",
+        "outcomes": [
+          {
+            "id": "handed",
+            "text": "You handed it to a shopkeeper who said 'good lad' and definitely kept it.",
+            "historyLine": "You handed in $40 you found.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              },
+              {
+                "op": "trait_add",
+                "traitId": "honest"
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "give_to_mom",
+        "label": "Give it to your mom",
+        "requires": {
+          "field": "rel.mother.alive",
+          "op": "==",
+          "value": true
+        },
+        "outcomes": [
+          {
+            "id": "gave",
+            "text": "She put it in the tin on the fridge and told everyone about it for years.",
+            "historyLine": "You gave your mother the money you found.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "mother",
+                "dimension": "affection",
+                "delta": 12
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 6
+              },
+              {
+                "op": "remember",
+                "target": "mother",
+                "factKey": "the_forty_dollars",
+                "line": "You gave her the $40 you found when you were small. She still mentions it.",
+                "weight": 55
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 1
+  },
+  {
+    "id": "child_teased",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "😖",
+      "label": "SCHOOL",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
+    "weightClass": "major",
+    "priority": 62,
+    "minAge": 7,
+    "maxAge": 14,
+    "participants": [],
+    "title": "There is a version of your name they use now.",
+    "body": "It started with two of them and it is most of the class by Friday. Nobody is hitting anybody. It is worse than that.",
+    "choices": [
+      {
+        "id": "fight_back",
+        "label": "Hit the one who started it",
+        "outcomes": [
+          {
+            "id": "worked",
+            "chance": 0.45,
+            "text": "It stopped immediately. You were suspended for three days and it was worth every hour.",
+            "historyLine": "You hit back, and it stopped.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "trait_add",
+                "traitId": "hot_tempered"
+              }
+            ]
+          },
+          {
+            "id": "backfired",
+            "text": "You missed, and it became the funniest thing that had ever happened to anyone.",
+            "historyLine": "You swung at someone and missed.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -12
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tell_teacher",
+        "label": "Tell a teacher",
+        "outcomes": [
+          {
+            "id": "told",
+            "text": "The teacher handled it in the way teachers handle it, which made it quieter and longer.",
+            "historyLine": "You told a teacher about the bullying.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "spawn_npc",
+                "role": "teacher",
+                "templateId": "teacher"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wait_it_out",
+        "label": "Wait it out",
+        "outcomes": [
+          {
+            "id": "waited",
+            "text": "You waited it out. It took a year and it left something behind.",
+            "historyLine": "You waited out a year of being the joke.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -14
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 8
+              },
+              {
+                "op": "trait_add",
+                "traitId": "anxious"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 1
+  },
+  {
+    "id": "child_parents_arguing",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🚪",
+      "label": "HOME",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 66,
+    "minAge": 6,
+    "maxAge": 15,
+    "conditions": {
+      "all": [
+        {
+          "field": "rel.mother.alive",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "rel.father.alive",
+          "op": "==",
+          "value": true
+        }
+      ]
+    },
+    "participants": [],
+    "title": "They're doing the quiet arguing again.",
+    "body": "The kind through a wall, where you can hear the shape but not the words. It has been most weeks since spring.",
+    "choices": [
+      {
+        "id": "go_down",
+        "label": "Go downstairs",
+        "outcomes": [
+          {
+            "id": "stopped",
+            "text": "They stopped the second you appeared and asked if you wanted toast. You said yes. Everyone ate toast.",
+            "historyLine": "You interrupted your parents arguing.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "relationship",
+                "target": "mother",
+                "dimension": "closeness",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "headphones",
+        "label": "Put headphones on",
+        "outcomes": [
+          {
+            "id": "tuned_out",
+            "text": "You got very good at not hearing things. It has been useful and it has cost you.",
+            "historyLine": "You learned to tune out the arguing.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -7
+              },
+              {
+                "op": "trait_add",
+                "traitId": "introverted"
+              },
+              {
+                "op": "hidden",
+                "attr": "creativity",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 4,
+    "maxPerLife": 2
+  },
+  {
+    "id": "school_tryouts",
+    "version": 1,
+    "category": "education",
+    "card": {
+      "icon": "⚽",
+      "label": "TRYOUTS",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 72,
+    "minAge": 13,
+    "maxAge": 17,
+    "conditions": {
+      "field": "stats.fitness",
+      "op": ">=",
+      "value": 55
+    },
+    "participants": [
+      {
+        "role": "friend",
+        "kinds": [
+          "friend",
+          "classmate",
+          "best_friend"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
+    "title": "Coach wants you on the first team.",
+    "body": "Practice is five days a week. Your grades are already slipping, and {friend} is the one being cut to make room for you.",
+    "choices": [
+      {
+        "id": "take_spot",
+        "label": "Take the spot",
+        "outcomes": [
+          {
+            "id": "took",
+            "text": "You took it. {friend} shook your hand at the noticeboard and did not look at you.",
+            "historyLine": "You took the first-team spot that was {friend}'s.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 14
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 7
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": -4
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "conflict",
+                "delta": 28
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "respect",
+                "delta": -12
+              },
+              {
+                "op": "remember",
+                "target": "friend",
+                "factKey": "you_took_their_place",
+                "line": "You took the first-team spot that was {friend}'s.",
+                "weight": 90
+              },
+              {
+                "op": "flag",
+                "key": "athlete",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "keep_both",
+        "label": "Ask coach to keep {friend} too",
+        "outcomes": [
+          {
+            "id": "worked",
+            "chance": 0.4,
+            "text": "Coach found a way. {friend} has never mentioned it and has never forgotten it either.",
+            "historyLine": "You got {friend} kept on the team with you.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 11
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "trust",
+                "delta": 25
+              },
+              {
+                "op": "remember",
+                "target": "friend",
+                "factKey": "you_went_to_bat_for_them",
+                "line": "You got {friend.them} kept on the team when it should have been {friend.their} spot lost.",
+                "weight": 85
+              }
+            ]
+          },
+          {
+            "id": "failed",
+            "text": "Coach said it doesn't work like that, and then it didn't work like that.",
+            "historyLine": "You tried to save {friend}'s place and couldn't.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 11
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "conflict",
+                "delta": 10
+              },
+              {
+                "op": "remember",
+                "target": "friend",
+                "factKey": "you_tried",
+                "line": "You tried to keep {friend.them} on the team. It didn't work, but {friend.they} knows you tried.",
+                "weight": 60
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stay_second",
+        "label": "Stay on the second team",
+        "outcomes": [
+          {
+            "id": "stayed",
+            "text": "You stayed where you were. Your grades held and you were on the pitch about a third as much.",
+            "historyLine": "You stayed on the second team.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 5
+              },
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 4
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "closeness",
+                "delta": 10
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 4,
+    "maxPerLife": 1
+  },
+  {
+    "id": "school_the_exam_paper",
+    "version": 1,
+    "category": "education",
+    "card": {
+      "icon": "🌙",
+      "label": "3AM, FINALS WEEK",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 80,
+    "minAge": 16,
+    "maxAge": 26,
+    "conditions": {
+      "field": "education.enrolled",
+      "op": "==",
+      "value": true
+    },
+    "participants": [
+      {
+        "role": "friend",
+        "kinds": [
+          "friend",
+          "classmate"
+        ],
+        "pick": "closest",
+        "required": false
+      }
+    ],
+    "title": "Someone in your study group has last year's exam paper.",
+    "body": "Four of you are in the room. Nobody has said the word 'cheating' out loud yet. You are two points from losing your place.",
+    "choices": [
+      {
+        "id": "read_it",
+        "label": "Read it",
+        "outcomes": [
+          {
+            "id": "got_away",
+            "chance": 0.75,
+            "text": "You read it. Two of the questions were on the paper and nobody ever found out.",
+            "historyLine": "You cheated in your finals and got away with it.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": -3
+              },
+              {
+                "op": "flag",
+                "key": "cheated_in_finals",
+                "value": true
+              },
+              {
+                "op": "remember",
+                "target": "friend",
+                "factKey": "you_both_cheated",
+                "line": "You both read the paper that night. Neither of you has brought it up since.",
+                "weight": 75
+              }
+            ]
+          },
+          {
+            "id": "caught",
+            "text": "You read it, and so did a boy who could not keep his mouth shut. You were both out by the Friday.",
+            "historyLine": "You were caught cheating and thrown out.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -20
+              },
+              {
+                "op": "flag",
+                "key": "expelled",
+                "value": true
+              },
+              {
+                "op": "career_close_track",
+                "trackId": "medicine"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "leave_room",
+        "label": "Leave the room",
+        "outcomes": [
+          {
+            "id": "left",
+            "text": "You left, sat the exam honestly, and scraped it by a point and a half.",
+            "historyLine": "You walked out rather than read the paper.",
+            "effects": [
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 10
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              },
+              {
+                "op": "trait_add",
+                "traitId": "honest"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "report_it",
+        "label": "Report it",
+        "outcomes": [
+          {
+            "id": "reported",
+            "text": "Three people were removed from the course. You were never told who worked out it was you, but they did.",
+            "historyLine": "You reported the cheating.",
+            "effects": [
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -10
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "conflict",
+                "delta": 45
+              },
+              {
+                "op": "remember",
+                "target": "friend",
+                "factKey": "you_reported_them",
+                "line": "You reported the exam paper. {friend} was one of the three.",
+                "weight": 92
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 1
+  },
+  {
+    "id": "school_what_next",
+    "version": 1,
+    "category": "education",
+    "card": {
+      "icon": "🎓",
+      "label": "YOU'RE {age}",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 92,
+    "minAge": 18,
+    "maxAge": 19,
+    "conditions": {
+      "field": "education.enrolled",
+      "op": "==",
+      "value": false
+    },
+    "participants": [],
+    "title": "School is finished. Now what.",
+    "body": "Everyone has an opinion and none of them are going to be the ones living with it.",
+    "choices": [
+      {
+        "id": "university",
+        "label": "Go to university",
+        "requires": {
+          "field": "stats.smarts",
+          "op": ">=",
+          "value": 55
+        },
+        "note": "debt",
+        "outcomes": [
+          {
+            "id": "enrolled",
+            "text": "You got in. The debt started on the first day and so did everything else.",
+            "historyLine": "You started university.",
+            "effects": [
+              {
+                "op": "flag",
+                "key": "enrol_university",
+                "value": true
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trade",
+        "label": "Learn a trade",
+        "note": "quicker, cheaper",
+        "outcomes": [
+          {
+            "id": "trade",
+            "text": "Two years, no debt, and a skill somebody will always need.",
+            "historyLine": "You went to trade school.",
+            "effects": [
+              {
+                "op": "flag",
+                "key": "enrol_vocational",
+                "value": true
+              },
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "work_now",
+        "label": "Start working now",
+        "note": "money today",
+        "outcomes": [
+          {
+            "id": "working",
+            "text": "You had a payslip by September while everyone else had a reading list.",
+            "historyLine": "You went straight to work at 18.",
+            "effects": [
+              {
+                "op": "career_join",
+                "trackId": "auto",
+                "rungIndex": 0
+              },
+              {
+                "op": "money",
+                "delta": 200000
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 20,
+    "maxPerLife": 1
+  }
+]

@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EFE6D8;font-family:'Nunito',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E2563C;text-decoration:none}a:hover{color:#c8452c}
+::-webkit-scrollbar{width:0;height:0}
+</style>
+</helmet>
+
+<div style="padding:52px 52px 120px;display:flex;flex-direction:column;gap:70px;background:#EFE6D8;color:#2A2118;min-width:1000px">
+
+<div style="display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap;max-width:1520px">
+<div style="flex:1;min-width:420px">
+<div style="display:inline-block;font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.12em;color:#E2563C;background:#FFEDE4;padding:8px 12px;border-radius:99px">TAKE 2 · LIFE FIRST</div>
+<div style="font:800 70px/0.98 'Baloo 2',cursive;margin:20px 0 0;color:#2A2118">One Life</div>
+<div style="font:600 20px/1.5 'Nunito',sans-serif;color:#6E6255;margin:14px 0 0;max-width:660px;text-wrap:pretty">A life simulator where something is always happening to you. You read it, you choose, you live with it, you age up. The world is real underneath — you just never have to look at it.</div>
+</div>
+<div style="width:430px;flex:none;background:#fff;border:1px solid #EBE0D0;border-radius:22px;padding:24px 26px;box-shadow:0 6px 0 #E5D9C7">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.1em;color:#9C9184">WHAT I THREW OUT</div>
+<div style="display:flex;flex-direction:column;gap:11px;margin-top:16px">
+<div style="font:600 14.5px/1.45 'Nunito',sans-serif;color:#6E6255">✕&nbsp; The dark trading-terminal look</div>
+<div style="font:600 14.5px/1.45 'Nunito',sans-serif;color:#6E6255">✕&nbsp; The World tab as a place you visit</div>
+<div style="font:600 14.5px/1.45 'Nunito',sans-serif;color:#6E6255">✕&nbsp; Visible world ticks and player badges</div>
+<div style="font:600 14.5px/1.45 'Nunito',sans-serif;color:#6E6255">✕&nbsp; Screens that read like database tables</div>
+<div style="font:700 14.5px/1.45 'Nunito',sans-serif;color:#2FA97C;margin-top:4px">✓&nbsp; One screen: your life, right now, and a choice</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:1520px">
+<div style="background:#fff;border:1px solid #EBE0D0;border-radius:20px;padding:22px 22px 24px">
+<div style="font-size:26px;line-height:1">🎂</div>
+<div style="font:800 15px/1.3 'Baloo 2',cursive;margin-top:12px">The loop is the product</div>
+<div style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A7E70;margin-top:8px;text-wrap:pretty">Something happens → you choose → you see what it cost you → Age Up. Every other screen is reachable in one tap and optional.</div>
+</div>
+<div style="background:#fff;border:1px solid #EBE0D0;border-radius:20px;padding:22px 22px 24px">
+<div style="font-size:26px;line-height:1">🚪</div>
+<div style="font:800 15px/1.3 'Baloo 2',cursive;margin-top:12px">The world knocks, you don't visit</div>
+<div style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A7E70;margin-top:8px;text-wrap:pretty">There is no World tab. A world change reaches you only as an ordinary life event, and only if you own something it touches.</div>
+</div>
+<div style="background:#fff;border:1px solid #EBE0D0;border-radius:20px;padding:22px 22px 24px">
+<div style="font-size:26px;line-height:1">🙈</div>
+<div style="font:800 15px/1.3 'Baloo 2',cursive;margin-top:12px">The engine stays hidden</div>
+<div style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A7E70;margin-top:8px;text-wrap:pretty">No ticks, no relevance scores, no "player-run" tags. Dates read as dates. Other players are just where some of the world's news quietly comes from.</div>
+</div>
+<div style="background:#fff;border:1px solid #EBE0D0;border-radius:20px;padding:22px 22px 24px">
+<div style="font-size:26px;line-height:1">😊</div>
+<div style="font:800 15px/1.3 'Baloo 2',cursive;margin-top:12px">Warm, not cute</div>
+<div style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A7E70;margin-top:8px;text-wrap:pretty">Paper cream, rounded cards, chunky type, five colour-coded life areas. Playful enough to be a game; calm enough to read a real story in.</div>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid #E1D5C2;padding-bottom:12px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.12em;color:#E2563C">FLOW 1</div>
+<div style="font:800 30px/1 'Baloo 2',cursive">The loop</div>
+<div style="font:600 14px/1.4 'Nunito',sans-serif;color:#8A7E70">90% of the time the player is on one of these three screens.</div>
+</div>
+<div style="display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#2FA97C;padding:5px 8px;border-radius:99px">1A</span><span style="font:800 14px/1 'Baloo 2',cursive">Your Life</span><span style="font:700 11px/1 'Nunito',sans-serif;color:#2FA97C">PLAYABLE — choose, then Age Up</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 14px;background:#fff;border-bottom:1px solid #F2E8D9">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div style="min-width:0">
+<div style="font:700 12px/1 'Nunito',sans-serif;color:#A79B8C">{{ dateLine }}</div>
+<div style="font:800 27px/1.1 'Baloo 2',cursive;margin-top:5px">Alex Rivera</div>
+<div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">Age {{ age }} · Portland</div>
+</div>
+<div style="width:62px;height:62px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:31px;flex:none">🧑‍💻</div>
+</div>
+<div style="display:flex;gap:6px;margin-top:14px">
+<sc-for list="{{ stats }}" as="s" hint-placeholder-count="5">
+<div style="flex:1;background:#FFF9F2;border-radius:13px;padding:8px 6px 9px;text-align:center">
+<div style="font-size:15px;line-height:1">{{ s.icon }}</div>
+<div style="height:5px;border-radius:99px;background:#EFE4D5;margin-top:7px"><div style="height:5px;border-radius:99px;background:{{ s.c }};width:{{ s.w }}"></div></div>
+<div style="font:800 10px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">{{ s.v }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;background:#F3FAF6;border-radius:13px;padding:11px 14px">
+<span style="font:700 12.5px/1 'Nunito',sans-serif;color:#6E6255">💼 {{ jobLine }}</span>
+<span style="font:800 14px/1 'Nunito',sans-serif;color:#2FA97C">{{ money }}</span>
+</div>
+</div>
+
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:14px">
+
+<sc-if value="{{ showBirthday }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFF3D9;border-radius:16px;padding:13px 16px;display:flex;gap:10px;align-items:center">
+<span style="font-size:19px;line-height:1">🎂</span>
+<span style="font:700 13.5px/1.4 'Nunito',sans-serif;color:#8A6A20">{{ birthdayLine }}</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ showEvent }}" hint-placeholder-val="{{ true }}">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:{{ evTint }};padding:13px 18px;display:flex;align-items:center;gap:9px">
+<span style="font-size:17px;line-height:1">{{ evIcon }}</span>
+<span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:{{ evColor }}">{{ evLabel }}</span>
+</div>
+<div style="padding:18px 18px 20px">
+<div style="font:700 21px/1.28 'Baloo 2',cursive;color:#2A2118">{{ evTitle }}</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">{{ evBody }}</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:18px">
+<sc-for list="{{ evChoices }}" as="c" hint-placeholder-count="3">
+<div onClick="{{ c.pick }}" style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:10px" style-hover="background:#FFEDE4;border-color:#E2563C">
+<span style="font:700 14.5px/1.3 'Nunito',sans-serif;color:#2A2118">{{ c.label }}</span>
+<span style="font-size:14px;line-height:1;flex:none">›</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showResult }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;padding:20px 18px">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">WHAT HAPPENED</div>
+<div style="font:600 15.5px/1.6 'Nunito',sans-serif;color:#3D342A;margin-top:12px;text-wrap:pretty">{{ resultText }}</div>
+<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:16px">
+<sc-for list="{{ resultDeltas }}" as="d" hint-placeholder-count="2">
+<div style="background:{{ d.bg }};border-radius:99px;padding:7px 12px;font:800 12.5px/1 'Nunito',sans-serif;color:{{ d.c }}">{{ d.text }}</div>
+</sc-for>
+</div>
+<div onClick="{{ dismiss }}" style="margin-top:18px;background:#2A2118;color:#fff;border-radius:16px;padding:15px;text-align:center;font:800 14.5px/1 'Nunito',sans-serif;cursor:pointer;min-height:44px;box-sizing:border-box" style-hover="background:#40342A">Got it</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showIdle }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="background:#fff;border:1px dashed #E3D6C2;border-radius:20px;padding:20px 18px;text-align:center">
+<div style="font-size:24px;line-height:1">🌤️</div>
+<div style="font:700 15px/1.35 'Baloo 2',cursive;margin-top:9px">A quiet stretch.</div>
+<div style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A7E70;margin-top:6px;text-wrap:pretty">Do something with the year, or let it pass.</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ actions }}" as="a" hint-placeholder-count="6">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:15px 14px;display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer" style-hover="border-color:#E2563C">
+<span style="font-size:19px;line-height:1">{{ a.icon }}</span>
+<span style="font:700 13.5px/1.2 'Nunito',sans-serif">{{ a.label }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:9px;padding-top:4px">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">EARLIER THIS YEAR</div>
+<sc-for list="{{ history }}" as="h" hint-placeholder-count="2">
+<div style="display:flex;gap:11px;align-items:flex-start">
+<span style="font-size:15px;line-height:1.3;flex:none">{{ h.icon }}</span>
+<span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">{{ h.text }}</span>
+</div>
+</sc-for>
+</div>
+
+</div>
+
+<div style="flex:none;padding:12px 18px 12px;background:#fff;border-top:1px solid #F2E8D9">
+<div onClick="{{ ageUp }}" style="background:{{ ageBtnBg }};color:#fff;border-radius:20px;padding:18px;flex:none;text-align:center;font:800 17px/1 'Baloo 2',cursive;letter-spacing:0.02em;cursor:pointer;box-shadow:0 4px 0 {{ ageBtnShadow }}" style-hover="filter:brightness(1.06)">{{ ageBtnLabel }}</div>
+</div>
+<dc-import name="GameTabs" active="Life" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Everything the player needs is above the fold: who they are, how they're doing, what's happening, and one big button. Age Up is disabled-looking until the open decision is answered — the game never lets you skip past your own life.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E2563C;padding:5px 8px;border-radius:99px">1B</span><span style="font:800 14px/1 'Baloo 2',cursive">Birthday recap</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:1;overflow:auto;padding:66px 22px 16px;display:flex;flex-direction:column;gap:18px">
+<div style="text-align:center">
+<div style="font-size:46px;line-height:1">🎂</div>
+<div style="font:800 40px/1.05 'Baloo 2',cursive;margin-top:12px">You're 28.</div>
+<div style="font:700 14px/1.4 'Nunito',sans-serif;color:#8A7E70;margin-top:8px">Tuesday, June 14 · Portland</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;box-shadow:0 5px 0 #F0E6D8;padding:18px;flex:none;display:flex;flex-direction:column;gap:14px">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">YOUR YEAR AT 27</div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px;line-height:1.2;flex:none">💼</span><span style="font:600 14px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">You took the senior role and stayed in Portland. Your manager still brings it up.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px;line-height:1.2;flex:none">💞</span><span style="font:600 14px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">You and Emma moved in together in the spring.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px;line-height:1.2;flex:none">🏥</span><span style="font:600 14px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">A doctor told you to sleep more. You did not.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px;line-height:1.2;flex:none">💵</span><span style="font:600 14px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">You saved $9,400 and lent Daniel $2,500 you haven't seen again.</span></div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">HOW YOU CHANGED</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+<div style="display:flex;align-items:center;gap:11px"><span style="font-size:17px;line-height:1;flex:none">❤️</span><span style="font:700 13px/1 'Nunito',sans-serif;flex:1">Health</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E2563C;flex:none">68 &nbsp;−7</span></div>
+<div style="display:flex;align-items:center;gap:11px"><span style="font-size:17px;line-height:1;flex:none">😊</span><span style="font:700 13px/1 'Nunito',sans-serif;flex:1">Happiness</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C;flex:none">81 &nbsp;+12</span></div>
+<div style="display:flex;align-items:center;gap:11px"><span style="font-size:17px;line-height:1;flex:none">🧠</span><span style="font:700 13px/1 'Nunito',sans-serif;flex:1">Smarts</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C;flex:none">74 &nbsp;+3</span></div>
+<div style="display:flex;align-items:center;gap:11px"><span style="font-size:17px;line-height:1;flex:none">💪</span><span style="font:700 13px/1 'Nunito',sans-serif;flex:1">Fitness</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E2563C;flex:none">52 &nbsp;−9</span></div>
+</div>
+</div>
+<div style="background:#FFF3D9;border-radius:20px;padding:17px 18px;flex:none;display:flex;gap:11px;align-items:flex-start">
+<span style="font-size:19px;line-height:1.1;flex:none">✨</span>
+<span style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A6A20;text-wrap:pretty">Something has been building at work all year. It'll land soon.</span>
+</div>
+</div>
+<div style="flex:none;padding:12px 20px 20px;background:#FFF9F2">
+<div style="background:#E2563C;color:#fff;border-radius:20px;padding:18px;flex:none;text-align:center;font:800 17px/1 'Baloo 2',cursive;box-shadow:0 4px 0 #C4462E">Keep going →</div>
+</div>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">The reward screen. It never lists everything that happened — four lines, written like a friend recapping your year, plus a nudge at what's coming so the next Age Up has a pull.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E2563C;padding:5px 8px;border-radius:99px">1C</span><span style="font:800 14px/1 'Baloo 2',cursive">A world event, as a life event</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 14px;background:#fff;border-bottom:1px solid #F2E8D9;display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div><div style="font:700 12px/1 'Nunito',sans-serif;color:#A79B8C">Thursday, March 2</div><div style="font:800 25px/1.1 'Baloo 2',cursive;margin-top:5px">Alex Rivera</div><div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">Age 34 · Portland · Owner, Rivera Hauling</div></div>
+<div style="width:56px;height:56px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:28px;flex:none">🧑‍💼</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:14px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#FFF0E8;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">⛽</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#E2563C">YOUR BUSINESS</span></div>
+<div style="padding:18px 18px 20px">
+<div style="font:700 21px/1.28 'Baloo 2',cursive">Fuel went up again — a lot.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">Diesel is up 18% since the fall. Your six vans are suddenly costing you about $1,900 more a month, and two of your regular clients have already asked about their rates.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:18px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font:700 14.5px/1.3 'Nunito',sans-serif">Raise your rates 6%</span><span>›</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font:700 14.5px/1.3 'Nunito',sans-serif">Eat the cost for now</span><span>›</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font:700 14.5px/1.3 'Nunito',sans-serif">Sell two vans</span><span>›</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font:700 14.5px/1.3 'Nunito',sans-serif">Ask Emma what she'd do</span><span>›</span></div>
+</div>
+</div>
+</div>
+<div style="background:#F3F7FC;border-radius:20px;padding:17px 18px;flex:none;display:flex;gap:11px;align-items:flex-start">
+<span style="font-size:19px;line-height:1.1;flex:none">🙈</span>
+<span style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#3E6180;text-wrap:pretty">Design note, not in the game: this is the entire visible surface of the living world. Somewhere underneath, a fuel index moved — partly because thousands of other people's companies moved it. Alex will never see that screen, because Alex is a person, not an analyst.</span>
+</div>
+<div style="background:#fff;border:1px dashed #E3D6C2;border-radius:20px;padding:17px 18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">THE SAME WORLD CHANGE, OTHER LIVES</div>
+<div style="display:flex;flex-direction:column;gap:11px;margin-top:13px">
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#6E6255">🍜 &nbsp;A diner owner: your supplier raised prices $420 a month.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#6E6255">🏛️ &nbsp;A council member: voters want to know what you'll do about it.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#6E6255">🎓 &nbsp;A 19-year-old student: nothing happens at all.</div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="Life" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Identical card shape to a breakup or a promotion — the player can't tell a world event from a personal one, and shouldn't. The last option ("Ask Emma") is how relationships get pulled into economic decisions.</div>
+</div>
+
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid #E1D5C2;padding-bottom:12px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.12em;color:#E2563C">FLOW 2</div>
+<div style="font:800 30px/1 'Baloo 2',cursive">People and doing things</div>
+<div style="font:600 14px/1.4 'Nunito',sans-serif;color:#8A7E70">One tap from the loop. Never a list of records — always a person with a history.</div>
+</div>
+<div style="display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#DB6C9B;padding:5px 8px;border-radius:99px">2A</span><span style="font:800 14px/1 'Baloo 2',cursive">People</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 16px;background:#fff;border-bottom:1px solid #F2E8D9">
+<div style="font:800 28px/1.1 'Baloo 2',cursive">People</div>
+<div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">11 people you actually know</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:18px">
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">CLOSE</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;box-shadow:0 3px 0 #F3EAdC;padding:14px;display:flex;align-items:center;gap:13px">
+<div style="width:48px;height:48px;border-radius:99px;background:#FDE9F1;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none">👩</div>
+<div style="flex:1;min-width:0"><div style="font:800 15.5px/1.2 'Baloo 2',cursive">Emma Chen</div><div style="font:700 12.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Girlfriend · 3 years</div></div>
+<div style="text-align:right;flex:none"><div style="font-size:15px;line-height:1">💞</div><div style="font:800 12px/1 'Nunito',sans-serif;color:#DB6C9B;margin-top:5px">94</div></div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;box-shadow:0 3px 0 #F3EAdC;padding:14px;display:flex;align-items:center;gap:13px">
+<div style="width:48px;height:48px;border-radius:99px;background:#EEEAFB;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none">👵</div>
+<div style="flex:1;min-width:0"><div style="font:800 15.5px/1.2 'Baloo 2',cursive">Rosa Rivera</div><div style="font:700 12.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Mom · 62 · in Salem</div></div>
+<div style="text-align:right;flex:none"><div style="font-size:15px;line-height:1">💗</div><div style="font:800 12px/1 'Nunito',sans-serif;color:#7B6BD6;margin-top:5px">86</div></div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;box-shadow:0 3px 0 #F3EAdC;padding:14px;display:flex;align-items:center;gap:13px">
+<div style="width:48px;height:48px;border-radius:99px;background:#E9F4EE;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none">🧑</div>
+<div style="flex:1;min-width:0"><div style="font:800 15.5px/1.2 'Baloo 2',cursive">Daniel Okafor</div><div style="font:700 12.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Best friend · owes you $2,500</div></div>
+<div style="text-align:right;flex:none"><div style="font-size:15px;line-height:1">🙂</div><div style="font:800 12px/1 'Nunito',sans-serif;color:#E9A93B;margin-top:5px">61</div></div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">AROUND</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:13px 14px;display:flex;align-items:center;gap:13px"><div style="width:42px;height:42px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🧔</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Marcus Webb</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Your manager</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">52</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:13px 14px;display:flex;align-items:center;gap:13px"><div style="width:42px;height:42px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">👩‍🦰</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Priya Raman</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Coworker · wants your job</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#E2563C">28</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:13px 14px;display:flex;align-items:center;gap:13px"><div style="width:42px;height:42px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🧑‍🎤</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Jules Moreau</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Ex · you don't talk</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">12</span></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">DRIFTED AWAY</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:15px 16px;font:600 13.5px/1.5 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">5 people you've lost touch with. They keep living whether you call or not.</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="People" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Grouped by closeness, not by category, and each subtitle carries a fact rather than a label — "owes you $2,500", "wants your job". That's what makes the list feel like people instead of a contacts app.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#DB6C9B;padding:5px 8px;border-radius:99px">2B</span><span style="font:800 14px/1 'Baloo 2',cursive">Someone's story</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:50px 20px 20px;background:#FDE9F1;text-align:center">
+<div style="width:82px;height:82px;border-radius:99px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto">👩</div>
+<div style="font:800 26px/1.1 'Baloo 2',cursive;margin-top:12px">Emma Chen</div>
+<div style="font:700 13px/1.4 'Nunito',sans-serif;color:#9A5C77;margin-top:6px">Girlfriend · 29 · lawyer · together 3 years</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:14px">
+<div style="background:#fff;border-radius:99px;padding:8px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#DB6C9B">💞 Love 94</div>
+<div style="background:#fff;border-radius:99px;padding:8px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#8A7E70">🤝 Trust 88</div>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:18px">
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:12px">YOU TWO, SO FAR</div>
+<div style="display:flex;flex-direction:column;gap:13px">
+<div style="display:flex;gap:12px"><span style="font:800 12px/1.4 'Nunito',sans-serif;color:#C9B79C;flex:none;width:26px">24</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">Met at Daniel's terrible housewarming.</span></div>
+<div style="display:flex;gap:12px"><span style="font:800 12px/1.4 'Nunito',sans-serif;color:#C9B79C;flex:none;width:26px">25</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">She told you she'd never move for a job. You remember this.</span></div>
+<div style="display:flex;gap:12px"><span style="font:800 12px/1.4 'Nunito',sans-serif;color:#C9B79C;flex:none;width:26px">26</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">You turned down the Denver promotion. You never told her why.</span></div>
+<div style="display:flex;gap:12px"><span style="font:800 12px/1.4 'Nunito',sans-serif;color:#C9B79C;flex:none;width:26px">27</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">Moved in together. Her cat hates you.</span></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:17px 18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">ON HER MIND</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#3D342A;margin-top:11px;text-wrap:pretty">She's been asking about the next few years. She hasn't asked directly yet.</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">WHAT YOU CAN DO</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">💍 &nbsp;Propose</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">big</span></div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">✈️ &nbsp;Take a trip together</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">$2,400</span></div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">🗣️ &nbsp;Tell her about Denver</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#E2563C">risky</span></div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">🍜 &nbsp;Just spend the evening in</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">free</span></div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif;color:#8A7E70">💔 &nbsp;End it</span></div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="People" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">The relationship is a memory list, not a meter. "She told you she'd never move for a job" is a stored fact the engine will use when the Denver offer comes back at 34 — that's the whole difference from a percentage bar.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#7B6BD6;padding:5px 8px;border-radius:99px">2C</span><span style="font:800 14px/1 'Baloo 2',cursive">Do something</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 16px;background:#fff;border-bottom:1px solid #F2E8D9">
+<div style="font:800 28px/1.1 'Baloo 2',cursive">Do something</div>
+<div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">You're 28. Three things left this year.</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:20px">
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">YOUR BODY &amp; HEAD</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#E9F4EE;border-radius:18px;padding:16px 14px;min-height:44px"><div style="font-size:22px;line-height:1">🏋️</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Get in shape</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#4C7C64;margin-top:4px">💪 +8 · ❤️ +4</div></div>
+<div style="background:#E9F4EE;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">🩺</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">See a doctor</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#4C7C64;margin-top:4px">$180</div></div>
+<div style="background:#EEEAFB;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">📚</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Take a course</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#5F51AE;margin-top:4px">🧠 +6 · $900</div></div>
+<div style="background:#EEEAFB;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">🧘</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Sort your head out</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#5F51AE;margin-top:4px">😊 +9</div></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">FUN &amp; TROUBLE</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#FFF3D9;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">🎉</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Go out</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A6A20;margin-top:4px">😊 +6 · ❤️ −2</div></div>
+<div style="background:#FFF3D9;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">✈️</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Travel</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A6A20;margin-top:4px">from $1,100</div></div>
+<div style="background:#FFF0E8;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">🎲</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Gamble</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">who knows</div></div>
+<div style="background:#FFF0E8;border-radius:18px;padding:16px 14px"><div style="font-size:22px;line-height:1">🕶️</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Something illegal</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">risky</div></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">BIGGER MOVES</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">🏠 &nbsp;Look at houses</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">6 in Portland</span></div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">🚀 &nbsp;Start something of your own</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">$14,000</span></div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">🏛️ &nbsp;Get involved locally</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">slow burn</span></div>
+</div>
+</div>
+<div style="font:600 12.5px/1.55 'Nunito',sans-serif;color:#A79B8C;text-wrap:pretty">Actions are limited per year, so a year has to be spent rather than farmed.</div>
+</div>
+<dc-import name="GameTabs" active="Do" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Colour groups the kind of thing you're doing: green for upkeep, violet for growth, amber for fun, coral for risk. Costs and effects are visible up front so the player is making a bet, not guessing.</div>
+</div>
+
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid #E1D5C2;padding-bottom:12px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.12em;color:#E2563C">FLOW 3</div>
+<div style="font:800 30px/1 'Baloo 2',cursive">The systems behind your life</div>
+<div style="font:600 14px/1.4 'Nunito',sans-serif;color:#8A7E70">School, work, money, your own thing. Each one a single friendly screen, not a suite.</div>
+</div>
+<div style="display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#3B8FD4;padding:5px 8px;border-radius:99px">3A</span><span style="font:800 14px/1 'Baloo 2',cursive">School (age 15)</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 16px;background:#fff;border-bottom:1px solid #F2E8D9;display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div><div style="font:800 26px/1.1 'Baloo 2',cursive">Lincoln High</div><div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">10th grade · B+ average</div></div>
+<div style="width:54px;height:54px;border-radius:99px;background:#EAF2FA;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none">🎒</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#EAF2FA;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">⚽</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#2E6FA8">TRYOUTS</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">Coach wants you on the first team.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">Practice is five days a week. Your grades are already slipping, and Marcus is the one being cut to make room for you.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Take the spot</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Ask coach to keep Marcus too</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Stay on the second team</div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">YOUR CLUBS</div>
+<div style="display:flex;gap:9px;flex-wrap:wrap">
+<div style="background:#E9F4EE;border-radius:99px;padding:11px 15px;font:800 13px/1 'Nunito',sans-serif;color:#3D7A5E">⚽ Soccer, 2nd team</div>
+<div style="background:#EEEAFB;border-radius:99px;padding:11px 15px;font:800 13px/1 'Nunito',sans-serif;color:#5F51AE">🎸 Music club</div>
+<div style="background:#fff;border:1.5px dashed #E3D6C2;border-radius:99px;padding:11px 15px;font:800 13px/1 'Nunito',sans-serif;color:#A79B8C">+ one more slot</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">YOUR CLASS</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#FDE9F1;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">👧</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Emma Chen</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Sits behind you · new this year</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">44</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">👦</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Marcus Webb</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Friend since 3rd grade</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#2FA97C">79</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🧑‍🏫</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Ms. Alvarez</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Math · writes recommendations</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">58</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;font:700 13.5px/1 'Nunito',sans-serif;color:#8A7E70">+ 21 more classmates</div>
+</div>
+</div>
+<div style="background:#F3F7FC;border-radius:20px;padding:16px 18px;flex:none;font:600 13px/1.55 'Nunito',sans-serif;color:#3E6180;text-wrap:pretty">Design note: Emma is introduced at 15 and shows up again at 24 in the main loop. Nothing about her is random the second time.</div>
+</div>
+<dc-import name="GameTabs" active="Do" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Childhood gets the same card grammar as adulthood, so the game never changes shape as you age — only what's on offer changes. Marcus being cut to make room for you is a debt the engine will collect on in twenty years.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#3B8FD4;padding:5px 8px;border-radius:99px">3B</span><span style="font:800 14px/1 'Baloo 2',cursive">Work</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 18px;background:#EAF2FA">
+<div style="font:700 12px/1 'Nunito',sans-serif;color:#5B87AE">WHERE YOU WORK</div>
+<div style="font:800 26px/1.1 'Baloo 2',cursive;margin-top:7px">Northgate Labs</div>
+<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif">Senior Developer</div>
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#2FA97C">$112,000</div>
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#8A7E70">4 years in</div>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:18px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;padding:18px;flex:none">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">HOW YOU'RE DOING</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C">Strong</span></div>
+<div style="height:9px;border-radius:99px;background:#F0E6D8;margin-top:14px"><div style="height:9px;border-radius:99px;background:#2FA97C;width:81%"></div></div>
+<div style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#6E6255;margin-top:12px;text-wrap:pretty">Two more good years and you're in line for a lead role. Priya is closer than you think.</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">THE LADDER HERE</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#C0B4A5">Junior Developer<span>$68k</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#C0B4A5">Developer<span>$86k</span></div>
+<div style="background:#2A2118;border-radius:14px;padding:14px 15px;display:flex;justify-content:space-between;font:800 14px/1 'Nunito',sans-serif;color:#fff">Senior Developer<span>$112k</span></div>
+<div style="background:#fff;border:1.5px dashed #C9B79C;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#8A7E70">Team Lead<span>$140k</span></div>
+<div style="background:#fff;border:1.5px dashed #E3D6C2;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#C0B4A5">Director<span>$190k</span></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">PEOPLE HERE</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🧔</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Marcus Webb</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Your manager · knew you at 15</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#E9A93B">52</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">👩‍🦰</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Priya Raman</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Also up for Team Lead</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#E2563C">28</span></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">AT WORK YOU CAN</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px;font:700 13.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">🔥 Work harder</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px;font:700 13.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">💬 Ask for a raise</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px;font:700 13.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">🤝 Get closer to Marcus</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px;font:700 13.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">🚪 Look elsewhere</div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="Do" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">A career is a visible ladder with one named rival on it. No org charts, no performance dashboards — you can see where you are, what's next, and who's in the way.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#2FA97C;padding:5px 8px;border-radius:99px">3C</span><span style="font:800 14px/1 'Baloo 2',cursive">Money</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 20px;background:#EAF6F0;text-align:center">
+<div style="font:700 12px/1 'Nunito',sans-serif;color:#4C7C64">WHAT YOU'RE WORTH</div>
+<div style="font:800 44px/1 'Baloo 2',cursive;margin-top:9px;color:#1F7A56">$318,400</div>
+<div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#2FA97C">+$4,100 / mo</div>
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#8A7E70">3 debts</div>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:18px">
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">WHAT YOU OWN</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;box-shadow:0 3px 0 #F3EAdC;padding:15px;display:flex;align-items:center;gap:13px"><div style="width:44px;height:44px;border-radius:14px;background:#EAF6F0;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none">🏠</div><div style="flex:1"><div style="font:800 15px/1.2 'Baloo 2',cursive">House on Alder St</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">$284,000 · $61,000 left on the loan</div></div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;box-shadow:0 3px 0 #F3EAdC;padding:15px;display:flex;align-items:center;gap:13px"><div style="width:44px;height:44px;border-radius:14px;background:#EAF2FA;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none">🚚</div><div style="flex:1"><div style="font:800 15px/1.2 'Baloo 2',cursive">Rivera Hauling</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Your company · 6 vans · 4 staff</div></div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;box-shadow:0 3px 0 #F3EAdC;padding:15px;display:flex;align-items:center;gap:13px"><div style="width:44px;height:44px;border-radius:14px;background:#FFF3D9;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none">📈</div><div style="flex:1"><div style="font:800 15px/1.2 'Baloo 2',cursive">Savings &amp; funds</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">$52,300 · quietly growing</div></div></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">EVERY MONTH</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:8px 16px;flex:none">
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">💼 Salary</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">+$7,240</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">🚚 The company</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">+$1,860</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">🏠 Mortgage</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#E2563C">−$1,980</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">🍜 Living</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#E2563C">−$2,140</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0"><span style="font:700 13.5px/1 'Nunito',sans-serif">👵 Helping Mom</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#E2563C">−$880</span></div>
+</div>
+</div>
+<div style="background:#FFF3D9;border-radius:20px;padding:16px 18px;flex:none;display:flex;gap:11px;align-items:flex-start"><span style="font-size:19px;line-height:1.1;flex:none">⚠️</span><span style="font:600 13.5px/1.55 'Nunito',sans-serif;color:#8A6A20;text-wrap:pretty">Daniel still owes you $2,500 from four years ago. Asking for it back would cost you something else.</span></div>
+</div>
+<dc-import name="GameTabs" active="Money" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Money in plain language — "what you own", "every month" — with a human-cost note at the bottom instead of a chart. No candlesticks anywhere in this build.</div>
+</div>
+
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid #E1D5C2;padding-bottom:12px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.12em;color:#E2563C">FLOW 4</div>
+<div style="font:800 30px/1 'Baloo 2',cursive">Starting, ending, starting again</div>
+<div style="font:600 14px/1.4 'Nunito',sans-serif;color:#8A7E70">First launch, the More drawer, the end of a life, and the pull back in.</div>
+</div>
+<div style="display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E9A93B;padding:5px 8px;border-radius:99px">4A</span><span style="font:800 14px/1 'Baloo 2',cursive">A new life</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:1;overflow:auto;padding:66px 22px 14px;display:flex;flex-direction:column;gap:20px">
+<div style="text-align:center">
+<div style="font-size:44px;line-height:1">👶</div>
+<div style="font:800 34px/1.08 'Baloo 2',cursive;margin-top:12px">A new life</div>
+<div style="font:600 14.5px/1.5 'Nunito',sans-serif;color:#8A7E70;margin-top:9px;text-wrap:pretty">You'll start at birth and find out the rest as you go.</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;box-shadow:0 5px 0 #F0E6D8;padding:18px;flex:none;display:flex;flex-direction:column;gap:16px">
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:9px">NAME</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:14px;padding:14px 15px;display:flex;justify-content:space-between;align-items:center"><span style="font:700 15px/1 'Nunito',sans-serif">Alex Rivera</span><span style="font:700 12.5px/1 'Nunito',sans-serif;color:#E2563C">🎲 random</span></div>
+</div>
+<div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px"><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">WHERE IN THE WORLD</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#A79B8C">193 countries</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:10px;min-height:44px;box-sizing:border-box"><span style="font-size:15px;line-height:1">🔎</span><span style="font:700 14px/1 'Nunito',sans-serif;color:#A79B8C">Search a country or city…</span></div>
+<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:11px">
+<div style="background:#2A2118;color:#fff;border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif">Asia</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">Africa</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">Europe</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">Americas</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">Middle East</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">Oceania</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+<div style="background:#FFF9F2;border:2px solid #E2563C;border-radius:16px;padding:14px 15px;display:flex;align-items:center;gap:12px"><span style="font-size:24px;line-height:1;flex:none">🇻🇳</span><div style="flex:1;min-width:0"><div style="font:800 15px/1.2 'Baloo 2',cursive">Việt Nam</div><div style="font:700 11.5px/1.35 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Đà Nẵng · cheap, fast-growing, family stays close</div></div><span style="font:800 11.5px/1 'Nunito',sans-serif;color:#E2563C;flex:none">PICKED</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 15px;display:flex;align-items:center;gap:12px"><span style="font-size:24px;line-height:1;flex:none">🇳🇬</span><div style="flex:1;min-width:0"><div style="font:800 15px/1.2 'Baloo 2',cursive">Nigeria</div><div style="font:700 11.5px/1.35 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Lagos · hard, huge, everything is hustle</div></div></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 15px;display:flex;align-items:center;gap:12px"><span style="font-size:24px;line-height:1;flex:none">🇩🇰</span><div style="flex:1;min-width:0"><div style="font:800 15px/1.2 'Baloo 2',cursive">Denmark</div><div style="font:700 11.5px/1.35 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Aarhus · free school, free doctors, high taxes</div></div></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 15px;display:flex;align-items:center;gap:12px"><span style="font-size:24px;line-height:1;flex:none">🇧🇷</span><div style="flex:1;min-width:0"><div style="font:800 15px/1.2 'Baloo 2',cursive">Brazil</div><div style="font:700 11.5px/1.35 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Salvador · football, music, sharp inequality</div></div></div>
+<div style="background:#fff;border:1.5px dashed #E3D6C2;border-radius:16px;padding:14px 15px;display:flex;align-items:center;gap:12px;min-height:44px;box-sizing:border-box"><span style="font-size:22px;line-height:1;flex:none">🎲</span><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive;color:#8A7E70">Anywhere at all</div><div style="font:700 11.5px/1.35 'Nunito',sans-serif;color:#A79B8C;margin-top:4px">Weighted by real population — you'll probably be poor</div></div></div>
+</div>
+<div style="background:#EAF6F0;border-radius:16px;padding:15px 16px;margin-top:12px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#3D7A5E">WHAT BEING BORN IN VIỆT NAM CHANGES</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">🏥 &nbsp;Hospital bills are small. A bad diagnosis won't bankrupt your family.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">🎓 &nbsp;University is cheap but the entrance exam decides a lot at 18.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">💼 &nbsp;Manufacturing, tourism and software. Very different ladders than Portland.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">👨‍👩‍👧 &nbsp;Your parents expect to live with you later. Saying no has a cost.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">⚖️ &nbsp;Different laws, drinking age, marriage rules and military service.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">💵 &nbsp;Money is always shown in USD, wherever you're born.</div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:9px">WHAT YOU'RE BORN INTO</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#FFF9F2;border:1.5px solid #E2563C;border-radius:16px;padding:14px 15px"><div style="display:flex;justify-content:space-between"><span style="font:800 14px/1 'Nunito',sans-serif">Getting by</span><span style="font:700 12px/1 'Nunito',sans-serif;color:#E2563C">recommended</span></div><div style="font:600 12.5px/1.45 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Two parents, one income, a small house.</div></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 15px"><div style="font:800 14px/1 'Nunito',sans-serif">Rough start</div><div style="font:600 12.5px/1.45 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Less money, more grit. Harder, more interesting.</div></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 15px"><div style="display:flex;justify-content:space-between"><span style="font:800 14px/1 'Nunito',sans-serif">Comfortable</span><span style="font:700 12px/1 'Nunito',sans-serif;color:#8A7E70">🔒</span></div><div style="font:600 12.5px/1.45 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Money, expectations, and a family name.</div></div>
+</div>
+</div>
+</div>
+<div style="background:#F3F7FC;border-radius:20px;padding:16px 18px;flex:none;font:600 13.5px/1.55 'Nunito',sans-serif;color:#3E6180;text-wrap:pretty">🌍 &nbsp;Everyone plays in the same world. It's 2026 there too, and things have been happening in it since long before you showed up.</div>
+</div>
+<div style="flex:none;padding:12px 22px 20px"><div style="background:#E2563C;color:#fff;border-radius:20px;padding:18px;flex:none;text-align:center;font:800 17px/1 'Baloo 2',cursive;box-shadow:0 4px 0 #C4462E">Be born →</div></div>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Three choices, none of them a character sheet. The one line about the shared world is the only place the whole architecture is mentioned to the player — and it's phrased as flavour, not as a feature.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E9A93B;padding:5px 8px;border-radius:99px">4B</span><span style="font:800 14px/1 'Baloo 2',cursive">More</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 16px;background:#fff;border-bottom:1px solid #F2E8D9">
+<div style="font:800 28px/1.1 'Baloo 2',cursive">More</div>
+<div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">The stuff you only need sometimes</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:18px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:16px 14px"><div style="font-size:21px;line-height:1">🚚</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Your company</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Rivera Hauling</div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:16px 14px"><div style="font-size:21px;line-height:1">🏠</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Property</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">2 places</div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:16px 14px"><div style="font-size:21px;line-height:1">🏛️</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Local politics</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Ward 4 volunteer</div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:16px 14px"><div style="font-size:21px;line-height:1">⚖️</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Record</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">1 speeding fine</div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:16px 14px"><div style="font-size:21px;line-height:1">🩺</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Health</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#E2563C;margin-top:4px">1 thing to watch</div></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:16px 14px"><div style="font-size:21px;line-height:1">📜</div><div style="font:800 14px/1.2 'Baloo 2',cursive;margin-top:9px">Your will</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Not written</div></div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">YOUR STORY SO FAR</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:17px 18px;flex:none">
+<div style="font:600 14px/1.6 'Nunito',sans-serif;color:#3D342A;text-wrap:pretty">28 years. One company, one house, one person who's been there since high school, and $2,500 you'll probably never see again.</div>
+<div style="font:800 13px/1 'Nunito',sans-serif;color:#E2563C;margin-top:13px">Read the whole thing →</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:10px">FAMILY LINE</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:17px 18px;flex:none;display:flex;align-items:center;gap:14px">
+<div style="display:flex;gap:6px"><div style="width:34px;height:34px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:17px">👴</div><div style="width:34px;height:34px;border-radius:99px;background:#FFEDE4;display:flex;align-items:center;justify-content:center;font-size:17px">🧑‍💻</div><div style="width:34px;height:34px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:17px">👶</div></div>
+<div style="flex:1"><div style="font:800 14px/1.2 'Baloo 2',cursive">The Riveras</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">2nd generation · 1 kid</div></div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:16px;padding:15px 16px;font:700 14px/1 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">🔔 &nbsp;Notifications</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:16px;padding:15px 16px;font:700 14px/1 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">✨ &nbsp;One Life Plus</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:16px;padding:15px 16px;font:700 14px/1 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">⚙️ &nbsp;Settings</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="More" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Everything the old design put in the navigation bar now lives here, one tap deep, and each tile carries its current state so the drawer answers questions without being opened.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#7B6BD6;padding:5px 8px;border-radius:99px">4C</span><span style="font:800 14px/1 'Baloo 2',cursive">The end, and the next one</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#F6F2FB">
+<div style="flex:1;overflow:auto;padding:64px 22px 14px;display:flex;flex-direction:column;gap:18px">
+<div style="text-align:center">
+<div style="font-size:40px;line-height:1">🕯️</div>
+<div style="font:800 32px/1.1 'Baloo 2',cursive;margin-top:12px">Alex Rivera</div>
+<div style="font:700 14px/1.4 'Nunito',sans-serif;color:#6E6389;margin-top:8px">1998 – 2081 · 83 years · Portland</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#4A4260;margin-top:14px;text-wrap:pretty">Died in his sleep, at home, with the house paid off and the company still running.</div>
+</div>
+<div style="background:#fff;border:1px solid #EAE3F5;border-radius:22px;box-shadow:0 5px 0 #EAE3F5;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C93B4">THE WHOLE STORY</div>
+<div style="display:flex;flex-direction:column;gap:0;margin-top:16px">
+<div style="display:flex;gap:13px"><div style="width:38px;flex:none;font:800 12px/1.5 'Nunito',sans-serif;color:#B6AACF">0–17</div><div style="flex:1;border-left:2px solid #EAE3F5;padding:0 0 18px 15px"><div style="font:800 14px/1.3 'Baloo 2',cursive;color:#2A2118">Portland, in a small house</div><div style="font:600 13px/1.55 'Nunito',sans-serif;color:#5A5170;margin-top:5px;text-wrap:pretty">Two parents, one income. Made the second soccer team at 15 and took a spot that was Marcus Webb's. Met Emma Chen in 10th grade math.</div></div></div>
+<div style="display:flex;gap:13px"><div style="width:38px;flex:none;font:800 12px/1.5 'Nunito',sans-serif;color:#B6AACF">18–29</div><div style="flex:1;border-left:2px solid #EAE3F5;padding:0 0 18px 15px"><div style="font:800 14px/1.3 'Baloo 2',cursive;color:#2A2118">Work, and one big refusal</div><div style="font:600 13px/1.55 'Nunito',sans-serif;color:#5A5170;margin-top:5px;text-wrap:pretty">Computer science at Portland State, $31,000 of debt, cleared by 31. Joined Northgate Labs at 22. Turned down the Denver promotion at 26 because of Emma and never told her. Married her at 29.</div></div></div>
+<div style="display:flex;gap:13px"><div style="width:38px;flex:none;font:800 12px/1.5 'Nunito',sans-serif;color:#B6AACF">30–41</div><div style="flex:1;border-left:2px solid #EAE3F5;padding:0 0 18px 15px"><div style="font:800 14px/1.3 'Baloo 2',cursive;color:#2A2118">One van, then six, then forty</div><div style="font:600 13px/1.55 'Nunito',sans-serif;color:#5A5170;margin-top:5px;text-wrap:pretty">Left Northgate at 32 and bought a van. Maya born at 31, Theo at 34. Survived the fuel spike at 34 by raising rates and losing a client. Bought his parents' house at 36. Diagnosed with high blood pressure at 38 and mostly ignored it.</div></div></div>
+<div style="display:flex;gap:13px"><div style="width:38px;flex:none;font:800 12px/1.5 'Nunito',sans-serif;color:#B6AACF">42–58</div><div style="flex:1;border-left:2px solid #EAE3F5;padding:0 0 18px 15px"><div style="font:800 14px/1.3 'Baloo 2',cursive;color:#2A2118">The years that made his name</div><div style="font:600 13px/1.55 'Nunito',sans-serif;color:#5A5170;margin-top:5px;text-wrap:pretty">Won the Ward 4 council seat at 44 and served two terms. Pushed through the freight-idling ordinance at 49 — his one law. Refused to sell the company to a national carrier at 52. Stopped speaking to Theo at 55 over the succession.</div></div></div>
+<div style="display:flex;gap:13px"><div style="width:38px;flex:none;font:800 12px/1.5 'Nunito',sans-serif;color:#B6AACF">59–83</div><div style="flex:1;padding:0 0 0 17px"><div style="font:800 14px/1.3 'Baloo 2',cursive;color:#2A2118">Handing it over, badly and then well</div><div style="font:600 13px/1.55 'Nunito',sans-serif;color:#5A5170;margin-top:5px;text-wrap:pretty">Gave Maya the company at 61. Funded the Rivera Scholarship at Lincoln High at 64 — 39 kids so far. Heart attack at 71, survived it, walked four miles a day after. Emma died at 79. He lasted four more years.</div></div></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #EAE3F5;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C93B4">HOW PEOPLE SAW HIM</div>
+<div style="display:flex;flex-direction:column;gap:14px;margin-top:15px">
+<div><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:700 13px/1 'Nunito',sans-serif">His family</span><span style="font:800 12.5px/1 'Nunito',sans-serif;color:#2FA97C">Loved, mostly</span></div><div style="height:7px;border-radius:99px;background:#F1EDF9;margin-top:8px"><div style="height:7px;border-radius:99px;background:#2FA97C;width:78%"></div></div><div style="font:600 12px/1.45 'Nunito',sans-serif;color:#8A80A3;margin-top:6px">Maya gave the eulogy. Theo came, and sat at the back.</div></div>
+<div><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:700 13px/1 'Nunito',sans-serif">The 40 people he employed</span><span style="font:800 12.5px/1 'Nunito',sans-serif;color:#2FA97C">Trusted</span></div><div style="height:7px;border-radius:99px;background:#F1EDF9;margin-top:8px"><div style="height:7px;border-radius:99px;background:#2FA97C;width:86%"></div></div><div style="font:600 12px/1.45 'Nunito',sans-serif;color:#8A80A3;margin-top:6px">Never missed a payroll, including the year he didn't pay himself.</div></div>
+<div><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:700 13px/1 'Nunito',sans-serif">Portland, Ward 4</span><span style="font:800 12.5px/1 'Nunito',sans-serif;color:#E9A93B">Respected, not liked</span></div><div style="height:7px;border-radius:99px;background:#F1EDF9;margin-top:8px"><div style="height:7px;border-radius:99px;background:#E9A93B;width:58%"></div></div><div style="font:600 12px/1.45 'Nunito',sans-serif;color:#8A80A3;margin-top:6px">Known as the man who made the trucks turn their engines off.</div></div>
+<div><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:700 13px/1 'Nunito',sans-serif">His industry</span><span style="font:800 12.5px/1 'Nunito',sans-serif;color:#E2563C">Difficult</span></div><div style="height:7px;border-radius:99px;background:#F1EDF9;margin-top:8px"><div style="height:7px;border-radius:99px;background:#E2563C;width:34%"></div></div><div style="font:600 12px/1.45 'Nunito',sans-serif;color:#8A80A3;margin-top:6px">Two national carriers stopped calling after he refused to sell.</div></div>
+<div><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:700 13px/1 'Nunito',sans-serif">Everyone else</span><span style="font:800 12.5px/1 'Nunito',sans-serif;color:#8A80A3">Never heard of him</span></div><div style="height:7px;border-radius:99px;background:#F1EDF9;margin-top:8px"><div style="height:7px;border-radius:99px;background:#B6AACF;width:9%"></div></div><div style="font:600 12px/1.45 'Nunito',sans-serif;color:#8A80A3;margin-top:6px">He was never famous. Most people aren't.</div></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #EAE3F5;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C93B4">WHAT HE ACTUALLY CHANGED</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:17px;line-height:1.2;flex:none">💼</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D3450;text-wrap:pretty"><b>412 people</b> drew a wage from his company over 51 years. Nine of them started their own.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:17px;line-height:1.2;flex:none">⚖️</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D3450;text-wrap:pretty">The <b>freight-idling ordinance</b> is still law in Portland. It is the only thing he did that a stranger might benefit from today.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:17px;line-height:1.2;flex:none">🎓</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D3450;text-wrap:pretty">The <b>Rivera Scholarship</b> has paid for <b>39 kids</b> so far and is funded for another 60 years.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:17px;line-height:1.2;flex:none">🏠</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D3450;text-wrap:pretty">He kept his parents' house in the family. His granddaughter lives in it now.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:17px;line-height:1.2;flex:none">🕳️</span><span style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#8A80A3;text-wrap:pretty">And one thing he never fixed: he stopped speaking to his son for 28 years and died before either of them moved.</span></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #EAE3F5;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C93B4">A LIFE, IN NUMBERS</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:15px">
+<div><div style="font:800 21px/1 'Baloo 2',cursive;color:#5F51AE">83</div><div style="font:700 11px/1.3 'Nunito',sans-serif;color:#8A80A3;margin-top:4px">years lived</div></div>
+<div><div style="font:800 21px/1 'Baloo 2',cursive;color:#5F51AE">$1.4M</div><div style="font:700 11px/1.3 'Nunito',sans-serif;color:#8A80A3;margin-top:4px">estate</div></div>
+<div><div style="font:800 21px/1 'Baloo 2',cursive;color:#5F51AE">2</div><div style="font:700 11px/1.3 'Nunito',sans-serif;color:#8A80A3;margin-top:4px">children</div></div>
+<div><div style="font:800 21px/1 'Baloo 2',cursive;color:#5F51AE">51</div><div style="font:700 11px/1.3 'Nunito',sans-serif;color:#8A80A3;margin-top:4px">yrs of business</div></div>
+<div><div style="font:800 21px/1 'Baloo 2',cursive;color:#5F51AE">1</div><div style="font:700 11px/1.3 'Nunito',sans-serif;color:#8A80A3;margin-top:4px">law passed</div></div>
+<div><div style="font:800 21px/1 'Baloo 2',cursive;color:#5F51AE">0</div><div style="font:700 11px/1.3 'Nunito',sans-serif;color:#8A80A3;margin-top:4px">times famous</div></div>
+</div>
+<div style="font:600 12.5px/1.55 'Nunito',sans-serif;color:#8A80A3;margin-top:16px;text-wrap:pretty">Wealthier than 91% of people alive in his country when he died. Happier than 64% of them. Remembered by roughly 400.</div>
+</div>
+<div style="background:#fff;border:1px solid #EAE3F5;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C93B4">WHAT YOU LEFT</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:13px">
+<div style="background:#F6F2FB;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#5F51AE">$1.4M estate</div>
+<div style="background:#F6F2FB;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#5F51AE">A company, 40 staff</div>
+<div style="background:#F6F2FB;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#5F51AE">A scholarship</div>
+<div style="background:#F6F2FB;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#5F51AE">One city ordinance</div>
+<div style="background:#F6F2FB;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#5F51AE">A good name</div>
+<div style="background:#FFF0E8;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#C4462E">One angry son</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C93B4;margin-bottom:11px">WHO DO YOU WANT TO BE NOW?</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:2px solid #7B6BD6;border-radius:18px;padding:16px;display:flex;align-items:center;gap:13px"><div style="width:46px;height:46px;border-radius:99px;background:#F6F2FB;display:flex;align-items:center;justify-content:center;font-size:23px;flex:none">👩</div><div style="flex:1"><div style="font:800 15.5px/1.2 'Baloo 2',cursive">Maya Rivera, 41</div><div style="font:700 12px/1.4 'Nunito',sans-serif;color:#6E6389;margin-top:4px">Your daughter. Runs the company. Grew up rich.</div></div></div>
+<div style="background:#fff;border:1.5px solid #EAE3F5;border-radius:18px;padding:16px;display:flex;align-items:center;gap:13px"><div style="width:46px;height:46px;border-radius:99px;background:#F6F2FB;display:flex;align-items:center;justify-content:center;font-size:23px;flex:none">🧑</div><div style="flex:1"><div style="font:800 15.5px/1.2 'Baloo 2',cursive">Theo Rivera, 38</div><div style="font:700 12px/1.4 'Nunito',sans-serif;color:#6E6389;margin-top:4px">Your son. Owns nothing. Resents everything.</div></div></div>
+<div style="background:#fff;border:1.5px solid #EAE3F5;border-radius:18px;padding:16px;display:flex;align-items:center;gap:13px"><div style="width:46px;height:46px;border-radius:99px;background:#F6F2FB;display:flex;align-items:center;justify-content:center;font-size:23px;flex:none">👶</div><div style="flex:1"><div style="font:800 15.5px/1.2 'Baloo 2',cursive">Somebody new</div><div style="font:700 12px/1.4 'Nunito',sans-serif;color:#6E6389;margin-top:4px">Start from nothing, somewhere else.</div></div></div>
+</div>
+</div>
+</div>
+<div style="flex:none;padding:12px 22px 20px"><div style="background:#7B6BD6;color:#fff;border-radius:20px;padding:18px;flex:none;text-align:center;font:800 17px/1 'Baloo 2',cursive;box-shadow:0 4px 0 #6153B8">Live as Maya →</div></div>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Death is the only screen that changes colour — a soft violet, so it feels like a chapter break rather than a fail state. The heir options are framed by what they'd be like to play, not by what they inherit.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E9A93B;padding:5px 8px;border-radius:99px">4D</span><span style="font:800 14px/1 'Baloo 2',cursive">Coming back</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ yes }}" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#1A1714;justify-content:space-between">
+<div style="padding:98px 24px 0;text-align:center">
+<div style="font:700 15px/1 'Nunito',sans-serif;color:rgba(255,255,255,0.6)">Thursday, March 2</div>
+<div style="font:800 78px/1 'Baloo 2',cursive;color:#fff;margin-top:6px">9:41</div>
+</div>
+<div style="padding:0 14px 58px;display:flex;flex-direction:column;gap:10px">
+<div style="background:rgba(255,255,255,0.14);border-radius:22px;padding:15px 17px">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.06em;color:rgba(255,255,255,0.75)">✨ ONE LIFE</span><span style="font:700 11px/1 'Nunito',sans-serif;color:rgba(255,255,255,0.55)">now</span></div>
+<div style="font:800 15px/1.35 'Baloo 2',cursive;color:#fff;margin-top:9px">Emma's been trying to reach you.</div>
+<div style="font:600 13px/1.5 'Nunito',sans-serif;color:rgba(255,255,255,0.72);margin-top:5px;text-wrap:pretty">You're 28 and something's waiting.</div>
+</div>
+<div style="background:rgba(255,255,255,0.09);border-radius:22px;padding:15px 17px">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.06em;color:rgba(255,255,255,0.6)">✨ ONE LIFE</span><span style="font:700 11px/1 'Nunito',sans-serif;color:rgba(255,255,255,0.45)">Tuesday</span></div>
+<div style="font:800 14.5px/1.35 'Baloo 2',cursive;color:rgba(255,255,255,0.9);margin-top:9px">Fuel prices are climbing again.</div>
+<div style="font:600 13px/1.5 'Nunito',sans-serif;color:rgba(255,255,255,0.62);margin-top:5px;text-wrap:pretty">Your vans might feel it.</div>
+</div>
+<div style="padding:10px 6px 0;font:600 12px/1.6 'Nunito',sans-serif;color:rgba(255,255,255,0.42);text-wrap:pretty">Never "your daughter graduated" — your life didn't move while you were gone. Two a week, in your character's voice, always about something waiting for you.</div>
+</div>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">The one dark screen left in the design, and only because phones are dark at 9:41pm. Push copy is written as gossip about your own life, which is the honest version of what the return-event system actually produces.</div>
+</div>
+
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid #E1D5C2;padding-bottom:12px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.12em;color:#E2563C">FLOW 5</div>
+<div style="font:800 30px/1 'Baloo 2',cursive">The other lives you can have</div>
+<div style="font:600 14px/1.4 'Nunito',sans-serif;color:#8A7E70">Same card grammar, different content. Each of these unlocks from something you did earlier.</div>
+</div>
+<div style="display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#7B6BD6;padding:5px 8px;border-radius:99px">5A</span><span style="font:800 14px/1 'Baloo 2',cursive">University</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 18px;background:#EEEAFB">
+<div style="font:700 12px/1 'Nunito',sans-serif;color:#6153B8">SECOND YEAR</div>
+<div style="font:800 25px/1.1 'Baloo 2',cursive;margin-top:7px">Portland State</div>
+<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif">Computer Science</div>
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#2FA97C">GPA 3.4</div>
+<div style="background:#fff;border-radius:99px;padding:9px 14px;font:800 12.5px/1 'Nunito',sans-serif;color:#E2563C">−$31,000</div>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#EEEAFB;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">🌙</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#5F51AE">3AM, FINALS WEEK</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">Someone in your study group has last year's exam paper.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">Four of you are in the room. Nobody has said the word "cheating" out loud yet. You are two points from losing your scholarship.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Read it</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Leave the room</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Report it</div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">THIS SEMESTER</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:8px 16px;flex:none">
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">Algorithms</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">A−</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">Statistics</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#E2563C">D+</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0"><span style="font:700 13.5px/1 'Nunito',sans-serif">Ethics elective</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">A</span></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">CAMPUS LIFE</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#EEEAFB;border-radius:18px;padding:15px 14px;min-height:44px"><div style="font-size:20px;line-height:1">📖</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Study</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#5F51AE;margin-top:4px">🧠 +5</div></div>
+<div style="background:#FFF3D9;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">🍻</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Party</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#8A6A20;margin-top:4px">😊 +7 · 🧠 −2</div></div>
+<div style="background:#EAF6F0;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">💼</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Campus job</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#3D7A5E;margin-top:4px">+$740 / mo</div></div>
+<div style="background:#EAF2FA;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">🔬</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Research lab</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#2E6FA8;margin-top:4px">opens doors</div></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">PEOPLE HERE</div>
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#F4F0E7;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🧑‍🏫</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Prof. Ibrahim</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Could get you an internship</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#8A7E70">41</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:18px;padding:13px 14px;display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:99px;background:#E9F4EE;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🧑</div><div style="flex:1"><div style="font:800 14.5px/1.2 'Baloo 2',cursive">Daniel Okafor</div><div style="font:700 12px/1.3 'Nunito',sans-serif;color:#8A7E70;margin-top:3px">Roommate · already has ideas</div></div><span style="font:800 12px/1 'Nunito',sans-serif;color:#2FA97C">72</span></div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="Do" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Debt is on the header, permanently, in red — it follows you into the Money screen for a decade. Daniel is introduced here as a roommate, which is why he can ask you for $5,000 at 27.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#2FA97C;padding:5px 8px;border-radius:99px">5B</span><span style="font:800 14px/1 'Baloo 2',cursive">Sports career</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 18px;background:#EAF6F0;display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div><div style="font:700 12px/1 'Nunito',sans-serif;color:#3D7A5E">MIDFIELDER · AGE 23</div><div style="font:800 25px/1.1 'Baloo 2',cursive;margin-top:7px">Cascade FC</div><div style="font:700 12.5px/1 'Nunito',sans-serif;color:#4C7C64;margin-top:6px">Second division · 14 appearances</div></div>
+<div style="width:54px;height:54px;border-radius:99px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none">⚽</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">YOUR GAME</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+<div><div style="display:flex;justify-content:space-between"><span style="font:700 13px/1 'Nunito',sans-serif">Skill</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C">78</span></div><div style="height:7px;border-radius:99px;background:#F0E6D8;margin-top:7px"><div style="height:7px;border-radius:99px;background:#2FA97C;width:78%"></div></div></div>
+<div><div style="display:flex;justify-content:space-between"><span style="font:700 13px/1 'Nunito',sans-serif">Fitness</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E9A93B">64</span></div><div style="height:7px;border-radius:99px;background:#F0E6D8;margin-top:7px"><div style="height:7px;border-radius:99px;background:#E9A93B;width:64%"></div></div></div>
+<div><div style="display:flex;justify-content:space-between"><span style="font:700 13px/1 'Nunito',sans-serif">Left knee</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E2563C">Not right since March</span></div><div style="height:7px;border-radius:99px;background:#F0E6D8;margin-top:7px"><div style="height:7px;border-radius:99px;background:#E2563C;width:41%"></div></div></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#EAF6F0;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">🩹</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#3D7A5E">SIX DAYS BEFORE THE PLAYOFF</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">The knee is worse and only you know.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">A first-division scout is coming to the playoff. The physio would rule you out if you told him. Your contract ends in July.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Play through it</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Tell the physio</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Painkillers and say nothing</div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">HOW FAR THIS GOES</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#C0B4A5">School team<span>—</span></div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#C0B4A5">Academy<span>$0</span></div>
+<div style="background:#2A2118;border-radius:14px;padding:14px 15px;display:flex;justify-content:space-between;font:800 14px/1 'Nunito',sans-serif;color:#fff">Second division<span>$41k</span></div>
+<div style="background:#fff;border:1.5px dashed #C9B79C;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#8A7E70">First division<span>$310k</span></div>
+<div style="background:#fff;border:1.5px dashed #E3D6C2;border-radius:14px;padding:13px 15px;display:flex;justify-content:space-between;font:700 13.5px/1 'Nunito',sans-serif;color:#C0B4A5">National team<span>rare</span></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">AFTER PLAYING</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif">🧑‍🏫 Coach</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif">📋 Agent</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif">🎙️ Pundit</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif">🏟️ Buy a club</div>
+</div>
+</div>
+<div style="background:#F3F7FC;border-radius:20px;padding:16px 18px;flex:none;font:600 13px/1.55 'Nunito',sans-serif;color:#3E6180;text-wrap:pretty">Design note: the sport you can play depends on where you were born. Cascade FC in Portland, cricket in Karachi, baseball in Osaka — same screen, different ladder.</div>
+</div>
+<dc-import name="GameTabs" active="Do" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">A sports career is a short, high-variance version of the whole game: a visible ladder, a body that degrades, and one injury decision that can end it. The "after playing" row matters more than the ladder — most players will need it.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E2563C;padding:5px 8px;border-radius:99px">5C</span><span style="font:800 14px/1 'Baloo 2',cursive">Crime</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 14px;background:#fff;border-bottom:1px solid #F2E8D9;display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div><div style="font:700 12px/1 'Nunito',sans-serif;color:#A79B8C">Saturday, November 9</div><div style="font:800 25px/1.1 'Baloo 2',cursive;margin-top:5px">Alex Rivera</div><div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">Age 26 · broke · $340 in the bank</div></div>
+<div style="width:54px;height:54px;border-radius:99px;background:#FFF0E8;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none">🧑</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#FFF0E8;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">🕶️</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#C4462E">SOMEONE ASKS A FAVOUR</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">Drive a van, don't ask what's in it. $4,000.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">It's Daniel's cousin. Two hours each way, tonight. He says it's the third time he's asked someone and nothing has ever gone wrong.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">Do it</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#C4462E">caught 34%</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">Ask what's in it first</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">caught 12%</span></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;min-height:44px;box-sizing:border-box"><span style="font:700 14.5px/1.2 'Nunito',sans-serif">Say no</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#8A7E70">Daniel −8</span></div>
+</div>
+<div style="font:600 12px/1.5 'Nunito',sans-serif;color:#A79B8C;margin-top:14px;text-wrap:pretty">Odds shown because you're desperate, not smart — a cautious character sees them too, they're just worse at ignoring them.</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">WHAT'S ON OFFER AROUND HERE</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#FFF0E8;border-radius:18px;padding:15px 14px;min-height:44px"><div style="font-size:20px;line-height:1">🚗</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Steal a car</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">$2,800 · 41%</div></div>
+<div style="background:#FFF0E8;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">💳</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Card fraud</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">$9,000 · 27%</div></div>
+<div style="background:#FFF0E8;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">📦</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Move product</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">steady · 19%</div></div>
+<div style="background:#FFF0E8;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">🏦</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Something big</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">🔒 need people</div></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:17px 18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">YOUR RECORD</div>
+<div style="font:600 14px/1.6 'Nunito',sans-serif;color:#3D342A;margin-top:11px;text-wrap:pretty">Clean, apart from a speeding fine at 22. A clean record is worth more than $4,000 — it's the reason banks lend to you and Northgate hired you.</div>
+</div>
+<div style="background:#FFF3D9;border-radius:20px;padding:16px 18px;flex:none;font:600 13px/1.55 'Nunito',sans-serif;color:#8A6A20;text-wrap:pretty">⚖️ &nbsp;Where you were born changes all of this: what's illegal, how hard police look, and how much a conviction ruins.</div>
+</div>
+<dc-import name="GameTabs" active="Do" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Crime is priced, not glamorised — every tile shows the payout and the odds, and the record card underneath tells you what you're actually gambling with. It stays on the Do tab rather than getting its own tab, so it's a choice, not a career path the UI recommends.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#E2563C;padding:5px 8px;border-radius:99px">5D</span><span style="font:800 14px/1 'Baloo 2',cursive">Prison</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#F4F1EC">
+<div style="flex:none;padding:54px 20px 18px;background:#3A342C">
+<div style="font:700 12px/1 'Nunito',sans-serif;color:rgba(255,255,255,0.55)">SERVING 3 YEARS · YEAR 2 OF 3</div>
+<div style="font:800 25px/1.1 'Baloo 2',cursive;color:#fff;margin-top:7px">Columbia Correctional</div>
+<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+<div style="background:rgba(255,255,255,0.16);border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#fff">Possession with intent</div>
+<div style="background:rgba(255,255,255,0.16);border-radius:99px;padding:9px 13px;font:800 12px/1 'Nunito',sans-serif;color:#fff">Age 27</div>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:22px;padding:18px;flex:none">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">TIME LEFT</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C">14 months</span></div>
+<div style="height:9px;border-radius:99px;background:#EFE9DF;margin-top:14px"><div style="height:9px;border-radius:99px;background:#2FA97C;width:61%"></div></div>
+<div style="font:600 13px/1.55 'Nunito',sans-serif;color:#6E6255;margin-top:12px;text-wrap:pretty">Parole hearing in five months. Good behaviour helps. So does a letter from someone respectable.</div>
+</div>
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:24px;box-shadow:0 5px 0 #E8E1D6;overflow:hidden;flex:none">
+<div style="background:#F1EDE6;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">🚪</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#6E6255">IN THE YARD</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">Someone offers you protection, for a price later.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">Nothing is asked for now. That's what makes it expensive. He gets out four months before you do.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#F8F5F0;border:1.5px solid #E8E1D6;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Accept</div>
+<div style="background:#F8F5F0;border:1.5px solid #E8E1D6;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Decline politely</div>
+<div style="background:#F8F5F0;border:1.5px solid #E8E1D6;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Tell a guard</div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">HOW YOU SPEND THREE YEARS</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:18px;padding:15px 14px;min-height:44px"><div style="font-size:20px;line-height:1">📚</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Finish your degree</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#5F51AE;margin-top:4px">🧠 +11</div></div>
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">🏋️</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Lift</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#3D7A5E;margin-top:4px">💪 +14</div></div>
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">✉️</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Write to Emma</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C25585;margin-top:4px">she reads them</div></div>
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:18px;padding:15px 14px"><div style="font-size:20px;line-height:1">🧱</div><div style="font:800 13.5px/1.2 'Baloo 2',cursive;margin-top:8px">Try to escape</div><div style="font:700 11.5px/1.3 'Nunito',sans-serif;color:#C4462E;margin-top:4px">almost never works</div></div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #E8E1D6;border-radius:20px;padding:17px 18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">WHAT THIS COSTS AFTER</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">💼 &nbsp;Half the job ladders close. Northgate won't take you back.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">🏦 &nbsp;No business loan for seven years. Rivera Hauling starts later, or never.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">🏛️ &nbsp;You can't run for the council seat at 44.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">👧 &nbsp;Your kids will find out. The game decides when.</div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="Life" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">The only screen that changes the app's chrome — muted, browner, colder. The consequences card explicitly names doors that closed in other screens, so a three-year sentence reads as a fifty-year cost.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#DB6C9B;padding:5px 8px;border-radius:99px">5E</span><span style="font:800 14px/1 'Baloo 2',cursive">Fame</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 18px;background:#FDE9F1;display:flex;justify-content:space-between;align-items:center;gap:12px">
+<div><div style="font:700 12px/1 'Nunito',sans-serif;color:#9A5C77">KNOWN FOR: THE HAULING SHOW</div><div style="font:800 25px/1.1 'Baloo 2',cursive;margin-top:7px">1.2M following</div><div style="font:700 12.5px/1 'Nunito',sans-serif;color:#9A5C77;margin-top:6px">Recognised in Portland, nowhere else</div></div>
+<div style="width:54px;height:54px;border-radius:99px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none">🎙️</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;padding:18px;flex:none">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">HOW PEOPLE FEEL ABOUT YOU</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C">Liked</span></div>
+<div style="display:flex;height:11px;border-radius:99px;overflow:hidden;margin-top:14px"><div style="width:64%;background:#2FA97C"></div><div style="width:24%;background:#E3D6C2"></div><div style="width:12%;background:#E2563C"></div></div>
+<div style="display:flex;justify-content:space-between;margin-top:10px"><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#2FA97C">64% fans</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#A79B8C">24% indifferent</span><span style="font:700 11.5px/1 'Nunito',sans-serif;color:#E2563C">12% hate you</span></div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#FFF0E8;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">📰</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#C4462E">A REPORTER CALLS</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">Someone found the conviction.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">A local paper has the court record from when you were 27. They're running it Sunday either way and they'd like a comment.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Tell the whole story yourself, first</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">"No comment"</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Call a lawyer</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Lie</div>
+</div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">WHAT FAME PAYS</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:8px 16px;flex:none">
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">🎬 The show</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">+$14,000 / mo</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #F6EFE3"><span style="font:700 13.5px/1 'Nunito',sans-serif">🤝 Two brand deals</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">+$6,200 / mo</span></div>
+<div style="display:flex;justify-content:space-between;padding:11px 0"><span style="font:700 13.5px/1 'Nunito',sans-serif">🚚 Company bookings, up 31%</span><span style="font:800 13.5px/1 'Nunito',sans-serif;color:#2FA97C">knock-on</span></div>
+</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">WHAT IT COSTS</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:20px;padding:17px 18px;flex:none;display:flex;flex-direction:column;gap:9px">
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">👀 &nbsp;Every choice you make can now become an event for strangers.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">👧 &nbsp;Maya is recognised at school. She didn't choose this.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3D342A">😊 &nbsp;Happiness swings twice as hard in both directions.</div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="More" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Fame is modelled as a three-way split of public opinion rather than a single number, so a scandal moves the haters bar and not the total. The reporter card reaches nineteen years back into the prison screen — that's the payoff of storing facts instead of stats.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#3B8FD4;padding:5px 8px;border-radius:99px">5F</span><span style="font:800 14px/1 'Baloo 2',cursive">Health &amp; hospital</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 18px;background:#EAF2FA">
+<div style="font:700 12px/1 'Nunito',sans-serif;color:#2E6FA8">ST. VINCENT'S · AGE 71</div>
+<div style="font:800 25px/1.1 'Baloo 2',cursive;margin-top:7px">You had a heart attack.</div>
+<div style="font:600 13.5px/1.5 'Nunito',sans-serif;color:#3E6180;margin-top:8px;text-wrap:pretty">You survived it. What happens next is a decision, and it has a price.</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;padding:18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184">YOUR BODY, HONESTLY</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+<div><div style="display:flex;justify-content:space-between"><span style="font:700 13px/1 'Nunito',sans-serif">❤️ Health</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E2563C">31</span></div><div style="height:7px;border-radius:99px;background:#F0E6D8;margin-top:7px"><div style="height:7px;border-radius:99px;background:#E2563C;width:31%"></div></div></div>
+<div style="font:600 13px/1.55 'Nunito',sans-serif;color:#6E6255;text-wrap:pretty">High blood pressure since 38, untreated for 19 years. Two packs a week from 24 to 46. You walked away from three doctors telling you the same thing.</div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#EAF2FA;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">🩺</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#2E6FA8">THE SURGEON EXPLAINS YOUR OPTIONS</span></div>
+<div style="padding:18px;display:flex;flex-direction:column;gap:9px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px"><div style="display:flex;justify-content:space-between;gap:10px"><span style="font:800 14.5px/1.2 'Nunito',sans-serif">Triple bypass</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E2563C">$48,000</span></div><div style="font:600 12.5px/1.45 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Best odds. Six weeks flat on your back. Insurance covers $31,000.</div></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px"><div style="display:flex;justify-content:space-between;gap:10px"><span style="font:800 14.5px/1.2 'Nunito',sans-serif">Stents and medication</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#E9A93B">$9,400</span></div><div style="font:600 12.5px/1.45 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Good enough, probably. Pills every day for the rest of your life.</div></div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:15px 16px"><div style="display:flex;justify-content:space-between;gap:10px"><span style="font:800 14.5px/1.2 'Nunito',sans-serif">Go home and change everything</span><span style="font:800 13px/1 'Nunito',sans-serif;color:#2FA97C">$0</span></div><div style="font:600 12.5px/1.45 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Walking, salt, sleep. Works for some people. You have never been one of them.</div></div>
+</div>
+</div>
+<div style="background:#EAF6F0;border-radius:20px;padding:16px 18px;flex:none">
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#3D7A5E">IF YOU'D BEEN BORN SOMEWHERE ELSE</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">🇩🇰 &nbsp;Denmark: $0. You'd have been treated at 38, too.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">🇻🇳 &nbsp;Việt Nam: about $4,100, paid mostly by your daughter.</div>
+<div style="font:600 13px/1.45 'Nunito',sans-serif;color:#2F5F4A">🇳🇬 &nbsp;Nigeria: the bypass isn't really on offer where you live.</div>
+</div>
+<div style="font:600 12px/1.5 'Nunito',sans-serif;color:#4C7C64;margin-top:12px;text-wrap:pretty">Shown once, at the biggest medical moment of a life — this is where the birthplace choice finally bites.</div>
+</div>
+<div>
+<div style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#9C9184;margin-bottom:11px">WHO'S IN THE WAITING ROOM</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif">👩 Emma</div>
+<div style="background:#fff;border:1.5px solid #F0E6D8;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif">👧 Maya</div>
+<div style="background:#FFF0E8;border:1.5px solid #F5D9CE;border-radius:99px;padding:11px 15px;font:800 12.5px/1 'Nunito',sans-serif;color:#C4462E">🧑 Theo didn't come</div>
+</div>
+</div>
+</div>
+<dc-import name="GameTabs" active="Life" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Illness is a costed decision, not a dice roll, and the honest history card names every earlier screen where you were warned. The birthplace comparison appears exactly once per life, here, where it means the most.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:402px;flex:none">
+<div style="display:flex;align-items:center;gap:9px"><span style="font:800 10.5px/1 'Nunito',sans-serif;color:#fff;background:#7B6BD6;padding:5px 8px;border-radius:99px">5G</span><span style="font:800 14px/1 'Baloo 2',cursive">Your kids</span></div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#FFF9F2">
+<div style="flex:none;padding:54px 20px 16px;background:#fff;border-bottom:1px solid #F2E8D9">
+<div style="font:800 28px/1.1 'Baloo 2',cursive">Your kids</div>
+<div style="font:700 13px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:6px">Two. They are not you, and they notice everything.</div>
+</div>
+<div style="flex:1;overflow:auto;padding:16px 18px 14px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;box-shadow:0 4px 0 #F3EAdC;padding:17px;flex:none;display:flex;flex-direction:column;gap:13px">
+<div style="display:flex;align-items:center;gap:13px">
+<div style="width:52px;height:52px;border-radius:99px;background:#F6F2FB;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">👧</div>
+<div style="flex:1;min-width:0"><div style="font:800 17px/1.2 'Baloo 2',cursive">Maya, 9</div><div style="font:700 12.5px/1.35 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Quick, stubborn, keeps score</div></div>
+<div style="text-align:right;flex:none"><div style="font-size:15px;line-height:1">💗</div><div style="font:800 12px/1 'Nunito',sans-serif;color:#7B6BD6;margin-top:5px">88</div></div>
+</div>
+<div style="display:flex;gap:6px">
+<div style="flex:1;background:#FFF9F2;border-radius:12px;padding:9px 6px;text-align:center"><div style="font-size:14px;line-height:1">🧠</div><div style="font:800 11px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">81</div></div>
+<div style="flex:1;background:#FFF9F2;border-radius:12px;padding:9px 6px;text-align:center"><div style="font-size:14px;line-height:1">💪</div><div style="font:800 11px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">64</div></div>
+<div style="flex:1;background:#FFF9F2;border-radius:12px;padding:9px 6px;text-align:center"><div style="font-size:14px;line-height:1">😊</div><div style="font:800 11px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">77</div></div>
+<div style="flex:1;background:#FFF9F2;border-radius:12px;padding:9px 6px;text-align:center"><div style="font-size:14px;line-height:1">🎨</div><div style="font:800 11px/1 'Nunito',sans-serif;color:#8A7E70;margin-top:5px">52</div></div>
+</div>
+<div style="font:600 13px/1.5 'Nunito',sans-serif;color:#6E6255;text-wrap:pretty">She has asked to come to the depot on Saturdays. She has asked four times.</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:22px;box-shadow:0 4px 0 #F3EAdC;padding:17px;flex:none;display:flex;flex-direction:column;gap:13px">
+<div style="display:flex;align-items:center;gap:13px">
+<div style="width:52px;height:52px;border-radius:99px;background:#FFF0E8;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none">👦</div>
+<div style="flex:1;min-width:0"><div style="font:800 17px/1.2 'Baloo 2',cursive">Theo, 6</div><div style="font:700 12.5px/1.35 'Nunito',sans-serif;color:#8A7E70;margin-top:4px">Quiet, watchful, cries at unfairness</div></div>
+<div style="text-align:right;flex:none"><div style="font-size:15px;line-height:1">🙂</div><div style="font:800 12px/1 'Nunito',sans-serif;color:#E9A93B">54</div></div>
+</div>
+<div style="font:600 13px/1.5 'Nunito',sans-serif;color:#C4462E;text-wrap:pretty">You have missed eleven of his things. He has stopped mentioning them, which is worse.</div>
+</div>
+<div style="background:#fff;border:1px solid #F0E6D8;border-radius:24px;box-shadow:0 5px 0 #F0E6D8;overflow:hidden;flex:none">
+<div style="background:#EEEAFB;padding:13px 18px;display:flex;align-items:center;gap:9px"><span style="font-size:17px;line-height:1">🎒</span><span style="font:800 11.5px/1 'Nunito',sans-serif;letter-spacing:0.07em;color:#5F51AE">SATURDAY, 7AM</span></div>
+<div style="padding:18px">
+<div style="font:700 20px/1.28 'Baloo 2',cursive">Two things at once, as usual.</div>
+<div style="font:600 14.5px/1.6 'Nunito',sans-serif;color:#6E6255;margin-top:9px;text-wrap:pretty">Maya wants to come to the depot. Theo has a school play at the same hour, and hasn't asked you to come.</div>
+<div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Take Maya to the depot</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Go to the play</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Send Emma to the play, take Maya</div>
+<div style="background:#FFF9F2;border:1.5px solid #F0E6D8;border-radius:16px;padding:14px 16px;font:700 14.5px/1.2 'Nunito',sans-serif;min-height:44px;box-sizing:border-box;display:flex;align-items:center">Work. It's a Saturday in November.</div>
+</div>
+</div>
+</div>
+<div style="background:#F3F7FC;border-radius:20px;padding:16px 18px;flex:none;font:600 13px/1.55 'Nunito',sans-serif;color:#3E6180;text-wrap:pretty">Design note: this choice is why Theo won't speak to you at 55 and why Maya gets the company at 61. The game keeps the tally quietly and never shows it as a score.</div>
+</div>
+<dc-import name="GameTabs" active="People" hint-size="100%,76px"></dc-import>
+</div>
+</x-import>
+<div style="font:600 13px/1.6 'Nunito',sans-serif;color:#8A7E70;text-wrap:pretty">Kids are the game's long fuse. Each one has real stats you influence but don't control, and the recurring "two things at once" card is the mechanic — you can't be in both places for eighteen years, and the difference becomes the succession screen.</div>
+</div>
+
+</div>
+</div>
+
+<div style="background:#fff;border:1px solid #EBE0D0;border-radius:24px;padding:30px 32px;display:flex;gap:52px;flex-wrap:wrap;max-width:1520px">
+<div style="flex:1;min-width:290px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.1em;color:#E2563C">WHAT'S STILL MISSING</div>
+<div style="font:600 14.5px/1.7 'Nunito',sans-serif;color:#6E6255;margin-top:13px;text-wrap:pretty">Military service, religion and community, addiction and recovery, retirement, and the country-specific content packs behind the birthplace picker — 193 countries means 193 sets of school systems, job ladders, laws and family expectations, which is a content problem rather than a design one.</div>
+</div>
+<div style="flex:1;min-width:290px">
+<div style="font:800 11px/1 'Nunito',sans-serif;letter-spacing:0.1em;color:#E2563C">TELL ME NEXT</div>
+<div style="font:600 14.5px/1.7 'Nunito',sans-serif;color:#6E6255;margin-top:13px;text-wrap:pretty">"Make the playable loop run a full life, birth to death." · "Add the crime and fame card types." · "Try a bolder, more cartoon look." · "Show me the kid's-life version of screen 1A."</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Presentation&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      age: 24, idx: 0, phase: 'event', money: 12400, birthday: null,
+      st: { health: 82, happy: 71, smarts: 68, fit: 64, charm: 59 },
+      result: null, deltas: [], history: []
+    };
+  }
+
+  events() {
+    return [
+      { icon: '💼', label: 'WORK', tint: '#EAF2FA', color: '#2E6FA8',
+        title: 'They offered you the senior role — in Denver.',
+        body: 'Marcus called you in. More money, better title, 1,200 miles away. Emma told you once she\u2019d never move for a job, and she wasn\u2019t joking.',
+        choices: [
+          { label: 'Take it and move', out: 'You took it. Emma said she\u2019d visit. She visited twice.', d: { money: 22000, happy: -14, charm: -6 }, h: 'You moved to Denver for work.' },
+          { label: 'Ask to do it from Portland', out: 'Marcus pushed it through, grudgingly. He mentions it whenever he needs a favour.', d: { money: 14000, happy: 3, smarts: 4 }, h: 'You got the senior role without moving.' },
+          { label: 'Turn it down', out: 'You said no and didn\u2019t explain why. Emma still doesn\u2019t know she was the reason.', d: { happy: 6, money: 0, charm: 2 }, h: 'You turned down Denver. You never told Emma.' }
+        ] },
+      { icon: '💞', label: 'EMMA', tint: '#FDE9F1', color: '#C25585',
+        title: '"Are you free this weekend? I want to talk about something."',
+        body: 'Three years in, no context, and a text that just sits there. You read it four times.',
+        choices: [
+          { label: 'Call her right now', out: 'She wanted to move in together. You said yes before she finished asking.', d: { happy: 12, charm: 4 }, h: 'You and Emma moved in together.' },
+          { label: 'Say you\u2019re busy', out: 'You bought a week. The conversation waited, and got heavier.', d: { happy: -7 }, h: 'You put off a conversation with Emma.' },
+          { label: 'Reply "is everything ok?"', out: 'She said it was good news. You spent four days assuming otherwise.', d: { happy: 2, health: -3 }, h: 'You worried for four days over nothing.' }
+        ] },
+      { icon: '🩺', label: 'YOUR BODY', tint: '#EAF6F0', color: '#3D7A5E',
+        title: 'You haven\u2019t slept properly since March.',
+        body: 'Nothing is wrong, exactly. You just wake up at 4am and start thinking about work.',
+        choices: [
+          { label: 'Go see a doctor', out: 'Borderline blood pressure at 26. She told you to fix it now, while it\u2019s cheap.', d: { health: 9, money: -180, smarts: 2 }, h: 'A doctor caught your blood pressure early.' },
+          { label: 'Push through it', out: 'You pushed through. It became the normal way you feel.', d: { health: -11, happy: -5, money: 0 }, h: 'You ignored the sleep thing.' },
+          { label: 'Take a week off', out: 'You slept for nine days and came back better than the raise would have made you.', d: { health: 7, happy: 10, money: -900 }, h: 'You took a week off and it worked.' }
+        ] },
+      { icon: '🤝', label: 'DANIEL', tint: '#FFF3D9', color: '#8A6A20',
+        title: 'Daniel wants $5,000 for his app.',
+        body: 'He\u2019s your oldest friend and he has never once finished anything. He brought a pitch deck to your kitchen table.',
+        choices: [
+          { label: 'Give him the $5,000', out: 'The app died in eight months. He stopped bringing it up, and so did you.', d: { money: -5000, happy: -3, charm: 5 }, h: 'You lost $5,000 on Daniel\u2019s app.' },
+          { label: 'Offer half', out: 'You gave him $2,500. Enough to keep the friendship, not enough to save the app.', d: { money: -2500, happy: 1 }, h: 'You lent Daniel $2,500.' },
+          { label: 'Say no, kindly', out: 'He said he understood. He was different with you for about two years.', d: { charm: -8, happy: -4 }, h: 'You turned Daniel down.' }
+        ] },
+      { icon: '🏠', label: 'FAMILY', tint: '#EEEAFB', color: '#5F51AE',
+        title: 'Your dad is thinking about selling the house.',
+        body: 'The one you grew up in. He called at 11pm to mention it casually, which is how he mentions important things.',
+        choices: [
+          { label: 'Offer to buy it', out: 'You took on $61,000 of loan and a house you don\u2019t live in. He cried, briefly, and denied it.', d: { money: -18000, happy: 11, charm: 6 }, h: 'You bought your parents\u2019 house.' },
+          { label: 'Ask him to wait a year', out: 'He waited. The market moved against him and he never said so.', d: { happy: -2, smarts: 3 }, h: 'You talked your dad out of selling. For now.' },
+          { label: 'Tell him it\u2019s his call', out: 'He sold it in the spring. You drove past it once and didn\u2019t stop.', d: { happy: -9 }, h: 'Your dad sold the house.' }
+        ] },
+      { icon: '⛽', label: 'YOUR BUSINESS', tint: '#FFF0E8', color: '#C4462E',
+        title: 'Fuel went up again — a lot.',
+        body: 'Diesel is up 18% since the fall. Your six vans are costing you about $1,900 more a month, and two regular clients have already asked about rates.',
+        choices: [
+          { label: 'Raise your rates 6%', out: 'You lost one client and kept the margin. It was the right call and it still felt bad.', d: { money: 9000, happy: -3, smarts: 5 }, h: 'You raised your hauling rates 6%.' },
+          { label: 'Eat the cost for now', out: 'You absorbed it for eleven months. Then you had to raise rates anyway.', d: { money: -14000, charm: 4 }, h: 'You absorbed the fuel increase.' },
+          { label: 'Sell two vans', out: 'Smaller, safer, slower. You stopped taking the long routes.', d: { money: 21000, happy: -6 }, h: 'You sold two vans.' }
+        ] },
+      { icon: '👶', label: 'A BIG ONE', tint: '#FDE9F1', color: '#C25585',
+        title: 'Emma asked what you think about kids.',
+        body: 'Not hypothetically. She asked on a Tuesday, doing the dishes, without looking up.',
+        choices: [
+          { label: '"Yes. Soon."', out: 'Maya was born the following March. Nothing about your life stayed the same shape.', d: { happy: 18, money: -8000, health: -5 }, h: 'Maya was born.' },
+          { label: '"Not yet."', out: 'She accepted it. She asked again at 33, and it was a harder conversation.', d: { happy: -5, charm: -3 }, h: 'You asked Emma to wait on kids.' },
+          { label: '"I don\u2019t think I want them."', out: 'You told the truth. It cost you something you can\u2019t get back, and it was still the truth.', d: { happy: -12, charm: -9, smarts: 4 }, h: 'You told Emma you don\u2019t want kids.' }
+        ] },
+      { icon: '🏛️', label: 'YOUR TOWN', tint: '#EAF2FA', color: '#2E6FA8',
+        title: 'Ward 4 needs someone to run.',
+        body: 'Nobody else will. It pays badly, eats your evenings, and would put your name on things that outlast you.',
+        choices: [
+          { label: 'Run for it', out: 'You won by 340 votes. Now the fuel-price complaints come to you.', d: { charm: 12, happy: 5, money: -3000 }, h: 'You won the Ward 4 seat.' },
+          { label: 'Volunteer instead', out: 'You knocked doors for someone else and learned how it all actually works.', d: { charm: 5, smarts: 6 }, h: 'You volunteered in Ward 4.' },
+          { label: 'Stay out of it', out: 'Someone worse ran. You have opinions about them now.', d: { happy: -2 }, h: 'You stayed out of local politics.' }
+        ] }
+    ];
+  }
+
+  pick = (i) => {
+    const ev = this.events()[this.state.idx % this.events().length];
+    const c = ev.choices[i];
+    const st = Object.assign({}, this.state.st);
+    const labels = { health: ['❤️', 'Health'], happy: ['😊', 'Happiness'], smarts: ['🧠', 'Smarts'], fit: ['💪', 'Fitness'], charm: ['😎', 'Charm'] };
+    const deltas = [];
+    let money = this.state.money;
+    Object.keys(c.d).forEach(k => {
+      const v = c.d[k];
+      if (!v) return;
+      if (k === 'money') {
+        money += v;
+        deltas.push({ text: (v > 0 ? '+$' : '−$') + Math.abs(v).toLocaleString('en-US'), bg: v > 0 ? '#EAF6F0' : '#FFF0E8', c: v > 0 ? '#1F7A56' : '#C4462E' });
+      } else {
+        st[k] = Math.max(3, Math.min(99, st[k] + v));
+        deltas.push({ text: labels[k][0] + ' ' + labels[k][1] + ' ' + (v > 0 ? '+' : '−') + Math.abs(v), bg: v > 0 ? '#EAF6F0' : '#FFF0E8', c: v > 0 ? '#1F7A56' : '#C4462E' });
+      }
+    });
+    this.setState({
+      phase: 'result', st, money, result: c.out, deltas,
+      history: [{ icon: ev.icon, text: c.h }].concat(this.state.history).slice(0, 4)
+    });
+  };
+
+  dismiss = () => this.setState({ phase: 'idle' });
+
+  ageUp = () => {
+    if (this.state.phase === 'event') return;
+    const age = this.state.age + 1;
+    const st = Object.assign({}, this.state.st);
+    st.health = Math.max(3, st.health - (age > 45 ? 3 : 1));
+    st.fit = Math.max(3, st.fit - 2);
+    this.setState({
+      age, st, idx: this.state.idx + 1, phase: 'event', result: null, deltas: [],
+      money: this.state.money + 21000,
+      birthday: 'You turned ' + age + '. Another year of salary in the bank.'
+    });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const ev = this.events()[s.idx % this.events().length];
+    const dates = ['Tuesday, June 14', 'Friday, October 3', 'Sunday, February 11', 'Thursday, August 22', 'Monday, April 7'];
+    const jobs = ['Junior Developer, Northgate Labs', 'Developer, Northgate Labs', 'Senior Developer, Northgate Labs', 'Owner, Rivera Hauling'];
+    const st = s.st;
+    return {
+      yes: true,
+      showNotes: this.props.showNotes ?? true,
+      age: s.age,
+      dateLine: dates[s.idx % dates.length],
+      jobLine: jobs[Math.min(Math.floor(s.idx / 2), jobs.length - 1)],
+      money: '$' + s.money.toLocaleString('en-US'),
+      stats: [
+        { icon: '❤️', v: st.health, w: st.health + '%', c: '#E2563C' },
+        { icon: '😊', v: st.happy, w: st.happy + '%', c: '#E9A93B' },
+        { icon: '🧠', v: st.smarts, w: st.smarts + '%', c: '#7B6BD6' },
+        { icon: '💪', v: st.fit, w: st.fit + '%', c: '#2FA97C' },
+        { icon: '😎', v: st.charm, w: st.charm + '%', c: '#DB6C9B' }
+      ],
+      showBirthday: !!s.birthday && s.phase !== 'result',
+      birthdayLine: s.birthday || '',
+      showEvent: s.phase === 'event',
+      evIcon: ev.icon, evLabel: ev.label, evTint: ev.tint, evColor: ev.color,
+      evTitle: ev.title, evBody: ev.body,
+      evChoices: ev.choices.map((c, i) => ({ label: c.label, pick: () => this.pick(i) })),
+      showResult: s.phase === 'result',
+      resultText: s.result || '',
+      resultDeltas: s.deltas,
+      dismiss: this.dismiss,
+      showIdle: s.phase === 'idle',
+      actions: [
+        { icon: '🏋️', label: 'Get in shape' }, { icon: '📚', label: 'Take a course' },
+        { icon: '🎉', label: 'Go out' }, { icon: '💞', label: 'See Emma' },
+        { icon: '👵', label: 'Call your mom' }, { icon: '💼', label: 'Work harder' }
+      ],
+      history: s.history.length ? s.history : [{ icon: '🌱', text: 'Nothing yet — this year has only just started.' }],
+      ageUp: this.ageUp,
+      ageBtnLabel: s.phase === 'event' ? 'Decide first ↑' : 'AGE UP → ' + (s.age + 1),
+      ageBtnBg: s.phase === 'event' ? '#D6CBB9' : '#E2563C',
+      ageBtnShadow: s.phase === 'event' ? '#C2B7A5' : '#C4462E'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "vn",
+    "name": "Việt Nam",
+    "flag": "🇻🇳",
+    "region": "Asia",
+    "populationWeight": 1.3,
+    "cities": [
+      { "id": "da_nang", "name": "Đà Nẵng", "costOfLiving": 0.34, "crime": 22, "opportunity": 58, "blurb": "Cheap, fast-growing, family stays close." },
+      { "id": "ha_noi", "name": "Hà Nội", "costOfLiving": 0.42, "crime": 25, "opportunity": 72, "blurb": "Old, dense, and where the decisions get made." },
+      { "id": "ho_chi_minh", "name": "Hồ Chí Minh City", "costOfLiving": 0.48, "crime": 31, "opportunity": 80, "blurb": "The money city. Everyone here came from somewhere else." },
+      { "id": "can_tho", "name": "Cần Thơ", "costOfLiving": 0.28, "crime": 19, "opportunity": 38, "blurb": "River delta, rice, and a slower clock." }
+    ],
+    "changes": [
+      { "icon": "🏥", "text": "Hospital bills are small. A bad diagnosis won't bankrupt your family." },
+      { "icon": "🎓", "text": "University is cheap but the entrance exam decides a lot at 18." },
+      { "icon": "💼", "text": "Manufacturing, tourism and software. Very different ladders than Portland." },
+      { "icon": "👨‍👩‍👧", "text": "Your parents expect to live with you later. Saying no has a cost." },
+      { "icon": "⚖️", "text": "Different laws, drinking age, marriage rules and military service." },
+      { "icon": "💵", "text": "Money is always shown in USD, wherever you're born." }
+    ],
+    "healthcare": { "patientShare": 0.12, "screening": "basic", "unavailable": [] },
+    "education": { "universityCost": 240000, "entranceExam": true, "compulsoryUntilAge": 15 },
+    "law": { "drinkingAge": 18, "marriageAge": 20, "enforcement": 70, "convictionCost": 1.3, "militaryService": true },
+    "family": { "expectationToHouseParents": 85, "typicalSiblings": 2 },
+    "extraTrackIds": [],
+    "wageMultiplier": 0.22,
+    "nationalSportTrackId": "sport_football_us",
+    "surnames": ["Nguyễn", "Trần", "Lê", "Phạm", "Hoàng", "Phan", "Vũ", "Đặng", "Bùi", "Đỗ", "Hồ", "Ngô", "Dương", "Lý"],
+    "firstNames": {
+      "male": ["Minh", "Khang", "Bảo", "Huy", "Long", "Nam", "Phúc", "Quang", "Sơn", "Tuấn", "Đức", "Hải"],
+      "female": ["Linh", "Mai", "Thảo", "Ngọc", "Hà", "Anh", "Chi", "Trang", "Vy", "Hương", "Lan", "Nhung"]
+    }
+  }
+]

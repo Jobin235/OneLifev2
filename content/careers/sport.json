@@ -1,0 +1,48 @@
+[
+  {
+    "id": "sport_football_us",
+    "label": "Football",
+    "industry": "Sport",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": { "fitness": 72 },
+    "rungs": [
+      { "id": "academy", "title": "Academy player", "salary": 0, "minExperience": 0, "minPerformance": 0 },
+      { "id": "second_div", "title": "Second division", "salary": 4100000, "minExperience": 1, "minPerformance": 58 },
+      { "id": "first_div", "title": "First division", "salary": 31000000, "minExperience": 3, "minPerformance": 78 },
+      { "id": "national", "title": "National team", "salary": 62000000, "minExperience": 6, "minPerformance": 92 }
+    ],
+    "retiresAtAge": 35,
+    "exitTrackIds": ["coaching", "punditry"]
+  },
+  {
+    "id": "coaching",
+    "label": "Coaching",
+    "industry": "Sport",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      { "id": "youth_coach", "title": "Youth coach", "salary": 3200000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "assistant", "title": "Assistant manager", "salary": 6800000, "minExperience": 3, "minPerformance": 58 },
+      { "id": "head_coach", "title": "Head coach", "salary": 18000000, "minExperience": 7, "minPerformance": 74 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "punditry",
+    "label": "Punditry",
+    "industry": "Media",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": { "charm": 60 },
+    "rungs": [
+      { "id": "local_radio", "title": "Local radio", "salary": 3600000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "tv_pundit", "title": "TV pundit", "salary": 12000000, "minExperience": 3, "minPerformance": 65 },
+      { "id": "lead_pundit", "title": "Lead pundit", "salary": 24000000, "minExperience": 8, "minPerformance": 80 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "logistics",
+    "label": "Logistics & hauling",
+    "industry": "Transport",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      { "id": "driver", "title": "Driver", "salary": 4400000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "lead_driver", "title": "Lead Driver", "salary": 5600000, "minExperience": 3, "minPerformance": 50 },
+      { "id": "dispatcher", "title": "Dispatcher", "salary": 6400000, "minExperience": 5, "minPerformance": 58 },
+      { "id": "ops_manager", "title": "Operations Manager", "salary": 8800000, "minExperience": 9, "minPerformance": 68 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "trades_electrical",
+    "label": "Electrician",
+    "industry": "Construction",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": { "fitness": 45 },
+    "rungs": [
+      { "id": "apprentice", "title": "Apprentice", "salary": 3400000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "journeyman", "title": "Journeyman", "salary": 6200000, "minExperience": 4, "minPerformance": 50 },
+      { "id": "master", "title": "Master Electrician", "salary": 8900000, "minExperience": 9, "minPerformance": 65 },
+      { "id": "contractor", "title": "Contractor", "salary": 12500000, "minExperience": 14, "minPerformance": 72 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "retail",
+    "label": "Retail",
+    "industry": "Retail",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      { "id": "associate", "title": "Sales Associate", "salary": 2600000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "supervisor", "title": "Shift Supervisor", "salary": 3400000, "minExperience": 2, "minPerformance": 48 },
+      { "id": "store_manager", "title": "Store Manager", "salary": 5200000, "minExperience": 6, "minPerformance": 62 },
+      { "id": "regional", "title": "Regional Manager", "salary": 8400000, "minExperience": 12, "minPerformance": 74 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]

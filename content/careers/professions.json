@@ -1,0 +1,66 @@
+[
+  {
+    "id": "medicine",
+    "label": "Medicine",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": { "smarts": 78 },
+    "rungs": [
+      { "id": "resident", "title": "Resident", "salary": 6000000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "physician", "title": "Physician", "salary": 20000000, "minExperience": 4, "minPerformance": 60 },
+      { "id": "specialist", "title": "Specialist", "salary": 31000000, "minExperience": 9, "minPerformance": 74 },
+      { "id": "chief", "title": "Chief of Service", "salary": 42000000, "minExperience": 16, "minPerformance": 84 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "law",
+    "label": "Law",
+    "industry": "Legal",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": { "smarts": 72, "charm": 55 },
+    "rungs": [
+      { "id": "associate_atty", "title": "Associate", "salary": 9500000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "senior_atty", "title": "Senior Associate", "salary": 15000000, "minExperience": 4, "minPerformance": 62 },
+      { "id": "partner_atty", "title": "Partner", "salary": 34000000, "minExperience": 10, "minPerformance": 80 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["politics"]
+  },
+  {
+    "id": "teaching",
+    "label": "Teaching",
+    "industry": "Education",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": { "smarts": 58 },
+    "rungs": [
+      { "id": "teacher", "title": "Teacher", "salary": 4600000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "senior_teacher", "title": "Senior Teacher", "salary": 5800000, "minExperience": 5, "minPerformance": 55 },
+      { "id": "head_of_dept", "title": "Head of Department", "salary": 7200000, "minExperience": 10, "minPerformance": 68 },
+      { "id": "principal", "title": "Principal", "salary": 10500000, "minExperience": 16, "minPerformance": 76 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "politics",
+    "label": "Politics",
+    "industry": "Public office",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": { "charm": 62 },
+    "rungs": [
+      { "id": "volunteer", "title": "Volunteer", "salary": 0, "minExperience": 0, "minPerformance": 0 },
+      { "id": "councillor", "title": "Council Member", "salary": 2400000, "minExperience": 2, "minPerformance": 55 },
+      { "id": "mayor", "title": "Mayor", "salary": 9500000, "minExperience": 8, "minPerformance": 72 },
+      { "id": "legislator", "title": "Legislator", "salary": 17400000, "minExperience": 14, "minPerformance": 80 },
+      { "id": "minister", "title": "Minister", "salary": 22000000, "minExperience": 20, "minPerformance": 88 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]

@@ -1,0 +1,860 @@
+[
+  {
+    "id": "relationship_the_text",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "💞",
+      "label": "{partner}",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 76,
+    "minAge": 18,
+    "conditions": {
+      "all": [
+        {
+          "field": "has.partner",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "rel.partner.years",
+          "op": ">=",
+          "value": 2
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "partner",
+          "spouse"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
+    "title": "\"Are you free this weekend? I want to talk about something.\"",
+    "body": "Years in, no context, and a text that just sits there. You read it four times.",
+    "choices": [
+      {
+        "id": "call_now",
+        "label": "Call {partner.them} right now",
+        "outcomes": [
+          {
+            "id": "move_in",
+            "when": {
+              "field": "rel.partner.romance",
+              "op": ">=",
+              "value": 60
+            },
+            "text": "{partner.they} wanted to move in together. You said yes before {partner.they} finished asking.",
+            "historyLine": "You and {partner} moved in together.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 12
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 4
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "closeness",
+                "delta": 18
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "lives_with_you",
+                "line": "You moved in together. {partner.their} cat hates you.",
+                "weight": 70
+              },
+              {
+                "op": "flag",
+                "key": "cohabiting",
+                "value": true
+              }
+            ]
+          },
+          {
+            "id": "wobble",
+            "text": "{partner.they} wanted to know where this was going. You didn't have an answer ready and it showed.",
+            "historyLine": "{partner} asked where things were going.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": -8
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "say_busy",
+        "label": "Say you're busy",
+        "outcomes": [
+          {
+            "id": "postponed",
+            "text": "You bought a week. The conversation waited, and got heavier.",
+            "historyLine": "You put off a conversation with {partner}.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -7
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": -10
+              },
+              {
+                "op": "schedule",
+                "eventId": "relationship_the_heavier_conversation",
+                "inYears": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask_whats_wrong",
+        "label": "Reply \"is everything ok?\"",
+        "outcomes": [
+          {
+            "id": "four_days",
+            "text": "{partner.they} said it was good news. You spent four days assuming otherwise.",
+            "historyLine": "You worried for four days over nothing.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 2
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 2
+  },
+  {
+    "id": "relationship_the_heavier_conversation",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "💔",
+      "label": "{partner}",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 82,
+    "minAge": 18,
+    "scheduledOnly": true,
+    "conditions": {
+      "field": "has.partner",
+      "op": "==",
+      "value": true
+    },
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "partner",
+          "spouse"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
+    "title": "{partner} asked the question properly this time.",
+    "body": "The one you avoided last year. {partner.they} has clearly been rehearsing, which is worse.",
+    "choices": [
+      {
+        "id": "commit",
+        "label": "Say yes to all of it",
+        "outcomes": [
+          {
+            "id": "committed",
+            "text": "You said yes to all of it, and meant most of it. That turned out to be enough.",
+            "historyLine": "You committed to {partner}.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": 16
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": 18
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 13
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "honest_no",
+        "label": "Tell {partner.them} the truth",
+        "outcomes": [
+          {
+            "id": "ended",
+            "text": "You told the truth. It ended that night, kindly, which somehow made it worse.",
+            "historyLine": "You and {partner} ended it.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "ex"
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": -60
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -18
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "you_told_them_the_truth",
+                "line": "You told {partner.them} the truth and it ended things.",
+                "weight": 88
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stall_again",
+        "label": "Stall again",
+        "outcomes": [
+          {
+            "id": "stalled",
+            "text": "You stalled again. {partner.they} stopped asking, and that was the actual answer.",
+            "historyLine": "You stalled, and {partner} stopped asking.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": -22
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": -20
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -9
+              },
+              {
+                "op": "schedule",
+                "eventId": "relationship_it_ends",
+                "inYears": 2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 4,
+    "maxPerLife": 2
+  },
+  {
+    "id": "relationship_it_ends",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "💔",
+      "label": "{partner}",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
+    "weightClass": "major",
+    "priority": 88,
+    "minAge": 18,
+    "scheduledOnly": true,
+    "conditions": {
+      "field": "has.partner",
+      "op": "==",
+      "value": true
+    },
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "partner",
+          "spouse"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
+    "title": "{partner} has already packed.",
+    "body": "There is no version of this where you talk {partner.them} out of it. There is only how it goes tonight.",
+    "choices": [
+      {
+        "id": "let_go",
+        "label": "Let {partner.them} go well",
+        "outcomes": [
+          {
+            "id": "clean",
+            "text": "You helped carry boxes. Years later you could both be in a room together, which is not nothing.",
+            "historyLine": "You and {partner} separated.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "ex"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -14
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "respect",
+                "delta": 12
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "fight",
+        "label": "Say the thing you've been saving",
+        "outcomes": [
+          {
+            "id": "ugly",
+            "text": "You said it. It landed exactly as hard as you wanted and you have thought about it since.",
+            "historyLine": "It ended badly with {partner}.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "ex"
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "conflict",
+                "delta": 45
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -20
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "no_longer_speaks_to_you",
+                "line": "You said something at the end that neither of you has taken back.",
+                "weight": 92
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "beg",
+        "label": "Ask {partner.them} to stay",
+        "outcomes": [
+          {
+            "id": "stayed_briefly",
+            "chance": 0.3,
+            "text": "{partner.they} stayed. For eleven months, and then not.",
+            "historyLine": "{partner} stayed, for a while.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": 8
+              },
+              {
+                "op": "schedule",
+                "eventId": "relationship_it_ends",
+                "inYears": 1
+              }
+            ]
+          },
+          {
+            "id": "no",
+            "text": "{partner.they} said no, gently, twice. You asked a third time and {partner.they} stopped being gentle.",
+            "historyLine": "You asked {partner} to stay. {partner.they} left.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "ex"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -22
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 3
+  },
+  {
+    "id": "relationship_meet_someone",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "✨",
+      "label": "SOMEONE NEW",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 64,
+    "minAge": 17,
+    "maxAge": 78,
+    "conditions": {
+      "all": [
+        {
+          "field": "has.partner",
+          "op": "==",
+          "value": false
+        },
+        {
+          "field": "stats.charm",
+          "op": ">=",
+          "value": 30
+        }
+      ]
+    },
+    "participants": [],
+    "title": "You met someone at a party you nearly didn't go to.",
+    "body": "You talked for two hours by the coats. Neither of you noticed the party ending.",
+    "choices": [
+      {
+        "id": "ask_them_out",
+        "label": "Ask them out",
+        "outcomes": [
+          {
+            "id": "yes",
+            "chance": 0.7,
+            "text": "They said yes. You spent the next week composing a text and then sending a different one.",
+            "historyLine": "You started seeing someone new.",
+            "effects": [
+              {
+                "op": "spawn_npc",
+                "role": "partner",
+                "templateId": "date"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 11
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 3
+              }
+            ]
+          },
+          {
+            "id": "no",
+            "text": "They were kind about it, which you would rather they hadn't been.",
+            "historyLine": "You asked someone out and got turned down.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wait_and_see",
+        "label": "Leave it and see",
+        "outcomes": [
+          {
+            "id": "they_asked",
+            "chance": 0.4,
+            "text": "They messaged you first, three days later, and pretended it was about something else.",
+            "historyLine": "Someone new asked you out.",
+            "effects": [
+              {
+                "op": "spawn_npc",
+                "role": "partner",
+                "templateId": "date"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 10
+              }
+            ]
+          },
+          {
+            "id": "nothing",
+            "text": "Nothing came of it. You still think about the coats sometimes.",
+            "historyLine": "You met someone and did nothing about it.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 3,
+    "maxPerLife": 8
+  },
+  {
+    "id": "relationship_proposal",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "💍",
+      "label": "{partner}",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 84,
+    "minAge": 20,
+    "conditions": {
+      "all": [
+        {
+          "field": "rel.partner.kind",
+          "op": "==",
+          "value": "partner"
+        },
+        {
+          "field": "rel.partner.romance",
+          "op": ">=",
+          "value": 66
+        },
+        {
+          "field": "rel.partner.years",
+          "op": ">=",
+          "value": 3
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "partner"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
+    "title": "One of you is going to ask.",
+    "body": "It has been obvious for about a year. {partner} has stopped hinting, which usually means {partner.they} is waiting.",
+    "choices": [
+      {
+        "id": "propose",
+        "label": "Ask {partner.them}",
+        "outcomes": [
+          {
+            "id": "yes",
+            "chance": 0.88,
+            "text": "{partner.they} said yes, and then cried, and then complained about crying.",
+            "historyLine": "You married {partner}.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "spouse"
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": 15
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 20
+              },
+              {
+                "op": "money",
+                "delta": -1200000
+              },
+              {
+                "op": "flag",
+                "key": "married",
+                "value": true
+              }
+            ]
+          },
+          {
+            "id": "no",
+            "text": "{partner.they} said not yet. There is no good way to put a ring back in a pocket.",
+            "historyLine": "You proposed and {partner} said not yet.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -15
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wait_for_them",
+        "label": "Wait for {partner.them} to ask",
+        "outcomes": [
+          {
+            "id": "they_asked",
+            "chance": 0.55,
+            "text": "{partner.they} asked, on an ordinary Thursday, and made it sound like it had just occurred to {partner.them}.",
+            "historyLine": "{partner} proposed to you.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "spouse"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 18
+              },
+              {
+                "op": "flag",
+                "key": "married",
+                "value": true
+              }
+            ]
+          },
+          {
+            "id": "neither",
+            "text": "Neither of you asked. It became a thing you were both being brave about.",
+            "historyLine": "Neither of you asked.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": -10
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "not_this",
+        "label": "Decide you don't want this",
+        "outcomes": [
+          {
+            "id": "ended",
+            "text": "You worked out that you didn't want it, and then had to say so out loud.",
+            "historyLine": "You realised you didn't want to marry {partner}.",
+            "effects": [
+              {
+                "op": "relationship_kind",
+                "target": "partner",
+                "kind": "ex"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -12
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 3
+  },
+  {
+    "id": "relationship_the_thing_you_never_said",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "🗣️",
+      "label": "{partner}",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 79,
+    "minAge": 24,
+    "scheduledOnly": true,
+    "conditions": {
+      "all": [
+        {
+          "field": "has.partner",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "flags.refused_denver_silently",
+          "op": "==",
+          "value": true
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "partner",
+          "spouse"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
+    "title": "It came up, years later, the way these things do.",
+    "body": "Someone at dinner mentioned Denver. {partner} laughed and said you'd never have gone anyway.",
+    "choices": [
+      {
+        "id": "tell_them",
+        "label": "Tell {partner.them} what actually happened",
+        "outcomes": [
+          {
+            "id": "told",
+            "text": "You told {partner.them}. {partner.they} was quiet for a long time and then said you should have said something at the time.",
+            "historyLine": "You finally told {partner} about Denver.",
+            "effects": [
+              {
+                "op": "resolve_memory",
+                "target": "partner",
+                "factKey": "you_gave_something_up_for_them"
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": 14
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "affection",
+                "delta": 10
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "laugh_along",
+        "label": "Laugh along",
+        "outcomes": [
+          {
+            "id": "kept",
+            "text": "You laughed along. It is genuinely yours now, in the way that a thing nobody else knows is yours.",
+            "historyLine": "You kept Denver to yourself.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "you_never_told_them",
+                "line": "You had the chance to tell {partner.them} about Denver and didn't.",
+                "weight": 80
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 10,
+    "maxPerLife": 1
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "br",
+    "name": "Brazil",
+    "flag": "🇧🇷",
+    "region": "Americas",
+    "populationWeight": 2.6,
+    "cities": [
+      { "id": "salvador", "name": "Salvador", "costOfLiving": 0.42, "crime": 66, "opportunity": 49, "blurb": "Football, music, sharp inequality." },
+      { "id": "sao_paulo", "name": "São Paulo", "costOfLiving": 0.61, "crime": 57, "opportunity": 84, "blurb": "Enormous, grey, and where the work is." },
+      { "id": "recife", "name": "Recife", "costOfLiving": 0.4, "crime": 63, "opportunity": 47, "blurb": "Warm, poor in places, and stubbornly alive." },
+      { "id": "curitiba", "name": "Curitiba", "costOfLiving": 0.49, "crime": 38, "opportunity": 58, "blurb": "Organised, cooler, faintly smug about it." }
+    ],
+    "changes": [
+      { "icon": "🏥", "text": "Public care is free but slow. Private care is fast and costs." },
+      { "icon": "🎓", "text": "The free universities are the best ones, and the hardest to get into." },
+      { "icon": "💼", "text": "Agriculture, services, football. Informal work is normal work." },
+      { "icon": "👨‍👩‍👧", "text": "Family is close, loud, and stays close." },
+      { "icon": "⚖️", "text": "Where you live changes how the police treat you." }
+    ],
+    "healthcare": { "patientShare": 0.2, "screening": "basic", "unavailable": [] },
+    "education": { "universityCost": 90000, "entranceExam": true, "compulsoryUntilAge": 17 },
+    "law": { "drinkingAge": 18, "marriageAge": 18, "enforcement": 44, "convictionCost": 1.2, "militaryService": true },
+    "family": { "expectationToHouseParents": 60, "typicalSiblings": 2 },
+    "extraTrackIds": [],
+    "wageMultiplier": 0.24,
+    "nationalSportTrackId": "sport_football_us",
+    "surnames": ["Silva", "Santos", "Oliveira", "Souza", "Costa", "Pereira", "Almeida", "Ferreira", "Rocha", "Barbosa"],
+    "firstNames": {
+      "male": ["Gabriel", "Lucas", "Mateus", "Davi", "Rafael", "Thiago", "Caio", "Bruno"],
+      "female": ["Ana", "Beatriz", "Larissa", "Juliana", "Camila", "Letícia", "Sofia", "Isadora"]
+    }
+  }
+]

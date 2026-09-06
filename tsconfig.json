@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/shared-types" },
+    { "path": "packages/config" },
+    { "path": "packages/simulation" },
+    { "path": "packages/event-engine" },
+    { "path": "packages/npc-engine" },
+    { "path": "packages/world" },
+    { "path": "packages/narrative" },
+    { "path": "packages/content" },
+    { "path": "packages/game" }
+  ]
+}

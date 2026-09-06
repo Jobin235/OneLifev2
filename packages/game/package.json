@@ -1,0 +1,31 @@
+{
+  "name": "@lineage/game",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@lineage/shared-types": "workspace:*",
+    "@lineage/config": "workspace:*",
+    "@lineage/simulation": "workspace:*",
+    "@lineage/event-engine": "workspace:*",
+    "@lineage/npc-engine": "workspace:*",
+    "@lineage/world": "workspace:*",
+    "@lineage/narrative": "workspace:*",
+    "@lineage/content": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}

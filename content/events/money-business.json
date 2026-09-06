@@ -1,0 +1,146 @@
+[
+  {
+    "id": "money_friend_asks",
+    "version": 1,
+    "category": "money",
+    "card": { "icon": "🤝", "label": "{friend}", "tint": "#FFF3D9", "color": "#8A6A20" },
+    "weightClass": "major",
+    "priority": 70,
+    "minAge": 20,
+    "conditions": { "field": "money.liquid", "op": ">=", "value": 600000 },
+    "participants": [ { "role": "friend", "kinds": ["friend", "best_friend"], "pick": "closest", "required": true } ],
+    "title": "{friend} wants $5,000 for an idea.",
+    "body": "{friend.they} is your oldest friend and {friend.they} has never once finished anything. {friend.they} brought a pitch deck to your kitchen table.",
+    "choices": [
+      { "id": "give_full", "label": "Give {friend.them} the $5,000", "requires": { "field": "money.liquid", "op": ">=", "value": 500000 }, "outcomes": [
+        { "id": "died", "chance": 0.8, "text": "It died in eight months. {friend.they} stopped bringing it up, and so did you.", "historyLine": "You lost $5,000 on {friend}'s idea.", "effects": [ { "op": "money", "delta": -500000 }, { "op": "stat", "stat": "happiness", "delta": -3 }, { "op": "stat", "stat": "charm", "delta": 5 }, { "op": "remember", "target": "friend", "factKey": "owes_you_money", "line": "{friend.they} still owes you the $5,000.", "weight": 78, "data": { "amount": 500000 } } ] },
+        { "id": "worked", "text": "It worked. Not enormously, but it worked, and {friend.they} paid you back twice over and never let you forget it.", "historyLine": "You backed {friend}'s idea and it paid off.", "effects": [ { "op": "money", "delta": 900000 }, { "op": "relationship", "target": "friend", "dimension": "trust", "delta": 20 }, { "op": "stat", "stat": "happiness", "delta": 10 } ] } ] },
+      { "id": "offer_half", "label": "Offer half", "outcomes": [ { "id": "half", "text": "You gave {friend.them} $2,500. Enough to keep the friendship, not enough to save the idea.", "historyLine": "You lent {friend} $2,500.", "effects": [ { "op": "money", "delta": -250000 }, { "op": "stat", "stat": "happiness", "delta": 1 }, { "op": "remember", "target": "friend", "factKey": "owes_you_money", "line": "{friend.they} owes you $2,500 from all those years ago.", "weight": 72, "data": { "amount": 250000 } }, { "op": "schedule", "eventId": "money_the_old_debt", "inYears": 4 } ] } ] },
+      { "id": "say_no", "label": "Say no, kindly", "outcomes": [ { "id": "no", "text": "{friend.they} said {friend.they} understood. {friend.they} was different with you for about two years.", "historyLine": "You turned {friend} down.", "effects": [ { "op": "stat", "stat": "charm", "delta": -8 }, { "op": "stat", "stat": "happiness", "delta": -4 }, { "op": "relationship", "target": "friend", "dimension": "closeness", "delta": -16 } ] } ] }
+    ],
+    "cooldownYears": 7,
+    "maxPerLife": 2
+  },
+  {
+    "id": "money_the_old_debt",
+    "version": 1,
+    "category": "money",
+    "card": { "icon": "⚠️", "label": "{friend}", "tint": "#FFF3D9", "color": "#8A6A20" },
+    "weightClass": "major",
+    "priority": 60,
+    "minAge": 22,
+    "scheduledOnly": true,
+    "participants": [ { "role": "friend", "kinds": ["friend", "best_friend", "acquaintance"], "pick": "closest", "required": true } ],
+    "title": "{friend} still owes you the money.",
+    "body": "It has been years. {friend.they} has a new car. Asking for it back would cost you something else.",
+    "choices": [
+      { "id": "ask", "label": "Ask for it back", "outcomes": [
+        { "id": "paid", "chance": 0.45, "text": "{friend.they} paid it that week, all of it, and was strange with you for a year afterwards.", "historyLine": "{friend} finally paid you back.", "effects": [ { "op": "money", "delta": 250000 }, { "op": "resolve_memory", "target": "friend", "factKey": "owes_you_money" }, { "op": "relationship", "target": "friend", "dimension": "closeness", "delta": -14 } ] },
+        { "id": "excuses", "text": "{friend.they} had a reason, and then another one. You stopped asking and started counting it as gone.", "historyLine": "You asked {friend} for the money. You didn't get it.", "effects": [ { "op": "relationship", "target": "friend", "dimension": "trust", "delta": -25 }, { "op": "relationship", "target": "friend", "dimension": "conflict", "delta": 20 }, { "op": "stat", "stat": "happiness", "delta": -6 } ] } ] },
+      { "id": "let_it_go", "label": "Write it off", "outcomes": [ { "id": "written_off", "text": "You wrote it off in your head and never mentioned it again. It cost you exactly what it cost you.", "historyLine": "You wrote off the money {friend} owed you.", "effects": [ { "op": "resolve_memory", "target": "friend", "factKey": "owes_you_money" }, { "op": "relationship", "target": "friend", "dimension": "affection", "delta": 8 }, { "op": "stat", "stat": "happiness", "delta": 3 } ] } ] }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 2
+  },
+  {
+    "id": "business_start_something",
+    "version": 1,
+    "category": "business",
+    "card": { "icon": "🚀", "label": "AN IDEA", "tint": "#FFF0E8", "color": "#C4462E" },
+    "weightClass": "major",
+    "priority": 68,
+    "minAge": 22,
+    "maxAge": 60,
+    "conditions": { "all": [ { "field": "has.business", "op": "==", "value": false }, { "field": "money.liquid", "op": ">=", "value": 1400000 } ] },
+    "participants": [],
+    "title": "You could buy the van.",
+    "body": "One van, your own name on the side, and every hour of your week accounted for by nobody but you. It costs $14,000 you currently have.",
+    "choices": [
+      { "id": "buy_it", "label": "Buy the van", "outcomes": [ { "id": "started", "text": "You bought it on a Tuesday and had two clients by the end of the month. Both of them were people you knew.", "historyLine": "You started your own company.", "effects": [ { "op": "money", "delta": -1400000 }, { "op": "business_start", "templateId": "hauling" }, { "op": "stat", "stat": "happiness", "delta": 12 }, { "op": "career_leave", "reason": "quit" }, { "op": "schedule", "eventId": "business_first_hard_year", "inYears": 2 } ] } ] },
+      { "id": "keep_the_job", "label": "Keep the job", "outcomes": [ { "id": "kept", "text": "You kept the job. It was the sensible call and you have wondered about it since.", "historyLine": "You decided against starting your own thing.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -5 }, { "op": "flag", "key": "nearly_started_something", "value": true } ] } ] }
+    ],
+    "cooldownYears": 8,
+    "maxPerLife": 2
+  },
+  {
+    "id": "business_first_hard_year",
+    "version": 1,
+    "category": "business",
+    "card": { "icon": "📉", "label": "{business}", "tint": "#FFF0E8", "color": "#C4462E" },
+    "weightClass": "major",
+    "priority": 78,
+    "minAge": 22,
+    "scheduledOnly": true,
+    "conditions": { "field": "has.business", "op": "==", "value": true },
+    "participants": [],
+    "title": "{business} isn't working yet.",
+    "body": "You are two months behind on everything and one client is most of your revenue. You know what that means and you have not said it out loud.",
+    "choices": [
+      { "id": "borrow", "label": "Borrow against the house", "requires": { "field": "has.house", "op": "==", "value": true }, "outcomes": [ { "id": "borrowed", "text": "You put the house behind it. It bought you fourteen months and you have never told anyone the number.", "historyLine": "You borrowed against your house to save the company.", "effects": [ { "op": "debt", "delta": 4000000 }, { "op": "money", "delta": 4000000 }, { "op": "stat", "stat": "happiness", "delta": -9 }, { "op": "schedule", "eventId": "business_scale_up", "inYears": 3 } ] } ] },
+      { "id": "cut_everything", "label": "Cut everything to the bone", "outcomes": [ { "id": "cut", "text": "You let two people go and did their jobs yourself for a year. It worked. You aged about four years.", "historyLine": "You cut the company back to survive.", "effects": [ { "op": "business_units", "delta": -1 }, { "op": "stat", "stat": "health", "delta": -8 }, { "op": "stat", "stat": "happiness", "delta": -6 }, { "op": "habit_add", "habitId": "overwork" }, { "op": "schedule", "eventId": "business_scale_up", "inYears": 4 } ] } ] },
+      { "id": "fold", "label": "Fold it", "outcomes": [ { "id": "folded", "text": "You folded it before it took anything else. It was the right call and you did not feel right about it for years.", "historyLine": "You closed the company.", "effects": [ { "op": "business_close" }, { "op": "stat", "stat": "happiness", "delta": -14 }, { "op": "schedule", "eventId": "career_new_job_offer", "inYears": 1 } ] } ] }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 2
+  },
+  {
+    "id": "business_scale_up",
+    "version": 1,
+    "category": "business",
+    "card": { "icon": "📈", "label": "{business}", "tint": "#EAF6F0", "color": "#3D7A5E" },
+    "weightClass": "major",
+    "priority": 72,
+    "minAge": 24,
+    "conditions": { "all": [ { "field": "has.business", "op": "==", "value": true }, { "field": "business.profit", "op": ">", "value": 0 } ] },
+    "participants": [],
+    "title": "You could take on the bigger contract.",
+    "body": "It doubles your revenue and requires four more vehicles you do not have and cannot quite afford.",
+    "choices": [
+      { "id": "take_it", "label": "Take it and buy the vehicles", "outcomes": [
+        { "id": "worked", "chance": 0.65, "text": "It worked. Six became forty over the following decade and you stopped driving yourself.", "historyLine": "You scaled the company up.", "effects": [ { "op": "business_units", "delta": 4 }, { "op": "debt", "delta": 3000000 }, { "op": "stat", "stat": "happiness", "delta": 8 }, { "op": "flag", "key": "scaled_business", "value": true } ] },
+        { "id": "overstretched", "text": "You overstretched. The contract was real and your cash flow was not.", "historyLine": "You scaled up too fast.", "effects": [ { "op": "business_units", "delta": 2 }, { "op": "debt", "delta": 5000000 }, { "op": "stat", "stat": "happiness", "delta": -10 }, { "op": "schedule", "eventId": "business_first_hard_year", "inYears": 1 } ] } ] },
+      { "id": "stay_small", "label": "Stay the size you are", "outcomes": [ { "id": "stayed", "text": "You stayed small on purpose. You made less and slept properly, which turned out to be a real trade.", "historyLine": "You kept the company small deliberately.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 6 }, { "op": "stat", "stat": "health", "delta": 4 } ] } ] }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 3
+  },
+  {
+    "id": "business_acquisition_offer",
+    "version": 1,
+    "category": "business",
+    "card": { "icon": "💰", "label": "AN OFFER", "tint": "#FFF3D9", "color": "#8A6A20" },
+    "weightClass": "major",
+    "priority": 84,
+    "minAge": 35,
+    "conditions": { "all": [ { "field": "has.business", "op": "==", "value": true }, { "field": "business.employees", "op": ">=", "value": 8 } ] },
+    "participants": [],
+    "title": "A national carrier wants to buy {business}.",
+    "body": "The number is more money than you have ever had at once. They would keep the name for two years and then not.",
+    "choices": [
+      { "id": "sell", "label": "Sell", "outcomes": [ { "id": "sold", "text": "You sold. The name came off the vans in the third year and you saw it happen from a car park.", "historyLine": "You sold the company.", "effects": [ { "op": "money", "delta": 180000000 }, { "op": "business_close" }, { "op": "stat", "stat": "happiness", "delta": -8 }, { "op": "flag", "key": "sold_the_company", "value": true } ] } ] },
+      { "id": "refuse", "label": "Refuse", "outcomes": [ { "id": "refused", "text": "You said no. Two national carriers stopped calling and you kept a thing that was yours.", "historyLine": "You refused to sell the company.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 10 }, { "op": "flag", "key": "refused_to_sell", "value": true } ] } ] },
+      { "id": "sell_but_stay", "label": "Sell, but stay on to run it", "outcomes": [ { "id": "stayed", "text": "You took the money and a title. You reported to a 32-year-old in another state and lasted eighteen months.", "historyLine": "You sold the company and stayed on, briefly.", "effects": [ { "op": "money", "delta": 140000000 }, { "op": "stat", "stat": "happiness", "delta": -14 }, { "op": "business_close" } ] } ] }
+    ],
+    "cooldownYears": 10,
+    "maxPerLife": 1
+  },
+  {
+    "id": "money_windfall",
+    "version": 1,
+    "category": "money",
+    "card": { "icon": "✉️", "label": "AN ENVELOPE", "tint": "#FFF3D9", "color": "#8A6A20" },
+    "weightClass": "major",
+    "priority": 58,
+    "minAge": 20,
+    "participants": [],
+    "title": "A relative you barely knew left you something.",
+    "body": "Nine thousand dollars and a letter that mostly talks about somebody else. You met them maybe four times.",
+    "choices": [
+      { "id": "save_it", "label": "Put it away", "outcomes": [ { "id": "saved", "text": "You put it away and did not touch it. It was still there when you needed it, which was the point.", "historyLine": "You inherited $9,000 and saved it.", "effects": [ { "op": "money", "delta": 900000 }, { "op": "hidden", "attr": "discipline", "delta": 5 } ] } ] },
+      { "id": "spend_it", "label": "Spend it on something you'll remember", "outcomes": [ { "id": "spent", "text": "You spent all of it in about five weeks and you can still list every single thing.", "historyLine": "You spent an inheritance in five weeks.", "effects": [ { "op": "money", "delta": 900000 }, { "op": "money", "delta": -900000 }, { "op": "stat", "stat": "happiness", "delta": 14 } ] } ] },
+      { "id": "give_it_away", "label": "Give it to family who need it more", "outcomes": [ { "id": "gave", "text": "You gave it away and let everyone assume you'd kept it.", "historyLine": "You gave away an inheritance.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 8 }, { "op": "relationship", "target": "sibling", "dimension": "affection", "delta": 20 }, { "op": "trait_add", "traitId": "generous" } ] } ] }
+    ],
+    "cooldownYears": 12,
+    "maxPerLife": 2
+  }
+]

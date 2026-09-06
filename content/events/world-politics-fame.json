@@ -1,0 +1,187 @@
+[
+  {
+    "id": "world_fuel_spike",
+    "version": 1,
+    "category": "world",
+    "card": { "icon": "⛽", "label": "{business}", "tint": "#FFF0E8", "color": "#C4462E" },
+    "weightClass": "major",
+    "priority": 86,
+    "minAge": 22,
+    "conditions": { "all": [ { "field": "has.business", "op": "==", "value": true }, { "field": "world.fuel", "op": ">=", "value": 112 } ] },
+    "participants": [ { "role": "partner", "kinds": ["spouse", "partner"], "pick": "closest", "required": false } ],
+    "title": "Fuel went up again — a lot.",
+    "body": "Diesel is up sharply since the fall. Your {business.units} are suddenly costing you about $1,900 more a month, and two regular clients have already asked about their rates.",
+    "choices": [
+      { "id": "raise_rates", "label": "Raise your rates 6%", "outcomes": [ { "id": "raised", "text": "You lost one client and kept the margin. It was the right call and it still felt bad.", "historyLine": "You raised your rates to survive the fuel spike.", "effects": [ { "op": "business_price", "pct": 0.06 }, { "op": "money", "delta": 900000 }, { "op": "stat", "stat": "happiness", "delta": -3 }, { "op": "stat", "stat": "smarts", "delta": 5 } ] } ] },
+      { "id": "absorb", "label": "Eat the cost for now", "outcomes": [ { "id": "absorbed", "text": "You absorbed it for eleven months. Then you had to raise rates anyway.", "historyLine": "You absorbed the fuel increase.", "effects": [ { "op": "money", "delta": -1400000 }, { "op": "stat", "stat": "charm", "delta": 4 }, { "op": "schedule", "eventId": "world_fuel_spike", "inYears": 1 } ] } ] },
+      { "id": "sell_units", "label": "Sell two vehicles", "outcomes": [ { "id": "sold", "text": "Smaller, safer, slower. You stopped taking the long routes.", "historyLine": "You shrank the company to cope.", "effects": [ { "op": "business_units", "delta": -2 }, { "op": "money", "delta": 2100000 }, { "op": "stat", "stat": "happiness", "delta": -6 } ] } ] },
+      { "id": "ask_partner", "label": "Ask {partner} what {partner.they}'d do", "requires": { "field": "has.partner", "op": "==", "value": true }, "outcomes": [ { "id": "asked", "text": "{partner.they} told you to raise the rates and stop apologising for it. {partner.they} was right, and remembered being right.", "historyLine": "{partner} talked you through the fuel decision.", "effects": [ { "op": "business_price", "pct": 0.06 }, { "op": "money", "delta": 700000 }, { "op": "relationship", "target": "partner", "dimension": "respect", "delta": 14 }, { "op": "relationship", "target": "partner", "dimension": "closeness", "delta": 10 }, { "op": "remember", "target": "partner", "factKey": "they_saved_the_business", "line": "{partner.they} told you to raise the rates. {partner.they} was right.", "weight": 70 } ] } ] }
+    ],
+    "cooldownYears": 4,
+    "maxPerLife": 4
+  },
+  {
+    "id": "world_rates_up",
+    "version": 1,
+    "category": "world",
+    "card": { "icon": "🏦", "label": "THE MORTGAGE", "tint": "#EAF2FA", "color": "#2E6FA8" },
+    "weightClass": "major",
+    "priority": 78,
+    "minAge": 24,
+    "conditions": { "all": [ { "field": "money.debt", "op": ">", "value": 2000000 }, { "field": "world.interestRates", "op": ">=", "value": 110 } ] },
+    "participants": [],
+    "title": "Your repayment went up by $340 a month.",
+    "body": "A letter, not a conversation. It is the same house and the same job and $4,080 a year that used to be yours.",
+    "choices": [
+      { "id": "refinance", "label": "Refinance onto a longer term", "outcomes": [ { "id": "refinanced", "text": "Lower every month, more in total, and eleven extra years of it. You signed anyway.", "historyLine": "You refinanced when rates went up.", "effects": [ { "op": "debt", "delta": 900000 }, { "op": "money", "delta": 400000 }, { "op": "stat", "stat": "happiness", "delta": -3 } ] } ] },
+      { "id": "cut_back", "label": "Cut back on everything else", "outcomes": [ { "id": "cut", "text": "No holidays for two years and a very detailed spreadsheet nobody else was allowed to see.", "historyLine": "You cut everything back to cover the mortgage.", "effects": [ { "op": "money", "delta": -700000 }, { "op": "stat", "stat": "happiness", "delta": -9 }, { "op": "hidden", "attr": "discipline", "delta": 6 } ] } ] },
+      { "id": "sell_up", "label": "Sell and rent instead", "requires": { "field": "has.house", "op": "==", "value": true }, "outcomes": [ { "id": "sold", "text": "You sold it and rented, and everyone had an opinion about that.", "historyLine": "You sold the house when rates rose.", "effects": [ { "op": "asset_sell", "assetRef": "house" }, { "op": "stat", "stat": "happiness", "delta": -7 } ] } ] }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 3
+  },
+  {
+    "id": "world_layoff_wave",
+    "version": 1,
+    "category": "world",
+    "card": { "icon": "🌧️", "label": "EVERYONE'S TALKING", "tint": "#EAF2FA", "color": "#2E6FA8" },
+    "weightClass": "minor",
+    "priority": 50,
+    "minAge": 20,
+    "conditions": { "field": "world.employment", "op": "<", "value": 94 },
+    "participants": [],
+    "title": "Everyone you know is worried about their job.",
+    "body": "Three people from your year have been let go this month. Nobody is saying the word recession out loud yet.",
+    "choices": [
+      { "id": "build_a_buffer", "label": "Put money aside, fast", "outcomes": [ { "id": "buffered", "text": "You built four months of runway and did not need it, which is the best possible outcome and feels like nothing.", "historyLine": "You built a buffer before the downturn.", "effects": [ { "op": "hidden", "attr": "discipline", "delta": 6 }, { "op": "stat", "stat": "happiness", "delta": -2 } ] } ] },
+      { "id": "ignore", "label": "Assume it won't be you", "outcomes": [ { "id": "ignored", "text": "You assumed it wouldn't be you. It usually isn't.", "historyLine": "You didn't worry about the layoffs.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 2 } ] } ] }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 3
+  },
+  {
+    "id": "politics_ward_seat",
+    "version": 1,
+    "category": "politics",
+    "card": { "icon": "🏛️", "label": "YOUR TOWN", "tint": "#EAF2FA", "color": "#2E6FA8" },
+    "weightClass": "major",
+    "priority": 70,
+    "minAge": 28,
+    "maxAge": 70,
+    "conditions": { "all": [ { "field": "stats.charm", "op": ">=", "value": 55 }, { "field": "record.clean", "op": "==", "value": true } ] },
+    "participants": [],
+    "title": "Ward 4 needs someone to run.",
+    "body": "Nobody else will. It pays badly, eats your evenings, and would put your name on things that outlast you.",
+    "choices": [
+      { "id": "run", "label": "Run for it", "outcomes": [
+        { "id": "won", "chance": 0.55, "text": "You won by 340 votes. Now the complaints come to you.", "historyLine": "You won the Ward 4 seat.", "effects": [ { "op": "career_join", "trackId": "politics", "rungIndex": 1 }, { "op": "stat", "stat": "charm", "delta": 12 }, { "op": "stat", "stat": "happiness", "delta": 5 }, { "op": "money", "delta": -300000 }, { "op": "flag", "key": "in_politics", "value": true }, { "op": "schedule", "eventId": "politics_your_one_law", "inYears": 5 } ] },
+        { "id": "lost", "text": "You lost by ninety. You knocked on 1,100 doors and can still name the bad ones.", "historyLine": "You ran for the council seat and lost.", "effects": [ { "op": "money", "delta": -300000 }, { "op": "stat", "stat": "charm", "delta": 5 }, { "op": "stat", "stat": "happiness", "delta": -8 } ] } ] },
+      { "id": "volunteer", "label": "Volunteer instead", "outcomes": [ { "id": "volunteered", "text": "You knocked doors for someone else and learned how it all actually works.", "historyLine": "You volunteered in Ward 4.", "effects": [ { "op": "stat", "stat": "charm", "delta": 5 }, { "op": "stat", "stat": "smarts", "delta": 6 }, { "op": "flag", "key": "in_politics", "value": true } ] } ] },
+      { "id": "stay_out", "label": "Stay out of it", "outcomes": [ { "id": "stayed_out", "text": "Someone worse ran. You have opinions about them now.", "historyLine": "You stayed out of local politics.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -2 } ] } ] }
+    ],
+    "cooldownYears": 8,
+    "maxPerLife": 2
+  },
+  {
+    "id": "politics_your_one_law",
+    "version": 1,
+    "category": "politics",
+    "card": { "icon": "⚖️", "label": "COUNCIL", "tint": "#EAF2FA", "color": "#2E6FA8" },
+    "weightClass": "major",
+    "priority": 74,
+    "minAge": 30,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "You could get one thing through.",
+    "body": "You have the votes for exactly one fight this term. There are three things worth doing and you can have one of them.",
+    "choices": [
+      { "id": "the_ordinance", "label": "The unglamorous local one", "outcomes": [ { "id": "passed", "text": "It passed, 6–3, and it is still law. It is the only thing you did that a stranger might benefit from today.", "historyLine": "You passed the freight-idling ordinance.", "effects": [ { "op": "stat", "stat": "charm", "delta": 8 }, { "op": "stat", "stat": "happiness", "delta": 12 }, { "op": "flag", "key": "passed_a_law", "value": true } ] } ] },
+      { "id": "the_popular_one", "label": "The one that gets you re-elected", "outcomes": [ { "id": "reelected", "text": "It got you re-elected and changed nothing whatsoever. Both of those things were the point.", "historyLine": "You spent your term on the popular thing.", "effects": [ { "op": "career_promote" }, { "op": "stat", "stat": "charm", "delta": 12 }, { "op": "fame", "following": 4000, "fans": 8 } ] } ] },
+      { "id": "the_hard_one", "label": "The one that will fail", "outcomes": [ { "id": "failed", "text": "It failed 2–7. Eleven years later somebody else passed nearly the same thing and thanked you in the chamber.", "historyLine": "You lost a fight you knew you'd lose.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 6 }, { "op": "stat", "stat": "charm", "delta": -4 }, { "op": "flag", "key": "the_honourable_loss", "value": true } ] } ] }
+    ],
+    "cooldownYears": 10,
+    "maxPerLife": 1
+  },
+  {
+    "id": "fame_a_reporter_calls",
+    "version": 1,
+    "category": "fame",
+    "card": { "icon": "📰", "label": "A REPORTER CALLS", "tint": "#FDE9F1", "color": "#C25585" },
+    "weightClass": "major",
+    "priority": 90,
+    "minAge": 25,
+    "conditions": { "all": [ { "field": "fame.following", "op": ">=", "value": 5000 }, { "field": "record.convictions", "op": ">=", "value": 1 } ] },
+    "participants": [ { "role": "kid", "kinds": ["child"], "pick": "oldest", "required": false } ],
+    "title": "Someone found the conviction.",
+    "body": "A local paper has the court record from decades ago. They're running it Sunday either way and they'd like a comment.",
+    "choices": [
+      { "id": "tell_it_first", "label": "Tell the whole story yourself, first", "outcomes": [ { "id": "owned_it", "text": "You put it out on the Friday, all of it, in your own words. By Monday it was somebody else's turn.", "historyLine": "You told the story of your conviction before the paper could.", "effects": [ { "op": "fame", "fans": 6, "haters": -4 }, { "op": "stat", "stat": "happiness", "delta": 4 }, { "op": "stat", "stat": "charm", "delta": 6 } ] } ] },
+      { "id": "no_comment", "label": "\"No comment\"", "outcomes": [ { "id": "ran_it", "text": "They ran it with your no comment in the second paragraph, where it looked exactly like what it was.", "historyLine": "The conviction came out in the paper.", "effects": [ { "op": "fame", "haters": 14, "fans": -8 }, { "op": "stat", "stat": "happiness", "delta": -12 } ] } ] },
+      { "id": "lawyer", "label": "Call a lawyer", "requires": { "field": "money.liquid", "op": ">=", "value": 800000 }, "outcomes": [ { "id": "delayed", "text": "The lawyer bought you four days and cost you eight thousand dollars. It ran on the Thursday instead.", "historyLine": "You lawyered up over the story. It ran anyway.", "effects": [ { "op": "money", "delta": -800000 }, { "op": "fame", "haters": 8 }, { "op": "stat", "stat": "happiness", "delta": -8 } ] } ] },
+      { "id": "lie", "label": "Lie", "outcomes": [
+        { "id": "held", "chance": 0.35, "text": "It held. It has held for years and you think about it whenever anybody says the word 'record'.", "historyLine": "You lied about the conviction, and it held.", "effects": [ { "op": "fame", "fans": 3 }, { "op": "stat", "stat": "happiness", "delta": -6 }, { "op": "flag", "key": "lied_publicly", "value": true } ] },
+        { "id": "collapsed", "text": "The court record is a public document. It took a stranger about forty minutes.", "historyLine": "You lied about the conviction and were caught.", "effects": [ { "op": "fame", "haters": 30, "fans": -22 }, { "op": "stat", "stat": "happiness", "delta": -20 }, { "op": "stat", "stat": "charm", "delta": -12 } ] } ] }
+    ],
+    "cooldownYears": 10,
+    "maxPerLife": 1
+  },
+  {
+    "id": "fame_you_got_noticed",
+    "version": 1,
+    "category": "fame",
+    "card": { "icon": "🎙️", "label": "SOMEBODY NOTICED", "tint": "#FDE9F1", "color": "#C25585" },
+    "weightClass": "major",
+    "priority": 64,
+    "minAge": 20,
+    "conditions": { "all": [ { "field": "stats.charm", "op": ">=", "value": 70 }, { "field": "fame.following", "op": "<", "value": 5000 } ] },
+    "participants": [],
+    "title": "Somebody wants to film what you do.",
+    "body": "A small production company with a good idea and a bad budget. They think there is a show in your working week.",
+    "choices": [
+      { "id": "do_it", "label": "Let them film it", "outcomes": [
+        { "id": "hit", "chance": 0.4, "text": "It went further than anybody expected. You are recognised in your own city and nowhere else, which is the funniest possible amount of famous.", "historyLine": "You ended up with a show.", "effects": [ { "op": "fame", "following": 1200000, "fans": 55, "haters": 10, "knownFor": "The show" }, { "op": "money", "delta": 1400000 }, { "op": "stat", "stat": "happiness", "delta": 10 } ] },
+        { "id": "flop", "text": "Six episodes, no second series, and a permanent low-grade embarrassment when people bring it up.", "historyLine": "You made a show nobody watched.", "effects": [ { "op": "fame", "following": 12000, "fans": 30, "haters": 20, "knownFor": "That show" }, { "op": "money", "delta": 200000 }, { "op": "stat", "stat": "happiness", "delta": -5 } ] } ] },
+      { "id": "no", "label": "Say no", "outcomes": [ { "id": "declined", "text": "You said no and kept your Tuesdays. Somebody else made it, worse, two years later.", "historyLine": "You turned down a TV show.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 3 } ] } ] }
+    ],
+    "cooldownYears": 8,
+    "maxPerLife": 2
+  },
+  {
+    "id": "random_a_stranger",
+    "version": 1,
+    "category": "random",
+    "card": { "icon": "🌤️", "label": "A TUESDAY", "tint": "#FFF3D9", "color": "#8A6A20" },
+    "weightClass": "minor",
+    "priority": 40,
+    "minAge": 14,
+    "participants": [],
+    "title": "A stranger did something small for you.",
+    "body": "Ran after you with a dropped wallet, or held a door for a stupidly long time. It has stuck with you.",
+    "choices": [
+      { "id": "pass_it_on", "label": "Pass it on", "outcomes": [ { "id": "passed", "text": "You did something equivalent within about a week, for somebody who did not notice.", "historyLine": "A stranger was kind to you, and you passed it on.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 6 }, { "op": "stat", "stat": "charm", "delta": 2 } ] } ] },
+      { "id": "just_thanks", "label": "Just say thanks", "outcomes": [ { "id": "thanks", "text": "You said thanks properly, which is rarer than it should be.", "historyLine": "A stranger was kind to you.", "effects": [ { "op": "stat", "stat": "happiness", "delta": 4 } ] } ] }
+    ],
+    "cooldownYears": 4,
+    "maxPerLife": 4
+  },
+  {
+    "id": "random_bad_luck",
+    "version": 1,
+    "category": "random",
+    "card": { "icon": "💥", "label": "OUT OF NOWHERE", "tint": "#FFF0E8", "color": "#C4462E" },
+    "weightClass": "major",
+    "priority": 55,
+    "minAge": 16,
+    "participants": [],
+    "title": "Someone went into the back of you at a junction.",
+    "body": "Nobody is hurt. Everything else about it is going to take four months.",
+    "choices": [
+      { "id": "claim", "label": "Claim on the insurance", "outcomes": [ { "id": "claimed", "text": "Four months, six phone calls, and a settlement that did not cover the excess.", "historyLine": "You were in a crash and it took months to settle.", "effects": [ { "op": "money", "delta": -90000 }, { "op": "stat", "stat": "happiness", "delta": -6 } ] } ] },
+      { "id": "settle_cash", "label": "Settle it there and then", "outcomes": [
+        { "id": "fine", "chance": 0.6, "text": "He paid you cash at the roadside and you both drove off. It covered it, roughly.", "historyLine": "You settled a crash at the roadside.", "effects": [ { "op": "money", "delta": 60000 } ] },
+        { "id": "stung", "text": "The cash did not cover half of it and he was never going to answer that number again.", "historyLine": "You settled a crash at the roadside and lost out.", "effects": [ { "op": "money", "delta": -180000 }, { "op": "stat", "stat": "smarts", "delta": 3 } ] } ] }
+    ],
+    "cooldownYears": 8,
+    "maxPerLife": 3
+  }
+]

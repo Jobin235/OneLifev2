@@ -1,0 +1,373 @@
+[
+  {
+    "id": "classmate",
+    "kind": "classmate",
+    "ageOffset": [
+      0,
+      0
+    ],
+    "emojiPool": [
+      "👦",
+      "👧",
+      "🧒",
+      "🧑"
+    ],
+    "descriptors": [
+      "Sits behind you",
+      "Loud in the hallway, quiet in class",
+      "Always has gum",
+      "Copies your homework and thanks you for it",
+      "New this year"
+    ],
+    "occupations": [],
+    "dimensions": {
+      "closeness": 35,
+      "affection": 40,
+      "trust": 40
+    },
+    "traitCount": 1,
+    "detailed": false
+  },
+  {
+    "id": "school_friend",
+    "kind": "friend",
+    "ageOffset": [
+      0,
+      0
+    ],
+    "emojiPool": [
+      "👦",
+      "👧",
+      "🧑"
+    ],
+    "descriptors": [
+      "Friend since 3rd grade",
+      "Lives four streets over",
+      "Makes you laugh in bad situations",
+      "The one your mother approves of"
+    ],
+    "occupations": [],
+    "dimensions": {
+      "closeness": 68,
+      "affection": 70,
+      "trust": 65
+    },
+    "traitCount": 2,
+    "detailed": true
+  },
+  {
+    "id": "teacher",
+    "kind": "teacher",
+    "ageOffset": [
+      18,
+      35
+    ],
+    "emojiPool": [
+      "🧑‍🏫",
+      "👩‍🏫",
+      "👨‍🏫"
+    ],
+    "descriptors": [
+      "Writes recommendations",
+      "Has given up on most of the class",
+      "Notices things",
+      "Runs the club nobody joins"
+    ],
+    "occupations": [
+      "Teacher"
+    ],
+    "dimensions": {
+      "respect": 60,
+      "closeness": 40,
+      "trust": 55
+    },
+    "traitCount": 1,
+    "detailed": false
+  },
+  {
+    "id": "roommate",
+    "kind": "friend",
+    "ageOffset": [
+      -1,
+      2
+    ],
+    "emojiPool": [
+      "🧑",
+      "👨",
+      "👩"
+    ],
+    "descriptors": [
+      "Roommate · already has ideas",
+      "Never washes anything",
+      "Studies more than you and pretends not to",
+      "Knows everybody on campus"
+    ],
+    "occupations": [
+      "Student"
+    ],
+    "dimensions": {
+      "closeness": 70,
+      "affection": 68,
+      "trust": 60
+    },
+    "traitCount": 2,
+    "detailed": true
+  },
+  {
+    "id": "professor",
+    "kind": "teacher",
+    "ageOffset": [
+      20,
+      40
+    ],
+    "emojiPool": [
+      "🧑‍🏫",
+      "👩‍🔬",
+      "👨‍🏫"
+    ],
+    "descriptors": [
+      "Could get you an internship",
+      "Publishes constantly, teaches reluctantly",
+      "Remembers your name, which is rare"
+    ],
+    "occupations": [
+      "Professor"
+    ],
+    "dimensions": {
+      "respect": 70,
+      "closeness": 35,
+      "trust": 55
+    },
+    "traitCount": 1,
+    "detailed": true
+  },
+  {
+    "id": "manager",
+    "kind": "boss",
+    "ageOffset": [
+      5,
+      22
+    ],
+    "emojiPool": [
+      "🧔",
+      "👩‍💼",
+      "🧑‍💼"
+    ],
+    "descriptors": [
+      "Your manager",
+      "Fair, up to a point",
+      "Mentions favours he's done for you",
+      "Protects the team, mostly"
+    ],
+    "occupations": [
+      "Manager"
+    ],
+    "dimensions": {
+      "respect": 55,
+      "closeness": 40,
+      "trust": 50
+    },
+    "traitCount": 2,
+    "detailed": true
+  },
+  {
+    "id": "coworker_rival",
+    "kind": "colleague",
+    "ageOffset": [
+      -4,
+      4
+    ],
+    "emojiPool": [
+      "👩‍🦰",
+      "🧑‍💻",
+      "👨‍💼"
+    ],
+    "descriptors": [
+      "Also up for the next role",
+      "Better at the political part than you",
+      "Works later than you and mentions it"
+    ],
+    "occupations": [
+      "Colleague"
+    ],
+    "dimensions": {
+      "closeness": 30,
+      "respect": 55,
+      "conflict": 30,
+      "trust": 35
+    },
+    "traitCount": 2,
+    "detailed": true
+  },
+  {
+    "id": "coworker_friend",
+    "kind": "colleague",
+    "ageOffset": [
+      -6,
+      6
+    ],
+    "emojiPool": [
+      "🧑",
+      "👩",
+      "👨"
+    ],
+    "descriptors": [
+      "Eats lunch with you",
+      "Covers for you",
+      "Complains about the same things you do"
+    ],
+    "occupations": [
+      "Colleague"
+    ],
+    "dimensions": {
+      "closeness": 55,
+      "affection": 55,
+      "trust": 58
+    },
+    "traitCount": 1,
+    "detailed": false
+  },
+  {
+    "id": "date",
+    "kind": "partner",
+    "ageOffset": [
+      -4,
+      4
+    ],
+    "emojiPool": [
+      "👩",
+      "🧑",
+      "👨",
+      "🧑‍🎤"
+    ],
+    "descriptors": [
+      "Laughs before you finish the joke",
+      "Has a plan for everything",
+      "Reads on trains",
+      "Not from around here"
+    ],
+    "occupations": [
+      "Lawyer",
+      "Nurse",
+      "Designer",
+      "Teacher",
+      "Bartender",
+      "Engineer",
+      "Musician",
+      "Accountant"
+    ],
+    "dimensions": {
+      "romance": 68,
+      "affection": 58,
+      "closeness": 50,
+      "trust": 48
+    },
+    "traitCount": 2,
+    "detailed": true
+  },
+  {
+    "id": "neighbour",
+    "kind": "acquaintance",
+    "ageOffset": [
+      -15,
+      30
+    ],
+    "emojiPool": [
+      "🧓",
+      "🧑",
+      "👵",
+      "👴"
+    ],
+    "descriptors": [
+      "Two doors down",
+      "Waters your plants and reads your post",
+      "Has opinions about the bins"
+    ],
+    "occupations": [],
+    "dimensions": {
+      "closeness": 30,
+      "affection": 45
+    },
+    "traitCount": 1,
+    "detailed": false
+  },
+  {
+    "id": "business_partner",
+    "kind": "business_partner",
+    "ageOffset": [
+      -8,
+      12
+    ],
+    "emojiPool": [
+      "🧑‍💼",
+      "👩‍💼",
+      "🧔"
+    ],
+    "descriptors": [
+      "In it with you",
+      "Better at the money than you",
+      "Wants to grow faster than you do"
+    ],
+    "occupations": [
+      "Business partner"
+    ],
+    "dimensions": {
+      "trust": 62,
+      "respect": 62,
+      "closeness": 50
+    },
+    "traitCount": 2,
+    "detailed": true
+  },
+  {
+    "id": "cellmate",
+    "kind": "cellmate",
+    "ageOffset": [
+      -10,
+      15
+    ],
+    "emojiPool": [
+      "🧑",
+      "👨",
+      "🧔"
+    ],
+    "descriptors": [
+      "Been inside before",
+      "Reads all day and says nothing",
+      "Knows who to avoid"
+    ],
+    "occupations": [],
+    "dimensions": {
+      "trust": 30,
+      "respect": 40,
+      "closeness": 35
+    },
+    "traitCount": 2,
+    "detailed": false
+  },
+  {
+    "id": "recruiter",
+    "kind": "acquaintance",
+    "ageOffset": [
+      -2,
+      15
+    ],
+    "emojiPool": [
+      "🧑‍💼",
+      "👩‍💼"
+    ],
+    "descriptors": [
+      "Found you on the internet",
+      "Very keen, very vague"
+    ],
+    "occupations": [
+      "Recruiter"
+    ],
+    "dimensions": {
+      "closeness": 15,
+      "trust": 30
+    },
+    "traitCount": 1,
+    "detailed": false
+  }
+]

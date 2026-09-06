@@ -1,0 +1,36 @@
+[
+  {
+    "id": "software",
+    "label": "Software",
+    "industry": "Technology",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": { "smarts": 55 },
+    "rungs": [
+      { "id": "junior_dev", "title": "Junior Developer", "salary": 6800000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "dev", "title": "Developer", "salary": 8600000, "minExperience": 2, "minPerformance": 45 },
+      { "id": "senior_dev", "title": "Senior Developer", "salary": 11200000, "minExperience": 5, "minPerformance": 60 },
+      { "id": "team_lead", "title": "Team Lead", "salary": 14000000, "minExperience": 8, "minPerformance": 70 },
+      { "id": "director", "title": "Director", "salary": 19000000, "minExperience": 13, "minPerformance": 78 },
+      { "id": "vp_eng", "title": "VP of Engineering", "salary": 26000000, "minExperience": 18, "minPerformance": 85 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["consulting"]
+  },
+  {
+    "id": "consulting",
+    "label": "Consulting",
+    "industry": "Professional services",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": { "smarts": 60, "charm": 55 },
+    "rungs": [
+      { "id": "analyst", "title": "Analyst", "salary": 7400000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "consultant", "title": "Consultant", "salary": 9800000, "minExperience": 2, "minPerformance": 50 },
+      { "id": "manager", "title": "Engagement Manager", "salary": 14500000, "minExperience": 5, "minPerformance": 65 },
+      { "id": "partner", "title": "Partner", "salary": 32000000, "minExperience": 12, "minPerformance": 82 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]
