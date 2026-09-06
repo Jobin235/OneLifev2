@@ -13,11 +13,30 @@ export const interpolate = (
   template: string,
   state: LifeState,
   bindings: Record<string, string>,
-): string =>
-  template.replace(/\{([a-zA-Z0-9_.]+)\}/g, (_whole, token: string) => {
+): string => {
+  const filled = template.replace(/\{([a-zA-Z0-9_.]+)\}/g, (_whole, token: string) => {
     const value = lookup(token, state, bindings);
     return value ?? fallbackFor(token);
   });
+  return capitaliseSentences(filled);
+};
+
+/**
+ * A pronoun token at the start of a sentence resolves to "he" or "she", which
+ * then reads as "he said yes, and then cried". Fixing this in the writing would
+ * mean every author remembering never to open a sentence with a role token —
+ * so it is fixed here instead, once.
+ *
+ * Only a lowercase letter immediately after sentence-ending punctuation or at the
+ * very start is touched, so nothing else in the prose is disturbed.
+ */
+const capitaliseSentences = (text: string): string =>
+  text
+    .replace(/^(\s*["“'(]?)([a-z])/, (_m, lead: string, letter: string) => lead + letter.toUpperCase())
+    .replace(
+      /([.!?])(\s+["“'(]?)([a-z])/g,
+      (_m, punct: string, gap: string, letter: string) => punct + gap + letter.toUpperCase(),
+    );
 
 const ROLE_FALLBACKS: Record<string, string> = {
   friend: 'someone you know',
