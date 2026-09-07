@@ -16,12 +16,27 @@ const out = join(here, '..', 'standalone');
 
 const html = readFileSync(join(dist, 'index.html'), 'utf8');
 
-const cssHref = /<link[^>]+href="([^"]+\.css)"/.exec(html)?.[1];
-const jsSrc = /<script[^>]+src="([^"]+\.js)"/.exec(html)?.[1];
-if (!cssHref || !jsSrc) throw new Error('could not find the built css/js in dist/index.html');
+/*
+ * Match the built bundle specifically, under /assets/. The page also links
+ * /fonts/fonts.css, and a looser regex picks that up instead — which ships a
+ * page with the fonts inlined twice and no application CSS at all. It looks
+ * fine to any check that reads text rather than pixels, so the assertions
+ * below exist to make that failure loud.
+ */
+const cssHref = /<link[^>]+href="(\/assets\/[^"]+\.css)"/.exec(html)?.[1];
+const jsSrc = /<script[^>]+src="(\/assets\/[^"]+\.js)"/.exec(html)?.[1];
+if (!cssHref || !jsSrc) throw new Error('could not find the built css/js under /assets/ in dist/index.html');
 
 const css = readFileSync(join(dist, cssHref.replace(/^\//, '')), 'utf8');
 const js = readFileSync(join(dist, jsSrc.replace(/^\//, '')), 'utf8');
+
+// The application stylesheet must actually be the application stylesheet.
+for (const marker of ['--coral', '.age-up', '.stat-row']) {
+  if (!css.includes(marker)) {
+    throw new Error(`the stylesheet at ${cssHref} is missing ${marker} — wrong file?`);
+  }
+}
+if (!js.includes('createRoot')) throw new Error(`the bundle at ${jsSrc} does not look like the app`);
 
 // The vendored woff2 files become data: URIs so the page needs nothing external.
 const fontCss = readFileSync(join(dist, 'fonts', 'fonts.css'), 'utf8').replace(
