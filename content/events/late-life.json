@@ -32,7 +32,8 @@
                 "stat": "happiness",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Even shares"
           }
         ]
       },
@@ -50,7 +51,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Somebody will find out"
           }
         ]
       },
@@ -68,7 +70,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Still on the side"
           }
         ]
       }
@@ -117,7 +120,8 @@
                 "stat": "health",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "They believed you"
           }
         ]
       },
@@ -144,7 +148,8 @@
                 "stat": "health",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "School runs"
           }
         ]
       }
@@ -197,7 +202,8 @@
                 "stat": "happiness",
                 "delta": -8
               }
-            ]
+            ],
+            "title": "Smaller, and still here"
           }
         ]
       },
@@ -220,7 +226,8 @@
                 "stat": "happiness",
                 "delta": 2
               }
-            ]
+            ],
+            "title": "Stopped talking about it"
           }
         ]
       },
@@ -243,7 +250,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Two years alone"
           }
         ]
       }
@@ -291,7 +299,8 @@
                 "stat": "happiness",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "Never mentioned again"
           }
         ]
       },
@@ -313,7 +322,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "You wrote terms"
           }
         ]
       },
@@ -331,7 +341,8 @@
                 "stat": "happiness",
                 "delta": -9
               }
-            ]
+            ],
+            "title": "Good reasons"
           }
         ]
       }
@@ -380,7 +391,8 @@
                 "stat": "charm",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Three hours"
           }
         ]
       },
@@ -398,7 +410,8 @@
                 "stat": "happiness",
                 "delta": -7
               }
-            ]
+            ],
+            "title": "On and off all year"
           }
         ]
       }
@@ -446,7 +459,8 @@
                 "stat": "health",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Near a shop"
           }
         ]
       },
@@ -469,7 +483,8 @@
                 "stat": "health",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Cold, and yours"
           }
         ]
       }
@@ -517,7 +532,8 @@
                 "op": "reputation",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "How much was luck"
           }
         ]
       },
@@ -539,7 +555,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "The version with the arc"
           }
         ]
       },
@@ -557,7 +574,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Not the right person"
           }
         ]
       }
@@ -605,7 +623,8 @@
                 "stat": "health",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Badly, and far too late"
           }
         ]
       },
@@ -623,7 +642,8 @@
                 "stat": "happiness",
                 "delta": 7
               }
-            ]
+            ],
+            "title": "Put it down"
           }
         ]
       }
@@ -662,7 +682,8 @@
                 "stat": "happiness",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "Two started coming"
           }
         ]
       },
@@ -680,7 +701,8 @@
                 "stat": "happiness",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "The one who came"
           }
         ]
       }
@@ -731,7 +753,8 @@
               {
                 "op": "business_close"
               }
-            ]
+            ],
+            "title": "Nothing, for a fortnight"
           }
         ]
       },
@@ -749,7 +772,8 @@
                 "stat": "happiness",
                 "delta": 9
               }
-            ]
+            ],
+            "title": "Worth less every year"
           }
         ]
       }
@@ -798,7 +822,8 @@
                 "stat": "health",
                 "delta": 8
               }
-            ]
+            ],
+            "title": "Warm, busy, not yours"
           }
         ]
       },
@@ -825,7 +850,8 @@
                 "stat": "health",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "Three people you liked"
           }
         ]
       },
@@ -848,7 +874,8 @@
                 "stat": "health",
                 "delta": -7
               }
-            ]
+            ],
+            "title": "Harder every year"
           }
         ]
       }
@@ -892,7 +919,8 @@
                 "stat": "happiness",
                 "delta": 13
               }
-            ]
+            ],
+            "title": "Shorter than yours"
           }
         ]
       },
@@ -910,7 +938,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Took it with you"
           }
         ]
       }
@@ -949,7 +978,8 @@
                 "stat": "happiness",
                 "delta": 11
               }
-            ]
+            ],
+            "title": "Two notebooks"
           }
         ]
       },
@@ -967,7 +997,8 @@
                 "stat": "happiness",
                 "delta": 8
               }
-            ]
+            ],
+            "title": "Mostly forgiven"
           }
         ]
       },
@@ -985,7 +1016,8 @@
                 "stat": "happiness",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "All of it went with you"
           }
         ]
       }

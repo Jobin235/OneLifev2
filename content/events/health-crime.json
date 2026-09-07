@@ -64,7 +64,8 @@
                 "stat": "smarts",
                 "delta": 2
               }
-            ]
+            ],
+            "title": "Caught early"
           }
         ]
       },
@@ -102,7 +103,8 @@
                 "eventId": "health_the_bill_comes_due",
                 "inYears": 25
               }
-            ]
+            ],
+            "title": "The normal way you feel"
           }
         ]
       },
@@ -138,7 +140,8 @@
                 "op": "habit_remove",
                 "habitId": "overwork"
               }
-            ]
+            ],
+            "title": "Nine days"
           }
         ]
       }
@@ -210,7 +213,8 @@
                 "op": "habit_remove",
                 "habitId": "smoking"
               }
-            ]
+            ],
+            "title": "Twenty more years"
           }
         ]
       },
@@ -237,7 +241,8 @@
                 "op": "condition_treat",
                 "conditionId": "heart_disease"
               }
-            ]
+            ],
+            "title": "Pills every day"
           }
         ]
       },
@@ -275,7 +280,8 @@
                 "op": "habit_add",
                 "habitId": "running"
               }
-            ]
+            ],
+            "title": "You actually did it"
           },
           {
             "id": "didnt",
@@ -293,7 +299,8 @@
                 "label": "Heart disease",
                 "annualHealthDrain": 4
               }
-            ]
+            ],
+            "title": "Five weeks of meaning it"
           }
         ]
       }
@@ -358,7 +365,8 @@
                 "op": "condition_treat",
                 "conditionId": "anxiety"
               }
-            ]
+            ],
+            "title": "The whole course"
           }
         ]
       },
@@ -381,7 +389,8 @@
                 "stat": "happiness",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "Managed it yourself"
           }
         ]
       }
@@ -455,7 +464,8 @@
                 "stat": "happiness",
                 "delta": -25
               }
-            ]
+            ],
+            "title": "The second junction"
           },
           {
             "id": "fine",
@@ -481,7 +491,8 @@
                 "eventId": "crime_they_ask_again",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Home by four"
           }
         ]
       },
@@ -505,7 +516,8 @@
                 "stat": "smarts",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Worse than he said"
           },
           {
             "id": "caught_anyway",
@@ -519,7 +531,8 @@
                 "fine": 0,
                 "facility": "Columbia Correctional"
               }
-            ]
+            ],
+            "title": "A shorter interview"
           }
         ]
       },
@@ -544,7 +557,8 @@
                 "attr": "discipline",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "Fine, in that way"
           }
         ]
       }
@@ -592,7 +606,8 @@
                 "fine": 0,
                 "facility": "Columbia Correctional"
               }
-            ]
+            ],
+            "title": "The odds do not reset"
           },
           {
             "id": "rich",
@@ -617,7 +632,8 @@
                 "eventId": "crime_they_ask_again",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Nowhere to put it"
           }
         ]
       },
@@ -640,7 +656,8 @@
                 "stat": "happiness",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "While you still could"
           }
         ]
       }
@@ -702,7 +719,8 @@
                 "eventId": "crime_the_price",
                 "inYears": 3
               }
-            ]
+            ],
+            "title": "The price arrived later"
           }
         ]
       },
@@ -721,7 +739,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "A year of expecting it"
           },
           {
             "id": "hurt",
@@ -739,7 +758,8 @@
                 "label": "A back that never came right",
                 "annualHealthDrain": 1
               }
-            ]
+            ],
+            "title": "In the laundry"
           }
         ]
       },
@@ -762,7 +782,8 @@
                 "key": "known_as_a_talker",
                 "value": true
               }
-            ]
+            ],
+            "title": "A different block"
           }
         ]
       }
@@ -811,7 +832,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Gracious about it"
           }
         ]
       },
@@ -835,7 +857,8 @@
                 "stat": "health",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "One night's work"
           },
           {
             "id": "caught",
@@ -849,7 +872,8 @@
                 "fine": 0,
                 "facility": "Columbia Correctional"
               }
-            ]
+            ],
+            "title": "Shorter the second time"
           }
         ]
       },
@@ -876,7 +900,8 @@
                 "stat": "health",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "Your car window"
           }
         ]
       }

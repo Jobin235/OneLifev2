@@ -67,7 +67,8 @@
                 "stat": "smarts",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "One client, kept the margin"
           }
         ]
       },
@@ -94,7 +95,8 @@
                 "eventId": "world_fuel_spike",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Eleven months of it"
           }
         ]
       },
@@ -120,7 +122,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Smaller, safer, slower"
           }
         ]
       },
@@ -165,7 +168,8 @@
                 "line": "{partner.they} told you to raise the rates. {partner.they} was right.",
                 "weight": 70
               }
-            ]
+            ],
+            "title": "Stop apologising"
           }
         ]
       }
@@ -229,7 +233,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Eleven extra years"
           }
         ]
       },
@@ -256,7 +261,8 @@
                 "attr": "discipline",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "A very detailed spreadsheet"
           }
         ]
       },
@@ -283,7 +289,8 @@
                 "stat": "happiness",
                 "delta": -7
               }
-            ]
+            ],
+            "title": "Everyone had an opinion"
           }
         ]
       }
@@ -332,7 +339,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Four months of runway"
           }
         ]
       },
@@ -350,7 +358,8 @@
                 "stat": "happiness",
                 "delta": 2
               }
-            ]
+            ],
+            "title": "It usually is not you"
           }
         ]
       }
@@ -429,7 +438,8 @@
                 "eventId": "politics_your_one_law",
                 "inYears": 5
               }
-            ]
+            ],
+            "title": "By 340 votes"
           },
           {
             "id": "lost",
@@ -450,7 +460,8 @@
                 "stat": "happiness",
                 "delta": -8
               }
-            ]
+            ],
+            "title": "1,100 doors"
           }
         ]
       },
@@ -478,7 +489,8 @@
                 "key": "in_politics",
                 "value": true
               }
-            ]
+            ],
+            "title": "How it actually works"
           }
         ]
       },
@@ -496,7 +508,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Someone worse ran"
           }
         ]
       }
@@ -546,7 +559,8 @@
                 "key": "passed_a_law",
                 "value": true
               }
-            ]
+            ],
+            "title": "Six to three"
           }
         ]
       },
@@ -572,7 +586,8 @@
                 "following": 4000,
                 "fans": 8
               }
-            ]
+            ],
+            "title": "Re-elected, changed nothing"
           }
         ]
       },
@@ -600,7 +615,8 @@
                 "key": "the_honourable_loss",
                 "value": true
               }
-            ]
+            ],
+            "title": "Eleven years early"
           }
         ]
       }
@@ -672,7 +688,8 @@
                 "stat": "charm",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "Out on the Friday"
           }
         ]
       },
@@ -695,7 +712,8 @@
                 "stat": "happiness",
                 "delta": -12
               }
-            ]
+            ],
+            "title": "Second paragraph"
           }
         ]
       },
@@ -726,7 +744,8 @@
                 "stat": "happiness",
                 "delta": -8
               }
-            ]
+            ],
+            "title": "Four days, eight thousand"
           }
         ]
       },
@@ -754,7 +773,8 @@
                 "key": "lied_publicly",
                 "value": true
               }
-            ]
+            ],
+            "title": "It held"
           },
           {
             "id": "collapsed",
@@ -776,7 +796,8 @@
                 "stat": "charm",
                 "delta": -12
               }
-            ]
+            ],
+            "title": "Forty minutes"
           }
         ]
       }
@@ -841,7 +862,8 @@
                 "stat": "happiness",
                 "delta": 10
               }
-            ]
+            ],
+            "title": "Recognised at home"
           },
           {
             "id": "flop",
@@ -864,7 +886,8 @@
                 "stat": "happiness",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "No second series"
           }
         ]
       },
@@ -882,7 +905,8 @@
                 "stat": "happiness",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Kept your Tuesdays"
           }
         ]
       }
@@ -926,7 +950,8 @@
                 "stat": "charm",
                 "delta": 2
               }
-            ]
+            ],
+            "title": "Passed it on"
           }
         ]
       },
@@ -944,7 +969,8 @@
                 "stat": "happiness",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Said it properly"
           }
         ]
       }
@@ -987,7 +1013,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Six phone calls"
           }
         ]
       },
@@ -1005,7 +1032,8 @@
                 "op": "money",
                 "delta": 60000
               }
-            ]
+            ],
+            "title": "Cash at the roadside"
           },
           {
             "id": "stung",
@@ -1021,7 +1049,8 @@
                 "stat": "smarts",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Never going to answer"
           }
         ]
       }

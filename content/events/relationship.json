@@ -82,7 +82,8 @@
                 "key": "cohabiting",
                 "value": true
               }
-            ]
+            ],
+            "title": "Yes, immediately"
           },
           {
             "id": "wobble",
@@ -100,7 +101,8 @@
                 "stat": "happiness",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "No answer ready"
           }
         ]
       },
@@ -129,7 +131,8 @@
                 "eventId": "relationship_the_heavier_conversation",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Bought a week"
           }
         ]
       },
@@ -152,7 +155,8 @@
                 "stat": "health",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Four days wasted"
           }
         ]
       }
@@ -219,7 +223,8 @@
                 "stat": "happiness",
                 "delta": 13
               }
-            ]
+            ],
+            "title": "Meant most of it"
           }
         ]
       },
@@ -255,7 +260,8 @@
                 "line": "You told {partner.them} the truth and it ended things.",
                 "weight": 88
               }
-            ]
+            ],
+            "title": "Kindly, that night"
           }
         ]
       },
@@ -290,7 +296,8 @@
                 "eventId": "relationship_it_ends",
                 "inYears": 2
               }
-            ]
+            ],
+            "title": "They stopped asking"
           }
         ]
       }
@@ -356,7 +363,8 @@
                 "dimension": "respect",
                 "delta": 12
               }
-            ]
+            ],
+            "title": "You carried boxes"
           }
         ]
       },
@@ -392,7 +400,8 @@
                 "line": "You said something at the end that neither of you has taken back.",
                 "weight": 92
               }
-            ]
+            ],
+            "title": "It landed"
           }
         ]
       },
@@ -422,7 +431,8 @@
                 "eventId": "relationship_it_ends",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Eleven months"
           },
           {
             "id": "no",
@@ -444,7 +454,8 @@
                 "stat": "charm",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "Twice, gently"
           }
         ]
       }
@@ -509,7 +520,8 @@
                 "stat": "charm",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Sent a different one"
           },
           {
             "id": "no",
@@ -526,7 +538,8 @@
                 "stat": "charm",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Kind, unfortunately"
           }
         ]
       },
@@ -550,7 +563,8 @@
                 "stat": "happiness",
                 "delta": 10
               }
-            ]
+            ],
+            "title": "Three days later"
           },
           {
             "id": "nothing",
@@ -562,7 +576,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "The coats"
           }
         ]
       }
@@ -650,7 +665,8 @@
                 "key": "married",
                 "value": true
               }
-            ]
+            ],
+            "title": "Cried, then complained"
           },
           {
             "id": "no",
@@ -668,7 +684,8 @@
                 "dimension": "trust",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Not yet"
           }
         ]
       },
@@ -697,7 +714,8 @@
                 "key": "married",
                 "value": true
               }
-            ]
+            ],
+            "title": "An ordinary Thursday"
           },
           {
             "id": "neither",
@@ -715,7 +733,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Both being brave"
           }
         ]
       },
@@ -743,7 +762,8 @@
                 "attr": "discipline",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Out loud"
           }
         ]
       }
@@ -824,7 +844,8 @@
                 "stat": "happiness",
                 "delta": 8
               }
-            ]
+            ],
+            "title": "Quiet for a long time"
           }
         ]
       },
@@ -849,7 +870,8 @@
                 "line": "You had the chance to tell {partner.them} why you turned it down and didn't.",
                 "weight": 80
               }
-            ]
+            ],
+            "title": "Genuinely yours"
           }
         ]
       }

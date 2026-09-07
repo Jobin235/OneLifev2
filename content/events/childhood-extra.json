@@ -37,7 +37,8 @@
                 "attr": "discipline",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Afraid quietly"
           }
         ]
       },
@@ -55,7 +56,8 @@
                 "stat": "happiness",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "Somebody came"
           }
         ]
       },
@@ -78,7 +80,8 @@
                 "stat": "happiness",
                 "delta": 2
               }
-            ]
+            ],
+            "title": "Nothing there"
           }
         ]
       }
@@ -121,7 +124,8 @@
                 "op": "trait_add",
                 "traitId": "honest"
               }
-            ]
+            ],
+            "title": "A look, not a shouting"
           }
         ]
       },
@@ -144,7 +148,8 @@
                 "stat": "charm",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Found in the spring"
           }
         ]
       },
@@ -167,7 +172,8 @@
                 "stat": "charm",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "The dog took it well"
           }
         ]
       }
@@ -216,7 +222,8 @@
                 "stat": "charm",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Ten awkward minutes"
           }
         ]
       },
@@ -234,7 +241,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Someone else did it"
           }
         ]
       }
@@ -283,7 +291,8 @@
                 "stat": "charm",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Fine about it"
           }
         ]
       },
@@ -311,7 +320,8 @@
                 "stat": "charm",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Half a step"
           }
         ]
       }
@@ -354,7 +364,8 @@
                 "stat": "happiness",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "Spent and forgotten"
           }
         ]
       },
@@ -376,7 +387,8 @@
                 "op": "trait_add",
                 "traitId": "honest"
               }
-            ]
+            ],
+            "title": "Slightly red"
           }
         ]
       }
@@ -420,7 +432,8 @@
                 "stat": "happiness",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "About half of it"
           }
         ]
       },
@@ -443,7 +456,8 @@
                 "stat": "smarts",
                 "delta": 2
               }
-            ]
+            ],
+            "title": "Twice more"
           }
         ]
       }
@@ -492,7 +506,8 @@
                 "stat": "charm",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "Two years to shake"
           }
         ]
       },
@@ -519,7 +534,8 @@
                 "op": "reputation",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "In trouble by four"
           }
         ]
       },
@@ -542,7 +558,8 @@
                 "attr": "discipline",
                 "delta": 7
               }
-            ]
+            ],
+            "title": "Something got harder"
           }
         ]
       }
@@ -586,7 +603,8 @@
                 "stat": "smarts",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Nobody said it"
           }
         ]
       },
@@ -609,7 +627,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "More than they meant"
           }
         ]
       }
@@ -662,7 +681,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Tired Saturdays"
           }
         ]
       },
@@ -680,7 +700,8 @@
                 "stat": "happiness",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "Good Saturdays"
           }
         ]
       }
@@ -729,7 +750,8 @@
                 "stat": "health",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Would not have missed it"
           }
         ]
       },
@@ -752,7 +774,8 @@
                 "stat": "smarts",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Better than it was"
           }
         ]
       },
@@ -779,7 +802,8 @@
                 "op": "trait_add",
                 "traitId": "honest"
               }
-            ]
+            ],
+            "title": "Yes, with conditions"
           }
         ]
       }
@@ -832,7 +856,8 @@
                 "stat": "happiness",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "Better than deserved"
           }
         ]
       },
@@ -854,7 +879,8 @@
                 "stat": "happiness",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Found out in August"
           }
         ]
       },
@@ -880,7 +906,8 @@
                 "op": "reputation",
                 "delta": -8
               }
-            ]
+            ],
+            "title": "Waiting to be caught"
           }
         ]
       }
@@ -929,7 +956,8 @@
                 "stat": "charm",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Kind about it"
           }
         ]
       },
@@ -952,7 +980,8 @@
                 "stat": "charm",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "Never said"
           }
         ]
       }
@@ -999,7 +1028,8 @@
                 "op": "reputation",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "Shaking on the bus"
           }
         ]
       },
@@ -1022,7 +1052,8 @@
                 "attr": "discipline",
                 "delta": 7
               }
-            ]
+            ],
+            "title": "One of them relieved"
           }
         ]
       }
@@ -1071,7 +1102,8 @@
                 "stat": "happiness",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Said out loud"
           }
         ]
       },
@@ -1094,7 +1126,8 @@
                 "attr": "discipline",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "Your own money"
           }
         ]
       },
@@ -1112,7 +1145,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "A year of not deciding"
           }
         ]
       }
@@ -1163,7 +1197,8 @@
                 "stat": "happiness",
                 "delta": 7
               }
-            ]
+            ],
+            "title": "Four awkward minutes"
           }
         ]
       },
@@ -1187,7 +1222,8 @@
                 "stat": "happiness",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "Both waited"
           }
         ]
       }
@@ -1236,7 +1272,8 @@
                 "stat": "health",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Nothing happened"
           }
         ]
       },
@@ -1259,7 +1296,8 @@
                 "stat": "happiness",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Soaked, and home first"
           }
         ]
       }

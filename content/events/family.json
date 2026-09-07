@@ -98,7 +98,8 @@
                 "key": "owns_childhood_home",
                 "value": true
               }
-            ]
+            ],
+            "title": "A house you never enter"
           }
         ]
       },
@@ -126,7 +127,8 @@
                 "eventId": "family_the_house_again",
                 "inYears": 3
               }
-            ]
+            ],
+            "title": "The market moved"
           }
         ]
       },
@@ -151,7 +153,8 @@
                 "line": "You told {parent.them} it was {parent.their} call. The house went to strangers.",
                 "weight": 72
               }
-            ]
+            ],
+            "title": "Drove past once"
           }
         ]
       }
@@ -219,7 +222,8 @@
                 "key": "owns_childhood_home",
                 "value": true
               }
-            ]
+            ],
+            "title": "Over the odds"
           }
         ]
       },
@@ -237,7 +241,8 @@
                 "stat": "happiness",
                 "delta": -7
               }
-            ]
+            ],
+            "title": "A different door"
           }
         ]
       }
@@ -324,7 +329,8 @@
                 "dimension": "closeness",
                 "delta": 14
               }
-            ]
+            ],
+            "title": "The following March"
           }
         ]
       },
@@ -358,7 +364,8 @@
                 "eventId": "family_kids_question",
                 "inYears": 5
               }
-            ]
+            ],
+            "title": "Asked again, later"
           }
         ]
       },
@@ -399,7 +406,8 @@
                 "key": "declined_children",
                 "value": true
               }
-            ]
+            ],
+            "title": "Can't get it back"
           }
         ]
       }
@@ -480,7 +488,8 @@
                 "line": "You missed it. {kid_b} said it was fine.",
                 "weight": 60
               }
-            ]
+            ],
+            "title": "Talked the whole way"
           }
         ]
       },
@@ -516,7 +525,8 @@
                 "stat": "happiness",
                 "delta": 7
               }
-            ]
+            ],
+            "title": "Forgot a line"
           }
         ]
       },
@@ -552,7 +562,8 @@
                 "dimension": "dependence",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "Both noticed"
           }
         ]
       },
@@ -593,7 +604,8 @@
                 "line": "You worked instead. {kid_b} stopped mentioning things after that.",
                 "weight": 70
               }
-            ]
+            ],
+            "title": "On a list"
           }
         ]
       }
@@ -679,7 +691,8 @@
                 "line": "{parent.they} lives with you now.",
                 "weight": 80
               }
-            ]
+            ],
+            "title": "The back room"
           }
         ]
       },
@@ -712,7 +725,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Thanked every visit"
           }
         ]
       },
@@ -754,7 +768,8 @@
                 "line": "They looked after {parent.them}. You didn't.",
                 "weight": 85
               }
-            ]
+            ],
+            "title": "They have not forgotten"
           }
         ]
       }
@@ -812,7 +827,8 @@
                 "stat": "charm",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Most of the way through"
           }
         ]
       },
@@ -830,7 +846,8 @@
                 "stat": "happiness",
                 "delta": -20
               }
-            ]
+            ],
+            "title": "Left before the tea"
           }
         ]
       }

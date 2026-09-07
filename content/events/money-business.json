@@ -70,7 +70,8 @@
                   "amount": 500000
                 }
               }
-            ]
+            ],
+            "title": "Eight months"
           },
           {
             "id": "worked",
@@ -92,7 +93,8 @@
                 "stat": "happiness",
                 "delta": 10
               }
-            ]
+            ],
+            "title": "Paid you back"
           }
         ]
       },
@@ -129,7 +131,8 @@
                 "eventId": "money_the_old_debt",
                 "inYears": 4
               }
-            ]
+            ],
+            "title": "Enough for the friendship"
           }
         ]
       },
@@ -158,7 +161,8 @@
                 "dimension": "closeness",
                 "delta": -16
               }
-            ]
+            ],
+            "title": "Different afterwards"
           }
         ]
       }
@@ -220,7 +224,8 @@
                 "dimension": "closeness",
                 "delta": -14
               }
-            ]
+            ],
+            "title": "All of it, that week"
           },
           {
             "id": "excuses",
@@ -244,7 +249,8 @@
                 "stat": "happiness",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "Another reason"
           }
         ]
       },
@@ -273,7 +279,8 @@
                 "stat": "happiness",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Written off"
           }
         ]
       }
@@ -344,7 +351,8 @@
                 "eventId": "business_first_hard_year",
                 "inYears": 2
               }
-            ]
+            ],
+            "title": "Two clients by Friday"
           }
         ]
       },
@@ -367,7 +375,8 @@
                 "key": "nearly_started_something",
                 "value": true
               }
-            ]
+            ],
+            "title": "The sensible call"
           }
         ]
       }
@@ -433,7 +442,8 @@
                 "eventId": "business_scale_up",
                 "inYears": 3
               }
-            ]
+            ],
+            "title": "The house behind it"
           }
         ]
       },
@@ -469,7 +479,8 @@
                 "eventId": "business_scale_up",
                 "inYears": 4
               }
-            ]
+            ],
+            "title": "Did their jobs too"
           }
         ]
       },
@@ -495,7 +506,8 @@
                 "eventId": "career_new_job_offer",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Before it took more"
           }
         ]
       }
@@ -565,7 +577,8 @@
                 "key": "scaled_business",
                 "value": true
               }
-            ]
+            ],
+            "title": "Six became forty"
           },
           {
             "id": "overstretched",
@@ -593,7 +606,8 @@
                 "eventId": "business_first_hard_year",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Cash flow was not"
           }
         ]
       },
@@ -616,7 +630,8 @@
                 "stat": "health",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Slept properly"
           }
         ]
       }
@@ -681,7 +696,8 @@
                 "key": "sold_the_company",
                 "value": true
               }
-            ]
+            ],
+            "title": "Off the vans"
           }
         ]
       },
@@ -704,7 +720,8 @@
                 "key": "refused_to_sell",
                 "value": true
               }
-            ]
+            ],
+            "title": "Kept the thing"
           }
         ]
       },
@@ -729,7 +746,8 @@
               {
                 "op": "business_close"
               }
-            ]
+            ],
+            "title": "Money and a title"
           }
         ]
       }
@@ -772,7 +790,8 @@
                 "attr": "discipline",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "Still there"
           }
         ]
       },
@@ -798,7 +817,8 @@
                 "stat": "happiness",
                 "delta": 14
               }
-            ]
+            ],
+            "title": "Five weeks"
           }
         ]
       },
@@ -826,7 +846,8 @@
                 "op": "trait_add",
                 "traitId": "generous"
               }
-            ]
+            ],
+            "title": "Let them assume"
           }
         ]
       }

@@ -105,7 +105,8 @@
                 "key": "took_denver",
                 "value": true
               }
-            ]
+            ],
+            "title": "Visited twice"
           },
           {
             "id": "moved_alone",
@@ -130,7 +131,8 @@
                 "key": "took_denver",
                 "value": true
               }
-            ]
+            ],
+            "title": "Nobody to talk round"
           }
         ]
       },
@@ -171,7 +173,8 @@
                 "dimension": "dependence",
                 "delta": 18
               }
-            ]
+            ],
+            "title": "Grudgingly"
           },
           {
             "id": "refused",
@@ -192,7 +195,8 @@
                 "eventId": "career_passed_over_again",
                 "inYears": 2
               }
-            ]
+            ],
+            "title": "Somebody said yes"
           }
         ]
       },
@@ -237,7 +241,8 @@
                 "eventId": "relationship_the_thing_you_never_said",
                 "inYears": 8
               }
-            ]
+            ],
+            "title": "Never explained"
           },
           {
             "id": "plain_no",
@@ -253,7 +258,8 @@
                 "op": "career_performance",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "Easy, for a year"
           }
         ]
       }
@@ -318,7 +324,8 @@
                 "attr": "discipline",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "An honest answer"
           }
         ]
       },
@@ -345,7 +352,8 @@
                 "eventId": "career_new_job_offer",
                 "inYears": 0
               }
-            ]
+            ],
+            "title": "Out within the year"
           }
         ]
       },
@@ -367,7 +375,8 @@
                 "op": "habit_add",
                 "habitId": "overwork"
               }
-            ]
+            ],
+            "title": "Extremely normal"
           }
         ]
       }
@@ -428,7 +437,8 @@
                 "stat": "happiness",
                 "delta": 7
               }
-            ]
+            ],
+            "title": "Just a job again"
           },
           {
             "id": "rejected",
@@ -445,7 +455,8 @@
                 "stat": "charm",
                 "delta": -2
               }
-            ]
+            ],
+            "title": "Name spelled wrong"
           }
         ]
       },
@@ -468,7 +479,8 @@
                 "stat": "happiness",
                 "delta": -4
               }
-            ]
+            ],
+            "title": "It paid the rent"
           }
         ]
       },
@@ -495,7 +507,8 @@
                 "eventId": "career_new_job_offer",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "Eight months of savings"
           }
         ]
       }
@@ -567,7 +580,8 @@
                 "op": "career_performance",
                 "delta": 3
               }
-            ]
+            ],
+            "title": "Half of lunch"
           },
           {
             "id": "cut",
@@ -588,7 +602,8 @@
                 "eventId": "career_new_job_offer",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "A box and a dead login"
           }
         ]
       },
@@ -619,7 +634,8 @@
                 "eventId": "career_new_job_offer",
                 "inYears": 1
               }
-            ]
+            ],
+            "title": "The best summer"
           }
         ]
       },
@@ -649,7 +665,8 @@
                 "stat": "happiness",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "You saved one"
           },
           {
             "id": "saved_nobody",
@@ -665,7 +682,8 @@
                 "stat": "happiness",
                 "delta": -5
               }
-            ]
+            ],
+            "title": "They remembered"
           }
         ]
       }
@@ -748,7 +766,8 @@
                 "line": "You got the role {rival} was up for.",
                 "weight": 75
               }
-            ]
+            ],
+            "title": "The title fit"
           }
         ]
       },
@@ -779,7 +798,8 @@
                 "stat": "charm",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Always there"
           },
           {
             "id": "got_it_anyway",
@@ -794,7 +814,8 @@
                 "stat": "happiness",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Title, not money"
           }
         ]
       },
@@ -821,7 +842,8 @@
                 "key": "declined_promotion",
                 "value": true
               }
-            ]
+            ],
+            "title": "Nobody asks twice"
           }
         ]
       }

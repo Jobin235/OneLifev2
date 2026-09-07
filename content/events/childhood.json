@@ -46,7 +46,8 @@
                 "stat": "charm",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "A friend, then"
           }
         ]
       },
@@ -73,7 +74,8 @@
                 "op": "trait_add",
                 "traitId": "introverted"
               }
-            ]
+            ],
+            "title": "Table for one"
           }
         ]
       }
@@ -122,7 +124,8 @@
                 "attr": "discipline",
                 "delta": -3
               }
-            ]
+            ],
+            "title": "Finders keepers"
           }
         ]
       },
@@ -149,7 +152,8 @@
                 "attr": "discipline",
                 "delta": 4
               }
-            ]
+            ],
+            "title": "Good lad"
           }
         ]
       },
@@ -185,7 +189,8 @@
                 "line": "You gave her the $40 you found when you were small. She still mentions it.",
                 "weight": 55
               }
-            ]
+            ],
+            "title": "The tin on the fridge"
           }
         ]
       }
@@ -235,7 +240,8 @@
                 "op": "trait_add",
                 "traitId": "hot_tempered"
               }
-            ]
+            ],
+            "title": "Worth the three days"
           },
           {
             "id": "backfired",
@@ -252,7 +258,8 @@
                 "stat": "charm",
                 "delta": -6
               }
-            ]
+            ],
+            "title": "You missed"
           }
         ]
       },
@@ -275,7 +282,8 @@
                 "role": "teacher",
                 "templateId": "teacher"
               }
-            ]
+            ],
+            "title": "Quieter, and worse"
           }
         ]
       },
@@ -302,7 +310,8 @@
                 "op": "trait_add",
                 "traitId": "anxious"
               }
-            ]
+            ],
+            "title": "It took a year"
           }
         ]
       }
@@ -362,7 +371,8 @@
                 "dimension": "closeness",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "Everyone ate toast"
           }
         ]
       },
@@ -389,7 +399,8 @@
                 "attr": "creativity",
                 "delta": 6
               }
-            ]
+            ],
+            "title": "A useful skill"
           }
         ]
       }
@@ -479,7 +490,8 @@
                 "key": "athlete",
                 "value": true
               }
-            ]
+            ],
+            "title": "The noticeboard"
           }
         ]
       },
@@ -511,7 +523,8 @@
                 "line": "You got {friend.them} kept on the team when it should have been {friend.their} spot lost.",
                 "weight": 85
               }
-            ]
+            ],
+            "title": "Never mentioned it"
           },
           {
             "id": "failed",
@@ -536,7 +549,8 @@
                 "line": "You tried to keep {friend.them} on the team. It didn't work, but {friend.they} knows you tried.",
                 "weight": 60
               }
-            ]
+            ],
+            "title": "Doesn't work like that"
           }
         ]
       },
@@ -565,7 +579,8 @@
                 "dimension": "closeness",
                 "delta": 10
               }
-            ]
+            ],
+            "title": "Second string"
           }
         ]
       }
@@ -686,7 +701,8 @@
                 "op": "trait_add",
                 "traitId": "honest"
               }
-            ]
+            ],
+            "title": "By a point and a half"
           }
         ]
       },
@@ -722,7 +738,8 @@
                 "line": "You reported the exam paper. {friend} was one of the three.",
                 "weight": 92
               }
-            ]
+            ],
+            "title": "Three removed"
           }
         ]
       }
