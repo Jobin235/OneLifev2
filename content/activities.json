@@ -6,7 +6,6 @@
     "group": "body_and_head",
     "minAge": 12,
     "cost": 0,
-    "costsAction": true,
     "note": "💪 +8 · ❤️ +4",
     "effects": [
       {
@@ -19,7 +18,9 @@
         "stat": "health",
         "delta": 4
       }
-    ]
+    ],
+    "effectiveTimes": 3,
+    "onRepeat": "riskier"
   },
   {
     "id": "see_a_doctor",
@@ -28,7 +29,6 @@
     "group": "body_and_head",
     "minAge": 5,
     "cost": 18000,
-    "costsAction": true,
     "note": "$180",
     "effects": [
       {
@@ -36,7 +36,9 @@
         "stat": "health",
         "delta": 3
       }
-    ]
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   },
   {
     "id": "take_a_course",
@@ -45,7 +47,6 @@
     "group": "body_and_head",
     "minAge": 16,
     "cost": 90000,
-    "costsAction": true,
     "note": "🧠 +6 · $900",
     "effects": [
       {
@@ -58,7 +59,9 @@
         "attr": "discipline",
         "delta": 2
       }
-    ]
+    ],
+    "effectiveTimes": 3,
+    "onRepeat": "no_effect"
   },
   {
     "id": "sort_your_head_out",
@@ -67,7 +70,6 @@
     "group": "body_and_head",
     "minAge": 14,
     "cost": 12000,
-    "costsAction": true,
     "note": "😊 +9",
     "effects": [
       {
@@ -80,7 +82,9 @@
         "stat": "health",
         "delta": 2
       }
-    ]
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   },
   {
     "id": "go_out",
@@ -89,7 +93,6 @@
     "group": "fun_and_trouble",
     "minAge": 15,
     "cost": 9000,
-    "costsAction": true,
     "note": "😊 +6 · ❤️ −2",
     "effects": [
       {
@@ -107,7 +110,9 @@
         "stat": "charm",
         "delta": 2
       }
-    ]
+    ],
+    "effectiveTimes": 4,
+    "onRepeat": "riskier"
   },
   {
     "id": "travel",
@@ -116,7 +121,6 @@
     "group": "fun_and_trouble",
     "minAge": 16,
     "cost": 110000,
-    "costsAction": true,
     "note": "from $1,100",
     "effects": [
       {
@@ -129,7 +133,9 @@
         "stat": "smarts",
         "delta": 2
       }
-    ]
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   },
   {
     "id": "gamble",
@@ -138,9 +144,10 @@
     "group": "fun_and_trouble",
     "minAge": 18,
     "cost": 20000,
-    "costsAction": true,
     "note": "who knows",
-    "effects": []
+    "effects": [],
+    "effectiveTimes": 0,
+    "onRepeat": "riskier"
   },
   {
     "id": "something_illegal",
@@ -149,9 +156,10 @@
     "group": "fun_and_trouble",
     "minAge": 14,
     "cost": 0,
-    "costsAction": true,
     "note": "risky",
-    "effects": []
+    "effects": [],
+    "effectiveTimes": 0,
+    "onRepeat": "riskier"
   },
   {
     "id": "look_at_houses",
@@ -160,9 +168,10 @@
     "group": "bigger_moves",
     "minAge": 20,
     "cost": 0,
-    "costsAction": true,
     "note": "",
-    "effects": []
+    "effects": [],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "start_something",
@@ -171,9 +180,10 @@
     "group": "bigger_moves",
     "minAge": 18,
     "cost": 1400000,
-    "costsAction": true,
     "note": "$14,000",
-    "effects": []
+    "effects": [],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "get_involved_locally",
@@ -182,7 +192,6 @@
     "group": "bigger_moves",
     "minAge": 18,
     "cost": 0,
-    "costsAction": true,
     "note": "slow burn",
     "effects": [
       {
@@ -195,7 +204,9 @@
         "stat": "charm",
         "delta": 3
       }
-    ]
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "work_harder",
@@ -204,7 +215,6 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "costsAction": true,
     "note": "performance up, health down",
     "effects": [
       {
@@ -221,7 +231,9 @@
         "stat": "happiness",
         "delta": -2
       }
-    ]
+    ],
+    "effectiveTimes": 3,
+    "onRepeat": "riskier"
   },
   {
     "id": "ask_for_a_raise",
@@ -230,9 +242,10 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "costsAction": true,
     "note": "",
-    "effects": []
+    "effects": [],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "get_closer_to_boss",
@@ -241,7 +254,6 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "costsAction": true,
     "note": "",
     "effects": [
       {
@@ -256,7 +268,9 @@
         "dimension": "trust",
         "delta": 6
       }
-    ]
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   },
   {
     "id": "look_elsewhere",
@@ -265,9 +279,10 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "costsAction": true,
     "note": "",
-    "effects": []
+    "effects": [],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   },
   {
     "id": "study",
@@ -277,7 +292,6 @@
     "minAge": 6,
     "maxAge": 30,
     "cost": 0,
-    "costsAction": true,
     "note": "🧠 +5",
     "effects": [
       {
@@ -290,7 +304,9 @@
         "attr": "discipline",
         "delta": 3
       }
-    ]
+    ],
+    "effectiveTimes": 3,
+    "onRepeat": "no_effect"
   },
   {
     "id": "party",
@@ -300,7 +316,6 @@
     "minAge": 16,
     "maxAge": 30,
     "cost": 6000,
-    "costsAction": true,
     "note": "😊 +7 · 🧠 −2",
     "effects": [
       {
@@ -318,7 +333,9 @@
         "stat": "charm",
         "delta": 3
       }
-    ]
+    ],
+    "effectiveTimes": 4,
+    "onRepeat": "riskier"
   },
   {
     "id": "campus_job",
@@ -328,7 +345,6 @@
     "minAge": 17,
     "maxAge": 30,
     "cost": 0,
-    "costsAction": true,
     "note": "+$740 / mo",
     "effects": [
       {
@@ -340,7 +356,9 @@
         "stat": "happiness",
         "delta": -2
       }
-    ]
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "research_lab",
@@ -350,7 +368,6 @@
     "minAge": 18,
     "maxAge": 30,
     "cost": 0,
-    "costsAction": true,
     "note": "opens doors",
     "effects": [
       {
@@ -363,7 +380,9 @@
         "key": "did_research",
         "value": true
       }
-    ]
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "join_a_club",
@@ -373,7 +392,6 @@
     "minAge": 8,
     "maxAge": 22,
     "cost": 0,
-    "costsAction": true,
     "note": "😊 +5",
     "effects": [
       {
@@ -386,7 +404,9 @@
         "stat": "charm",
         "delta": 3
       }
-    ]
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   },
   {
     "id": "call_your_mom",
@@ -395,7 +415,6 @@
     "group": "relationship",
     "minAge": 12,
     "cost": 0,
-    "costsAction": false,
     "note": "free",
     "effects": [
       {
@@ -415,7 +434,9 @@
         "stat": "happiness",
         "delta": 2
       }
-    ]
+    ],
+    "effectiveTimes": 0,
+    "onRepeat": "no_effect"
   },
   {
     "id": "spend_evening_in",
@@ -424,7 +445,6 @@
     "group": "relationship",
     "minAge": 16,
     "cost": 0,
-    "costsAction": false,
     "note": "free",
     "effects": [
       {
@@ -439,7 +459,9 @@
         "dimension": "romance",
         "delta": 4
       }
-    ]
+    ],
+    "effectiveTimes": 0,
+    "onRepeat": "no_effect"
   },
   {
     "id": "trip_together",
@@ -448,7 +470,6 @@
     "group": "relationship",
     "minAge": 18,
     "cost": 240000,
-    "costsAction": true,
     "note": "$2,400",
     "effects": [
       {
@@ -468,7 +489,9 @@
         "stat": "happiness",
         "delta": 8
       }
-    ]
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   },
   {
     "id": "lift",
@@ -477,7 +500,6 @@
     "group": "body_and_head",
     "minAge": 14,
     "cost": 0,
-    "costsAction": true,
     "note": "💪 +14",
     "effects": [
       {
@@ -486,7 +508,9 @@
         "delta": 14
       }
     ],
-    "onlyWhen": "incarcerated"
+    "onlyWhen": "incarcerated",
+    "effectiveTimes": 3,
+    "onRepeat": "riskier"
   },
   {
     "id": "finish_your_degree",
@@ -495,7 +519,6 @@
     "group": "school",
     "minAge": 18,
     "cost": 0,
-    "costsAction": true,
     "note": "🧠 +11",
     "effects": [
       {
@@ -504,6 +527,8 @@
         "delta": 11
       }
     ],
-    "onlyWhen": "incarcerated"
+    "onlyWhen": "incarcerated",
+    "effectiveTimes": 3,
+    "onRepeat": "no_effect"
   }
 ]

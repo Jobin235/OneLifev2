@@ -1144,3 +1144,34 @@ button {
 .fade-in {
   animation: rise 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* How much of a thing is left this year, shown only when it is running out. */
+.tile-left {
+  font: 800 10.5px/1 var(--text);
+  color: var(--faint);
+  margin-top: 6px;
+  letter-spacing: 0.03em;
+}
+
+/* A screen-level condition, said once instead of on every tile. */
+.notice {
+  background: var(--amber-tint);
+  border-radius: var(--r-panel);
+  padding: 15px 16px;
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  flex: none;
+}
+
+.notice span:first-child {
+  font-size: 17px;
+  line-height: 1.2;
+  flex: none;
+}
+
+.notice span:last-child {
+  font: 700 13.5px/1.5 var(--text);
+  color: var(--amber-deep);
+  text-wrap: pretty;
+}

@@ -59,14 +59,56 @@ describe('the rules the client cannot be trusted with', () => {
     expect(() => game.choose(state, state.activeEvent!.id, 'not_a_real_choice')).toThrow();
   });
 
-  it('refuses to act with no actions left', () => {
+  it('stops an activity helping once its year is used up, without erroring', () => {
     let state = newLife('gate-4');
     for (let i = 0; i < 30 && state.character.alive; i++) {
       state = game.ageUp(state).state;
       if (state.activeEvent) state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
     }
-    state.actionsRemaining = 0;
-    expect(() => game.act(state, 'get_in_shape')).toThrow(/no actions left/);
+
+    // "Take a course" fades after three goes and never turns harmful.
+    for (let i = 0; i < 3; i++) {
+      const result = game.act(state, 'take_a_course');
+      expect(result.outcome).toBe('done');
+      state = result.state;
+    }
+
+    const plateau = structuredClone(state);
+    const fourth = game.act(state, 'take_a_course');
+    expect(fourth.outcome).toBe('no_further_effect');
+    // A tap that cannot help must not cost anything either.
+    expect(fourth.state.character.stats).toEqual(plateau.character.stats);
+    expect(fourth.state.character.finances).toEqual(plateau.character.finances);
+  });
+
+  it('lets a player keep going at something that gets worse, and makes it worse', () => {
+    let state = newLife('gate-4b');
+    for (let i = 0; i < 26 && state.character.alive; i++) {
+      state = game.ageUp(state).state;
+      if (state.activeEvent) state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
+    }
+
+    // Training is 'riskier': it keeps working, and over-training injures you.
+    for (let i = 0; i < 3; i++) state = game.act(state, 'get_in_shape').state;
+    const healthBefore = state.character.stats.health;
+
+    const overdone = game.act(state, 'get_in_shape');
+    expect(overdone.outcome).toBe('overdone');
+    expect(overdone.state.character.stats.health).toBeLessThan(healthBefore);
+  });
+
+  it('has no global action budget: a year can hold as much as the player wants', () => {
+    let state = newLife('gate-4c');
+    for (let i = 0; i < 24 && state.character.alive; i++) {
+      state = game.ageUp(state).state;
+      if (state.activeEvent) state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
+    }
+    // Fifteen distinct actions in one year, none of them refused for "no actions left".
+    for (let i = 0; i < 15; i++) {
+      expect(() => game.act(state, 'call_your_mom')).not.toThrow();
+    }
+    // Something with no annual limit never stops working.
+    expect(game.act(state, 'call_your_mom').outcome).toBe('done');
   });
 
   it('refuses to spend money the character does not have', () => {

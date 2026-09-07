@@ -183,3 +183,43 @@ that person named; an unbound role falls back to a generic phrase.
 `docs/CONTENT_PIPELINE.md`, and `tools/wiki-ingest` which produces a gap list.
 That list is a checklist of *subjects*, never a source of text. The step from
 "they model military service and we don't" to a finished event is a writing job.
+
+
+## Writing an activity
+
+Activities live in `content/activities.json` and are simpler than events: no
+conditions, no branching, just effects and a shape for how they wear out.
+
+```jsonc
+{
+  "id": "get_in_shape",
+  "icon": "🏋️",
+  "label": "Get in shape",
+  "group": "body_and_head",     // colours the tile: see design 2C
+  "minAge": 12,
+  "cost": 0,                    // cents
+  "effectiveTimes": 3,          // times a year it still does something; 0 = never fades
+  "onRepeat": "riskier",        // or "no_effect"
+  "onlyWhen": "anywhere",       // or incarcerated / enrolled / employed
+  "note": "💪 +8 · ❤️ +4",       // shown on the tile, before the tap
+  "effects": [ { "op": "stat", "stat": "fitness", "delta": 8 } ]
+}
+```
+
+**There is no global action budget.** A player may do as much in a year as they
+like. What stops a year being farmed is `effectiveTimes` per activity.
+
+Choosing the two fields:
+
+- `effectiveTimes` — how many times this plausibly helps in one year. Three for
+  training or classes, one for things that only make sense once (looking at
+  houses, asking for a raise), `0` for anything that should never stop working
+  (calling your mother).
+- `onRepeat` — `no_effect` for almost everything: the tile greys out and says
+  "Nothing more to gain this year", and a tap is a free no-op. Use `riskier`
+  only where overdoing it genuinely hurts — training, drinking, overwork. Past
+  the limit those apply **only** the harm, never the benefit.
+
+`note` is written for before the tap, so the player is making a bet rather than
+guessing. State the actual numbers where they are known and the honest shrug
+("who knows") where they are not.

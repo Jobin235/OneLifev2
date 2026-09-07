@@ -71,8 +71,10 @@ export const checkInvariants = (state: LifeState, previous?: LifeState): void =>
     npcIds.add(npc.id);
   }
 
-  if (state.actionsRemaining > state.actionsPerYear) {
-    fail('actions_within_budget', `${state.actionsRemaining} > ${state.actionsPerYear}`);
+  for (const [activityId, used] of Object.entries(state.activityUsage)) {
+    if (!Number.isInteger(used) || used < 0) {
+      fail('activity_usage_is_a_count', `${activityId} is ${used}`);
+    }
   }
 
   if (state.career.retired && state.career.current) {

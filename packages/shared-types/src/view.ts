@@ -35,12 +35,15 @@ export const ActionCardSchema = z.object({
   tint: z.string(),
   noteColor: z.string(),
   available: z.boolean(),
+  /** Times left this year; null when the activity has no annual limit. */
+  timesLeft: z.number().int().nullable(),
   /** Why it is greyed out, if it is. */
   blockedReason: z.string().nullable(),
 });
 
 export const LifeViewSchema = z.object({
   lifeId: z.string(),
+  revision: z.number().int(),
   dateLine: z.string(),
   name: z.string(),
   age: z.number().int(),
@@ -56,7 +59,6 @@ export const LifeViewSchema = z.object({
   birthdayLine: z.string().nullable(),
   earlierThisYear: z.array(z.object({ icon: z.string(), text: z.string() })),
   quickActions: z.array(ActionCardSchema),
-  actionsRemaining: z.number().int(),
   canAgeUp: z.boolean(),
   ageUpLabel: z.string(),
 });

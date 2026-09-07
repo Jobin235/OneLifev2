@@ -25,15 +25,15 @@ const GROUP_ORDER = [
 
 export const DoScreen = ({
   actions,
-  remaining,
   age,
   busy,
+  decisionOpen,
   onAct,
 }: {
   actions: ActionCard[];
-  remaining: number;
   age: number;
   busy: boolean;
+  decisionOpen: boolean;
   onAct: (activityId: string) => void;
 }) => {
   const grouped = GROUP_ORDER.map((group) => ({
@@ -45,12 +45,16 @@ export const DoScreen = ({
     <>
       <header className="header">
         <h1 className="screen-title">Do something</h1>
-        <div className="screen-sub">
-          You're {age}. {remaining === 0 ? 'Nothing left this year.' : `${remaining} thing${remaining === 1 ? '' : 's'} left this year.`}
-        </div>
+        <div className="screen-sub">You're {age}. Do as much as you like.</div>
       </header>
 
       <div className="scroll" style={{ gap: 20 }}>
+        {decisionOpen && (
+          <div className="notice">
+            <span>👆</span>
+            <span>Something is waiting on your answer. Decide first.</span>
+          </div>
+        )}
         {grouped.map(({ group, items }) => (
           <div key={group}>
             <div className="eyebrow" style={{ marginBottom: 11 }}>
@@ -88,6 +92,11 @@ export const DoScreen = ({
                     <div className="tile-note" style={{ color: action.noteColor }}>
                       {action.blockedReason ?? action.note}
                     </div>
+                    {action.timesLeft !== null && action.timesLeft > 0 && action.timesLeft <= 2 && (
+                      <div className="tile-left">
+                        {action.timesLeft} more this year
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>
@@ -102,7 +111,8 @@ export const DoScreen = ({
             textWrap: 'pretty',
           }}
         >
-          Actions are limited per year, so a year has to be spent rather than farmed.
+          Do as much as you want. Most things stop helping after a few goes, and a
+          few start hurting.
         </div>
       </div>
     </>

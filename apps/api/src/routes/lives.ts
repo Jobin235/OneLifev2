@@ -152,8 +152,8 @@ export const registerLifeRoutes = (
     const { activityId } = ActBody.parse(request.body);
     try {
       return await lives.withLock(userOf(request), lifeId, (state) => {
-        game.act(state, activityId);
-        return { life: lifeView(state, game.content) };
+        const { outcome } = game.act(state, activityId);
+        return { life: lifeView(state, game.content), outcome };
       });
     } catch (error) {
       return reply.code(statusFor(error)).send({ error: messageFor(error) });
@@ -192,7 +192,7 @@ export const registerLifeRoutes = (
   app.get('/lives/:lifeId/actions', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     const state = await load(userOf(request), lifeId);
-    return { actions: actionsView(state, game.content), remaining: state.actionsRemaining };
+    return { actions: actionsView(state, game.content) };
   });
 
   app.get('/lives/:lifeId/money', async (request) => {

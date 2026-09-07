@@ -14,7 +14,6 @@ import type {
 } from '@lineage/shared-types';
 import { SCHEMA_VERSION, clampStat } from '@lineage/shared-types';
 import { makeId, makeRng, type Rng } from './rng.js';
-import { actionsForStage } from './aging.js';
 import { refreshDerived } from './relationships.js';
 
 export interface CreateLifeInput {
@@ -294,8 +293,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     pending: [],
     eventLog: {},
     categoryLog: {},
-    actionsRemaining: actionsForStage(0, config),
-    actionsPerYear: actionsForStage(0, config),
+    activityUsage: {},
     lastSeenWorldSnapshotId: null,
     lastReturnEventAt: null,
     legacy: null,

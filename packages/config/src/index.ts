@@ -47,11 +47,6 @@ export const GameConfigSchema = z.object({
     hardCapAge: z.number().int(),
   }),
 
-  actions: z.object({
-    /** Design 2C: a year has to be spent, not farmed. */
-    perYearByStage: z.record(z.string(), z.number().int()),
-  }),
-
   events: z.object({
     /** Spec §19: 0–1 major and 0–2 minor per age-up. */
     maxMajorPerYear: z.number().int(),
@@ -151,18 +146,6 @@ export const DEFAULT_CONFIG: GameConfig = GameConfigSchema.parse({
     frailHealthThreshold: 35,
     frailRiskPerPoint: 0.0009,
     hardCapAge: 122,
-  },
-  actions: {
-    perYearByStage: {
-      early_childhood: 1,
-      childhood: 2,
-      teenage: 3,
-      young_adult: 3,
-      adult: 3,
-      middle_age: 3,
-      senior: 2,
-      elder: 2,
-    },
   },
   events: {
     maxMajorPerYear: 1,

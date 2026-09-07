@@ -2,7 +2,6 @@ import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
 import type { EventInstance, LifeState, WorldIndicators } from '@lineage/shared-types';
 import {
-  actionsForStage,
   advanceBusinessYear,
   advanceCareerYear,
   advanceEducationYear,
@@ -152,8 +151,8 @@ export const advanceYear = (
 
   // 6. Refresh everything derived before events read it.
   refreshDerived(state, config);
-  state.actionsPerYear = actionsForStage(state.character.age, config);
-  state.actionsRemaining = state.actionsPerYear;
+  // Diminishing returns reset with the year: training helps again in January.
+  state.activityUsage = {};
 
   // 7. Death check, before events — a dead character gets no card.
   if (rng.chance(mortalityChance(state.character, config))) {
@@ -225,7 +224,6 @@ const die = (
   state.character.causeOfDeath = causeOfDeath(state);
   state.activeEvent = null;
   state.gameState = 'LIFE_COMPLETE';
-  state.actionsRemaining = 0;
 
   pushHistory(
     state,

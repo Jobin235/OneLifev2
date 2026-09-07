@@ -66,11 +66,7 @@ export const LifeScreen = ({
             <div className="quiet">
               <div style={{ fontSize: 24, lineHeight: 1 }}>🌤️</div>
               <div className="quiet-title">A quiet stretch.</div>
-              <div className="quiet-text">
-                {life.actionsRemaining > 0
-                  ? 'Do something with the year, or let it pass.'
-                  : 'Nothing left to spend this year. Age up.'}
-              </div>
+              <div className="quiet-text">Do something with the year, or let it pass.</div>
             </div>
 
             <div className="action-grid">

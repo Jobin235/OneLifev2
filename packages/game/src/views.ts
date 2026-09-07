@@ -46,6 +46,8 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
 
   return {
     lifeId: state.id,
+    /** Bumps on every mutation, so the client knows when a panel is stale. */
+    revision: state.step,
     generation: state.lineage.generation,
     dateLine: DATE_PREFIXES[character.age % DATE_PREFIXES.length]!,
     name: `${character.firstName} ${character.lastName}`,
@@ -70,9 +72,9 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
       .slice(-4)
       .reverse()
       .map((e) => ({ icon: e.icon, text: e.line })),
-    quickActions: actionsView(state, content).slice(0, 6),
-    actionsRemaining: state.actionsRemaining,
-    actionsPerYear: state.actionsPerYear,
+    quickActions: actionsView(state, content)
+      .filter((a) => a.available)
+      .slice(0, 6),
     canAgeUp: character.alive && state.activeEvent === null,
     ageUpLabel: !character.alive
       ? 'Your life is over'
@@ -209,24 +211,36 @@ export const actionsView = (state: LifeState, content: ContentPack) => {
     })
     .map((a) => {
       const tint = GROUP_TINT[a.group] ?? GROUP_TINT.bigger_moves!;
+      const used = state.activityUsage[a.id] ?? 0;
+      const limited = a.effectiveTimes > 0;
+      const timesLeft = limited ? Math.max(0, a.effectiveTimes - used) : null;
+
       const unaffordable = a.cost > liquid;
-      const noActions = a.costsAction && state.actionsRemaining <= 0;
+      // Past its allowance a "no_effect" activity is pointless rather than
+      // forbidden; the tile says so instead of pretending it still works.
+      const spent = limited && used >= a.effectiveTimes && a.onRepeat === 'no_effect';
+      const risky = limited && used >= a.effectiveTimes && a.onRepeat === 'riskier';
+
+      // An open decision blocks everything, so it is said once at the screen
+      // level rather than repeated on every tile.
+      const blockedReason = spent
+        ? 'Nothing more to gain this year'
+        : unaffordable
+          ? "You can't afford that"
+          : null;
+
       return {
         id: a.id,
         icon: a.icon,
         label: a.label,
-        note: a.note,
+        // Warn before the tap, not after it.
+        note: risky ? 'You have done this enough' : a.note,
         group: a.group,
         tint: tint.tint,
-        noteColor: tint.noteColor,
-        available: !unaffordable && !noActions && !state.activeEvent && state.character.alive,
-        blockedReason: unaffordable
-          ? "You can't afford that"
-          : noActions
-            ? 'Nothing left this year'
-            : state.activeEvent
-              ? 'Answer the open decision first'
-              : null,
+        noteColor: risky ? '#C4462E' : tint.noteColor,
+        timesLeft,
+        available: !spent && !unaffordable && !state.activeEvent && state.character.alive,
+        blockedReason,
       };
     });
 };

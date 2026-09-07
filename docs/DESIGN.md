@@ -139,7 +139,33 @@ The design file post-dates the prose spec and supersedes it here:
 | §43 "START NEW LIFE" | Continue as your heir (Maya / Theo / somebody new) | Design — this is the *lineage* mechanic and the game's title |
 | §111 creation: name, gender, country, city, appearance | Name, birthplace, what you're born into. Start at **birth** | Design |
 | §113 MVP: one country | Birthplace picker across 193 countries, content packs per country | Design intent; MVP ships a few packs and a generic fallback |
-| §55 unlimited activities | Limited actions per year ("Three things left this year") | Design |
+| §55 unlimited activities | Limited actions per year ("Three things left this year") | **Neither** — see below |
 
 Two mechanics exist only in the design and are therefore first-class requirements:
 **succession/lineage** and **fame as a three-way opinion split**.
+
+### The one place we follow neither
+
+Design 2C says "Actions are limited per year, so a year has to be spent rather
+than farmed", and shows "Three things left this year" in the header. We do not
+do that, on the product owner's call, because the genre does not: BitLife has no
+overall cap on actions in a year. What it has is **diminishing returns per
+activity** — most things can be tapped freely but stop giving progress after a
+few goes, skill classes only advance you the first three times, and
+over-practising a sport injures you.
+
+That is what we implement:
+
+- No global budget. A year holds as much as the player wants to do.
+- Each activity declares `effectiveTimes` — how many times a year it still does
+  something — and `onRepeat`, which is either `no_effect` or `riskier`.
+- Past that point a `no_effect` activity is a free no-op: it costs nothing,
+  changes nothing, and the tile says "Nothing more to gain this year".
+- A `riskier` one keeps accepting taps and applies **only** the harm. The fourth
+  training session of the year is an injury, not a personal best — applying the
+  gains as well would net out positive and quietly reward the spamming this
+  exists to discourage.
+
+The design's underlying goal — that a year is spent rather than farmed — is met.
+The mechanism is different, and better matched to content that ranges from
+"call your mother" to "start a company".

@@ -91,9 +91,6 @@ export const mortalityChance = (character: Character, config: GameConfig): numbe
   return Math.min(1, base * healthFactor + frailty);
 };
 
-export const actionsForStage = (age: number, config: GameConfig): number =>
-  config.actions.perYearByStage[lifeStageFor(age, config)] ?? 3;
-
 /** Convenience for the pipeline; keeps `lifeStageFor` out of caller imports. */
 export const stageOf = (state: LifeState, config: GameConfig): string =>
   lifeStageFor(state.character.age, config);

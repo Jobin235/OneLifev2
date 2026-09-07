@@ -42,7 +42,7 @@ export const App = () => {
   const [recap, setRecap] = useState<Recap | null>(null);
   const [people, setPeople] = useState<PeopleView | null>(null);
   const [person, setPerson] = useState<PersonView | null>(null);
-  const [actions, setActions] = useState<{ actions: ActionCard[]; remaining: number } | null>(null);
+  const [actions, setActions] = useState<ActionCard[] | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
   const [more, setMore] = useState<MoreView | null>(null);
 
@@ -107,13 +107,13 @@ export const App = () => {
 
   // Refresh whichever tab is open whenever the life changes underneath it.
   const lifeId = life?.lifeId;
-  const stamp = `${life?.age}:${life?.gameState}:${life?.actionsRemaining}`;
+  const stamp = `${life?.revision}:${life?.gameState}`;
   useEffect(() => {
     if (!lifeId) return;
     void (async () => {
       try {
         if (tab === 'people' && !person) setPeople(await api.people(lifeId));
-        if (tab === 'do') setActions(await api.actions(lifeId));
+        if (tab === 'do') setActions((await api.actions(lifeId)).actions);
         if (tab === 'money') setMoney(await api.money(lifeId));
         if (tab === 'more') setMore(await api.more(lifeId));
       } catch {
@@ -153,9 +153,17 @@ export const App = () => {
     async (activityId: string) => {
       if (!life) return;
       const result = await run(() => api.act(life.lifeId, activityId));
-      if (result) setLifeAndRemember(result.life);
+      if (!result) return;
+      setLifeAndRemember(result.life);
+
+      // A tap that could not help says so, rather than appearing to do nothing.
+      if (result.outcome === 'no_further_effect') {
+        show('That has done all it can for you this year.');
+      } else if (result.outcome === 'overdone') {
+        show('You overdid it.');
+      }
     },
-    [life, run, setLifeAndRemember],
+    [life, run, setLifeAndRemember, show],
   );
 
   const onCreate = useCallback(
@@ -245,10 +253,10 @@ export const App = () => {
       {tab === 'do' &&
         (actions ? (
           <DoScreen
-            actions={actions.actions}
-            remaining={actions.remaining}
+            actions={actions}
             age={life.age}
             busy={busy}
+            decisionOpen={life.activeEvent !== null}
             onAct={onAct}
           />
         ) : (

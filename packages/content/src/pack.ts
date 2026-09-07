@@ -30,8 +30,22 @@ export const ActivitySchema = z.object({
   maxAge: z.number().int().default(140),
   /** Cost in cents; 0 is free. */
   cost: z.number().int().min(0).default(0),
-  /** Whether it consumes one of the year's actions. */
-  costsAction: z.boolean().default(true),
+  /**
+   * How many times a year this still does something. 0 means it never fades.
+   *
+   * There is no global action budget — a year is not a pool of three tokens to
+   * spend. What stops a year being farmed is diminishing returns per activity:
+   * you can keep tapping, but training stops adding fitness after a few sessions
+   * and the fourth doctor's visit tells you what the first one did. That is both
+   * how the genre actually behaves and a better fit for content ranging from
+   * "call your mother" to "start a company".
+   */
+  effectiveTimes: z.number().int().min(0).default(3),
+  /**
+   * What happens past that point. Most things simply stop helping; a few get
+   * worse, because over-training injures you and pushing your luck compounds.
+   */
+  onRepeat: z.enum(['no_effect', 'riskier']).default('no_effect'),
   /**
    * The situation this belongs to. Design 5D gives prison its own things to do
    * with three years; those must not leak into an ordinary Tuesday, where "Lift"

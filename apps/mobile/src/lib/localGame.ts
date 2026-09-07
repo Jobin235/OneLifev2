@@ -1,5 +1,5 @@
 import { Game, actionsView, lifeView, moneyView, moreView, peopleView, personView } from '@lineage/game';
-import type { LifeState } from '@lineage/shared-types';
+import { SCHEMA_VERSION, type LifeState } from '@lineage/shared-types';
 import { NEUTRAL_INDICATORS, snapshot, tickWorld } from '@lineage/world';
 import { DEFAULT_CONFIG } from '@lineage/config';
 import { localContent } from './localContent';
@@ -22,15 +22,34 @@ interface Stored {
   order: string[];
 }
 
+const EMPTY: Stored = { lives: {}, order: [] };
+
 const read = (): Stored => {
   const raw = safeStorage.get(STORAGE_KEY);
-  if (!raw) return { lives: {}, order: [] };
+  if (!raw) return EMPTY;
+
+  let parsed: Stored;
   try {
-    return JSON.parse(raw) as Stored;
+    parsed = JSON.parse(raw) as Stored;
   } catch {
     // Corrupt save: start fresh rather than refusing to load.
-    return { lives: {}, order: [] };
+    return EMPTY;
   }
+
+  /*
+   * There is no migration path yet, so a life saved by an older build is
+   * dropped rather than loaded into an engine that expects a different shape.
+   * Losing a demo save is a nuisance; loading one and failing an invariant
+   * three age-ups later is much worse to debug.
+   */
+  const compatible = Object.values(parsed.lives ?? {}).every(
+    (life) => life?.schemaVersion === SCHEMA_VERSION,
+  );
+  if (!compatible) {
+    safeStorage.remove(STORAGE_KEY);
+    return EMPTY;
+  }
+  return parsed;
 };
 
 const write = (store: Stored): void => safeStorage.set(STORAGE_KEY, JSON.stringify(store));
@@ -125,9 +144,9 @@ export const createLocalApi = (): Api => {
     },
 
     act: async (lifeId, activityId) => {
-      const state = game.act(get(lifeId), activityId);
+      const { state, outcome } = game.act(get(lifeId), activityId);
       save(state);
-      return view(state);
+      return { ...view(state), outcome };
     },
 
     succeed: async (lifeId, heirNpcId) => {
@@ -146,10 +165,7 @@ export const createLocalApi = (): Api => {
       if (!person) throw new Error('no such person in this life');
       return person as never;
     },
-    actions: async (lifeId) => {
-      const state = get(lifeId);
-      return { actions: actionsView(state, game.content) as never, remaining: state.actionsRemaining };
-    },
+    actions: async (lifeId) => ({ actions: actionsView(get(lifeId), game.content) as never }),
     money: async (lifeId) => moneyView(get(lifeId), game.config) as never,
     more: async (lifeId) => moreView(get(lifeId)) as never,
     legacy: async (lifeId) => {

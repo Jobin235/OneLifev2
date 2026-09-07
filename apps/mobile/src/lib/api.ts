@@ -91,12 +91,16 @@ export interface ActionCard {
   group: string;
   tint: string;
   noteColor: string;
+  /** Times left this year; null when the activity never stops working. */
+  timesLeft: number | null;
   available: boolean;
   blockedReason: string | null;
 }
 
 export interface LifeView {
   lifeId: string;
+  /** Bumps on every mutation; used to refetch panels that have gone stale. */
+  revision: number;
   generation: number;
   dateLine: string;
   name: string;
@@ -111,8 +115,6 @@ export interface LifeView {
   resolvedEvent: ActiveEvent | null;
   earlierThisYear: Array<{ icon: string; text: string }>;
   quickActions: ActionCard[];
-  actionsRemaining: number;
-  actionsPerYear: number;
   canAgeUp: boolean;
   ageUpLabel: string;
   incarcerated: boolean;
@@ -206,6 +208,8 @@ export interface CountryOption {
  * authoritative server, and by `createLocalApi` which runs the same engine in
  * the browser so the game can be played from a link with no backend.
  */
+export type ActOutcome = 'done' | 'overdone' | 'no_further_effect';
+
 export interface Api {
   countries(): Promise<{ countries: CountryOption[] }>;
   listLives(): Promise<{ lives: Array<{ id: string; name: string; age: number; alive: boolean }> }>;
@@ -220,11 +224,12 @@ export interface Api {
   ageUp(lifeId: string, idempotencyKey: string): Promise<{ life: LifeView; recap: Recap; died: boolean }>;
   choose(lifeId: string, eventId: string, choiceId: string): Promise<{ life: LifeView }>;
   dismiss(lifeId: string): Promise<{ life: LifeView }>;
-  act(lifeId: string, activityId: string): Promise<{ life: LifeView }>;
+  /** `outcome` is 'no_further_effect' when the tap was a deliberate no-op. */
+  act(lifeId: string, activityId: string): Promise<{ life: LifeView; outcome: ActOutcome }>;
   succeed(lifeId: string, heirNpcId: string | null): Promise<{ life: LifeView }>;
   people(lifeId: string): Promise<PeopleView>;
   person(lifeId: string, npcId: string): Promise<PersonView>;
-  actions(lifeId: string): Promise<{ actions: ActionCard[]; remaining: number }>;
+  actions(lifeId: string): Promise<{ actions: ActionCard[] }>;
   money(lifeId: string): Promise<MoneyView>;
   more(lifeId: string): Promise<MoreView>;
   legacy(lifeId: string): Promise<Legacy>;
@@ -266,7 +271,7 @@ export const httpApi: Api = {
     request<{ life: LifeView }>(`/lives/${lifeId}/dismiss`, { method: 'POST' }),
 
   act: (lifeId: string, activityId: string) =>
-    request<{ life: LifeView }>(`/lives/${lifeId}/act`, {
+    request<{ life: LifeView; outcome: ActOutcome }>(`/lives/${lifeId}/act`, {
       method: 'POST',
       body: JSON.stringify({ activityId }),
     }),
@@ -279,8 +284,7 @@ export const httpApi: Api = {
 
   people: (lifeId: string) => request<PeopleView>(`/lives/${lifeId}/people`),
   person: (lifeId: string, npcId: string) => request<PersonView>(`/lives/${lifeId}/people/${npcId}`),
-  actions: (lifeId: string) =>
-    request<{ actions: ActionCard[]; remaining: number }>(`/lives/${lifeId}/actions`),
+  actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
   more: (lifeId: string) => request<MoreView>(`/lives/${lifeId}/more`),
   legacy: (lifeId: string) => request<Legacy>(`/lives/${lifeId}/legacy`),

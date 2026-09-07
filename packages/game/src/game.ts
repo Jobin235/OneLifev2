@@ -7,12 +7,14 @@ import type {
   Upbringing,
   WorldIndicators,
 } from '@lineage/shared-types';
+import { clampStat } from '@lineage/shared-types';
 import {
   checkInvariants,
   createLife,
   makeId,
   makeRng,
   refreshDerived,
+  type Rng,
 } from '@lineage/simulation';
 import {
   InvalidChoiceError,
@@ -51,6 +53,17 @@ export interface NewLifeOptions {
 }
 
 export class ChoiceRejected extends Error {}
+
+/**
+ * What an activity actually did. `no_further_effect` is a successful request
+ * that deliberately changed nothing.
+ */
+export type ActOutcome = 'done' | 'overdone' | 'no_further_effect';
+
+export interface ActResult {
+  state: LifeState;
+  outcome: ActOutcome;
+}
 
 /**
  * The application service. Everything above this line is presentation or
@@ -217,24 +230,59 @@ export class Game {
     }
   }
 
-  /** Design 2C: actions are limited per year, so a year is spent rather than farmed. */
-  act(state: LifeState, activityId: string): LifeState {
+  /**
+   * Does something with a year.
+   *
+   * There is no action budget. The player may tap anything as often as they
+   * like; what stops a year being farmed is that each activity stops helping
+   * after a few goes, and a few of them start hurting instead.
+   *
+   * Tapping something that has stopped helping is a no-op, not an error — it
+   * costs nothing and changes nothing. Charging for an effect the player will
+   * not get would be a trap, and rejecting the tap would make the client
+   * responsible for a rule the server owns.
+   */
+  act(state: LifeState, activityId: string): ActResult {
     const activity = this.content.activities.find((a) => a.id === activityId);
     if (!activity) throw new ChoiceRejected(`unknown activity ${activityId}`);
     if (!state.character.alive) throw new ChoiceRejected('a dead character cannot do anything');
     if (state.activeEvent) throw new ChoiceRejected('answer the open decision first');
-    if (activity.costsAction && state.actionsRemaining <= 0) {
-      throw new ChoiceRejected('no actions left this year');
-    }
     if (state.character.age < activity.minAge || state.character.age > activity.maxAge) {
       throw new ChoiceRejected('not available at this age');
     }
-    const liquid = state.character.finances.cash + state.character.finances.savings;
-    if (activity.cost > liquid) throw new ChoiceRejected('you cannot afford that');
+
+    const used = state.activityUsage[activityId] ?? 0;
+    const spent = activity.effectiveTimes > 0 && used >= activity.effectiveTimes;
+
+    // Nothing left to gain, and nothing to lose: a free no-op.
+    if (spent && activity.onRepeat === 'no_effect') {
+      return { state, outcome: 'no_further_effect' };
+    }
 
     const before = structuredClone(state);
+    const rng = makeRng(state.seed, 'activity', activityId, state.character.age, used);
+
     try {
-      const rng = makeRng(state.seed, 'activity', activityId, state.character.age, state.step);
+      if (spent) {
+        /*
+         * Past the point of usefulness, the benefit is gone and only the cost of
+         * overdoing it remains — the fifth training session of the year is an
+         * injury, not a personal best. Applying the gains *and* the harm would
+         * net out positive and quietly reward spamming, which is the exact
+         * behaviour this is here to discourage.
+         */
+        overdoIt(state, used - activity.effectiveTimes + 1, rng);
+        state.activityUsage[activityId] = used + 1;
+        state.step += 1;
+        pushHistory(state, 'random', activity.icon, overdoneLineFor(activity), 8);
+        refreshDerived(state, this.config);
+        checkInvariants(state, before);
+        return { state, outcome: 'overdone' };
+      }
+
+      const liquid = state.character.finances.cash + state.character.finances.savings;
+      if (activity.cost > liquid) throw new ChoiceRejected('you cannot afford that');
+
       const effectCtx: EffectContext = {
         state,
         config: this.config,
@@ -249,13 +297,13 @@ export class Game {
       applyEffects(activity.effects as never, effectCtx);
       applyDeferred(effectCtx.deferred, state, this.content, this.config, rng, {});
 
-      if (activity.costsAction) state.actionsRemaining -= 1;
+      state.activityUsage[activityId] = used + 1;
       state.step += 1;
       pushHistory(state, 'random', activity.icon, historyLineFor(activity), 12);
 
       refreshDerived(state, this.config);
       checkInvariants(state, before);
-      return state;
+      return { state, outcome: 'done' };
     } catch (error) {
       Object.assign(state, before);
       throw error;
@@ -269,6 +317,27 @@ export class Game {
     return state;
   }
 }
+
+/** The price of not knowing when to stop, growing with how far past it you are. */
+const overdoIt = (state: LifeState, timesOver: number, rng: Rng): void => {
+  const severity = Math.min(5, timesOver + 1);
+  state.character.stats.health = clampStat(
+    state.character.stats.health - severity - Math.round(rng.next() * 2),
+  );
+  state.character.stats.fitness = clampStat(state.character.stats.fitness - severity);
+  state.character.stats.happiness = clampStat(state.character.stats.happiness - severity);
+};
+
+const overdoneLineFor = (activity: Activity): string => {
+  const overrides: Record<string, string> = {
+    get_in_shape: 'You trained through something you should have rested.',
+    lift: 'You lifted through something you should have rested.',
+    go_out: 'You went out again. It stopped being fun a while ago.',
+    party: 'You went out again, and it cost you more than the night.',
+    work_harder: 'You put in more hours and got less back.',
+  };
+  return overrides[activity.id] ?? `You overdid it on ${activity.label.toLowerCase()}.`;
+};
 
 const historyLineFor = (activity: Activity): string => {
   const overrides: Record<string, string> = {

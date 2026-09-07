@@ -56,9 +56,12 @@ export const LifeStateSchema = z.object({
   /** category → ages, for the similarity penalty that keeps variety (§108). */
   categoryLog: z.record(z.string(), z.array(z.number().int())),
 
-  /** Design 2C: "Three things left this year." */
-  actionsRemaining: z.number().int().min(0),
-  actionsPerYear: z.number().int().min(0),
+  /**
+   * activityId → how many times it has been done this life year. Cleared on
+   * every age-up. Each activity carries its own annual limit; there is no
+   * global budget.
+   */
+  activityUsage: z.record(z.string(), z.number().int().min(0)),
 
   /** For the return-diff engine; never shown to the player (§88). */
   lastSeenWorldSnapshotId: z.string().nullable(),
@@ -68,4 +71,8 @@ export const LifeStateSchema = z.object({
 });
 export type LifeState = z.infer<typeof LifeStateSchema>;
 
-export const SCHEMA_VERSION = 1;
+/**
+ * 2: replaced the global per-year action budget with per-activity annual limits.
+ * A saved life from version 1 has no `activityUsage` and cannot be resumed.
+ */
+export const SCHEMA_VERSION = 2;
