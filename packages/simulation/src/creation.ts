@@ -299,6 +299,8 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     interactionUsage: {},
     ribbonsEarned: [],
     yearsOutOfWork: 0,
+    struggling: false,
+    struggleYears: 0,
     applicationsThisYear: 0,
     lastSeenWorldSnapshotId: null,
     lastReturnEventAt: null,

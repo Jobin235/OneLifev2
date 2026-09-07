@@ -70,6 +70,10 @@ export const LifeStateSchema = z.object({
   ribbonsEarned: z.array(z.string()),
   /** Consecutive years an adult has been out of work. Drives desperation. */
   yearsOutOfWork: z.number().int().min(0),
+  /** Whether costs are currently going uncovered, so only the change is logged. */
+  struggling: z.boolean(),
+  /** Consecutive years contradicting `struggling`; two flips it. */
+  struggleYears: z.number().int().min(0),
   /** Applications made this year. Cleared on age-up. */
   applicationsThisYear: z.number().int().min(0),
 

@@ -185,7 +185,47 @@ export const advanceYear = (
   if (country) rollNewConditions(state, country, rng);
   const city = country?.cities.find((c) => c.id === state.character.cityId);
   updateCostOfLiving(state, config, city?.costOfLiving ?? 1);
-  settleYear(state, config);
+  const money = settleYear(state, config);
+
+  /*
+   * Say when the year did not add up.
+   *
+   * The going-without model is correct — nobody borrows indefinitely against no
+   * income, so a shortfall becomes doing without rather than debt — but it was
+   * silent. The player saw expenses of $13,680, watched nothing leave their
+   * account, and reasonably concluded the money was made up.
+   */
+  /*
+   * Log the change, not the state, and only once it has held.
+   *
+   * A decade of poverty is one hard stretch rather than ten identical lines,
+   * and a single lean year is not a hard stretch at all — without the second
+   * rule a character oscillating around the line announces it every other year.
+   */
+  const shortThisYear = money.wentWithout > 0;
+  state.struggleYears = shortThisYear === state.struggling ? 0 : state.struggleYears + 1;
+
+  if (state.struggleYears >= 2) {
+    state.struggling = shortThisYear;
+    state.struggleYears = 0;
+    /*
+     * Worded differently each time. A life can genuinely fall into hardship
+     * twice, and when it does the player should read two sentences rather than
+     * the same one twice — which reads as a bug even when the event is real.
+     */
+    const line = shortThisYear
+      ? rng.pick([
+          'Money stopped covering the month, and you started going without.',
+          'The sums stopped working. You got very good at the cheap shop.',
+          'You started leaving things in the basket at the till.',
+        ])
+      : rng.pick([
+          'Things eased off. You stopped counting every week.',
+          'The money caught up with the month again.',
+          'You bought something you did not strictly need, and enjoyed it.',
+        ]);
+    pushHistory(state, 'money', shortThisYear ? '🥫' : '🌤️', line, 35);
+  }
 
   // 5. Retirement is automatic and unglamorous.
   if (state.character.age >= 67 && state.career.current && rng.chance(0.35)) {

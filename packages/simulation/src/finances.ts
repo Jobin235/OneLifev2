@@ -62,8 +62,21 @@ export const updateCostOfLiving = (
   const comfortable = base * 2;
   const inflation = income > comfortable ? Math.round((income - comfortable) * 0.34) : 0;
 
+  /*
+   * Everything that will actually be charged, in one number.
+   *
+   * Asset upkeep and debt payments used to be added separately inside
+   * settleYear, so the figure the Money screen showed was smaller than the one
+   * taken — and dependants were counted here *and* there, so children were paid
+   * for twice. If the player is shown a total, that total has to be the total.
+   */
+  const assetUpkeep = state.assets.reduce((sum, a) => sum + a.annualCost, 0);
+
   character.finances.annualExpenses =
-    Math.round(base * studentDiscount) + inflation + dependents * config.money.perChildAnnualCost;
+    Math.round(base * studentDiscount) +
+    inflation +
+    dependents * config.money.perChildAnnualCost +
+    assetUpkeep;
 };
 
 /** What the year's money actually did, in words, for the log. */
@@ -77,11 +90,20 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
   const { character } = state;
   const f = character.finances;
 
+  /*
+   * What a business pays you is income, and has to be visible as income.
+   *
+   * This was computed here and never written back, so the Money screen reported
+   * a salary of $54,800 while $1.18M a year landed in savings from a haulage
+   * firm it never mentioned. That is the whole of "money doesn't add up".
+   */
   const businessIncome = state.businesses
     .filter((b) => !b.closed)
     .reduce((sum, b) => sum + Math.round(((b.annualRevenue - b.annualCosts) * b.equity) / 100), 0);
 
-  const gross = f.salary + f.otherIncome + Math.max(0, businessIncome);
+  f.otherIncome = Math.max(0, businessIncome);
+
+  const gross = f.salary + f.otherIncome;
   const tax = Math.round(gross * config.money.taxRate);
   const net = gross - tax;
 
