@@ -1,5 +1,5 @@
 import type { GameConfig } from '@lineage/config';
-import type { ContentPack } from '@lineage/content';
+import type { Activity, ContentPack } from '@lineage/content';
 import { interactionsFor } from './interact.js';
 import { shopView } from './shop.js';
 import type { LifeState, Npc } from '@lineage/shared-types';
@@ -80,12 +80,12 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
      * hand you cash — it puts a number in the header that follows you for a
      * decade, and watching it climb back to zero is most of what early
      * adulthood feels like.
+     *
+     * Debt secured on something you own is left out of it. A mortgage is not
+     * money you are down, it is half of a house, and netting it here made the
+     * header say −$16,379 on the same screen where net worth said $343,213.
      */
-    balance: formatMoneyExact(
-      character.finances.cash +
-        character.finances.savings -
-        character.finances.debts.reduce((sum, d) => sum + d.balance, 0),
-    ),
+    balance: formatMoneyExact(unsecuredPosition(state)),
     gameState: state.gameState,
     activeEvent: state.activeEvent,
     resolvedEvent: state.resolvedEvent,
@@ -113,6 +113,18 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
     incarcerated: character.record.incarceration !== null,
     legacy: state.legacy,
   };
+};
+
+/** Cash and savings, less the debts that are not held against anything. */
+const unsecuredPosition = (state: LifeState): number => {
+  const owned = state.assets.map((a) => a.label.toLowerCase());
+  const unsecured = state.character.finances.debts
+    .filter((debt) => {
+      const label = debt.label.toLowerCase();
+      return !owned.some((asset) => label.includes(asset));
+    })
+    .reduce((sum, debt) => sum + debt.balance, 0);
+  return state.character.finances.cash + state.character.finances.savings - unsecured;
 };
 
 const avatarFor = (state: LifeState): string => {
@@ -224,48 +236,83 @@ const GROUP_TINT: Record<string, { tint: string; noteColor: string }> = {
   school: { tint: '#EEEAFB', noteColor: '#5F51AE' },
 };
 
+/**
+ * Everything the player could do, and everything they could not.
+ *
+ * Locked rows stay on the list, greyed, with the reason — which is how BitLife
+ * does it and is the difference between a menu and a map. Filtering them out
+ * meant a fourteen-year-old saw six things and had no idea the other thirty
+ * existed, so there was nothing to grow into and no reason to look again next
+ * year. See docs/BITLIFE-LOOP-SPEC.md §5.
+ */
 export const actionsView = (state: LifeState, content: ContentPack) => {
   const liquid = state.character.finances.cash + state.character.finances.savings;
+  const inside = state.character.record.incarceration !== null;
+  const enrolled = state.education.current !== null;
+  const employed = state.career.current !== null;
+
+  /** Why this is not available, or null when it is. Order is deliberate. */
+  const lockedBy = (a: Activity): string | null => {
+    if (state.character.age < a.minAge) return `You have to be ${a.minAge}`;
+    if (state.character.age > a.maxAge) return 'That time has passed';
+
+    if (a.onlyWhen === 'incarcerated') return inside ? null : 'Only in prison';
+    if (inside) {
+      const allowedInside = a.group === 'body_and_head' || a.id === 'study';
+      return allowedInside ? null : 'Not from in here';
+    }
+    if (a.onlyWhen === 'enrolled' || a.group === 'school') {
+      return enrolled ? null : 'You are not at school';
+    }
+    if (a.onlyWhen === 'employed' || a.group === 'work') {
+      return employed ? null : 'You need a job first';
+    }
+    if (a.onlyWhen === 'unemployed') {
+      return !employed && !state.career.retired ? null : 'You already have work';
+    }
+    if (a.group === 'relationship') {
+      if (a.id === 'call_your_mom') {
+        const mother = state.relationships.find((r) => r.kind === 'mother');
+        const alive = mother && state.npcs.find((n) => n.id === mother.npcId)?.alive;
+        return alive ? null : 'There is nobody to call';
+      }
+      const partner = state.relationships.some((r) => r.kind === 'partner' || r.kind === 'spouse');
+      return partner ? null : 'You are not seeing anyone';
+    }
+    return null;
+  };
 
   return content.activities
-    .filter((a) => state.character.age >= a.minAge && state.character.age <= a.maxAge)
-    .filter((a) => {
-      const inside = state.character.record.incarceration !== null;
-      if (a.onlyWhen === 'incarcerated') return inside;
-      // Design 5D: inside, almost nothing else is on offer.
-      if (inside) return a.group === 'body_and_head' || a.id === 'study';
-      if (a.onlyWhen === 'enrolled') return state.education.current !== null;
-      if (a.onlyWhen === 'employed') return state.career.current !== null;
-      if (a.onlyWhen === 'unemployed') {
-        return state.career.current === null && !state.career.retired;
-      }
-      if (a.group === 'work') return state.career.current !== null;
-      if (a.group === 'school') return state.education.current !== null;
-      if (a.group === 'relationship') {
-        if (a.id === 'call_your_mom') return state.relationships.some((r) => r.kind === 'mother');
-        return state.relationships.some((r) => r.kind === 'partner' || r.kind === 'spouse');
-      }
-      return true;
-    })
+    /*
+     * One long look ahead, not the whole catalogue. Something twenty years off
+     * is not aspiration, it is noise — but the next few years of a life should
+     * be visible from where the player is standing.
+     */
+    .filter((a) => state.character.age + 8 >= a.minAge && state.character.age <= a.maxAge)
+    /*
+     * Prison actions belong to prison, not to a locked future. Listing "Lift —
+     * only in prison" to a free character reads as the game suggesting they get
+     * arrested, and it is the one lock that is not something to grow into.
+     */
+    .filter((a) => a.onlyWhen !== 'incarcerated' || inside)
     .map((a) => {
       const tint = GROUP_TINT[a.group] ?? GROUP_TINT.bigger_moves!;
       const used = state.activityUsage[a.id] ?? 0;
       const limited = a.effectiveTimes > 0;
       const timesLeft = limited ? Math.max(0, a.effectiveTimes - used) : null;
 
+      const locked = lockedBy(a);
       const unaffordable = a.cost > liquid;
       // Past its allowance a "no_effect" activity is pointless rather than
-      // forbidden; the tile says so instead of pretending it still works.
+      // forbidden; the row says so instead of pretending it still works.
       const spent = limited && used >= a.effectiveTimes && a.onRepeat === 'no_effect';
       const risky = limited && used >= a.effectiveTimes && a.onRepeat === 'riskier';
 
       // An open decision blocks everything, so it is said once at the screen
-      // level rather than repeated on every tile.
-      const blockedReason = spent
-        ? 'Nothing more to gain this year'
-        : unaffordable
-          ? "You can't afford that"
-          : null;
+      // level rather than repeated on every row.
+      const blockedReason =
+        locked ??
+        (spent ? 'Nothing more to gain this year' : unaffordable ? "You can't afford that" : null);
 
       return {
         id: a.id,
@@ -277,8 +324,10 @@ export const actionsView = (state: LifeState, content: ContentPack) => {
         tint: tint.tint,
         noteColor: risky ? '#C4462E' : tint.noteColor,
         timesLeft,
-        available: !spent && !unaffordable && !state.activeEvent && state.character.alive,
+        available: blockedReason === null && !state.activeEvent && state.character.alive,
         blockedReason,
+        /** Greyed but visible: this is something to grow into, not an error. */
+        locked: locked !== null,
       };
     });
 };

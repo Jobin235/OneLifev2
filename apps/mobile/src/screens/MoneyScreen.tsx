@@ -16,7 +16,12 @@ export const MoneyScreen = ({
   onBuy: (purchasableId: string, onFinance: boolean) => void;
   onSell: (assetId: string) => void;
 }) => {
-  const [shopOpen, setShopOpen] = useState(false);
+  /*
+   * Open. The shop was behind a "+" and stayed shut, which on a screen the
+   * player opens to spend money is the wrong default — BitLife's equivalents
+   * are lists you land in, not accordions you have to find.
+   */
+  const [shopOpen, setShopOpen] = useState(true);
 
   return (
     <div className="sheet-scroll">

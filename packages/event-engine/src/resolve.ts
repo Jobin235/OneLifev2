@@ -93,9 +93,13 @@ export const resolveChoice = (
   const historyLine = interpolate(outcome.historyLine, state, bindings);
 
   instance.chosenChoiceId = choiceId;
-  instance.outcomeTitle = outcome.title
-    ? interpolate(outcome.title, state, bindings)
-    : instance.title;
+  /*
+   * Only an authored title. Falling back to the event's own title put a whole
+   * sentence where BitLife has two words — "A relative you barely knew left you
+   * something." as a heading above the sentence explaining it. No heading reads
+   * better than the wrong one, and the toast is designed to work without it.
+   */
+  instance.outcomeTitle = outcome.title ? interpolate(outcome.title, state, bindings) : null;
   instance.outcomeText = outcomeText;
   instance.historyLine = historyLine;
   instance.deltas = deltas;

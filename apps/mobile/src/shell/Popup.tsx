@@ -169,7 +169,7 @@ export const ResultToast = ({
 }) => (
   <div className="sh-scrim" onClick={onDismiss}>
     <div className="sh-toast" onClick={(e) => e.stopPropagation()}>
-      <div className="sh-toast-title">{event.outcomeTitle ?? 'What happened'}</div>
+      {event.outcomeTitle && <div className="sh-toast-title">{event.outcomeTitle}</div>}
       <p className="sh-toast-text">{event.outcomeText}</p>
       {event.deltas.length > 0 && (
         <div className="sh-toast-deltas">

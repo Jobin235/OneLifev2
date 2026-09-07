@@ -116,6 +116,8 @@ export interface ActionCard {
   timesLeft: number | null;
   available: boolean;
   blockedReason: string | null;
+  /** Greyed but visible: something to grow into rather than an error. */
+  locked: boolean;
 }
 
 export interface LifeView {

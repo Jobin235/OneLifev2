@@ -2205,7 +2205,7 @@ button {
 }
 
 .sh-year + .sh-year {
-  margin-top: 14px;
+  margin-top: 11px;
 }
 
 /*
@@ -2215,15 +2215,20 @@ button {
 .sh-year-head {
   font-family: var(--display);
   font-weight: 800;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--coral);
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
+/*
+ * Small and tight. The log is the whole screen and a life is hundreds of
+ * sentences: at 14px a single year filled the view and the scroll stopped
+ * reading as a continuous document, which is the one thing it has to do.
+ */
 .sh-line {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.42;
+  font-size: 12.5px;
+  line-height: 1.38;
   color: var(--ink-2);
 }
 
@@ -2850,4 +2855,122 @@ button {
   border-color: var(--line-dash);
   color: var(--faint);
   cursor: not-allowed;
+}
+
+/* ---- activities: a dense list, with the locked rows still on it ---- */
+
+.act-list {
+  padding: 8px 0 20px;
+}
+
+.act-group {
+  margin: 14px 0 3px;
+  padding: 0 16px;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+/* Tight rows. Density is the point — BitLife fits eight on a screen and the
+   list reads as a catalogue rather than a set of buttons. */
+.act-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 7px 16px;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+}
+
+.act-row:active:not(:disabled) {
+  background: var(--coral-tint);
+}
+
+/*
+ * Locked rows stay legible rather than disappearing. The player is meant to
+ * read them — that is the whole point of leaving them there.
+ */
+.act-row.locked,
+.act-row:disabled {
+  cursor: not-allowed;
+  background: var(--app-bg);
+}
+
+.act-row.locked .act-icon,
+.act-row:disabled .act-icon {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.act-row.locked .act-label,
+.act-row:disabled .act-label {
+  color: var(--faint);
+}
+
+.act-icon {
+  width: 24px;
+  flex: none;
+  font-size: 17px;
+  text-align: center;
+}
+
+.act-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.act-label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.act-note {
+  display: block;
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.act-chev {
+  flex: none;
+  font-size: 19px;
+  color: var(--line-dash);
+}
+
+.act-lock {
+  flex: none;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.act-left {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: var(--r-pill);
+  background: var(--amber-tint);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--amber-deep);
+}
+
+.act-foot {
+  margin: 18px 16px 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--faint);
+  text-wrap: pretty;
 }

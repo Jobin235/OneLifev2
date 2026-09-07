@@ -24,15 +24,29 @@ describe('crime', () => {
   };
 
   it('gates the serious crimes behind age', () => {
+    /*
+     * Locked rows stay on the list now, greyed and with the reason, so the
+     * question is no longer whether a nine-year-old is shown grand theft auto —
+     * it is whether they can tap it. What they can see is a separate promise,
+     * asserted below.
+     */
     const child = at('crime-1', 9);
-    const offered = game.actions(child).map((a) => a.id);
-    expect(offered).toContain('porch_pirate');
-    expect(offered).not.toContain('bank_robbery');
-    expect(offered).not.toContain('grand_theft_auto');
+    const forChild = new Map(game.actions(child).map((a) => [a.id, a]));
+    expect(forChild.get('porch_pirate')?.available).toBe(true);
+    expect(forChild.get('bank_robbery')?.available ?? false).toBe(false);
+    expect(forChild.get('grand_theft_auto')?.available ?? false).toBe(false);
 
     const adult = at('crime-1', 20);
-    const adultOffered = game.actions(adult).map((a) => a.id);
-    expect(adultOffered).toContain('bank_robbery');
+    const forAdult = new Map(game.actions(adult).map((a) => [a.id, a]));
+    expect(forAdult.get('bank_robbery')?.available).toBe(true);
+  });
+
+  it('says why a locked row is locked, rather than hiding it', () => {
+    const child = at('crime-1', 12);
+    const locked = game.actions(child).filter((a) => a.locked);
+    expect(locked.length).toBeGreaterThan(0);
+    // A grey row with no explanation is worse than no row at all.
+    for (const row of locked) expect(row.blockedReason).toBeTruthy();
   });
 
   it('pays when it works and convicts when it does not', () => {
