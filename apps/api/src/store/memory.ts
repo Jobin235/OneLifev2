@@ -1,3 +1,4 @@
+import type { Snapshot } from '@lineage/game';
 import type { LifeState, WorldSnapshot } from '@lineage/shared-types';
 import type { LifeRepository, WorldRepository } from './repository.js';
 
@@ -10,6 +11,15 @@ export class InMemoryLifeRepository implements LifeRepository {
   private readonly lives = new Map<string, { userId: string; state: LifeState }>();
   private readonly locks = new Map<string, Promise<unknown>>();
   private readonly idempotency = new Map<string, unknown>();
+  private readonly histories = new Map<string, Snapshot[]>();
+
+  async history(userId: string, lifeId: string): Promise<Snapshot[]> {
+    return this.histories.get(`${userId}:${lifeId}`) ?? [];
+  }
+
+  async putHistory(userId: string, lifeId: string, history: Snapshot[]): Promise<void> {
+    this.histories.set(`${userId}:${lifeId}`, history);
+  }
 
   async create(userId: string, state: LifeState): Promise<void> {
     this.lives.set(state.id, { userId, state: structuredClone(state) });

@@ -95,14 +95,23 @@ export const advanceYear = (
    * People you know die, and until now the log said nothing about it — they
    * simply stopped appearing. Say it, name them, and settle what they left.
    */
-  for (const { npc, relationship } of npcYear.deaths) {
+  for (const { npc, relationship, cause } of npcYear.deaths) {
+    /*
+     * A repeat death keeps its original wording, because it is the same death.
+     * A first one is written now and recorded, so that if the player rewinds
+     * past it, it comes back exactly as it was.
+     */
+    const manner = cause ?? deathManner(npc, rng);
+    if (cause === null) {
+      state.fated.push({ npcId: npc.id, atAge: npc.age, cause: manner });
+    }
     pushHistory(
       state,
       'family',
       '🕯️',
       // Named, always. A life has several supervisors and several nephews, and
       // "Your supervisor died" twice reads as the log stuttering.
-      `${narrativeSubject(relationship, npc, state.character.age, state)} died ${deathManner(npc, rng)}.`,
+      `${narrativeSubject(relationship, npc, state.character.age, state)} died ${manner}.`,
       relationship.band === 'close' ? 75 : 40,
     );
     inheritanceFrom(state, npc, relationship, rng);

@@ -3144,3 +3144,44 @@ button {
 .sh-btn-fill {
   background: var(--amber);
 }
+
+/* ---- the time machine ---- */
+
+.sh-rewind {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  margin-right: -4px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--violet-tint);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.tm-blurb {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--body);
+}
+
+.tm-warning {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  background: var(--amber-tint);
+  border: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--amber-deep);
+  text-wrap: pretty;
+}
+
+.tm-warning-icon {
+  flex: none;
+  font-size: 17px;
+  line-height: 1.2;
+}

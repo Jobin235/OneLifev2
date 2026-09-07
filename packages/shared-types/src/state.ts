@@ -68,6 +68,25 @@ export const LifeStateSchema = z.object({
   interactionUsage: z.record(z.string(), z.number().int().min(0)),
   /** Ribbon ids earned by this line so far — what carries between lives. */
   ribbonsEarned: z.array(z.string()),
+  /**
+   * Deaths this life has already witnessed, and the age and cause they happened
+   * at.
+   *
+   * This is the Time Machine's one rule with teeth: rewinding past somebody's
+   * death does not save them. They stay alive until that year comes round again
+   * and then die of the same thing, at the same age. The ledger is knowledge
+   * that survives time travel, so it is carried across a rewind rather than
+   * rolled back with everything else.
+   */
+  fated: z
+    .array(
+      z.object({
+        npcId: z.string(),
+        atAge: z.number().int().min(0),
+        cause: z.string(),
+      }),
+    )
+    .default([]),
   /** Consecutive years an adult has been out of work. Drives desperation. */
   yearsOutOfWork: z.number().int().min(0),
   /** Whether costs are currently going uncovered, so only the change is logged. */

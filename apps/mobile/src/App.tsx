@@ -10,6 +10,7 @@ import type {
   PersonView,
   Opening,
   PrisonView,
+  RewindOption,
   SchoolView,
   WorkView,
 } from './lib/api';
@@ -24,6 +25,7 @@ import { SchoolScreen } from './screens/SchoolScreen';
 import { WorkScreen } from './screens/WorkScreen';
 import { JobsScreen } from './screens/JobsScreen';
 import { PrisonScreen } from './screens/PrisonScreen';
+import { RewindScreen } from './screens/RewindScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
@@ -61,6 +63,8 @@ export const App = () => {
   const [jobs, setJobs] = useState<{ openings: Opening[]; applicationsLeft: number } | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
   const [prison, setPrison] = useState<PrisonView | null>(null);
+  const [rewinds, setRewinds] = useState<RewindOption[]>([]);
+  const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
   useEffect(() => {
@@ -117,6 +121,8 @@ export const App = () => {
   const setLifeAndRemember = useCallback((next: LifeView) => {
     setLife(next);
     safeStorage.set(LAST_LIFE, next.lifeId);
+    // Cheap, and it decides whether the header button is there at all.
+    void api.rewindOptions(next.lifeId).then(setRewinds);
   }, []);
 
   // Refresh whichever sheet is open whenever the life changes underneath it.
@@ -265,6 +271,20 @@ export const App = () => {
     [life, run, setLifeAndRemember],
   );
 
+  const onRewind = useCallback(
+    async (toAge: number) => {
+      if (!life) return;
+      const restored = await run(() => api.rewind(life.lifeId, toAge));
+      if (!restored) return;
+      setLifeAndRemember(restored);
+      setTimeMachine(false);
+      setSlot(null);
+      setPerson(null);
+      show(`You are ${toAge} again.`);
+    },
+    [life, run, setLifeAndRemember, show],
+  );
+
   const openPerson = useCallback(
     async (npcId: string) => {
       if (!life) return;
@@ -305,7 +325,11 @@ export const App = () => {
 
   return (
     <div className="app">
-      <Header life={life} />
+      <Header
+        life={life}
+        canRewind={rewinds.length > 0}
+        onRewind={() => setTimeMachine(true)}
+      />
 
       <main className="sh-main">
         <LifeLog life={life} />
@@ -393,6 +417,12 @@ export const App = () => {
             ) : (
               <div className="spinner">…</div>
             )}
+          </Sheet>
+        )}
+
+        {timeMachine && (
+          <Sheet title="Time Machine" onClose={() => setTimeMachine(false)}>
+            <RewindScreen options={rewinds} busy={busy} onRewind={onRewind} />
           </Sheet>
         )}
 

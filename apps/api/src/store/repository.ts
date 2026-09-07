@@ -1,3 +1,4 @@
+import type { Snapshot } from '@lineage/game';
 import type { LifeState, WorldSnapshot } from '@lineage/shared-types';
 
 /**
@@ -23,6 +24,16 @@ export interface LifeRepository {
   /** Idempotency (spec §84): a retried request returns the first result. */
   rememberResult(key: string, result: unknown): Promise<void>;
   recallResult<T>(key: string): Promise<T | null>;
+
+  /**
+   * The last few years of a life, for the Time Machine.
+   *
+   * Kept beside the save rather than inside it — a LifeState containing eight
+   * LifeStates is a schema that cannot describe itself, and every read of a
+   * life would carry nine of them.
+   */
+  history(userId: string, lifeId: string): Promise<Snapshot[]>;
+  putHistory(userId: string, lifeId: string, history: Snapshot[]): Promise<void>;
 }
 
 export interface WorldRepository {

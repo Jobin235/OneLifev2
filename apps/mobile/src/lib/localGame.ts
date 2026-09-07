@@ -3,6 +3,7 @@ import { SCHEMA_VERSION, type LifeState } from '@lineage/shared-types';
 import { NEUTRAL_INDICATORS, snapshot, tickWorld } from '@lineage/world';
 import { DEFAULT_CONFIG } from '@lineage/config';
 import { localContent } from './localContent';
+import { forget, remember, rewind, rewindOptions, type Snapshot } from '@lineage/game';
 import { safeStorage } from './storage';
 import type { Api } from './api';
 
@@ -20,9 +21,15 @@ const STORAGE_KEY = 'onelife.localLives';
 interface Stored {
   lives: Record<string, LifeState>;
   order: string[];
+  /**
+   * The last eight years of each life, kept beside the save rather than inside
+   * it: a LifeState containing eight LifeStates is a schema that cannot describe
+   * itself, and a save carrying its own history is nine times the size.
+   */
+  history?: Record<string, Snapshot[]>;
 }
 
-const EMPTY: Stored = { lives: {}, order: [] };
+const EMPTY: Stored = { lives: {}, order: [], history: {} };
 
 const read = (): Stored => {
   const raw = safeStorage.get(STORAGE_KEY);
@@ -126,9 +133,30 @@ export const createLocalApi = (): Api => {
     life: async (lifeId) => view(get(lifeId)),
 
     ageUp: async (lifeId) => {
-      const result = game.ageUp(get(lifeId), indicators);
+      const before = get(lifeId);
+      // Taken before the year runs, so rewinding to it un-lives that year.
+      store.history = store.history ?? {};
+      store.history[lifeId] = remember(store.history[lifeId] ?? [], before);
+
+      const result = game.ageUp(before, indicators);
       save(result.state);
       return { ...view(result.state), recap: result.recap, died: result.died };
+    },
+
+    rewindOptions: async (lifeId) => rewindOptions(store.history?.[lifeId] ?? [], get(lifeId)),
+
+    rewind: async (lifeId, toAge) => {
+      const history = store.history?.[lifeId] ?? [];
+      const restored = rewind(history, get(lifeId), toAge);
+      store.history = store.history ?? {};
+      store.history[lifeId] = forget(history, toAge);
+      save(restored);
+      /*
+       * A LifeView, not the `{ life }` envelope the other methods return — the
+       * HTTP client unwraps that before it reaches the app, so this has to hand
+       * back the same thing. An `as never` here hid exactly this for one build.
+       */
+      return lifeView(restored, game.content) as never;
     },
 
     choose: async (lifeId, eventId, choiceId, selections) => {

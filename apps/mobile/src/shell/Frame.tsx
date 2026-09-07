@@ -11,10 +11,28 @@ import type { LifeView } from '../lib/api';
  * client got wrong. See docs/BITLIFE-LOOP-SPEC.md §1.
  */
 
-export const Header = ({ life }: { life: LifeView }) => {
+export const Header = ({
+  life,
+  canRewind,
+  onRewind,
+}: {
+  life: LifeView;
+  canRewind: boolean;
+  onRewind: () => void;
+}) => {
   const negative = life.balance.startsWith('−') || life.balance.startsWith('-');
   return (
     <header className="sh-header">
+      {/*
+        The Time Machine. Free for now and a purchase later, which is why it is
+        one button reading one flag rather than a feature threaded through the
+        screen.
+      */}
+      {canRewind && (
+        <button className="sh-rewind" onClick={onRewind} aria-label="Time Machine">
+          ⏪
+        </button>
+      )}
       <div className="sh-avatar">{life.avatarEmoji}</div>
       <div className="sh-who">
         <div className="sh-name">{life.name}</div>

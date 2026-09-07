@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView } from '@lineage/game';
+import { ApplicationRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -14,6 +14,7 @@ const NewLifeBody = z.object({
   upbringing: z.enum(['rough', 'getting_by', 'comfortable']),
 });
 
+const RewindBody = z.object({ toAge: z.number().int().min(0) });
 const ChooseBody = z.object({
   choiceId: z.string().min(1),
   /** What the player picked in the popup's dropdowns, keyed by select id. */
@@ -104,7 +105,11 @@ export const registerLifeRoutes = (
     const indicators = await currentWorld();
 
     try {
+      const history = await lives.history(userId, lifeId);
+      let remembered = history;
       const payload = await lives.withLock(userId, lifeId, (state) => {
+        // Taken before the year runs, so rewinding to it un-lives that year.
+        remembered = remember(history, state);
         const result = game.ageUp(state, indicators);
         return {
           life: lifeView(result.state, game.content),
@@ -112,6 +117,7 @@ export const registerLifeRoutes = (
           died: result.died,
         };
       });
+      await lives.putHistory(userId, lifeId, remembered);
 
       if (typeof idempotencyKey === 'string') {
         await lives.rememberResult(`${userId}:${lifeId}:${idempotencyKey}`, payload);
@@ -290,6 +296,32 @@ export const registerLifeRoutes = (
     const view = schoolView(await load(userOf(request), lifeId), game.content);
     if (!view) return reply.code(404).send({ error: 'not enrolled' });
     return view;
+  });
+
+  app.get('/lives/:lifeId/rewind', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const userId = userOf(request);
+    const state = await load(userId, lifeId);
+    return { options: rewindOptions(await lives.history(userId, lifeId), state) };
+  });
+
+  app.post('/lives/:lifeId/rewind', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { toAge } = RewindBody.parse(request.body);
+    const userId = userOf(request);
+    try {
+      const history = await lives.history(userId, lifeId);
+      const payload = await lives.withLock(userId, lifeId, (state) => {
+        const restored = rewind(history, state, toAge);
+        // The mutate callback saves whatever it leaves in `state`.
+        Object.assign(state, restored);
+        return { life: lifeView(state, game.content) };
+      });
+      await lives.putHistory(userId, lifeId, forget(history, toAge));
+      return payload;
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
   });
 
   app.get('/lives/:lifeId/prison', async (request, reply) => {

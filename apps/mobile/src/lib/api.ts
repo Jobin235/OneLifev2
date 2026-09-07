@@ -225,6 +225,12 @@ export interface PersonView {
   stats: Array<{ icon: string; label: string; value: number }>;
 }
 
+export interface RewindOption {
+  atAge: number;
+  label: string;
+  note: string;
+}
+
 export interface PrisonView {
   facility: string;
   offence: string;
@@ -390,6 +396,9 @@ export interface Api {
   /** Null when the character is not enrolled anywhere. */
   school(lifeId: string): Promise<SchoolView | null>;
   prison(lifeId: string): Promise<PrisonView | null>;
+  /** The years the Time Machine can reach. Empty means it cannot help. */
+  rewindOptions(lifeId: string): Promise<RewindOption[]>;
+  rewind(lifeId: string, toAge: number): Promise<LifeView>;
   /** Null when the character has no job. */
   work(lifeId: string): Promise<WorkView | null>;
   openings(lifeId: string): Promise<{ openings: Opening[]; applicationsLeft: number }>;
@@ -464,6 +473,17 @@ export const httpApi: Api = {
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
   prison: (lifeId: string) =>
     request<PrisonView>(`/lives/${lifeId}/prison`).catch(() => null),
+
+  rewindOptions: (lifeId: string) =>
+    request<{ options: RewindOption[] }>(`/lives/${lifeId}/rewind`)
+      .then((r) => r.options)
+      .catch(() => []),
+
+  rewind: (lifeId: string, toAge: number) =>
+    request<{ life: LifeView }>(`/lives/${lifeId}/rewind`, {
+      method: 'POST',
+      body: JSON.stringify({ toAge }),
+    }).then((r) => r.life),
 
   school: (lifeId: string) => request<SchoolView | null>(`/lives/${lifeId}/school`),
   work: (lifeId: string) => request<WorkView | null>(`/lives/${lifeId}/work`),

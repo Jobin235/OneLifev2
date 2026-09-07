@@ -304,6 +304,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     chronicleLog: {},
     interactionUsage: {},
     ribbonsEarned: [],
+    fated: [],
     yearsOutOfWork: 0,
     struggling: false,
     struggleYears: 0,

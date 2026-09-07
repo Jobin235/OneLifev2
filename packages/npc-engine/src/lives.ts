@@ -30,9 +30,26 @@ export const advanceNpcYear = (state: LifeState, config: GameConfig, rng: Rng): 
       }
     }
 
+    /*
+     * A death this life has already witnessed happens again, on schedule.
+     *
+     * Rewinding past somebody's death does not save them — that is the Time
+     * Machine's one rule with teeth, and it is what stops it being a cheat code
+     * for grief. The fate is carried across the rewind rather than rolled back,
+     * so the engine finds it waiting when the year comes round again.
+     */
+    const fate = state.fated.find((f) => f.npcId === npc.id);
+    if (fate) {
+      if (npc.age >= fate.atAge) {
+        npc.alive = false;
+        report.deaths.push({ npc, relationship: rel, cause: fate.cause });
+      }
+      continue;
+    }
+
     if (rollNpcDeath(npc, rng)) {
       npc.alive = false;
-      report.deaths.push({ npc, relationship: rel });
+      report.deaths.push({ npc, relationship: rel, cause: null });
     }
   }
 
@@ -41,7 +58,8 @@ export const advanceNpcYear = (state: LifeState, config: GameConfig, rng: Rng): 
 };
 
 export interface NpcYearReport {
-  deaths: Array<{ npc: Npc; relationship: Relationship }>;
+  /** `cause` is set only when this death is a repeat, fixed by an earlier run. */
+  deaths: Array<{ npc: Npc; relationship: Relationship; cause: string | null }>;
   /** Children crossing an age that unlocks new content (design 5G). */
   childMilestones: Array<{ npc: Npc; milestone: string }>;
   moodShifts: Array<{ npc: Npc; onTheirMind: string }>;
