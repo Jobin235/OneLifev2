@@ -141,6 +141,23 @@ export const EffectSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('court'), askedOut: z.boolean() }),
   /** Goes looking. Raises a love-interest card rather than changing anything. */
   z.object({ op: z.literal('meet_someone') }),
+  /**
+   * Charges the character rather than convicting them: raises the lawyer list,
+   * which raises the plea, which decides the sentence. `convict` still exists
+   * for the events that hand down a sentence with no argument.
+   */
+  z.object({
+    op: z.literal('charge'),
+    offence: z.string().min(1),
+    /** 0 for the offences that carry a fine and a record but no cell. */
+    sentenceYears: z.number().int().min(0),
+    fine: z.number().int().min(0).default(0),
+    facility: z.string().default('the county jail'),
+  }),
+  /** Picks one of the three firms on the charge sheet. */
+  z.object({ op: z.literal('hire_lawyer'), tier: z.number().int().min(0).max(2) }),
+  /** Answers the charge. */
+  z.object({ op: z.literal('enter_plea'), how: z.enum(['guilty', 'not_guilty', 'no_contest']) }),
   /** How you are getting on inside. Parole reads it; so do the guards. */
   z.object({ op: z.literal('behaviour'), delta: z.number().int() }),
   /**

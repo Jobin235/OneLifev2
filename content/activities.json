@@ -934,7 +934,7 @@
       "line": "You were caught: theft.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Theft",
           "sentenceYears": 0,
           "fine": 40000,
@@ -971,7 +971,7 @@
       "line": "You were caught: shoplifting.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Shoplifting",
           "sentenceYears": 0,
           "fine": 60000,
@@ -1008,7 +1008,7 @@
       "line": "You were caught: pickpocketing.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Pickpocketing",
           "sentenceYears": 1,
           "fine": 50000,
@@ -1045,7 +1045,7 @@
       "line": "You were caught: burglary.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Burglary",
           "sentenceYears": 3,
           "fine": 100000,
@@ -1082,7 +1082,7 @@
       "line": "You were caught: grand theft auto.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Grand theft auto",
           "sentenceYears": 4,
           "fine": 150000,
@@ -1119,7 +1119,7 @@
       "line": "You were caught: armed robbery.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Armed robbery",
           "sentenceYears": 7,
           "fine": 200000,
@@ -1156,7 +1156,7 @@
       "line": "You were caught: bank robbery.",
       "effects": [
         {
-          "op": "convict",
+          "op": "charge",
           "offence": "Bank robbery",
           "sentenceYears": 10,
           "fine": 400000,
@@ -1313,6 +1313,7 @@
       }
     ],
     "effectiveTimes": 2,
-    "onRepeat": "no_effect"
+    "onRepeat": "no_effect",
+    "silent": true
   }
 ]

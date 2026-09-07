@@ -6,6 +6,7 @@ import { bearChild, spawnNpc } from '@lineage/npc-engine';
 import { settleInterview } from './interview.js';
 import { settleTreatment } from './health.js';
 import { openLoveInterest, settleLoveInterest } from './love.js';
+import { openCharges, settleLawyer, settlePlea } from './justice.js';
 import { hireInto } from './jobs.js';
 import { ASSET_TEMPLATES, BUSINESS_TEMPLATES, businessNameFor } from './templates.js';
 
@@ -105,6 +106,31 @@ export const applyDeferred = (
             }
           }
         }
+        break;
+      }
+
+      case 'charge': {
+        openCharges(
+          state,
+          {
+            offence: effect.offence,
+            sentenceYears: effect.sentenceYears,
+            fine: effect.fine,
+            facility: effect.facility,
+          },
+          content,
+          rng,
+        );
+        break;
+      }
+
+      case 'hire_lawyer': {
+        settleLawyer(state, effect.tier, content);
+        break;
+      }
+
+      case 'enter_plea': {
+        settlePlea(state, effect.how);
         break;
       }
 

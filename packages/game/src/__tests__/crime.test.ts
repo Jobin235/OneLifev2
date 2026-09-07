@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../node.js';
+import type { LifeState } from '@lineage/shared-types';
 
 /**
  * Crime is the genre's freedom valve: it has to actually pay, actually risk
@@ -57,7 +58,7 @@ describe('crime', () => {
     for (const row of locked) expect(row.blockedReason).toBeTruthy();
   });
 
-  it('pays when it works and convicts when it does not', () => {
+  it('pays when it works and charges you when it does not', () => {
     const state = at('crime-2', 22);
     let paid = 0;
     let caught = 0;
@@ -70,7 +71,12 @@ describe('crime', () => {
 
       if (result.outcome === 'backfired') {
         caught++;
-        expect(result.state.character.record.convictions.length).toBeGreaterThan(0);
+        /*
+         * Caught is a charge, not a conviction — the lawyer and the plea decide
+         * that, and until they do there is nothing on the record.
+         */
+        expect(result.state.activeEvent?.definitionId).toBe('criminal_charges');
+        expect(result.state.character.record.convictions).toHaveLength(0);
       } else {
         paid++;
         expect(result.state.character.finances.cash).toBeGreaterThan(before);
@@ -80,16 +86,31 @@ describe('crime', () => {
     expect(caught).toBeGreaterThan(0);
   });
 
+  /**
+   * Getting caught no longer convicts you on the spot: it charges you, and the
+   * lawyer and the plea are two more decisions. Walking that flow is what these
+   * tests do now, and the last choice on each popup is the cheapest lawyer and
+   * a guilty plea — the fastest way to a cell.
+   */
+  const untilSentenced = (state: LifeState, crime: string, tries = 60): LifeState | null => {
+    for (let i = 0; i < tries; i++) {
+      let attempt = structuredClone(state);
+      attempt.seed = `${state.seed}:${i}`;
+      attempt = game.act(attempt, crime).state;
+      // Charge sheet, then plea. Two popups, one moment.
+      for (let step = 0; step < 2 && attempt.activeEvent; step++) {
+        const popup = attempt.activeEvent;
+        const choice = step === 0 ? popup.choices[2]! : popup.choices[0]!;
+        attempt = game.choose(attempt, popup.id, choice.id);
+      }
+      if (attempt.character.record.incarceration) return attempt;
+    }
+    return null;
+  };
+
   it('sends you to prison for the serious ones, and prison changes what you can do', () => {
     const state = at('crime-3', 25);
-
-    let jailed = null;
-    for (let i = 0; i < 60 && !jailed; i++) {
-      const attempt = structuredClone(state);
-      attempt.seed = `${state.seed}:${i}`;
-      const result = game.act(attempt, 'bank_robbery');
-      if (result.state.character.record.incarceration) jailed = result.state;
-    }
+    const jailed = untilSentenced(state, 'bank_robbery');
     expect(jailed).not.toBeNull();
 
     const inside = jailed!.character.record.incarceration!;
@@ -105,13 +126,7 @@ describe('crime', () => {
 
   it('lets you serve the time and come out', () => {
     const state = at('crime-4', 24);
-    let jailed = null;
-    for (let i = 0; i < 60 && !jailed; i++) {
-      const attempt = structuredClone(state);
-      attempt.seed = `${state.seed}:${i}`;
-      const result = game.act(attempt, 'train_robbery');
-      if (result.state.character.record.incarceration) jailed = result.state;
-    }
+    const jailed = untilSentenced(state, 'train_robbery');
     if (!jailed) return;
 
     let out = jailed;

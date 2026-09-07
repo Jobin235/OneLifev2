@@ -41,6 +41,15 @@ export const ActivitySchema = z.object({
   /** Cost in cents; 0 is free. */
   cost: z.number().int().min(0).default(0),
   /**
+   * Writes no log line of its own.
+   *
+   * For rows whose whole job is to raise a popup: "Find someone." sitting above
+   * "You asked Knox Sandoval out and were turned down." is the same beat told
+   * twice, the second time badly. A crime that goes wrong is the opposite case —
+   * the line is the story — so this is opt-in rather than inferred.
+   */
+  silent: z.boolean().default(false),
+  /**
    * How many times a year this still does something. 0 means it never fades.
    *
    * There is no global action budget — a year is not a pool of three tokens to

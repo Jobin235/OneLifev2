@@ -1,0 +1,124 @@
+[
+  {
+    "id": "criminal_charges",
+    "version": 1,
+    "category": "crime",
+    "card": { "icon": "⚖️", "label": "JUSTICE", "tint": "#FFF0E8", "color": "#C4462E" },
+    "weightClass": "major",
+    "priority": 99,
+    "minAge": 8,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "Criminal Charges",
+    "body": "You have been charged with {flag.charge_offence}. You are entitled to a lawyer, and you get the one you can pay for.",
+    "question": "Who will defend you?",
+    "choices": [
+      {
+        "id": "firm_a",
+        "label": "{flag.charge_firm_a}",
+        "price": "{flag.charge_price_a}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.charge_result_title}",
+            "text": "{flag.charge_result}",
+            "historyLine": "{flag.charge_history}",
+            "effects": [{ "op": "hire_lawyer", "tier": 0 }]
+          }
+        ]
+      },
+      {
+        "id": "firm_b",
+        "label": "{flag.charge_firm_b}",
+        "price": "{flag.charge_price_b}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.charge_result_title}",
+            "text": "{flag.charge_result}",
+            "historyLine": "{flag.charge_history}",
+            "effects": [{ "op": "hire_lawyer", "tier": 1 }]
+          }
+        ]
+      },
+      {
+        "id": "firm_c",
+        "label": "{flag.charge_firm_c}",
+        "price": "Free",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.charge_result_title}",
+            "text": "{flag.charge_result}",
+            "historyLine": "{flag.charge_history}",
+            "effects": [{ "op": "hire_lawyer", "tier": 2 }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  },
+  {
+    "id": "criminal_plea",
+    "version": 1,
+    "category": "crime",
+    "card": { "icon": "⚖️", "label": "PLEA", "tint": "#FFF0E8", "color": "#C4462E" },
+    "weightClass": "major",
+    "priority": 99,
+    "minAge": 8,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "Plea",
+    "body": "{flag.charge_lawyer} has read the file and wants to know what you are going to say when they ask.",
+    "question": "How will you plead?",
+    "choices": [
+      {
+        "id": "guilty",
+        "label": "Guilty",
+        "note": "a shorter sentence, and no argument",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.charge_result_title}",
+            "text": "{flag.charge_result}",
+            "historyLine": "{flag.charge_history}",
+            "effects": [{ "op": "enter_plea", "how": "guilty" }]
+          }
+        ]
+      },
+      {
+        "id": "not_guilty",
+        "label": "Not guilty",
+        "note": "the only way out, and the long way down",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.charge_result_title}",
+            "text": "{flag.charge_result}",
+            "historyLine": "{flag.charge_history}",
+            "effects": [{ "op": "enter_plea", "how": "not_guilty" }]
+          }
+        ]
+      },
+      {
+        "id": "no_contest",
+        "label": "No contest",
+        "note": "a smaller fine, and no fight",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.charge_result_title}",
+            "text": "{flag.charge_result}",
+            "historyLine": "{flag.charge_history}",
+            "effects": [{ "op": "enter_plea", "how": "no_contest" }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]

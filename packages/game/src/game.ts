@@ -260,9 +260,19 @@ export class Game {
         historyEntry.line = interpolate(templates.historyLine, state, instance.participants);
       }
 
+      /*
+       * A choice can lead straight into the next popup.
+       *
+       * Being charged with something opens the lawyer list, and picking a lawyer
+       * opens the plea — three decisions that are one moment, the way BitLife
+       * runs them. A deferred handler signals it by putting a new instance on
+       * `activeEvent`; anything else and the popup closes as normal.
+       */
+      const chained = state.activeEvent === instance ? null : state.activeEvent;
+
       state.resolvedEvent = instance;
-      state.activeEvent = null;
-      state.gameState = 'IDLE';
+      state.activeEvent = chained;
+      state.gameState = chained ? 'EVENT_AVAILABLE' : 'IDLE';
       refreshDerived(state, this.config);
       checkInvariants(state, before);
       return state;
@@ -361,13 +371,7 @@ export class Game {
       state.activityUsage[activityId] = used + 1;
       state.step += 1;
 
-      /*
-       * An activity whose whole job is to raise a popup writes nothing. The
-       * popup's own outcome is the record of what happened, and "Find someone."
-       * sitting in the log above "You asked Knox Sandoval out and were turned
-       * down." is the same beat told twice, the second time badly.
-       */
-      if (!state.activeEvent) {
+      if (!activity.silent) {
         pushHistory(
           state,
           'random',

@@ -470,6 +470,9 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
     case 'treatment':
     case 'court':
     case 'meet_someone':
+    case 'charge':
+    case 'hire_lawyer':
+    case 'enter_plea':
       ctx.deferred.push(effect);
       return null;
 
