@@ -179,6 +179,20 @@ export const createLocalApi = (): Api => {
     school: async (lifeId) => schoolView(get(lifeId), game.content) as never,
     work: async (lifeId) => workView(get(lifeId), game.content) as never,
 
+    openings: async (lifeId) => {
+      const state = get(lifeId);
+      return {
+        openings: game.openings(state) as never,
+        applicationsLeft: Math.max(0, 3 - (state.applicationsThisYear ?? 0)),
+      };
+    },
+
+    applyFor: async (lifeId, trackId) => {
+      const { state, hired, line } = game.applyFor(get(lifeId), trackId);
+      save(state);
+      return { ...view(state), hired, line };
+    },
+
     actions: async (lifeId) => ({ actions: actionsView(get(lifeId), game.content) as never }),
     money: async (lifeId) => moneyView(get(lifeId), game.config, game.content) as never,
     buy: async (lifeId, purchasableId) => {

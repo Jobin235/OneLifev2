@@ -9,6 +9,7 @@ import type {
   MoreView,
   PeopleView,
   PersonView,
+  Opening,
   SchoolView,
   WorkView,
 } from './lib/api';
@@ -20,6 +21,7 @@ import { PersonScreen } from './screens/PersonScreen';
 import { DoScreen } from './screens/DoScreen';
 import { SchoolScreen } from './screens/SchoolScreen';
 import { WorkScreen } from './screens/WorkScreen';
+import { JobsScreen } from './screens/JobsScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { MoreScreen } from './screens/MoreScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
@@ -46,6 +48,7 @@ export const App = () => {
   const [actions, setActions] = useState<ActionCard[] | null>(null);
   const [school, setSchool] = useState<SchoolView | null>(null);
   const [work, setWork] = useState<WorkView | null>(null);
+  const [jobs, setJobs] = useState<{ openings: Opening[]; applicationsLeft: number } | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
   const [more, setMore] = useState<MoreView | null>(null);
 
@@ -117,14 +120,16 @@ export const App = () => {
       try {
         if (tab === 'people' && !person) setPeople(await api.people(lifeId));
         if (tab === 'do') {
-          const [{ actions: list }, enrolled, employed] = await Promise.all([
+          const [{ actions: list }, enrolled, employed, market] = await Promise.all([
             api.actions(lifeId),
             api.school(lifeId),
             api.work(lifeId),
+            api.openings(lifeId),
           ]);
           setActions(list);
           setSchool(enrolled);
           setWork(employed);
+          setJobs(market);
         }
         if (tab === 'money') setMoney(await api.money(lifeId));
         if (tab === 'more') setMore(await api.more(lifeId));
@@ -172,6 +177,17 @@ export const App = () => {
       show(result.line);
     },
     [life, person, run, setLifeAndRemember, show],
+  );
+
+  const onApply = useCallback(
+    async (trackId: string) => {
+      if (!life) return;
+      const result = await run(() => api.applyFor(life.lifeId, trackId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      show(result.line);
+    },
+    [life, run, setLifeAndRemember, show],
   );
 
   const onBuy = useCallback(
@@ -329,9 +345,21 @@ export const App = () => {
         />
       )}
 
+      {/* Out of work and old enough: the job market is the thing to do. */}
+      {tab === 'do' && !school && !work && jobs && life.age >= 16 && (
+        <JobsScreen
+          openings={jobs.openings}
+          applicationsLeft={jobs.applicationsLeft}
+          busy={busy}
+          decisionOpen={life.activeEvent !== null}
+          onApply={onApply}
+        />
+      )}
+
       {tab === 'do' &&
         !school &&
         !work &&
+        !(jobs && life.age >= 16) &&
         (actions ? (
           <DoScreen
             actions={actions}

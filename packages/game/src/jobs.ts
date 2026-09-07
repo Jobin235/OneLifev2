@@ -126,7 +126,12 @@ export const openings = (state: LifeState, content: ContentPack): Opening[] => {
       return {
         trackId: track.id,
         title: rung.title,
-        employer: `${track.industry}`,
+        /*
+         * The field it is in, not a company name — you are looking at a listing,
+         * not an offer. Several ladders start on the same rung title
+         * ("Apprentice"), so without this the list shows the same job twice.
+         */
+        employer: track.label === rung.title ? track.industry : track.label,
         salary: money(Math.round(rung.salary * 1)),
         salaryCents: rung.salary,
         industry: track.industry,

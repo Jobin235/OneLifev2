@@ -1553,3 +1553,92 @@ button {
   margin-top: 11px;
   text-wrap: pretty;
 }
+
+/* ---------- What you owe ---------- */
+
+.debt-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.debt-balance {
+  font: 800 14px/1 var(--text);
+  color: var(--coral-deep);
+  flex: none;
+}
+
+/* ---------- The job market ---------- */
+
+.opening {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-tile);
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: stretch;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.14s ease;
+}
+
+.opening:hover:not(:disabled) {
+  border-color: var(--green);
+}
+
+.opening:disabled {
+  opacity: 0.62;
+  cursor: default;
+}
+
+.opening-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.opening-title {
+  font: 800 15px/1.2 var(--display);
+}
+
+.opening-salary {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.opening-req {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.req {
+  font: 700 11px/1 var(--text);
+  background: var(--app-bg);
+  border-radius: var(--r-pill);
+  padding: 6px 9px;
+  color: var(--muted);
+}
+
+/* The one thing standing in the way, said plainly. */
+.opening-missing {
+  font: 700 12px/1.4 var(--text);
+  color: var(--coral-deep);
+}
+
+.opening-odds {
+  font: 700 12px/1 var(--text);
+  color: var(--faint);
+}
+
+.opening-where {
+  display: block;
+  font: 700 12px/1.3 var(--text);
+  color: var(--muted);
+  margin-top: 3px;
+}

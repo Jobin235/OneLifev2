@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
+import { ApplicationRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -238,6 +238,28 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.get('/lives/:lifeId/openings', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return {
+      openings: game.openings(state),
+      applicationsLeft: Math.max(0, 3 - (state.applicationsThisYear ?? 0)),
+    };
+  });
+
+  app.post('/lives/:lifeId/apply', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { trackId } = request.body as { trackId: string };
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        const { hired, line } = game.applyFor(state, trackId);
+        return { life: lifeView(state, game.content), hired, line };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/actions', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     const state = await load(userOf(request), lifeId);
@@ -288,6 +310,7 @@ const statusFor = (error: unknown): number => {
   if (error instanceof ChoiceRejected) return 409;
   if (error instanceof InteractionRejected) return 409;
   if (error instanceof PurchaseRejected) return 409;
+  if (error instanceof ApplicationRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };
   if (typeof withCode.statusCode === 'number') return withCode.statusCode;

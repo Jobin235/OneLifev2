@@ -245,8 +245,31 @@ export interface ShopEntry {
   owned: boolean;
 }
 
+export interface DebtLine {
+  id: string;
+  label: string;
+  holder: string;
+  balance: string;
+  rate: string;
+  sinceAge: number;
+}
+
+export interface Opening {
+  trackId: string;
+  title: string;
+  employer: string;
+  salary: string;
+  salaryCents: number;
+  industry: string;
+  requirements: string[];
+  qualified: boolean;
+  missing: string | null;
+  chance: number;
+}
+
 export interface MoneyView {
   forSale: ShopEntry[];
+  debts: DebtLine[];
   netWorth: string;
   monthlyNet: string;
   debtCount: number;
@@ -308,6 +331,8 @@ export interface Api {
   school(lifeId: string): Promise<SchoolView | null>;
   /** Null when the character has no job. */
   work(lifeId: string): Promise<WorkView | null>;
+  openings(lifeId: string): Promise<{ openings: Opening[]; applicationsLeft: number }>;
+  applyFor(lifeId: string, trackId: string): Promise<{ life: LifeView; hired: boolean; line: string }>;
   money(lifeId: string): Promise<MoneyView>;
   buy(lifeId: string, purchasableId: string): Promise<{ life: LifeView; money: MoneyView }>;
   sell(lifeId: string, assetId: string): Promise<{ life: LifeView; money: MoneyView }>;
@@ -374,6 +399,15 @@ export const httpApi: Api = {
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
   school: (lifeId: string) => request<SchoolView | null>(`/lives/${lifeId}/school`),
   work: (lifeId: string) => request<WorkView | null>(`/lives/${lifeId}/work`),
+
+  openings: (lifeId: string) =>
+    request<{ openings: Opening[]; applicationsLeft: number }>(`/lives/${lifeId}/openings`),
+
+  applyFor: (lifeId: string, trackId: string) =>
+    request<{ life: LifeView; hired: boolean; line: string }>(`/lives/${lifeId}/apply`, {
+      method: 'POST',
+      body: JSON.stringify({ trackId }),
+    }),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
 
   buy: (lifeId: string, purchasableId: string) =>

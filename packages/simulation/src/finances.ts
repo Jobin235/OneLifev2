@@ -92,9 +92,29 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
   const expenses = f.annualExpenses + assetCosts + dependentCost;
   // Each debt carries its own rate, so a family loan does not compound like a
   // credit card and the player can see which one is eating them.
+  /*
+   * Two rules keep debt from becoming arithmetic rather than a story.
+   *
+   * A student loan is written off after thirty years, which is roughly how they
+   * actually work and stops one at nineteen compounding to $1.5M by seventy-five
+   * on somebody who never earned enough to pay a penny of it.
+   *
+   * And nothing compounds in a year where the character could not cover their
+   * own costs — a lender pursuing someone with no income does not turn them into
+   * a millionaire debtor, and the going-without penalty is already the cost of
+   * that year.
+   */
+  const age = character.age;
+  f.debts = f.debts.filter(
+    (d) => !(d.label.startsWith('Student loan') && age - d.takenAtAge >= 30),
+  );
+
   const before = f.debt;
-  for (const debt of f.debts) {
-    debt.balance += Math.round(debt.balance * debt.rate);
+  const couldCover = f.cash + f.savings + f.salary + f.otherIncome >= f.annualExpenses;
+  if (couldCover) {
+    for (const debt of f.debts) {
+      debt.balance += Math.round(debt.balance * debt.rate);
+    }
   }
   f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
   const debtInterest = f.debt - before;

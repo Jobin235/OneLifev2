@@ -350,6 +350,18 @@ export const moneyView = (state: LifeState, config: GameConfig, content: Content
       ...state.assets.map((a) => a.loanOutstanding > 0),
     ].filter(Boolean).length,
     forSale: shopView(state, content),
+    /** Who you owe, what for, and at what rate. */
+    debts: state.character.finances.debts
+      .slice()
+      .sort((a, b) => b.balance - a.balance)
+      .map((d) => ({
+        id: d.id,
+        label: d.label,
+        holder: d.holder,
+        balance: formatMoneyExact(d.balance),
+        rate: `${Math.round(d.rate * 100)}% a year`,
+        sinceAge: d.takenAtAge,
+      })),
     owned: [
       ...state.assets.map((a) => ({
         // Only real assets can be sold; a business is closed, not sold off here.

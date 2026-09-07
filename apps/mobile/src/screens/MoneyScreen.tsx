@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { MoneyView, ShopEntry } from '../lib/api';
+import type { DebtLine, MoneyView, ShopEntry } from '../lib/api';
 
 /**
  * Design 3C. Money in plain language — "what you own", "every month" — with a
@@ -69,6 +69,26 @@ export const MoneyScreen = ({
                     Sell
                   </button>
                 )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {money.debts.length > 0 && (
+        <section className="panel">
+          <div className="eyebrow">WHAT YOU OWE</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 14 }}>
+            {money.debts.map((debt: DebtLine) => (
+              <div className="debt-row" key={debt.id}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="owned-label">{debt.label}</div>
+                  {/* The whole point: who wants it back, and what it is costing. */}
+                  <div className="owned-detail">
+                    To {debt.holder} · {debt.rate} · since you were {debt.sinceAge}
+                  </div>
+                </div>
+                <span className="debt-balance">{debt.balance}</span>
               </div>
             ))}
           </div>
