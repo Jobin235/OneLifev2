@@ -15,6 +15,7 @@ const NewLifeBody = z.object({
 });
 
 const RewindBody = z.object({ toAge: z.number().int().min(0) });
+const ManageBody = z.object({ action: z.string().min(1), amenityId: z.string().optional() });
 const TradeBody = z.object({
   stockId: z.string().min(1),
   shares: z.number().int().min(1),
@@ -324,6 +325,31 @@ export const registerLifeRoutes = (
       });
       await lives.putHistory(userId, lifeId, forget(history, toAge));
       return payload;
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/properties', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return { properties: game.properties(state) };
+  });
+
+  app.get('/lives/:lifeId/properties/:assetId/amenities', async (request) => {
+    const { lifeId, assetId } = request.params as { lifeId: string; assetId: string };
+    const state = await load(userOf(request), lifeId);
+    return { amenities: game.amenities(state, assetId) };
+  });
+
+  app.post('/lives/:lifeId/properties/:assetId', async (request, reply) => {
+    const { lifeId, assetId } = request.params as { lifeId: string; assetId: string };
+    const { action, amenityId } = ManageBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        game.manageProperty(state, assetId, action, amenityId);
+        return { life: lifeView(state, game.content), properties: game.properties(state) };
+      });
     } catch (error) {
       return reply.code(statusFor(error)).send({ error: messageFor(error) });
     }

@@ -204,6 +204,9 @@ export const buy = (
       loanOutstanding: borrowed,
       annualCost: item.annualCost,
       acquiredAtAge: state.character.age,
+      condition: 90,
+      amenityIds: [],
+      rental: null,
       meaning: null,
     });
 

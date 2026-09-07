@@ -1,0 +1,90 @@
+[
+  {
+    "id": "rental_applicants",
+    "version": 1,
+    "category": "money",
+    "card": { "icon": "🏠", "label": "LETTING", "tint": "#EAF6F0", "color": "#1F7A56" },
+    "weightClass": "major",
+    "priority": 98,
+    "minAge": 18,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "Three people want it",
+    "body": "Three applications for {flag.let_label}. You can hand over the keys on what they have told you, or pay {flag.let_fee} to find out whether any of it is true.",
+    "question": "Who gets it?",
+    "choices": [
+      {
+        "id": "check",
+        "label": "Run background checks first",
+        "price": "{flag.let_fee}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.let_result_title}",
+            "text": "{flag.let_result}",
+            "historyLine": "{flag.let_history}",
+            "effects": [{ "op": "let_property", "pick": "check" }]
+          }
+        ]
+      },
+      {
+        "id": "a",
+        "label": "{flag.let_a_name}",
+        "price": "{flag.let_a_price}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.let_result_title}",
+            "text": "{flag.let_result}",
+            "historyLine": "{flag.let_history}",
+            "effects": [{ "op": "let_property", "pick": "a" }]
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "label": "{flag.let_b_name}",
+        "price": "{flag.let_b_price}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.let_result_title}",
+            "text": "{flag.let_result}",
+            "historyLine": "{flag.let_history}",
+            "effects": [{ "op": "let_property", "pick": "b" }]
+          }
+        ]
+      },
+      {
+        "id": "c",
+        "label": "{flag.let_c_name}",
+        "price": "{flag.let_c_price}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.let_result_title}",
+            "text": "{flag.let_result}",
+            "historyLine": "{flag.let_history}",
+            "effects": [{ "op": "let_property", "pick": "c" }]
+          }
+        ]
+      },
+      {
+        "id": "none",
+        "label": "None of them",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.let_result_title}",
+            "text": "{flag.let_result}",
+            "historyLine": "{flag.let_history}",
+            "effects": [{ "op": "let_property", "pick": "none" }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]

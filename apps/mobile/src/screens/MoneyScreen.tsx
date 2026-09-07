@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { DebtLine, MarketView, MoneyView, ShopEntry } from '../lib/api';
+import type { DebtLine, MarketView, MoneyView, PropertyRow, ShopEntry } from '../lib/api';
 
 /**
  * Design 3C. Money in plain language — "what you own", "every month" — with a
@@ -12,6 +12,8 @@ export const MoneyScreen = ({
   onBuy,
   onSell,
   onOpenMarket,
+  properties,
+  onOpenProperties,
 }: {
   money: MoneyView;
   market: MarketView | null;
@@ -19,6 +21,8 @@ export const MoneyScreen = ({
   onBuy: (purchasableId: string, onFinance: boolean) => void;
   onSell: (assetId: string) => void;
   onOpenMarket: () => void;
+  properties: PropertyRow[];
+  onOpenProperties: () => void;
 }) => {
   /*
    * Open. The shop was behind a "+" and stayed shut, which on a screen the
@@ -76,6 +80,23 @@ export const MoneyScreen = ({
             ))}
           </div>
         </section>
+      )}
+
+      {properties.length > 0 && (
+        <button className="act-row mk-entry" onClick={onOpenProperties}>
+          <span className="act-icon">🏠</span>
+          <span className="act-text">
+            <span className="act-label">Property</span>
+            <span className="act-note">
+              {(() => {
+                const let_ = properties.filter((p) => p.tenant).length;
+                if (let_ === 0) return `${properties.length} owned, none let`;
+                return `${let_} let · ${properties.length - let_} empty`;
+              })()}
+            </span>
+          </span>
+          <span className="act-chev">›</span>
+        </button>
       )}
 
       {/* The market is a place you go, the way BitLife puts it under Assets. */}

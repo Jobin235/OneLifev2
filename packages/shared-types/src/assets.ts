@@ -23,6 +23,37 @@ export const AssetSchema = z.object({
   acquiredAtAge: z.number().int().min(0),
   /** Sentimental weight: the childhood home is not just its market value. */
   meaning: z.string().nullable(),
+  /**
+   * 0..100. Falls every year and faster with somebody living in it; decides
+   * what the place is worth, what it lets for, and how long a tenant stays.
+   */
+  condition: z.number().int().min(0).max(100).default(90),
+  /** Upgrades that raise the value, the rent, and what a tenant puts up with. */
+  amenityIds: z.array(z.string()).default([]),
+  /** Set while somebody is living in it and paying you for the privilege. */
+  rental: z
+    .object({
+      tenantName: z.string(),
+      tenantEmoji: z.string(),
+      /** What they pay you a year, and what you are holding of theirs. */
+      rentAnnual: MoneySchema,
+      deposit: MoneySchema,
+      sinceAge: z.number().int().min(0),
+      /** 0..100. Falls with neglect and rent rises; a tenant who hates it leaves. */
+      satisfaction: z.number().int().min(0).max(100),
+      /** Years of rent they owe you. Two is a case; three is a disaster. */
+      yearsUnpaid: z.number().int().min(0).default(0),
+      /**
+       * What they are actually like — hidden until you pay for a background
+       * check, which is the whole point of paying for one.
+       */
+      character: z.enum(['careful', 'ordinary', 'trouble']),
+      checked: z.boolean().default(false),
+      /** One line about them, shown once you know it. */
+      note: z.string().default(''),
+    })
+    .nullable()
+    .default(null),
 });
 export type Asset = z.infer<typeof AssetSchema>;
 

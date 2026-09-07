@@ -249,6 +249,38 @@ export interface StockRow {
   affordable: boolean;
 }
 
+export interface PropertyRow {
+  assetId: string;
+  label: string;
+  emoji: string;
+  value: string;
+  condition: number;
+  conditionWord: string;
+  tenant: {
+    name: string;
+    emoji: string;
+    rent: string;
+    satisfaction: number;
+    satisfactionWord: string;
+    since: string;
+    arrears: string | null;
+    note: string;
+  } | null;
+  marketRent: string;
+  amenities: string[];
+  actions: Array<{ id: string; label: string; note: string; price: string; available: boolean }>;
+}
+
+export interface AmenityRow {
+  id: string;
+  label: string;
+  emoji: string;
+  note: string;
+  price: string;
+  available: boolean;
+  owned: boolean;
+}
+
 export interface MarketView {
   rows: StockRow[];
   total: string;
@@ -422,6 +454,14 @@ export interface Api {
   school(lifeId: string): Promise<SchoolView | null>;
   prison(lifeId: string): Promise<PrisonView | null>;
   market(lifeId: string): Promise<MarketView>;
+  properties(lifeId: string): Promise<PropertyRow[]>;
+  amenities(lifeId: string, assetId: string): Promise<AmenityRow[]>;
+  manageProperty(
+    lifeId: string,
+    assetId: string,
+    action: string,
+    amenityId?: string,
+  ): Promise<{ life: LifeView; properties: PropertyRow[] }>;
   trade(
     lifeId: string,
     stockId: string,
@@ -507,6 +547,20 @@ export const httpApi: Api = {
     request<PrisonView>(`/lives/${lifeId}/prison`).catch(() => null),
 
   market: (lifeId: string) => request<MarketView>(`/lives/${lifeId}/market`),
+
+  properties: (lifeId: string) =>
+    request<{ properties: PropertyRow[] }>(`/lives/${lifeId}/properties`).then((r) => r.properties),
+
+  amenities: (lifeId: string, assetId: string) =>
+    request<{ amenities: AmenityRow[] }>(`/lives/${lifeId}/properties/${assetId}/amenities`).then(
+      (r) => r.amenities,
+    ),
+
+  manageProperty: (lifeId: string, assetId: string, action: string, amenityId?: string) =>
+    request<{ life: LifeView; properties: PropertyRow[] }>(`/lives/${lifeId}/properties/${assetId}`, {
+      method: 'POST',
+      body: JSON.stringify({ action, amenityId }),
+    }),
 
   trade: (lifeId: string, stockId: string, shares: number, sell: boolean) =>
     request<{ life: LifeView; market: MarketView }>(`/lives/${lifeId}/trade`, {

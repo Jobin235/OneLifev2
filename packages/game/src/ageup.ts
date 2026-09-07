@@ -32,6 +32,7 @@ import { advanceNpcYear } from '@lineage/npc-engine';
 import { inheritanceFrom, runNpcNews } from './npcnews.js';
 import { openSymptom } from './health.js';
 import { reportMarketYear } from './stocks.js';
+import { advanceProperties } from './landlord.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -223,6 +224,7 @@ export const advanceYear = (
 
   for (const business of state.businesses) advanceBusinessYear(business, world, rng);
   driftAssetValues(state, rng);
+  advanceProperties(state, rng);
   reportMarketYear(state, content, world);
   serveTime(state);
 

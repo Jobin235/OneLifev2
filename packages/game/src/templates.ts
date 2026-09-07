@@ -10,6 +10,9 @@ export const ASSET_TEMPLATES: Record<string, Omit<Asset, 'id' | 'acquiredAtAge'>
     loanOutstanding: 6_100_000,
     annualCost: 1_400_000,
     meaning: 'You grew up in it. Your parents nearly lost it.',
+    condition: 90,
+    amenityIds: [],
+    rental: null,
   },
   first_house: {
     kind: 'house',
@@ -19,6 +22,9 @@ export const ASSET_TEMPLATES: Record<string, Omit<Asset, 'id' | 'acquiredAtAge'>
     loanOutstanding: 19_000_000,
     annualCost: 1_800_000,
     meaning: null,
+    condition: 90,
+    amenityIds: [],
+    rental: null,
   },
   apartment: {
     kind: 'apartment',
@@ -28,6 +34,9 @@ export const ASSET_TEMPLATES: Record<string, Omit<Asset, 'id' | 'acquiredAtAge'>
     loanOutstanding: 9_000_000,
     annualCost: 900_000,
     meaning: null,
+    condition: 90,
+    amenityIds: [],
+    rental: null,
   },
   car: {
     kind: 'car',
@@ -37,6 +46,9 @@ export const ASSET_TEMPLATES: Record<string, Omit<Asset, 'id' | 'acquiredAtAge'>
     loanOutstanding: 0,
     annualCost: 240_000,
     meaning: null,
+    condition: 90,
+    amenityIds: [],
+    rental: null,
   },
 };
 

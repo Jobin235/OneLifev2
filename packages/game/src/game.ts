@@ -32,6 +32,7 @@ import { NEUTRAL_INDICATORS } from '@lineage/world';
 import { advanceYear, applyDeferred, pushHistory, type AgeUpResult } from './ageup.js';
 import { toAncestor } from './death.js';
 import { buyShares, marketView, sellShares } from './stocks.js';
+import { amenitiesFor, manageProperty, propertiesView } from './landlord.js';
 
 export interface GameOptions {
   /**
@@ -412,6 +413,19 @@ export class Game {
 
   sell(state: LifeState, assetId: string) {
     return sell(state, assetId, this.config);
+  }
+
+  /** Everywhere you own that somebody could live in, and its state. */
+  properties(state: LifeState) {
+    return propertiesView(state);
+  }
+
+  amenities(state: LifeState, assetId: string) {
+    return amenitiesFor(state, assetId);
+  }
+
+  manageProperty(state: LifeState, assetId: string, action: string, amenityId?: string) {
+    return manageProperty(state, assetId, action, this.content, this.config, amenityId);
   }
 
   /** The market, what it costs, and what you are holding. */

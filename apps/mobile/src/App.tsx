@@ -5,8 +5,10 @@ import type {
   ActionCard,
   CountryOption,
   LifeView,
+  AmenityRow,
   MarketView,
   MoneyView,
+  PropertyRow,
   PeopleView,
   PersonView,
   Opening,
@@ -29,6 +31,7 @@ import { PrisonScreen } from './screens/PrisonScreen';
 import { RewindScreen } from './screens/RewindScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { MarketScreen } from './screens/MarketScreen';
+import { PropertyScreen } from './screens/PropertyScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
@@ -68,6 +71,8 @@ export const App = () => {
   const [rewinds, setRewinds] = useState<RewindOption[]>([]);
   const [market, setMarket] = useState<MarketView | null>(null);
   const [showMarket, setShowMarket] = useState(false);
+  const [properties, setProperties] = useState<PropertyRow[]>([]);
+  const [showProperties, setShowProperties] = useState(false);
   const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
@@ -151,9 +156,14 @@ export const App = () => {
         }
         if (slot === 'activities') setActions((await api.actions(lifeId)).actions);
         if (slot === 'assets') {
-          const [worth, board] = await Promise.all([api.money(lifeId), api.market(lifeId)]);
+          const [worth, board, owned] = await Promise.all([
+            api.money(lifeId),
+            api.market(lifeId),
+            api.properties(lifeId),
+          ]);
           setMoney(worth);
           setMarket(board);
+          setProperties(owned);
         }
       } catch {
         /* A stale sheet is better than a crash; the log stays authoritative. */
@@ -290,6 +300,26 @@ export const App = () => {
       void api.money(life.lifeId).then(setMoney);
     },
     [life, run, setLifeAndRemember],
+  );
+
+  const onManageProperty = useCallback(
+    async (assetId: string, action: string, amenityId?: string) => {
+      if (!life) return;
+      const result = await run(() => api.manageProperty(life.lifeId, assetId, action, amenityId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setProperties(result.properties);
+      // Letting somewhere raises the applicant popup, which lives over the sheet.
+      if (result.life.activeEvent) setSlot(null);
+      void api.money(life.lifeId).then(setMoney);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const loadAmenities = useCallback(
+    async (assetId: string): Promise<AmenityRow[]> =>
+      life ? await api.amenities(life.lifeId, assetId) : [],
+    [life],
   );
 
   const onRewind = useCallback(
@@ -447,7 +477,26 @@ export const App = () => {
           </Sheet>
         )}
 
+        {slot === 'assets' && showProperties && (
+          <Sheet
+            title="Property"
+            onBack={() => setShowProperties(false)}
+            onClose={() => {
+              setShowProperties(false);
+              setSlot(null);
+            }}
+          >
+            <PropertyScreen
+              properties={properties}
+              busy={busy}
+              loadAmenities={loadAmenities}
+              onManage={onManageProperty}
+            />
+          </Sheet>
+        )}
+
         {slot === 'assets' &&
+          !showProperties &&
           (showMarket ? (
             <Sheet
               title="Stock Market"
@@ -473,6 +522,8 @@ export const App = () => {
                   onBuy={onBuy}
                   onSell={onSell}
                   onOpenMarket={() => setShowMarket(true)}
+                  properties={properties}
+                  onOpenProperties={() => setShowProperties(true)}
                 />
               ) : (
                 <div className="spinner">…</div>

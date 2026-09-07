@@ -3382,3 +3382,62 @@ button {
   border-radius: var(--r-tile);
   box-shadow: 0 3px 0 var(--ink);
 }
+
+/* ---- property management ---- */
+
+.pm-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.pm-body {
+  margin-top: 14px;
+}
+
+.pm-meter + .pm-meter {
+  margin-top: 10px;
+}
+
+.pm-meter-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--body);
+}
+
+.pm-note {
+  margin: 12px 0 2px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.pm-refs,
+.pm-amenities {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.pm-amenities {
+  margin-top: 10px;
+  color: var(--green-text);
+  font-weight: 800;
+}
+
+/* `owned-label` and `owned-detail` are inline where they are reused; inside a
+   property row they are two stacked lines. */
+.pm-head .owned-label,
+.pm-head .owned-detail {
+  display: block;
+}

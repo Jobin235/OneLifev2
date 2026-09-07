@@ -156,6 +156,8 @@ export const EffectSchema = z.discriminatedUnion('op', [
   }),
   /** Picks one of the three firms on the charge sheet. */
   z.object({ op: z.literal('hire_lawyer'), tier: z.number().int().min(0).max(2) }),
+  /** Picks a tenant off the applicant list, or pays to check them first. */
+  z.object({ op: z.literal('let_property'), pick: z.enum(['a', 'b', 'c', 'check', 'none']) }),
   /** Answers the charge. */
   z.object({ op: z.literal('enter_plea'), how: z.enum(['guilty', 'not_guilty', 'no_contest']) }),
   /** How you are getting on inside. Parole reads it; so do the guards. */

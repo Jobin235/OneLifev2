@@ -7,6 +7,7 @@ import { settleInterview } from './interview.js';
 import { settleTreatment } from './health.js';
 import { openLoveInterest, settleLoveInterest } from './love.js';
 import { openCharges, settleLawyer, settlePlea } from './justice.js';
+import { settleLetting } from './landlord.js';
 import { hireInto } from './jobs.js';
 import { ASSET_TEMPLATES, BUSINESS_TEMPLATES, businessNameFor } from './templates.js';
 
@@ -129,6 +130,11 @@ export const applyDeferred = (
         break;
       }
 
+      case 'let_property': {
+        settleLetting(state, effect.pick, content, rng);
+        break;
+      }
+
       case 'enter_plea': {
         settlePlea(state, effect.how);
         break;
@@ -199,6 +205,9 @@ export const applyDeferred = (
           ...template,
           id: makeId('ast', state.seed, effect.assetId, state.step),
           acquiredAtAge: state.character.age,
+          condition: 90,
+          amenityIds: [],
+          rental: null,
         });
         break;
       }
