@@ -1,0 +1,47 @@
+[
+  {
+    "id": "love_interest",
+    "version": 1,
+    "category": "relationship",
+    "card": { "icon": "❤️", "label": "LOVE", "tint": "#FDE9F1", "color": "#C25585" },
+    "weightClass": "major",
+    "priority": 96,
+    "minAge": 15,
+    "maxAge": 100,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "Love Interest",
+    "body": "You've met somebody called {flag.love_first}.",
+    "question": "What will you do?",
+    "choices": [
+      {
+        "id": "ask_out",
+        "label": "Ask {flag.love_first} out",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.love_result_title}",
+            "text": "{flag.love_result}",
+            "historyLine": "{flag.love_history}",
+            "effects": [{ "op": "court", "askedOut": true }]
+          }
+        ]
+      },
+      {
+        "id": "no_thanks",
+        "label": "Not my type",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.love_result_title}",
+            "text": "{flag.love_result}",
+            "historyLine": "{flag.love_history}",
+            "effects": [{ "op": "court", "askedOut": false }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]

@@ -130,6 +130,17 @@ export const EffectSchema = z.discriminatedUnion('op', [
    * hire chance — which is what turns "a job appeared" into "you got the job".
    */
   z.object({ op: z.literal('interview_answer'), fit: z.number().int().min(-2).max(2) }),
+  /**
+   * Takes the treatment on the symptom popup currently on screen. `option` is
+   * the index of the row the player picked, which is what decides the fee and
+   * the odds — the details live in flags because they belong to this particular
+   * illness and this particular pair of doctors, not to the definition.
+   */
+  z.object({ op: z.literal('treatment'), option: z.number().int().min(0).max(3) }),
+  /** Answers the love-interest card currently on screen. */
+  z.object({ op: z.literal('court'), askedOut: z.boolean() }),
+  /** Goes looking. Raises a love-interest card rather than changing anything. */
+  z.object({ op: z.literal('meet_someone') }),
   /** How you are getting on inside. Parole reads it; so do the guards. */
   z.object({ op: z.literal('behaviour'), delta: z.number().int() }),
   /**
@@ -244,6 +255,16 @@ export const ChoiceSchema = z.object({
   label: z.string().min(1),
   /** Optional right-hand annotation: "$2,400", "risky", "caught 34%". */
   note: z.string().optional(),
+  /**
+   * A price on the button, and a bar for what it buys.
+   *
+   * This is the shape BitLife uses wherever money changes the odds — three law
+   * firms at $1,270 / $13,970 / free, two doctors with reputation bars — and it
+   * makes "pay more for better odds" legible without any arithmetic. The bar is
+   * 0..100 and is drawn, not stated.
+   */
+  price: z.string().optional(),
+  quality: z.number().int().min(0).max(100).optional(),
   /** Hidden gate — an unaffordable or ineligible choice is not offered. */
   requires: ConditionSchema.optional(),
   /**
@@ -368,6 +389,18 @@ export const EventInstanceSchema = z.object({
   body: z.string(),
   question: z.string().default('What will you do?'),
   stake: z.object({ label: z.string(), value: z.string() }).nullable().default(null),
+  /**
+   * A fact sheet above the buttons: Name / Gender / Age / Occupation / House.
+   * How BitLife introduces a stranger you are being asked to judge.
+   */
+  facts: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
+  /**
+   * Bars beside it — Looks, Smarts, Money, Craziness. Drawn rather than
+   * numbered, because the player is meant to glance and decide.
+   */
+  meters: z
+    .array(z.object({ label: z.string(), value: z.number().int().min(0).max(100) }))
+    .default([]),
   /** Resolved dropdowns: the options are real by the time the client sees them. */
   selects: z
     .array(
@@ -383,6 +416,8 @@ export const EventInstanceSchema = z.object({
       id: z.string(),
       label: z.string(),
       note: z.string().optional(),
+      price: z.string().optional(),
+      quality: z.number().int().min(0).max(100).optional(),
       confirm: z.string().optional(),
       disabled: z.boolean().optional(),
     }),

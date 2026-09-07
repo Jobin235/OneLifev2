@@ -3052,3 +3052,95 @@ button {
   font-weight: 800;
   color: var(--ink);
 }
+
+/* ---- the popup's fact sheet and bars ---- */
+
+.sh-facts {
+  margin: 12px 0;
+  padding: 9px 11px;
+  border-radius: var(--r-cell);
+  background: var(--app-bg);
+  text-align: left;
+}
+
+.sh-fact {
+  display: flex;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.sh-fact dt {
+  flex: 0 0 84px;
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--label);
+}
+
+.sh-fact dd {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sh-meters {
+  margin: 12px 0;
+}
+
+.sh-meter {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.sh-meter-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--body);
+  text-align: left;
+}
+
+.sh-meter-track,
+.sh-btn-track {
+  display: block;
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--track);
+  overflow: hidden;
+}
+
+.sh-meter-fill,
+.sh-btn-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--violet);
+}
+
+/* A priced button: what it costs on the right, what it buys underneath. */
+.sh-btn-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.sh-btn-price {
+  flex: none;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--green-text);
+}
+
+.sh-btn-track {
+  margin-top: 6px;
+}
+
+.sh-btn-fill {
+  background: var(--amber);
+}

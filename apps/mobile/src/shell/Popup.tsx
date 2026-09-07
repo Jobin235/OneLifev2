@@ -75,6 +75,36 @@ export const Popup = ({
             </p>
           ))}
 
+          {/*
+            A fact sheet and a set of bars: how BitLife introduces a stranger you
+            are being asked to judge, and how it shows what money buys. Both are
+            meant to be glanced at, which is why the meters are drawn rather than
+            numbered.
+          */}
+          {event.facts.length > 0 && (
+            <dl className="sh-facts">
+              {event.facts.map((fact) => (
+                <div className="sh-fact" key={fact.label}>
+                  <dt>{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          {event.meters.length > 0 && (
+            <div className="sh-meters">
+              {event.meters.map((meter) => (
+                <div className="sh-meter" key={meter.label}>
+                  <span className="sh-meter-label">{meter.label}</span>
+                  <span className="sh-meter-track">
+                    <span className="sh-meter-fill" style={{ width: `${Math.max(meter.value, 2)}%` }} />
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
           {event.stake && (
             <div className="sh-popup-stake">
               <span>{event.stake.label}</span>
@@ -114,7 +144,18 @@ export const Popup = ({
                 disabled={busy || choice.disabled}
                 onClick={() => pick(choice)}
               >
-                {choice.label}
+                <span className="sh-btn-line">
+                  <span>{choice.label}</span>
+                  {choice.price && <span className="sh-btn-price">{choice.price}</span>}
+                </span>
+                {choice.quality !== undefined && (
+                  <span className="sh-btn-track">
+                    <span
+                      className="sh-btn-fill"
+                      style={{ width: `${Math.max(choice.quality, 3)}%` }}
+                    />
+                  </span>
+                )}
                 {choice.note && <span className="sh-btn-note">{choice.note}</span>}
               </button>
             ))}

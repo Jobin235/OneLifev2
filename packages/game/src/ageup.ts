@@ -30,6 +30,7 @@ import {
 } from '@lineage/simulation';
 import { advanceNpcYear } from '@lineage/npc-engine';
 import { inheritanceFrom, runNpcNews } from './npcnews.js';
+import { openSymptom } from './health.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -215,7 +216,26 @@ export const advanceYear = (
   serveTime(state);
 
   // 4. Health, then money.
-  if (country) rollNewConditions(state, country, rng);
+  /*
+   * A new condition raises a symptom rather than appearing in the log fully
+   * diagnosed. Getting ill is one of the few things in a life that is
+   * unambiguously a decision about money, and it used to be a number quietly
+   * falling — see docs/BITLIFE-LOOP-SPEC.md §5.
+   *
+   * Only the first of a year gets the popup; a second one that year is recorded
+   * and left for a later year to raise, because two symptom cards back to back
+   * reads as the game malfunctioning.
+   */
+  if (country) {
+    const found = rollNewConditions(state, country, rng);
+    const untreated = found.find((f) => !f.treated);
+    const condition = untreated
+      ? state.character.conditions.find((c) => c.id === untreated.id)
+      : undefined;
+    if (condition && !state.activeEvent) {
+      openSymptom(state, condition, country.healthcare.patientShare, content, rng);
+    }
+  }
   const city = country?.cities.find((c) => c.id === state.character.cityId);
   updateCostOfLiving(state, config, city?.costOfLiving ?? 1);
   const money = settleYear(state, config);

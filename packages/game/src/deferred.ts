@@ -4,6 +4,8 @@ import type { CareerTrack, EducationStage, Effect, LifeState } from '@lineage/sh
 import { makeId, promote, type Rng } from '@lineage/simulation';
 import { bearChild, spawnNpc } from '@lineage/npc-engine';
 import { settleInterview } from './interview.js';
+import { settleTreatment } from './health.js';
+import { openLoveInterest, settleLoveInterest } from './love.js';
 import { hireInto } from './jobs.js';
 import { ASSET_TEMPLATES, BUSINESS_TEMPLATES, businessNameFor } from './templates.js';
 
@@ -103,6 +105,21 @@ export const applyDeferred = (
             }
           }
         }
+        break;
+      }
+
+      case 'meet_someone': {
+        if (country) openLoveInterest(state, country, content, rng);
+        break;
+      }
+
+      case 'court': {
+        if (country) settleLoveInterest(state, effect.askedOut, country);
+        break;
+      }
+
+      case 'treatment': {
+        settleTreatment(state, effect.option);
         break;
       }
 

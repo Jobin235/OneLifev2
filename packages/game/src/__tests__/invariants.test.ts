@@ -111,6 +111,9 @@ describe('the rules the client cannot be trusted with', () => {
       state = game.ageUp(state).state;
       if (state.activeEvent) state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
     }
+    // This is about the absence of a budget, not about prison, and `act` now
+    // enforces the prison rules the list draws.
+    state.character.record.incarceration = null;
     // Fifteen distinct actions in one year, none of them refused for "no actions left".
     for (let i = 0; i < 15; i++) {
       expect(() => game.act(state, 'call_your_mom')).not.toThrow();
@@ -125,6 +128,7 @@ describe('the rules the client cannot be trusted with', () => {
       state = game.ageUp(state).state;
       if (state.activeEvent) state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
     }
+    state.character.record.incarceration = null;
     state.character.finances.cash = 0;
     state.character.finances.savings = 0;
     expect(() => game.act(state, 'travel')).toThrow(/afford/);

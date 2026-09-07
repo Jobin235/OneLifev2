@@ -20,6 +20,14 @@ describe('crime', () => {
     while (state.activeEvent) {
       state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
     }
+    /*
+     * Free, whatever the dice did on the way here. These tests are about
+     * committing a crime and being sent down for it, which needs a character who
+     * is not already inside — and `act` now refuses anything the prison rules
+     * forbid, so a fixture that happened to land in prison would fail on the
+     * first line rather than the assertion.
+     */
+    state.character.record.incarceration = null;
     return state;
   };
 

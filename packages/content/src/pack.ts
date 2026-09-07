@@ -62,7 +62,7 @@ export const ActivitySchema = z.object({
    * would simply be a better "Get in shape".
    */
   onlyWhen: z
-    .enum(['anywhere', 'incarcerated', 'enrolled', 'employed', 'unemployed'])
+    .enum(['anywhere', 'incarcerated', 'enrolled', 'employed', 'unemployed', 'single', 'partnered'])
     .default('anywhere'),
   /** Deterministic effects, using the same effect vocabulary as events. */
   effects: z.array(z.unknown()).default([]),

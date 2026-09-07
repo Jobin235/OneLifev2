@@ -1,0 +1,101 @@
+[
+  {
+    "id": "health_symptom",
+    "version": 1,
+    "category": "health",
+    "card": {
+      "icon": "🩺",
+      "label": "SYMPTOM",
+      "tint": "#E9F4EE",
+      "color": "#1F7A56"
+    },
+    "weightClass": "major",
+    "priority": 97,
+    "minAge": 14,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "Something is wrong",
+    "body": "You have been putting it off, and it has not gone away. A doctor would call it {flag.symptom_label_a}.",
+    "question": "What will you do?",
+    "choices": [
+      {
+        "id": "ignore",
+        "label": "It doesn't bother me",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.symptom_result_title}",
+            "text": "{flag.symptom_result}",
+            "historyLine": "{flag.symptom_history}",
+            "effects": [
+              {
+                "op": "treatment",
+                "option": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "over_the_counter",
+        "label": "Take something for it",
+        "price": "$12",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.symptom_result_title}",
+            "text": "{flag.symptom_result}",
+            "historyLine": "{flag.symptom_history}",
+            "effects": [
+              {
+                "op": "treatment",
+                "option": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "see_cheap",
+        "label": "See {flag.symptom_cheap_name}",
+        "price": "{flag.symptom_cheap_price}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.symptom_result_title}",
+            "text": "{flag.symptom_result}",
+            "historyLine": "{flag.symptom_history}",
+            "effects": [
+              {
+                "op": "treatment",
+                "option": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "see_good",
+        "label": "See {flag.symptom_good_name}",
+        "price": "{flag.symptom_good_price}",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.symptom_result_title}",
+            "text": "{flag.symptom_result}",
+            "historyLine": "{flag.symptom_history}",
+            "effects": [
+              {
+                "op": "treatment",
+                "option": 3
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]

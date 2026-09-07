@@ -246,50 +246,67 @@ const GROUP_TINT: Record<string, { tint: string; noteColor: string }> = {
  * existed, so there was nothing to grow into and no reason to look again next
  * year. See docs/BITLIFE-LOOP-SPEC.md §5.
  */
-export const actionsView = (state: LifeState, content: ContentPack) => {
-  const liquid = state.character.finances.cash + state.character.finances.savings;
+/**
+ * Why an activity is not available, or null when it is. Order is deliberate.
+ *
+ * Exported because the server has to apply the same rule the list shows. It used
+ * to live inside the view, so `act` checked only the age and would happily let a
+ * request through for something the screen had greyed out — the client was the
+ * only thing enforcing a rule the server owns.
+ */
+export const activityLock = (state: LifeState, a: Activity): string | null => {
   const inside = state.character.record.incarceration !== null;
   const enrolled = state.education.current !== null;
   const employed = state.career.current !== null;
 
-  /** Why this is not available, or null when it is. Order is deliberate. */
-  const lockedBy = (a: Activity): string | null => {
-    if (state.character.age < a.minAge) return `You have to be ${a.minAge}`;
-    if (state.character.age > a.maxAge) return 'That time has passed';
+  if (state.character.age < a.minAge) return `You have to be ${a.minAge}`;
+  if (state.character.age > a.maxAge) return 'That time has passed';
 
-    if (a.onlyWhen === 'incarcerated') {
-      if (!inside) return 'Only in prison';
-      // Parole is a door that has to be open before it is worth asking about.
-      if (a.id === 'prison_parole') {
-        const left = state.character.record.incarceration!.paroleEligibleIn;
-        return left > 0 ? `Not eligible for ${left} more ${left === 1 ? 'year' : 'years'}` : null;
-      }
-      return null;
-    }
-    if (inside) {
-      const allowedInside = a.group === 'body_and_head' || a.id === 'study';
-      return allowedInside ? null : 'Not from in here';
-    }
-    if (a.onlyWhen === 'enrolled' || a.group === 'school') {
-      return enrolled ? null : 'You are not at school';
-    }
-    if (a.onlyWhen === 'employed' || a.group === 'work') {
-      return employed ? null : 'You need a job first';
-    }
-    if (a.onlyWhen === 'unemployed') {
-      return !employed && !state.career.retired ? null : 'You already have work';
-    }
-    if (a.group === 'relationship') {
-      if (a.id === 'call_your_mom') {
-        const mother = state.relationships.find((r) => r.kind === 'mother');
-        const alive = mother && state.npcs.find((n) => n.id === mother.npcId)?.alive;
-        return alive ? null : 'There is nobody to call';
-      }
-      const partner = state.relationships.some((r) => r.kind === 'partner' || r.kind === 'spouse');
-      return partner ? null : 'You are not seeing anyone';
+  if (a.onlyWhen === 'incarcerated') {
+    if (!inside) return 'Only in prison';
+    // Parole is a door that has to be open before it is worth asking about.
+    if (a.id === 'prison_parole') {
+      const left = state.character.record.incarceration!.paroleEligibleIn;
+      return left > 0 ? `Not eligible for ${left} more ${left === 1 ? 'year' : 'years'}` : null;
     }
     return null;
-  };
+  }
+  if (inside) {
+    const allowedInside = a.group === 'body_and_head' || a.id === 'study';
+    return allowedInside ? null : 'Not from in here';
+  }
+  if (a.onlyWhen === 'enrolled' || a.group === 'school') {
+    return enrolled ? null : 'You are not at school';
+  }
+  if (a.onlyWhen === 'employed' || a.group === 'work') {
+    return employed ? null : 'You need a job first';
+  }
+  if (a.onlyWhen === 'unemployed') {
+    return !employed && !state.career.retired ? null : 'You already have work';
+  }
+
+  const seeingSomeone = state.relationships.some(
+    (r) => r.kind === 'partner' || r.kind === 'spouse',
+  );
+  if (a.onlyWhen === 'single') return seeingSomeone ? 'You are seeing someone' : null;
+  if (a.onlyWhen === 'partnered') return seeingSomeone ? null : 'You are not seeing anyone';
+
+  if (a.group === 'relationship') {
+    if (a.id === 'call_your_mom') {
+      const mother = state.relationships.find((r) => r.kind === 'mother');
+      const alive = mother && state.npcs.find((n) => n.id === mother.npcId)?.alive;
+      return alive ? null : 'There is nobody to call';
+    }
+    return seeingSomeone ? null : 'You are not seeing anyone';
+  }
+  return null;
+};
+
+export const actionsView = (state: LifeState, content: ContentPack) => {
+  const liquid = state.character.finances.cash + state.character.finances.savings;
+  const inside = state.character.record.incarceration !== null;
+
+  const lockedBy = (a: Activity): string | null => activityLock(state, a);
 
   return content.activities
     /*

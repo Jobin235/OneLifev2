@@ -183,6 +183,8 @@ export const instantiate = (
       label: interpolate(choice.label, state, bindings),
       ...(choice.note ? { note: interpolate(choice.note, state, bindings) } : {}),
       ...(choice.confirm ? { confirm: interpolate(choice.confirm, state, bindings) } : {}),
+      ...(choice.price ? { price: interpolate(choice.price, state, bindings) } : {}),
+      ...(choice.quality !== undefined ? { quality: choice.quality } : {}),
     }));
 
   /*
@@ -222,6 +224,13 @@ export const instantiate = (
           ? select.options
           : (SELECT_CATALOGUES[select.optionsFrom ?? ''] ?? [{ value: 'none', label: '—' }]),
     })),
+    /*
+     * Filled by whatever put this popup on screen — the fact sheet and the bars
+     * belong to a specific person or offer, not to the definition, so content
+     * declares the shape and the simulation supplies the values.
+     */
+    facts: [],
+    meters: [],
     stake: definition.stake
       ? {
           label: definition.stake.label,

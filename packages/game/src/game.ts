@@ -1,7 +1,7 @@
 import { interact, interactionsFor } from './interact.js';
 import { applyFor, openings } from './jobs.js';
 import { buy, sell, shopView } from './shop.js';
-import { actionsView, prisonView, schoolView, workView } from './views.js';
+import { actionsView, activityLock, prisonView, schoolView, workView } from './views.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import type {
@@ -293,9 +293,13 @@ export class Game {
     if (!activity) throw new ChoiceRejected(`unknown activity ${activityId}`);
     if (!state.character.alive) throw new ChoiceRejected('a dead character cannot do anything');
     if (state.activeEvent) throw new ChoiceRejected('answer the open decision first');
-    if (state.character.age < activity.minAge || state.character.age > activity.maxAge) {
-      throw new ChoiceRejected('not available at this age');
-    }
+    /*
+     * The same rule the list draws. This used to check only the age, so a
+     * request for something the screen had greyed out went straight through and
+     * the client was the only thing enforcing a rule the server owns.
+     */
+    const locked = activityLock(state, activity);
+    if (locked) throw new ChoiceRejected(locked.toLowerCase());
 
     const used = state.activityUsage[activityId] ?? 0;
     const spent = activity.effectiveTimes > 0 && used >= activity.effectiveTimes;
@@ -356,13 +360,22 @@ export class Game {
 
       state.activityUsage[activityId] = used + 1;
       state.step += 1;
-      pushHistory(
-        state,
-        'random',
-        activity.icon,
-        backfired ? activity.backfire!.line : historyLineFor(activity),
-        backfired ? 35 : 12,
-      );
+
+      /*
+       * An activity whose whole job is to raise a popup writes nothing. The
+       * popup's own outcome is the record of what happened, and "Find someone."
+       * sitting in the log above "You asked Knox Sandoval out and were turned
+       * down." is the same beat told twice, the second time badly.
+       */
+      if (!state.activeEvent) {
+        pushHistory(
+          state,
+          'random',
+          activity.icon,
+          backfired ? activity.backfire!.line : historyLineFor(activity),
+          backfired ? 35 : 12,
+        );
+      }
 
       refreshDerived(state, this.config);
       checkInvariants(state, before);

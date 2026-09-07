@@ -70,6 +70,9 @@ export interface EventChoice {
   id: string;
   label: string;
   note?: string;
+  /** A price on the button, and a bar for what it buys. */
+  price?: string;
+  quality?: number;
   /** Raises a Confirm sheet carrying this sentence before anything happens. */
   confirm?: string;
   disabled?: boolean;
@@ -98,6 +101,10 @@ export interface ActiveEvent {
   }>;
   /** One named quantity: "Possible Sentence: 2 years". */
   stake: { label: string; value: string } | null;
+  /** A fact sheet: Name / Gender / Age / Occupation. */
+  facts: Array<{ label: string; value: string }>;
+  /** Bars beside it: Looks / Smarts / Money / Craziness. */
+  meters: Array<{ label: string; value: number }>;
   choices: EventChoice[];
   outcomeTitle: string | null;
   outcomeText: string | null;

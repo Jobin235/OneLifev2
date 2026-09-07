@@ -1297,5 +1297,22 @@
     ],
     "effectiveTimes": 1,
     "onRepeat": "no_effect"
+  },
+  {
+    "id": "find_a_date",
+    "icon": "❤️",
+    "label": "Find someone",
+    "group": "relationship",
+    "onlyWhen": "single",
+    "minAge": 15,
+    "cost": 0,
+    "note": "meet somebody new",
+    "effects": [
+      {
+        "op": "meet_someone"
+      }
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
   }
 ]

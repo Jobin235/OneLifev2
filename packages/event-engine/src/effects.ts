@@ -467,6 +467,9 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
     case 'spawn_npc':
     case 'child_born':
     case 'interview_answer':
+    case 'treatment':
+    case 'court':
+    case 'meet_someone':
       ctx.deferred.push(effect);
       return null;
 
