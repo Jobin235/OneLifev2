@@ -1,0 +1,443 @@
+[
+  {
+    "id": "hospitality",
+    "label": "Hospitality",
+    "industry": "Hospitality",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "hospitality_0",
+        "title": "Kitchen porter",
+        "salary": 1900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "hospitality_1",
+        "title": "Line cook",
+        "salary": 2600000,
+        "minExperience": 2,
+        "minPerformance": 40
+      },
+      {
+        "id": "hospitality_2",
+        "title": "Sous chef",
+        "salary": 3600000,
+        "minExperience": 5,
+        "minPerformance": 58
+      },
+      {
+        "id": "hospitality_3",
+        "title": "Head chef",
+        "salary": 5200000,
+        "minExperience": 9,
+        "minPerformance": 70
+      },
+      {
+        "id": "hospitality_4",
+        "title": "Restaurant owner",
+        "salary": 7800000,
+        "minExperience": 15,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "catering"
+    ]
+  },
+  {
+    "id": "catering",
+    "label": "Catering",
+    "industry": "Hospitality",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "catering_0",
+        "title": "Catering assistant",
+        "salary": 2100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "catering_1",
+        "title": "Catering manager",
+        "salary": 3400000,
+        "minExperience": 4,
+        "minPerformance": 50
+      },
+      {
+        "id": "catering_2",
+        "title": "Contracts director",
+        "salary": 5600000,
+        "minExperience": 10,
+        "minPerformance": 70
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "cleaning",
+    "label": "Cleaning",
+    "industry": "Facilities",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "cleaning_0",
+        "title": "Cleaner",
+        "salary": 1800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "cleaning_1",
+        "title": "Supervisor",
+        "salary": 2500000,
+        "minExperience": 3,
+        "minPerformance": 45
+      },
+      {
+        "id": "cleaning_2",
+        "title": "Contract manager",
+        "salary": 4100000,
+        "minExperience": 8,
+        "minPerformance": 62
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "security_work",
+    "label": "Security",
+    "industry": "Security",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "security_work_0",
+        "title": "Door supervisor",
+        "salary": 2200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "security_work_1",
+        "title": "Site security",
+        "salary": 2900000,
+        "minExperience": 3,
+        "minPerformance": 45
+      },
+      {
+        "id": "security_work_2",
+        "title": "Head of security",
+        "salary": 4800000,
+        "minExperience": 9,
+        "minPerformance": 68
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "warehouse",
+    "label": "Warehousing",
+    "industry": "Logistics",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "warehouse_0",
+        "title": "Picker",
+        "salary": 2100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "warehouse_1",
+        "title": "Team leader",
+        "salary": 2900000,
+        "minExperience": 3,
+        "minPerformance": 45
+      },
+      {
+        "id": "warehouse_2",
+        "title": "Shift manager",
+        "salary": 4200000,
+        "minExperience": 7,
+        "minPerformance": 60
+      },
+      {
+        "id": "warehouse_3",
+        "title": "Site manager",
+        "salary": 6100000,
+        "minExperience": 13,
+        "minPerformance": 74
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "logistics"
+    ]
+  },
+  {
+    "id": "farming",
+    "label": "Farming",
+    "industry": "Agriculture",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "farming_0",
+        "title": "Farmhand",
+        "salary": 2000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "farming_1",
+        "title": "Stockman",
+        "salary": 2800000,
+        "minExperience": 4,
+        "minPerformance": 48
+      },
+      {
+        "id": "farming_2",
+        "title": "Farm manager",
+        "salary": 4500000,
+        "minExperience": 10,
+        "minPerformance": 66
+      },
+      {
+        "id": "farming_3",
+        "title": "Landowner",
+        "salary": 7200000,
+        "minExperience": 18,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "fishing",
+    "label": "Fishing",
+    "industry": "Agriculture",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {
+      "fitness": 50
+    },
+    "rungs": [
+      {
+        "id": "fishing_0",
+        "title": "Deckhand",
+        "salary": 2400000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "fishing_1",
+        "title": "Bosun",
+        "salary": 3600000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "fishing_2",
+        "title": "Skipper",
+        "salary": 5800000,
+        "minExperience": 10,
+        "minPerformance": 70
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "care_work",
+    "label": "Care work",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "care_work_0",
+        "title": "Care assistant",
+        "salary": 2100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "care_work_1",
+        "title": "Senior carer",
+        "salary": 2800000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "care_work_2",
+        "title": "Home manager",
+        "salary": 4400000,
+        "minExperience": 9,
+        "minPerformance": 66
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "nursing"
+    ]
+  },
+  {
+    "id": "childcare",
+    "label": "Childcare",
+    "industry": "Education",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "childcare_0",
+        "title": "Nursery assistant",
+        "salary": 2000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "childcare_1",
+        "title": "Room leader",
+        "salary": 2700000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "childcare_2",
+        "title": "Nursery manager",
+        "salary": 4200000,
+        "minExperience": 8,
+        "minPerformance": 64
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "delivery",
+    "label": "Delivery driving",
+    "industry": "Transport",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "delivery_0",
+        "title": "Courier",
+        "salary": 2200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "delivery_1",
+        "title": "Van driver",
+        "salary": 2800000,
+        "minExperience": 2,
+        "minPerformance": 42
+      },
+      {
+        "id": "delivery_2",
+        "title": "HGV driver",
+        "salary": 4100000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "delivery_3",
+        "title": "Depot manager",
+        "salary": 5800000,
+        "minExperience": 12,
+        "minPerformance": 72
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "logistics"
+    ]
+  },
+  {
+    "id": "call_centre",
+    "label": "Call centre",
+    "industry": "Services",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "call_centre_0",
+        "title": "Agent",
+        "salary": 2200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "call_centre_1",
+        "title": "Team leader",
+        "salary": 3000000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "call_centre_2",
+        "title": "Operations manager",
+        "salary": 4800000,
+        "minExperience": 9,
+        "minPerformance": 66
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "groundskeeping",
+    "label": "Groundskeeping",
+    "industry": "Facilities",
+    "countryIds": [],
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "groundskeeping_0",
+        "title": "Groundsman",
+        "salary": 2100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "groundskeeping_1",
+        "title": "Head groundsman",
+        "salary": 3200000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "groundskeeping_2",
+        "title": "Estates manager",
+        "salary": 4700000,
+        "minExperience": 11,
+        "minPerformance": 70
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]

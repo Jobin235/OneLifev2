@@ -1,0 +1,380 @@
+[
+  {
+    "id": "academia",
+    "label": "Academia",
+    "industry": "Education",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 78
+    },
+    "rungs": [
+      {
+        "id": "academia_0",
+        "title": "Postdoc",
+        "salary": 3600000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "academia_1",
+        "title": "Lecturer",
+        "salary": 5000000,
+        "minExperience": 3,
+        "minPerformance": 52
+      },
+      {
+        "id": "academia_2",
+        "title": "Senior lecturer",
+        "salary": 6600000,
+        "minExperience": 8,
+        "minPerformance": 66
+      },
+      {
+        "id": "academia_3",
+        "title": "Professor",
+        "salary": 9200000,
+        "minExperience": 15,
+        "minPerformance": 80
+      },
+      {
+        "id": "academia_4",
+        "title": "Head of department",
+        "salary": 11800000,
+        "minExperience": 22,
+        "minPerformance": 88
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "psychiatry",
+    "label": "Psychiatry",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 80
+    },
+    "rungs": [
+      {
+        "id": "psychiatry_0",
+        "title": "Trainee psychiatrist",
+        "salary": 4200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "psychiatry_1",
+        "title": "Psychiatrist",
+        "salary": 7800000,
+        "minExperience": 5,
+        "minPerformance": 58
+      },
+      {
+        "id": "psychiatry_2",
+        "title": "Consultant psychiatrist",
+        "salary": 13200000,
+        "minExperience": 11,
+        "minPerformance": 74
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "veterinary",
+    "label": "Veterinary medicine",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 75
+    },
+    "rungs": [
+      {
+        "id": "veterinary_0",
+        "title": "Veterinary surgeon",
+        "salary": 3800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "veterinary_1",
+        "title": "Senior surgeon",
+        "salary": 5800000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "veterinary_2",
+        "title": "Practice partner",
+        "salary": 8800000,
+        "minExperience": 12,
+        "minPerformance": 72
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "dentistry",
+    "label": "Dentistry",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 75
+    },
+    "rungs": [
+      {
+        "id": "dentistry_0",
+        "title": "Foundation dentist",
+        "salary": 4200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "dentistry_1",
+        "title": "Dentist",
+        "salary": 7200000,
+        "minExperience": 3,
+        "minPerformance": 52
+      },
+      {
+        "id": "dentistry_2",
+        "title": "Practice owner",
+        "salary": 12800000,
+        "minExperience": 10,
+        "minPerformance": 70
+      },
+      {
+        "id": "dentistry_3",
+        "title": "Specialist",
+        "salary": 17800000,
+        "minExperience": 16,
+        "minPerformance": 82
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "surgery",
+    "label": "Surgery",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 82,
+      "health": 65
+    },
+    "rungs": [
+      {
+        "id": "surgery_0",
+        "title": "Surgical trainee",
+        "salary": 4800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "surgery_1",
+        "title": "Registrar",
+        "salary": 7200000,
+        "minExperience": 5,
+        "minPerformance": 58
+      },
+      {
+        "id": "surgery_2",
+        "title": "Consultant surgeon",
+        "salary": 14500000,
+        "minExperience": 11,
+        "minPerformance": 74
+      },
+      {
+        "id": "surgery_3",
+        "title": "Clinical director",
+        "salary": 19500000,
+        "minExperience": 20,
+        "minPerformance": 86
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "medicine"
+    ]
+  },
+  {
+    "id": "barrister",
+    "label": "The Bar",
+    "industry": "Legal",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 80,
+      "charm": 65
+    },
+    "rungs": [
+      {
+        "id": "barrister_0",
+        "title": "Pupil",
+        "salary": 2400000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "barrister_1",
+        "title": "Junior barrister",
+        "salary": 6800000,
+        "minExperience": 3,
+        "minPerformance": 55
+      },
+      {
+        "id": "barrister_2",
+        "title": "Senior barrister",
+        "salary": 16500000,
+        "minExperience": 10,
+        "minPerformance": 72
+      },
+      {
+        "id": "barrister_3",
+        "title": "King's Counsel",
+        "salary": 32000000,
+        "minExperience": 18,
+        "minPerformance": 86
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "law",
+      "judiciary"
+    ]
+  },
+  {
+    "id": "economics",
+    "label": "Economics",
+    "industry": "Finance",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 78
+    },
+    "rungs": [
+      {
+        "id": "economics_0",
+        "title": "Research economist",
+        "salary": 4200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "economics_1",
+        "title": "Economist",
+        "salary": 6800000,
+        "minExperience": 4,
+        "minPerformance": 55
+      },
+      {
+        "id": "economics_2",
+        "title": "Senior economist",
+        "salary": 9800000,
+        "minExperience": 10,
+        "minPerformance": 70
+      },
+      {
+        "id": "economics_3",
+        "title": "Chief economist",
+        "salary": 16500000,
+        "minExperience": 18,
+        "minPerformance": 84
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "research_science",
+    "label": "Research science",
+    "industry": "Science",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 80
+    },
+    "rungs": [
+      {
+        "id": "research_science_0",
+        "title": "Research associate",
+        "salary": 3600000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "research_science_1",
+        "title": "Research fellow",
+        "salary": 5200000,
+        "minExperience": 4,
+        "minPerformance": 55
+      },
+      {
+        "id": "research_science_2",
+        "title": "Principal investigator",
+        "salary": 8200000,
+        "minExperience": 11,
+        "minPerformance": 72
+      },
+      {
+        "id": "research_science_3",
+        "title": "Institute director",
+        "salary": 12200000,
+        "minExperience": 20,
+        "minPerformance": 86
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "judiciary",
+    "label": "The judiciary",
+    "industry": "Legal",
+    "countryIds": [],
+    "requiredEducation": "graduate",
+    "requiredStats": {
+      "smarts": 82
+    },
+    "rungs": [
+      {
+        "id": "judiciary_0",
+        "title": "Recorder",
+        "salary": 14500000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "judiciary_1",
+        "title": "Circuit Judge",
+        "salary": 21000000,
+        "minExperience": 4,
+        "minPerformance": 60
+      },
+      {
+        "id": "judiciary_2",
+        "title": "High Court Judge",
+        "salary": 28500000,
+        "minExperience": 10,
+        "minPerformance": 76
+      },
+      {
+        "id": "judiciary_3",
+        "title": "Court of Appeal",
+        "salary": 34000000,
+        "minExperience": 17,
+        "minPerformance": 86
+      }
+    ],
+    "retiresAtAge": 75,
+    "exitTrackIds": []
+  }
+]

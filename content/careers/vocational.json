@@ -1,0 +1,386 @@
+[
+  {
+    "id": "trades_plumbing",
+    "label": "Plumbing",
+    "industry": "Construction",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "trades_plumbing_0",
+        "title": "Apprentice",
+        "salary": 2000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "trades_plumbing_1",
+        "title": "Plumber",
+        "salary": 3800000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "trades_plumbing_2",
+        "title": "Senior plumber",
+        "salary": 5200000,
+        "minExperience": 8,
+        "minPerformance": 62
+      },
+      {
+        "id": "trades_plumbing_3",
+        "title": "Contractor",
+        "salary": 7600000,
+        "minExperience": 14,
+        "minPerformance": 76
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "trades_carpentry",
+    "label": "Carpentry",
+    "industry": "Construction",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "trades_carpentry_0",
+        "title": "Apprentice",
+        "salary": 2000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "trades_carpentry_1",
+        "title": "Carpenter",
+        "salary": 3700000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "trades_carpentry_2",
+        "title": "Site carpenter",
+        "salary": 5100000,
+        "minExperience": 8,
+        "minPerformance": 62
+      },
+      {
+        "id": "trades_carpentry_3",
+        "title": "Contractor",
+        "salary": 7400000,
+        "minExperience": 14,
+        "minPerformance": 76
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "trades_bricklaying",
+    "label": "Bricklaying",
+    "industry": "Construction",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {
+      "fitness": 55
+    },
+    "rungs": [
+      {
+        "id": "trades_bricklaying_0",
+        "title": "Apprentice",
+        "salary": 2000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "trades_bricklaying_1",
+        "title": "Bricklayer",
+        "salary": 3800000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "trades_bricklaying_2",
+        "title": "Ganger",
+        "salary": 5300000,
+        "minExperience": 8,
+        "minPerformance": 62
+      },
+      {
+        "id": "trades_bricklaying_3",
+        "title": "Contractor",
+        "salary": 7600000,
+        "minExperience": 14,
+        "minPerformance": 76
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "trades_welding",
+    "label": "Welding",
+    "industry": "Manufacturing",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "trades_welding_0",
+        "title": "Trainee welder",
+        "salary": 2300000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "trades_welding_1",
+        "title": "Welder",
+        "salary": 4100000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "trades_welding_2",
+        "title": "Coded welder",
+        "salary": 5800000,
+        "minExperience": 8,
+        "minPerformance": 64
+      },
+      {
+        "id": "trades_welding_3",
+        "title": "Fabrication manager",
+        "salary": 7800000,
+        "minExperience": 15,
+        "minPerformance": 76
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "mechanics",
+    "label": "Vehicle mechanics",
+    "industry": "Automotive",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "mechanics_0",
+        "title": "Apprentice",
+        "salary": 1900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "mechanics_1",
+        "title": "Mechanic",
+        "salary": 3400000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "mechanics_2",
+        "title": "Master technician",
+        "salary": 5000000,
+        "minExperience": 8,
+        "minPerformance": 64
+      },
+      {
+        "id": "mechanics_3",
+        "title": "Garage owner",
+        "salary": 7200000,
+        "minExperience": 14,
+        "minPerformance": 76
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "hgv",
+    "label": "Heavy goods",
+    "industry": "Transport",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "hgv_0",
+        "title": "HGV driver",
+        "salary": 3800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "hgv_1",
+        "title": "Transport supervisor",
+        "salary": 5000000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "hgv_2",
+        "title": "Fleet manager",
+        "salary": 6800000,
+        "minExperience": 11,
+        "minPerformance": 70
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "logistics"
+    ]
+  },
+  {
+    "id": "chef_training",
+    "label": "Professional cookery",
+    "industry": "Hospitality",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {
+      "creativity": 58
+    },
+    "rungs": [
+      {
+        "id": "chef_training_0",
+        "title": "Commis chef",
+        "salary": 2200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "chef_training_1",
+        "title": "Chef de partie",
+        "salary": 3200000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "chef_training_2",
+        "title": "Sous chef",
+        "salary": 4400000,
+        "minExperience": 7,
+        "minPerformance": 60
+      },
+      {
+        "id": "chef_training_3",
+        "title": "Head chef",
+        "salary": 6400000,
+        "minExperience": 12,
+        "minPerformance": 74
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "hospitality"
+    ]
+  },
+  {
+    "id": "dental_nursing",
+    "label": "Dental nursing",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "dental_nursing_0",
+        "title": "Trainee",
+        "salary": 2200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "dental_nursing_1",
+        "title": "Dental nurse",
+        "salary": 3100000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "dental_nursing_2",
+        "title": "Practice manager",
+        "salary": 4800000,
+        "minExperience": 9,
+        "minPerformance": 66
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "veterinary_nursing",
+    "label": "Veterinary nursing",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "veterinary_nursing_0",
+        "title": "Trainee",
+        "salary": 2100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "veterinary_nursing_1",
+        "title": "Veterinary nurse",
+        "salary": 3000000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "veterinary_nursing_2",
+        "title": "Head nurse",
+        "salary": 4500000,
+        "minExperience": 9,
+        "minPerformance": 66
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "veterinary"
+    ]
+  },
+  {
+    "id": "beautician_advanced",
+    "label": "Aesthetics",
+    "industry": "Services",
+    "countryIds": [],
+    "requiredEducation": "vocational",
+    "requiredStats": {
+      "charm": 58
+    },
+    "rungs": [
+      {
+        "id": "beautician_advanced_0",
+        "title": "Therapist",
+        "salary": 2500000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "beautician_advanced_1",
+        "title": "Senior therapist",
+        "salary": 3800000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "beautician_advanced_2",
+        "title": "Clinic owner",
+        "salary": 6800000,
+        "minExperience": 11,
+        "minPerformance": 72
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]

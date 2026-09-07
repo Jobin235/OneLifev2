@@ -1,0 +1,632 @@
+[
+  {
+    "id": "admin",
+    "label": "Office administration",
+    "industry": "Business",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "admin_0",
+        "title": "Administrator",
+        "salary": 2500000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "admin_1",
+        "title": "Office manager",
+        "salary": 3600000,
+        "minExperience": 4,
+        "minPerformance": 50
+      },
+      {
+        "id": "admin_2",
+        "title": "Operations lead",
+        "salary": 5200000,
+        "minExperience": 9,
+        "minPerformance": 66
+      },
+      {
+        "id": "admin_3",
+        "title": "Chief of staff",
+        "salary": 7400000,
+        "minExperience": 15,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "sales",
+    "label": "Sales",
+    "industry": "Business",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "charm": 55
+    },
+    "rungs": [
+      {
+        "id": "sales_0",
+        "title": "Sales assistant",
+        "salary": 2400000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "sales_1",
+        "title": "Account executive",
+        "salary": 3800000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "sales_2",
+        "title": "Account director",
+        "salary": 6400000,
+        "minExperience": 8,
+        "minPerformance": 64
+      },
+      {
+        "id": "sales_3",
+        "title": "Sales director",
+        "salary": 9800000,
+        "minExperience": 14,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "banking_retail",
+    "label": "Retail banking",
+    "industry": "Finance",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "banking_retail_0",
+        "title": "Cashier",
+        "salary": 2500000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "banking_retail_1",
+        "title": "Personal banker",
+        "salary": 3600000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "banking_retail_2",
+        "title": "Branch manager",
+        "salary": 5800000,
+        "minExperience": 8,
+        "minPerformance": 64
+      },
+      {
+        "id": "banking_retail_3",
+        "title": "Regional director",
+        "salary": 9200000,
+        "minExperience": 15,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "finance"
+    ]
+  },
+  {
+    "id": "insurance",
+    "label": "Insurance",
+    "industry": "Finance",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "insurance_0",
+        "title": "Claims handler",
+        "salary": 2700000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "insurance_1",
+        "title": "Underwriter",
+        "salary": 4200000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "insurance_2",
+        "title": "Senior underwriter",
+        "salary": 6400000,
+        "minExperience": 9,
+        "minPerformance": 68
+      },
+      {
+        "id": "insurance_3",
+        "title": "Head of underwriting",
+        "salary": 9500000,
+        "minExperience": 15,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "police",
+    "label": "Police",
+    "industry": "Public service",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "fitness": 55
+    },
+    "rungs": [
+      {
+        "id": "police_0",
+        "title": "Constable",
+        "salary": 3200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "police_1",
+        "title": "Sergeant",
+        "salary": 4400000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "police_2",
+        "title": "Inspector",
+        "salary": 6000000,
+        "minExperience": 10,
+        "minPerformance": 68
+      },
+      {
+        "id": "police_3",
+        "title": "Chief Inspector",
+        "salary": 8200000,
+        "minExperience": 16,
+        "minPerformance": 78
+      },
+      {
+        "id": "police_4",
+        "title": "Chief Constable",
+        "salary": 11800000,
+        "minExperience": 24,
+        "minPerformance": 88
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "fire_service",
+    "label": "Fire service",
+    "industry": "Public service",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "fitness": 65
+    },
+    "rungs": [
+      {
+        "id": "fire_service_0",
+        "title": "Firefighter",
+        "salary": 3300000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "fire_service_1",
+        "title": "Crew manager",
+        "salary": 4500000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "fire_service_2",
+        "title": "Station manager",
+        "salary": 6100000,
+        "minExperience": 11,
+        "minPerformance": 70
+      },
+      {
+        "id": "fire_service_3",
+        "title": "Area manager",
+        "salary": 8400000,
+        "minExperience": 18,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "military",
+    "label": "Armed forces",
+    "industry": "Public service",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "fitness": 60
+    },
+    "rungs": [
+      {
+        "id": "military_0",
+        "title": "Private",
+        "salary": 2600000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "military_1",
+        "title": "Corporal",
+        "salary": 3400000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "military_2",
+        "title": "Sergeant",
+        "salary": 4400000,
+        "minExperience": 7,
+        "minPerformance": 58
+      },
+      {
+        "id": "military_3",
+        "title": "Captain",
+        "salary": 6200000,
+        "minExperience": 12,
+        "minPerformance": 70
+      },
+      {
+        "id": "military_4",
+        "title": "Colonel",
+        "salary": 9200000,
+        "minExperience": 20,
+        "minPerformance": 82
+      },
+      {
+        "id": "military_5",
+        "title": "General",
+        "salary": 14000000,
+        "minExperience": 28,
+        "minPerformance": 90
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "paramedic",
+    "label": "Ambulance service",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "fitness": 55
+    },
+    "rungs": [
+      {
+        "id": "paramedic_0",
+        "title": "Technician",
+        "salary": 2900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "paramedic_1",
+        "title": "Paramedic",
+        "salary": 4100000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "paramedic_2",
+        "title": "Advanced paramedic",
+        "salary": 5600000,
+        "minExperience": 10,
+        "minPerformance": 68
+      },
+      {
+        "id": "paramedic_3",
+        "title": "Clinical lead",
+        "salary": 7400000,
+        "minExperience": 16,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "prison_officer",
+    "label": "Prison service",
+    "industry": "Public service",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "fitness": 50
+    },
+    "rungs": [
+      {
+        "id": "prison_officer_0",
+        "title": "Prison officer",
+        "salary": 3000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "prison_officer_1",
+        "title": "Senior officer",
+        "salary": 4000000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "prison_officer_2",
+        "title": "Custodial manager",
+        "salary": 5600000,
+        "minExperience": 11,
+        "minPerformance": 70
+      },
+      {
+        "id": "prison_officer_3",
+        "title": "Governor",
+        "salary": 8400000,
+        "minExperience": 19,
+        "minPerformance": 82
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "aviation_cabin",
+    "label": "Cabin crew",
+    "industry": "Transport",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "charm": 58
+    },
+    "rungs": [
+      {
+        "id": "aviation_cabin_0",
+        "title": "Cabin crew",
+        "salary": 2600000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "aviation_cabin_1",
+        "title": "Senior crew",
+        "salary": 3600000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "aviation_cabin_2",
+        "title": "Cabin manager",
+        "salary": 5000000,
+        "minExperience": 9,
+        "minPerformance": 66
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "journalism",
+    "label": "Journalism",
+    "industry": "Media",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "smarts": 58
+    },
+    "rungs": [
+      {
+        "id": "journalism_0",
+        "title": "Junior reporter",
+        "salary": 2400000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "journalism_1",
+        "title": "Reporter",
+        "salary": 3400000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "journalism_2",
+        "title": "Senior correspondent",
+        "salary": 5200000,
+        "minExperience": 8,
+        "minPerformance": 64
+      },
+      {
+        "id": "journalism_3",
+        "title": "Editor",
+        "salary": 7800000,
+        "minExperience": 15,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "punditry"
+    ]
+  },
+  {
+    "id": "photography",
+    "label": "Photography",
+    "industry": "Creative",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "creativity": 60
+    },
+    "rungs": [
+      {
+        "id": "photography_0",
+        "title": "Assistant",
+        "salary": 2100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "photography_1",
+        "title": "Photographer",
+        "salary": 3400000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "photography_2",
+        "title": "Studio owner",
+        "salary": 5800000,
+        "minExperience": 10,
+        "minPerformance": 68
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "beauty",
+    "label": "Hair and beauty",
+    "industry": "Services",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "charm": 55
+    },
+    "rungs": [
+      {
+        "id": "beauty_0",
+        "title": "Apprentice",
+        "salary": 1900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "beauty_1",
+        "title": "Stylist",
+        "salary": 2900000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "beauty_2",
+        "title": "Senior stylist",
+        "salary": 4200000,
+        "minExperience": 7,
+        "minPerformance": 60
+      },
+      {
+        "id": "beauty_3",
+        "title": "Salon owner",
+        "salary": 6400000,
+        "minExperience": 13,
+        "minPerformance": 74
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "estate_agency",
+    "label": "Estate agency",
+    "industry": "Property",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "charm": 60
+    },
+    "rungs": [
+      {
+        "id": "estate_agency_0",
+        "title": "Negotiator",
+        "salary": 2600000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "estate_agency_1",
+        "title": "Senior negotiator",
+        "salary": 4000000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "estate_agency_2",
+        "title": "Branch manager",
+        "salary": 6200000,
+        "minExperience": 8,
+        "minPerformance": 66
+      },
+      {
+        "id": "estate_agency_3",
+        "title": "Regional director",
+        "salary": 9600000,
+        "minExperience": 15,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "fitness_training",
+    "label": "Personal training",
+    "industry": "Sport",
+    "countryIds": [],
+    "requiredEducation": "secondary",
+    "requiredStats": {
+      "fitness": 70
+    },
+    "rungs": [
+      {
+        "id": "fitness_training_0",
+        "title": "Gym instructor",
+        "salary": 2200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "fitness_training_1",
+        "title": "Personal trainer",
+        "salary": 3300000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "fitness_training_2",
+        "title": "Studio owner",
+        "salary": 5600000,
+        "minExperience": 9,
+        "minPerformance": 68
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "coaching"
+    ]
+  }
+]

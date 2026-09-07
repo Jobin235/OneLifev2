@@ -1,0 +1,766 @@
+[
+  {
+    "id": "nursing",
+    "label": "Nursing",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 58
+    },
+    "rungs": [
+      {
+        "id": "nursing_0",
+        "title": "Staff nurse",
+        "salary": 3100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "nursing_1",
+        "title": "Senior nurse",
+        "salary": 4200000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "nursing_2",
+        "title": "Ward manager",
+        "salary": 5600000,
+        "minExperience": 9,
+        "minPerformance": 66
+      },
+      {
+        "id": "nursing_3",
+        "title": "Matron",
+        "salary": 7400000,
+        "minExperience": 16,
+        "minPerformance": 78
+      },
+      {
+        "id": "nursing_4",
+        "title": "Director of nursing",
+        "salary": 9800000,
+        "minExperience": 24,
+        "minPerformance": 86
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "engineering",
+    "label": "Engineering",
+    "industry": "Engineering",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 65
+    },
+    "rungs": [
+      {
+        "id": "engineering_0",
+        "title": "Graduate engineer",
+        "salary": 3400000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "engineering_1",
+        "title": "Engineer",
+        "salary": 4800000,
+        "minExperience": 3,
+        "minPerformance": 48
+      },
+      {
+        "id": "engineering_2",
+        "title": "Senior engineer",
+        "salary": 6600000,
+        "minExperience": 7,
+        "minPerformance": 62
+      },
+      {
+        "id": "engineering_3",
+        "title": "Principal engineer",
+        "salary": 8800000,
+        "minExperience": 13,
+        "minPerformance": 74
+      },
+      {
+        "id": "engineering_4",
+        "title": "Engineering director",
+        "salary": 12400000,
+        "minExperience": 20,
+        "minPerformance": 84
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "architecture",
+    "label": "Architecture",
+    "industry": "Construction",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "creativity": 65,
+      "smarts": 60
+    },
+    "rungs": [
+      {
+        "id": "architecture_0",
+        "title": "Part I assistant",
+        "salary": 2800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "architecture_1",
+        "title": "Architect",
+        "salary": 4600000,
+        "minExperience": 5,
+        "minPerformance": 55
+      },
+      {
+        "id": "architecture_2",
+        "title": "Senior architect",
+        "salary": 6800000,
+        "minExperience": 11,
+        "minPerformance": 70
+      },
+      {
+        "id": "architecture_3",
+        "title": "Partner",
+        "salary": 10800000,
+        "minExperience": 18,
+        "minPerformance": 82
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "accounting",
+    "label": "Accountancy",
+    "industry": "Finance",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 62
+    },
+    "rungs": [
+      {
+        "id": "accounting_0",
+        "title": "Trainee",
+        "salary": 3000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "accounting_1",
+        "title": "Accountant",
+        "salary": 4600000,
+        "minExperience": 3,
+        "minPerformance": 50
+      },
+      {
+        "id": "accounting_2",
+        "title": "Senior accountant",
+        "salary": 6400000,
+        "minExperience": 7,
+        "minPerformance": 64
+      },
+      {
+        "id": "accounting_3",
+        "title": "Finance director",
+        "salary": 10200000,
+        "minExperience": 14,
+        "minPerformance": 78
+      },
+      {
+        "id": "accounting_4",
+        "title": "CFO",
+        "salary": 16500000,
+        "minExperience": 22,
+        "minPerformance": 88
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "finance"
+    ]
+  },
+  {
+    "id": "finance",
+    "label": "Investment banking",
+    "industry": "Finance",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 70
+    },
+    "rungs": [
+      {
+        "id": "finance_0",
+        "title": "Analyst",
+        "salary": 6200000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "finance_1",
+        "title": "Associate",
+        "salary": 9500000,
+        "minExperience": 3,
+        "minPerformance": 55
+      },
+      {
+        "id": "finance_2",
+        "title": "Vice President",
+        "salary": 15000000,
+        "minExperience": 7,
+        "minPerformance": 68
+      },
+      {
+        "id": "finance_3",
+        "title": "Director",
+        "salary": 24000000,
+        "minExperience": 12,
+        "minPerformance": 80
+      },
+      {
+        "id": "finance_4",
+        "title": "Managing Director",
+        "salary": 42000000,
+        "minExperience": 18,
+        "minPerformance": 90
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "marketing",
+    "label": "Marketing",
+    "industry": "Business",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "creativity": 60
+    },
+    "rungs": [
+      {
+        "id": "marketing_0",
+        "title": "Executive",
+        "salary": 2800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "marketing_1",
+        "title": "Manager",
+        "salary": 4200000,
+        "minExperience": 3,
+        "minPerformance": 50
+      },
+      {
+        "id": "marketing_2",
+        "title": "Head of marketing",
+        "salary": 6800000,
+        "minExperience": 8,
+        "minPerformance": 66
+      },
+      {
+        "id": "marketing_3",
+        "title": "Marketing director",
+        "salary": 9800000,
+        "minExperience": 14,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "hr",
+    "label": "Human resources",
+    "industry": "Business",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "charm": 58
+    },
+    "rungs": [
+      {
+        "id": "hr_0",
+        "title": "HR advisor",
+        "salary": 2900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "hr_1",
+        "title": "HR manager",
+        "salary": 4400000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "hr_2",
+        "title": "Head of HR",
+        "salary": 6800000,
+        "minExperience": 10,
+        "minPerformance": 68
+      },
+      {
+        "id": "hr_3",
+        "title": "People director",
+        "salary": 9600000,
+        "minExperience": 17,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "civil_service",
+    "label": "Civil service",
+    "industry": "Public service",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 62
+    },
+    "rungs": [
+      {
+        "id": "civil_service_0",
+        "title": "Executive officer",
+        "salary": 2900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "civil_service_1",
+        "title": "Higher executive officer",
+        "salary": 3900000,
+        "minExperience": 3,
+        "minPerformance": 50
+      },
+      {
+        "id": "civil_service_2",
+        "title": "Senior civil servant",
+        "salary": 6800000,
+        "minExperience": 10,
+        "minPerformance": 68
+      },
+      {
+        "id": "civil_service_3",
+        "title": "Director general",
+        "salary": 12000000,
+        "minExperience": 20,
+        "minPerformance": 84
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "politics"
+    ]
+  },
+  {
+    "id": "social_work",
+    "label": "Social work",
+    "industry": "Public service",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {},
+    "rungs": [
+      {
+        "id": "social_work_0",
+        "title": "Social worker",
+        "salary": 3100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "social_work_1",
+        "title": "Senior practitioner",
+        "salary": 4200000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "social_work_2",
+        "title": "Team manager",
+        "salary": 5600000,
+        "minExperience": 9,
+        "minPerformance": 66
+      },
+      {
+        "id": "social_work_3",
+        "title": "Head of service",
+        "salary": 7800000,
+        "minExperience": 17,
+        "minPerformance": 78
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "librarian",
+    "label": "Libraries and archives",
+    "industry": "Education",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 60
+    },
+    "rungs": [
+      {
+        "id": "librarian_0",
+        "title": "Assistant librarian",
+        "salary": 2500000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "librarian_1",
+        "title": "Librarian",
+        "salary": 3500000,
+        "minExperience": 4,
+        "minPerformance": 50
+      },
+      {
+        "id": "librarian_2",
+        "title": "Head of service",
+        "salary": 5200000,
+        "minExperience": 11,
+        "minPerformance": 68
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "psychology_applied",
+    "label": "Psychology",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 68
+    },
+    "rungs": [
+      {
+        "id": "psychology_applied_0",
+        "title": "Assistant psychologist",
+        "salary": 2700000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "psychology_applied_1",
+        "title": "Psychologist",
+        "salary": 4400000,
+        "minExperience": 4,
+        "minPerformance": 55
+      },
+      {
+        "id": "psychology_applied_2",
+        "title": "Consultant psychologist",
+        "salary": 7200000,
+        "minExperience": 11,
+        "minPerformance": 72
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "psychiatry"
+    ]
+  },
+  {
+    "id": "air_traffic",
+    "label": "Air traffic control",
+    "industry": "Transport",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 72
+    },
+    "rungs": [
+      {
+        "id": "air_traffic_0",
+        "title": "Trainee controller",
+        "salary": 3800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "air_traffic_1",
+        "title": "Controller",
+        "salary": 7200000,
+        "minExperience": 3,
+        "minPerformance": 58
+      },
+      {
+        "id": "air_traffic_2",
+        "title": "Watch manager",
+        "salary": 9800000,
+        "minExperience": 10,
+        "minPerformance": 72
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "pilot",
+    "label": "Commercial pilot",
+    "industry": "Transport",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 68,
+      "health": 70
+    },
+    "rungs": [
+      {
+        "id": "pilot_0",
+        "title": "First officer",
+        "salary": 5800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "pilot_1",
+        "title": "Senior first officer",
+        "salary": 8800000,
+        "minExperience": 4,
+        "minPerformance": 58
+      },
+      {
+        "id": "pilot_2",
+        "title": "Captain",
+        "salary": 14000000,
+        "minExperience": 10,
+        "minPerformance": 72
+      },
+      {
+        "id": "pilot_3",
+        "title": "Training captain",
+        "salary": 17800000,
+        "minExperience": 17,
+        "minPerformance": 84
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "design",
+    "label": "Design",
+    "industry": "Creative",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "creativity": 70
+    },
+    "rungs": [
+      {
+        "id": "design_0",
+        "title": "Junior designer",
+        "salary": 2600000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "design_1",
+        "title": "Designer",
+        "salary": 4000000,
+        "minExperience": 3,
+        "minPerformance": 50
+      },
+      {
+        "id": "design_2",
+        "title": "Senior designer",
+        "salary": 5800000,
+        "minExperience": 7,
+        "minPerformance": 64
+      },
+      {
+        "id": "design_3",
+        "title": "Creative director",
+        "salary": 9200000,
+        "minExperience": 14,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "data_science",
+    "label": "Data science",
+    "industry": "Technology",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 72
+    },
+    "rungs": [
+      {
+        "id": "data_science_0",
+        "title": "Data analyst",
+        "salary": 3800000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "data_science_1",
+        "title": "Data scientist",
+        "salary": 6200000,
+        "minExperience": 3,
+        "minPerformance": 52
+      },
+      {
+        "id": "data_science_2",
+        "title": "Senior data scientist",
+        "salary": 8800000,
+        "minExperience": 7,
+        "minPerformance": 66
+      },
+      {
+        "id": "data_science_3",
+        "title": "Head of data",
+        "salary": 12500000,
+        "minExperience": 13,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": [
+      "software"
+    ]
+  },
+  {
+    "id": "pharmacy",
+    "label": "Pharmacy",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "smarts": 68
+    },
+    "rungs": [
+      {
+        "id": "pharmacy_0",
+        "title": "Pre-registration",
+        "salary": 3000000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "pharmacy_1",
+        "title": "Pharmacist",
+        "salary": 5200000,
+        "minExperience": 2,
+        "minPerformance": 50
+      },
+      {
+        "id": "pharmacy_2",
+        "title": "Lead pharmacist",
+        "salary": 7200000,
+        "minExperience": 8,
+        "minPerformance": 66
+      },
+      {
+        "id": "pharmacy_3",
+        "title": "Chief pharmacist",
+        "salary": 9800000,
+        "minExperience": 16,
+        "minPerformance": 80
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "physiotherapy",
+    "label": "Physiotherapy",
+    "industry": "Healthcare",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "fitness": 60
+    },
+    "rungs": [
+      {
+        "id": "physiotherapy_0",
+        "title": "Physiotherapist",
+        "salary": 3100000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "physiotherapy_1",
+        "title": "Senior physiotherapist",
+        "salary": 4400000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "physiotherapy_2",
+        "title": "Clinical lead",
+        "salary": 6200000,
+        "minExperience": 10,
+        "minPerformance": 68
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  },
+  {
+    "id": "hotel_management",
+    "label": "Hotel management",
+    "industry": "Hospitality",
+    "countryIds": [],
+    "requiredEducation": "university",
+    "requiredStats": {
+      "charm": 60
+    },
+    "rungs": [
+      {
+        "id": "hotel_management_0",
+        "title": "Duty manager",
+        "salary": 2900000,
+        "minExperience": 0,
+        "minPerformance": 0
+      },
+      {
+        "id": "hotel_management_1",
+        "title": "Operations manager",
+        "salary": 4400000,
+        "minExperience": 4,
+        "minPerformance": 52
+      },
+      {
+        "id": "hotel_management_2",
+        "title": "General manager",
+        "salary": 7200000,
+        "minExperience": 10,
+        "minPerformance": 70
+      },
+      {
+        "id": "hotel_management_3",
+        "title": "Group director",
+        "salary": 11200000,
+        "minExperience": 18,
+        "minPerformance": 82
+      }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": []
+  }
+]
