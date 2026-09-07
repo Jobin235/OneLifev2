@@ -172,7 +172,7 @@ describe('the views the design renders', () => {
     const people = peopleView(state);
     expect(people.headline).toMatch(/you actually know$/);
 
-    const money = moneyView(state, game.config);
+    const money = moneyView(state, game.config, game.content);
     expect(money.netWorth).toMatch(/^−?\$/);
   });
 });

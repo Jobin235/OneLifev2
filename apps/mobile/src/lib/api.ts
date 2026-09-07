@@ -231,11 +231,25 @@ export interface WorkView {
   actions: ActionCard[];
 }
 
+export interface ShopEntry {
+  id: string;
+  kind: string;
+  label: string;
+  emoji: string;
+  price: string;
+  priceCents: number;
+  upkeep: string;
+  available: boolean;
+  blockedReason: string | null;
+  owned: boolean;
+}
+
 export interface MoneyView {
+  forSale: ShopEntry[];
   netWorth: string;
   monthlyNet: string;
   debtCount: number;
-  owned: Array<{ emoji: string; label: string; detail: string }>;
+  owned: Array<{ assetId: string | null; emoji: string; label: string; detail: string }>;
   monthly: Array<{ icon: string; label: string; amount: string; positive: boolean }>;
   note: string | null;
 }
@@ -294,6 +308,8 @@ export interface Api {
   /** Null when the character has no job. */
   work(lifeId: string): Promise<WorkView | null>;
   money(lifeId: string): Promise<MoneyView>;
+  buy(lifeId: string, purchasableId: string): Promise<{ life: LifeView; money: MoneyView }>;
+  sell(lifeId: string, assetId: string): Promise<{ life: LifeView; money: MoneyView }>;
   more(lifeId: string): Promise<MoreView>;
   legacy(lifeId: string): Promise<Legacy>;
 }
@@ -358,6 +374,18 @@ export const httpApi: Api = {
   school: (lifeId: string) => request<SchoolView | null>(`/lives/${lifeId}/school`),
   work: (lifeId: string) => request<WorkView | null>(`/lives/${lifeId}/work`),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
+
+  buy: (lifeId: string, purchasableId: string) =>
+    request<{ life: LifeView; money: MoneyView }>(`/lives/${lifeId}/buy`, {
+      method: 'POST',
+      body: JSON.stringify({ purchasableId }),
+    }),
+
+  sell: (lifeId: string, assetId: string) =>
+    request<{ life: LifeView; money: MoneyView }>(`/lives/${lifeId}/sell`, {
+      method: 'POST',
+      body: JSON.stringify({ assetId }),
+    }),
   more: (lifeId: string) => request<MoreView>(`/lives/${lifeId}/more`),
   legacy: (lifeId: string) => request<Legacy>(`/lives/${lifeId}/legacy`),
 };

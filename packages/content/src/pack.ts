@@ -146,6 +146,20 @@ export const InteractionSchema = z.object({
 });
 export type Interaction = z.infer<typeof InteractionSchema>;
 
+/** Something you can buy. Story assets live in code; these are the shop. */
+export const PurchasableSchema = z.object({
+  id: z.string().min(1),
+  kind: z.enum(['house', 'apartment', 'car', 'luxury', 'collectible', 'investment']),
+  label: z.string().min(1),
+  emoji: z.string().min(1),
+  /** Cents. */
+  price: z.number().int().min(0),
+  /** Cents a year to keep — the part players forget when they buy the yacht. */
+  annualCost: z.number().int().min(0),
+  minAge: z.number().int().min(0).default(18),
+});
+export type Purchasable = z.infer<typeof PurchasableSchema>;
+
 export const NpcTemplateFileSchema = z.object({
   id: z.string().min(1),
   kind: z.string().min(1),
@@ -171,6 +185,7 @@ export interface ContentPack {
   activities: Activity[];
   chronicle: ChronicleLine[];
   interactions: Interaction[];
+  purchasables: Purchasable[];
   npcTemplates: z.infer<typeof NpcTemplateFileSchema>[];
 }
 
@@ -195,6 +210,7 @@ export interface ContentSources {
   activities: unknown;
   chronicle: unknown[];
   interactions: unknown;
+  purchasables: unknown;
   npcTemplates: unknown;
 }
 
@@ -231,6 +247,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
   const activities = parseArray('activities.json', sources.activities, ActivitySchema);
   const chronicle = parseGroups('chronicle', sources.chronicle, ChronicleLineSchema);
   const interactions = parseArray('interactions.json', sources.interactions, InteractionSchema);
+  const purchasables = parseArray('assets.json', sources.purchasables, PurchasableSchema);
   const npcTemplates = parseArray('npc-templates.json', sources.npcTemplates, NpcTemplateFileSchema);
 
   const pack: ContentPack = {
@@ -246,6 +263,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
     activities,
     chronicle,
     interactions,
+    purchasables,
     npcTemplates,
   };
 

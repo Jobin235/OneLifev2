@@ -1,6 +1,7 @@
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
 import { interactionsFor } from './interact.js';
+import { shopView } from './shop.js';
 import type { LifeState, Npc } from '@lineage/shared-types';
 import { STAT_DISPLAY } from '@lineage/shared-types';
 import {
@@ -337,7 +338,7 @@ const outlookLine = (performance: number, rivalName: string | null): string => {
 };
 
 /** Design 3C: plain language, no charts. */
-export const moneyView = (state: LifeState, config: GameConfig) => {
+export const moneyView = (state: LifeState, config: GameConfig, content: ContentPack) => {
   const monthly = monthlyLines(state, config);
   const monthlyNet = monthly.reduce((sum, line) => sum + line.cents, 0);
 
@@ -348,8 +349,11 @@ export const moneyView = (state: LifeState, config: GameConfig) => {
       state.character.finances.debt > 0,
       ...state.assets.map((a) => a.loanOutstanding > 0),
     ].filter(Boolean).length,
+    forSale: shopView(state, content),
     owned: [
       ...state.assets.map((a) => ({
+        // Only real assets can be sold; a business is closed, not sold off here.
+        assetId: a.id,
         emoji: a.emoji,
         label: a.label,
         detail:
@@ -360,6 +364,7 @@ export const moneyView = (state: LifeState, config: GameConfig) => {
       ...state.businesses
         .filter((b) => !b.closed)
         .map((b) => ({
+          assetId: null,
           emoji: b.emoji,
           label: b.name,
           detail: `Your company · ${b.units} ${b.unitLabel} · ${b.employees} staff`,

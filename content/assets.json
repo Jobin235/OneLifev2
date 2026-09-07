@@ -1,0 +1,146 @@
+[
+  {
+    "id": "buy_trailer",
+    "kind": "house",
+    "label": "A trailer on the edge of town",
+    "emoji": "🚚",
+    "price": 4200000,
+    "annualCost": 420000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_flat",
+    "kind": "apartment",
+    "label": "A one-bed flat",
+    "emoji": "🏢",
+    "price": 14000000,
+    "annualCost": 900000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_terrace",
+    "kind": "house",
+    "label": "A terraced house",
+    "emoji": "🏠",
+    "price": 26000000,
+    "annualCost": 1500000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_family_house",
+    "kind": "house",
+    "label": "A house with a garden",
+    "emoji": "🏡",
+    "price": 48000000,
+    "annualCost": 2400000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_townhouse",
+    "kind": "house",
+    "label": "A townhouse in a good street",
+    "emoji": "🏘️",
+    "price": 120000000,
+    "annualCost": 5200000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_estate",
+    "kind": "house",
+    "label": "A house with a name",
+    "emoji": "🏰",
+    "price": 420000000,
+    "annualCost": 18000000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_old_car",
+    "kind": "car",
+    "label": "A car that mostly starts",
+    "emoji": "🚗",
+    "price": 1800000,
+    "annualCost": 320000,
+    "minAge": 17
+  },
+  {
+    "id": "buy_hatchback",
+    "kind": "car",
+    "label": "A sensible hatchback",
+    "emoji": "🚙",
+    "price": 6500000,
+    "annualCost": 480000,
+    "minAge": 17
+  },
+  {
+    "id": "buy_estate_car",
+    "kind": "car",
+    "label": "An estate car",
+    "emoji": "🚐",
+    "price": 14000000,
+    "annualCost": 700000,
+    "minAge": 17
+  },
+  {
+    "id": "buy_sports_car",
+    "kind": "car",
+    "label": "Something with a badge",
+    "emoji": "🏎️",
+    "price": 58000000,
+    "annualCost": 2600000,
+    "minAge": 17
+  },
+  {
+    "id": "buy_boat",
+    "kind": "luxury",
+    "label": "A boat you will use twice a year",
+    "emoji": "⛵",
+    "price": 32000000,
+    "annualCost": 2100000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_yacht",
+    "kind": "luxury",
+    "label": "A yacht",
+    "emoji": "🛥️",
+    "price": 280000000,
+    "annualCost": 16000000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_plane",
+    "kind": "luxury",
+    "label": "A small aircraft",
+    "emoji": "✈️",
+    "price": 190000000,
+    "annualCost": 11000000,
+    "minAge": 18
+  },
+  {
+    "id": "buy_watch",
+    "kind": "luxury",
+    "label": "A watch worth more than a car",
+    "emoji": "⌚",
+    "price": 9500000,
+    "annualCost": 0,
+    "minAge": 18
+  },
+  {
+    "id": "buy_guitar",
+    "kind": "luxury",
+    "label": "The guitar you wanted at fifteen",
+    "emoji": "🎸",
+    "price": 320000,
+    "annualCost": 0,
+    "minAge": 14
+  },
+  {
+    "id": "buy_art",
+    "kind": "luxury",
+    "label": "A painting you actually like",
+    "emoji": "🖼️",
+    "price": 22000000,
+    "annualCost": 120000,
+    "minAge": 18
+  }
+]

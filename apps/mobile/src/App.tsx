@@ -174,6 +174,28 @@ export const App = () => {
     [life, person, run, setLifeAndRemember, show],
   );
 
+  const onBuy = useCallback(
+    async (purchasableId: string) => {
+      if (!life) return;
+      const result = await run(() => api.buy(life.lifeId, purchasableId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setMoney(result.money);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onSell = useCallback(
+    async (assetId: string) => {
+      if (!life) return;
+      const result = await run(() => api.sell(life.lifeId, assetId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setMoney(result.money);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
   const onAct = useCallback(
     async (activityId: string) => {
       if (!life) return;
@@ -322,7 +344,12 @@ export const App = () => {
           <div className="spinner">…</div>
         ))}
 
-      {tab === 'money' && (money ? <MoneyScreen money={money} /> : <div className="spinner">…</div>)}
+      {tab === 'money' &&
+        (money ? (
+          <MoneyScreen money={money} busy={busy} onBuy={onBuy} onSell={onSell} />
+        ) : (
+          <div className="spinner">…</div>
+        ))}
 
       {tab === 'more' &&
         (more ? (

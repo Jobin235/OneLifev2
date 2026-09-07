@@ -180,7 +180,19 @@ export const createLocalApi = (): Api => {
     work: async (lifeId) => workView(get(lifeId), game.content) as never,
 
     actions: async (lifeId) => ({ actions: actionsView(get(lifeId), game.content) as never }),
-    money: async (lifeId) => moneyView(get(lifeId), game.config) as never,
+    money: async (lifeId) => moneyView(get(lifeId), game.config, game.content) as never,
+    buy: async (lifeId, purchasableId) => {
+      const state = game.buy(get(lifeId), purchasableId);
+      save(state);
+      return { ...view(state), money: moneyView(state, game.config, game.content) as never };
+    },
+
+    sell: async (lifeId, assetId) => {
+      const state = game.sell(get(lifeId), assetId);
+      save(state);
+      return { ...view(state), money: moneyView(state, game.config, game.content) as never };
+    },
+
     more: async (lifeId) => moreView(get(lifeId)) as never,
     legacy: async (lifeId) => {
       const legacy = get(lifeId).legacy;

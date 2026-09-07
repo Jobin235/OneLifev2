@@ -1458,3 +1458,67 @@ button {
   font: 800 12.5px/1 var(--text);
   flex: none;
 }
+
+/* ---------- Buying and selling ---------- */
+
+.shop-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+}
+
+.shop-chevron {
+  font: 800 17px/1 var(--text);
+  color: var(--faint);
+}
+
+.shop-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-tile);
+  background: var(--app-bg);
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.14s ease;
+}
+
+.shop-row:hover:not(:disabled) {
+  border-color: var(--green);
+}
+
+.shop-row:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.shop-row .owned-label,
+.shop-row .owned-detail {
+  display: block;
+}
+
+.shop-price {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.sell {
+  font: 800 12px/1 var(--text);
+  color: var(--coral-deep);
+  background: var(--coral-tint);
+  border-radius: var(--r-pill);
+  padding: 9px 13px;
+  flex: none;
+  cursor: pointer;
+  min-height: 34px;
+}
+
+.sell:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

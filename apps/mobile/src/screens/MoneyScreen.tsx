@@ -1,10 +1,24 @@
-import type { MoneyView } from '../lib/api';
+import { useState } from 'react';
+import type { MoneyView, ShopEntry } from '../lib/api';
 
 /**
  * Design 3C. Money in plain language — "what you own", "every month" — with a
  * human-cost note at the bottom instead of a chart. No candlesticks anywhere.
  */
-export const MoneyScreen = ({ money }: { money: MoneyView }) => (
+export const MoneyScreen = ({
+  money,
+  busy,
+  onBuy,
+  onSell,
+}: {
+  money: MoneyView;
+  busy: boolean;
+  onBuy: (purchasableId: string) => void;
+  onSell: (assetId: string) => void;
+}) => {
+  const [shopOpen, setShopOpen] = useState(false);
+
+  return (
   <>
     <header className="header">
       <h1 className="screen-title">Money</h1>
@@ -41,13 +55,55 @@ export const MoneyScreen = ({ money }: { money: MoneyView }) => (
             {money.owned.map((item, index) => (
               <div className="owned-row" key={index}>
                 <span className="owned-emoji">{item.emoji}</span>
-                <div>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="owned-label">{item.label}</div>
                   <div className="owned-detail">{item.detail}</div>
                 </div>
+                {/* A business is closed rather than sold, so it has no id here. */}
+                {item.assetId && (
+                  <button
+                    className="sell"
+                    disabled={busy}
+                    onClick={() => onSell(item.assetId!)}
+                  >
+                    Sell
+                  </button>
+                )}
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {money.forSale.length > 0 && (
+        <section className="panel">
+          <button className="shop-toggle" onClick={() => setShopOpen((open) => !open)}>
+            <span className="eyebrow">BUY SOMETHING</span>
+            <span className="shop-chevron">{shopOpen ? '−' : '+'}</span>
+          </button>
+
+          {shopOpen && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 14 }}>
+              {money.forSale.map((item: ShopEntry) => (
+                <button
+                  className="shop-row"
+                  key={item.id}
+                  disabled={!item.available || busy}
+                  onClick={() => onBuy(item.id)}
+                >
+                  <span className="owned-emoji">{item.emoji}</span>
+                  <span style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
+                    <span className="owned-label">{item.label}</span>
+                    {/* The upkeep is the half of the decision people forget. */}
+                    <span className="owned-detail">
+                      {item.blockedReason ?? item.upkeep}
+                    </span>
+                  </span>
+                  <span className="shop-price">{item.price}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </section>
       )}
 
@@ -92,3 +148,4 @@ export const MoneyScreen = ({ money }: { money: MoneyView }) => (
     </div>
   </>
 );
+};

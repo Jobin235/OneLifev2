@@ -126,15 +126,20 @@ Train Robbery, murder, with **age gates** (porch pirate 8, burglary 10, murder
 and GTA 15, train robbery 16, bank robbery 18), plus prison, escape attempts,
 lawyers, appeals.
 
-**Us:** one `something_illegal` activity. Prison exists as a state with its own
-activities, which is good, but there is nothing to *do* to get there
-deliberately.
+**Us: closed.** Seven crimes with the genre's age gates — a parcel from a porch
+at eight through to a bank at eighteen — with payouts and odds scaling together,
+so the ladder is a risk/reward curve rather than a list. Getting caught runs the
+conviction, fine, lost job, facility, sentence and parole machinery that was
+already there.
 
 ### Assets
 Six classes — cars, houses, jewellery, instruments, aircraft, boats — bought
 with cash or finance, requiring licences, sellable with haggling.
 
-**Us:** assets exist in the money model but cannot be bought or sold.
+**Us: closed.** Sixteen things to buy, from a trailer to a house with a name,
+each with an annual upkeep — which is the half of the decision players forget,
+and the reason the catalogue is priced the way it is. Anything owned can be sold
+back, less whatever is still owed on it.
 
 ### Ribbons
 40 end-of-life ribbons that summarise the life lived and appear on the
@@ -179,8 +184,11 @@ Ranked by player-visible depth per unit of work:
 4. ~~**Work with substance**~~ — **done.** A Work screen (design 3B) with the
    ladder, a performance meter, seven actions, and colleagues you can act on.
    Also fixed the balance bug it exposed: a third of lives never worked at all.
-5. **Crime as a menu** with age gates and a real justice chain.
-6. **Assets you can buy and sell.**
+5. ~~**Crime as a menu**~~ — **done.** Seven crimes, age-gated from eight to
+   eighteen, running into the conviction and prison machinery that already
+   existed.
+6. ~~**Assets you can buy and sell**~~ — **done.** A 16-item catalogue in the
+   Money screen, priced so the annual upkeep is the interesting half.
 7. **Careers, broadened** — toward 100+ tracks, part-time and freelance work.
 8. **Ribbons** — an end-of-life summary worth collecting.
 

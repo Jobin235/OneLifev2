@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ChoiceRejected, InteractionRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
+import { ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -212,6 +212,32 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.post('/lives/:lifeId/buy', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { purchasableId } = request.body as { purchasableId: string };
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        game.buy(state, purchasableId);
+        return { life: lifeView(state, game.content), money: moneyView(state, game.config, game.content) };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.post('/lives/:lifeId/sell', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { assetId } = request.body as { assetId: string };
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        game.sell(state, assetId);
+        return { life: lifeView(state, game.content), money: moneyView(state, game.config, game.content) };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/actions', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     const state = await load(userOf(request), lifeId);
@@ -220,7 +246,7 @@ export const registerLifeRoutes = (
 
   app.get('/lives/:lifeId/money', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
-    return moneyView(await load(userOf(request), lifeId), game.config);
+    return moneyView(await load(userOf(request), lifeId), game.config, game.content);
   });
 
   app.get('/lives/:lifeId/work', async (request, reply) => {
@@ -261,6 +287,7 @@ export const registerLifeRoutes = (
 const statusFor = (error: unknown): number => {
   if (error instanceof ChoiceRejected) return 409;
   if (error instanceof InteractionRejected) return 409;
+  if (error instanceof PurchaseRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };
   if (typeof withCode.statusCode === 'number') return withCode.statusCode;
