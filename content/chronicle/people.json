@@ -1,0 +1,20 @@
+[
+  { "id": "pe_friend_drift", "icon": "🌊", "text": "You and {friend} went months without speaking, and neither of you meant anything by it.", "category": "relationship", "minAge": 16, "requires": ["has_friend"], "cooldownYears": 7 },
+  { "id": "pe_friend_late", "icon": "📞", "text": "{friend} rang late and you talked until it got light.", "category": "relationship", "minAge": 15, "requires": ["has_friend"], "cooldownYears": 8 },
+  { "id": "pe_friend_moved", "icon": "🧳", "text": "{friend} moved away. You both said you would visit.", "category": "relationship", "minAge": 14, "requires": ["has_friend"], "cooldownYears": 12 },
+  { "id": "pe_parent_ageing", "icon": "🫖", "text": "{parent} mentioned a knee, lightly, twice.", "category": "family", "minAge": 25, "requires": ["has_parent"], "cooldownYears": 6 },
+  { "id": "pe_parent_proud", "icon": "🖼️", "text": "{parent} told someone else about you while you were in the room.", "category": "family", "minAge": 16, "requires": ["has_parent"], "cooldownYears": 9 },
+  { "id": "pe_parent_argument", "icon": "🌡️", "text": "You and {parent} had the same argument you always have.", "category": "family", "minAge": 14, "requires": ["has_parent"], "cooldownYears": 6 },
+  { "id": "pe_sibling_call", "icon": "📱", "text": "You and {sibling} spoke properly for the first time in a while.", "category": "family", "minAge": 18, "requires": ["has_sibling"], "cooldownYears": 7 },
+  { "id": "pe_partner_routine", "icon": "🍳", "text": "You and {partner} settled into a routine you would both have called boring at twenty.", "category": "relationship", "minAge": 22, "requires": ["has_partner"], "cooldownYears": 8 },
+  { "id": "pe_partner_small_fight", "icon": "🌧️", "text": "You and {partner} argued about something that was not what you were arguing about.", "category": "relationship", "minAge": 20, "requires": ["has_partner"], "cooldownYears": 5 },
+  { "id": "pe_partner_good_week", "icon": "☀️", "text": "You and {partner} had a good week, for no particular reason.", "category": "relationship", "minAge": 20, "requires": ["has_partner"], "cooldownYears": 6 },
+  { "id": "pe_child_word", "icon": "👶", "text": "{child} learned a word and used it relentlessly.", "category": "family", "minAge": 20, "requires": ["has_children"], "cooldownYears": 5 },
+  { "id": "pe_child_school", "icon": "🎒", "text": "You dropped {child} at school and they did not look back.", "category": "family", "minAge": 24, "requires": ["has_children"], "cooldownYears": 6 },
+  { "id": "pe_child_argument", "icon": "🚪", "text": "{child} slammed a door and you recognised the gesture.", "category": "family", "minAge": 30, "requires": ["has_children"], "cooldownYears": 6 },
+  { "id": "pe_child_quiet_proud", "icon": "🌱", "text": "{child} did something kind when they thought nobody was watching.", "category": "family", "minAge": 26, "requires": ["has_children"], "cooldownYears": 7 },
+  { "id": "pe_funeral", "icon": "🕯️", "text": "You went to a funeral and saw people you only ever see at funerals.", "category": "family", "minAge": 25, "cooldownYears": 8 },
+  { "id": "pe_wedding", "icon": "💒", "text": "You went to a wedding and cried at the part everyone cries at.", "category": "relationship", "minAge": 20, "cooldownYears": 7 },
+  { "id": "pe_new_neighbour", "icon": "🏘️", "text": "New neighbours moved in. You have still not learned their names.", "category": "random", "minAge": 20, "cooldownYears": 10 },
+  { "id": "pe_lonely", "icon": "🪟", "text": "You went a whole week without a real conversation.", "category": "relationship", "minAge": 18, "requires": ["unhappy"], "forbids": ["has_partner"], "cooldownYears": 6 }
+]

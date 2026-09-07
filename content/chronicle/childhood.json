@@ -1,0 +1,22 @@
+[
+  { "id": "ch_first_word", "icon": "🗣️", "text": "You said your first word. Nobody agrees on what it was.", "category": "family", "minAge": 1, "maxAge": 2, "cooldownYears": 99 },
+  { "id": "ch_walked", "icon": "🦶", "text": "You walked across the room and immediately fell over.", "category": "family", "minAge": 1, "maxAge": 3, "cooldownYears": 99 },
+  { "id": "ch_favourite_toy", "icon": "🧸", "text": "You would not go anywhere without a particular stuffed rabbit.", "category": "family", "minAge": 2, "maxAge": 6 },
+  { "id": "ch_afraid_dark", "icon": "🌙", "text": "You became convinced something lived under the bed.", "category": "family", "minAge": 3, "maxAge": 8 },
+  { "id": "ch_parent_song", "icon": "🎵", "text": "{parent} sang the same song every night until you could sing it back.", "category": "family", "minAge": 2, "maxAge": 6, "requires": ["has_parent"] },
+  { "id": "ch_sibling_fight", "icon": "🥊", "text": "You and {sibling} fought over something neither of you remembers.", "category": "family", "minAge": 4, "maxAge": 15, "requires": ["has_sibling"], "cooldownYears": 6 },
+  { "id": "ch_sibling_secret", "icon": "🤫", "text": "{sibling} kept a secret for you, and never brought it up again.", "category": "family", "minAge": 6, "maxAge": 17, "requires": ["has_sibling"] },
+  { "id": "ch_bike", "icon": "🚲", "text": "You learned to ride a bike, badly, with consequences for both knees.", "category": "family", "minAge": 5, "maxAge": 9, "cooldownYears": 99 },
+  { "id": "ch_lost_tooth", "icon": "🦷", "text": "You lost a tooth and negotiated hard over what it was worth.", "category": "family", "minAge": 5, "maxAge": 9 },
+  { "id": "ch_imaginary", "icon": "👻", "text": "You had an imaginary friend with strong opinions about dinner.", "category": "family", "minAge": 3, "maxAge": 7 },
+  { "id": "ch_collection", "icon": "🪨", "text": "You started collecting something your parents kept trying to throw out.", "category": "family", "minAge": 5, "maxAge": 12 },
+  { "id": "ch_summer", "icon": "☀️", "text": "You spent an entire summer outside and came back a different colour.", "category": "family", "minAge": 5, "maxAge": 14 },
+  { "id": "ch_grandparent", "icon": "👵", "text": "You were told a family story you did not understand until much later.", "category": "family", "minAge": 6, "maxAge": 14 },
+  { "id": "ch_broke_something", "icon": "💥", "text": "You broke something of {parent}'s and blamed the dog.", "category": "family", "minAge": 5, "maxAge": 12, "requires": ["has_parent"] },
+  { "id": "ch_pet", "icon": "🐕", "text": "The family got a dog. It preferred someone else.", "category": "family", "minAge": 4, "maxAge": 14 },
+  { "id": "ch_moved_room", "icon": "🚪", "text": "You got your own room and found it too quiet.", "category": "family", "minAge": 6, "maxAge": 13 },
+  { "id": "ch_money_tight", "icon": "💸", "text": "You worked out that money was tight, and pretended you hadn't.", "category": "family", "minAge": 7, "maxAge": 15, "requires": ["broke"] },
+  { "id": "ch_nightmare", "icon": "😰", "text": "You had the same nightmare three nights running.", "category": "health", "minAge": 4, "maxAge": 11 },
+  { "id": "ch_hospital", "icon": "🏥", "text": "A fall needed more stitches than anyone expected.", "category": "health", "minAge": 4, "maxAge": 13 },
+  { "id": "ch_reading", "icon": "📖", "text": "You read the same book so many times the spine gave up.", "category": "random", "minAge": 6, "maxAge": 14, "requires": ["sharp"] }
+]

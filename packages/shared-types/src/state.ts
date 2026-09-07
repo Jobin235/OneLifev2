@@ -62,6 +62,8 @@ export const LifeStateSchema = z.object({
    * global budget.
    */
   activityUsage: z.record(z.string(), z.number().int().min(0)),
+  /** chronicleLineId → the age it last appeared, so a life does not repeat itself. */
+  chronicleLog: z.record(z.string(), z.number().int()),
 
   /** For the return-diff engine; never shown to the player (§88). */
   lastSeenWorldSnapshotId: z.string().nullable(),
@@ -73,6 +75,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
 
 /**
  * 2: replaced the global per-year action budget with per-activity annual limits.
- * A saved life from version 1 has no `activityUsage` and cannot be resumed.
+ * 3: added the chronicle (decision-free log lines) and its per-line cooldowns.
+ * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;

@@ -1,0 +1,19 @@
+[
+  { "id": "wk_first_payslip", "icon": "🧾", "text": "Your first payslip was smaller than the number you had been quoted.", "category": "career", "minAge": 15, "maxAge": 30, "requires": ["employed"], "cooldownYears": 99 },
+  { "id": "wk_quiet_month", "icon": "🗓️", "text": "Work was quiet for a month and you enjoyed it more than you admitted.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 8 },
+  { "id": "wk_late_nights", "icon": "🌙", "text": "You worked three late nights in a row for something nobody used.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 6 },
+  { "id": "wk_colleague_left", "icon": "📦", "text": "{colleague} left, and the place was worse for a while.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 8 },
+  { "id": "wk_new_system", "icon": "🖥️", "text": "They changed the system. Everyone hated it. It stayed.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 9 },
+  { "id": "wk_credit_taken", "icon": "😠", "text": "Someone presented your work as theirs, smoothly, in a meeting.", "category": "career", "minAge": 20, "requires": ["employed"], "cooldownYears": 10 },
+  { "id": "wk_thanked", "icon": "🙏", "text": "Someone thanked you properly, in front of people, and you thought about it for weeks.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 10 },
+  { "id": "wk_commute", "icon": "🚇", "text": "You learned the commute so well you stopped seeing it.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 12 },
+  { "id": "wk_lunch_rut", "icon": "🥡", "text": "You ate the same lunch every working day for a year.", "category": "career", "minAge": 18, "requires": ["employed"], "cooldownYears": 12 },
+  { "id": "wk_almost_quit", "icon": "🚪", "text": "You drafted a resignation letter and did not send it.", "category": "career", "minAge": 20, "requires": ["employed"], "cooldownYears": 8 },
+  { "id": "wk_good_year", "icon": "📈", "text": "It was a good year at work. You were briefly certain you had it figured out.", "category": "career", "minAge": 22, "requires": ["employed"], "cooldownYears": 9 },
+  { "id": "wk_unemployed_apps", "icon": "📮", "text": "You applied for a lot of jobs and heard back from almost none.", "category": "career", "minAge": 22, "maxAge": 66, "requires": ["unemployed"], "cooldownYears": 5 },
+  { "id": "wk_unemployed_days", "icon": "🕰️", "text": "The days got long and started to look alike.", "category": "career", "minAge": 22, "maxAge": 66, "requires": ["unemployed"], "cooldownYears": 5 },
+  { "id": "wk_business_slow", "icon": "🐌", "text": "The business had a slow quarter and you took it personally.", "category": "business", "minAge": 20, "requires": ["has_business"], "cooldownYears": 6 },
+  { "id": "wk_business_regular", "icon": "🤝", "text": "A customer became a regular, then something like a friend.", "category": "business", "minAge": 20, "requires": ["has_business"], "cooldownYears": 8 },
+  { "id": "wk_retired_slow", "icon": "🪴", "text": "You filled the mornings first. The afternoons took longer.", "category": "career", "minAge": 60, "requires": ["retired"], "cooldownYears": 7 },
+  { "id": "wk_retired_advice", "icon": "☎️", "text": "Someone from the old job rang for advice, and you enjoyed it more than you let on.", "category": "career", "minAge": 60, "requires": ["retired"], "cooldownYears": 8 }
+]

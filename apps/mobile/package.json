@@ -11,7 +11,8 @@
     "cap:ios": "cap open ios",
     "cap:android": "cap open android",
     "build:local": "VITE_LOCAL=1 vite build",
-    "build:standalone": "VITE_LOCAL=1 vite build && node scripts/build-standalone.mjs"
+    "build:standalone": "VITE_LOCAL=1 vite build && node scripts/build-standalone.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "react": "^18.3.1",

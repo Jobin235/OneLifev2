@@ -1,3 +1,4 @@
+import { chronicleYear } from './chronicle.js';
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
 import type { EventInstance, LifeState, WorldIndicators } from '@lineage/shared-types';
@@ -175,6 +176,9 @@ export const advanceYear = (
   } else {
     state.gameState = 'IDLE';
   }
+
+  // The texture of the year, around whatever the events did.
+  chronicleYear(state, content, config, rng);
 
   // Minor events resolve themselves; they are recap lines, not decisions (§19).
   for (const minor of selection.minor) {

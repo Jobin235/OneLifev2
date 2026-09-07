@@ -3,19 +3,145 @@
     "id": "health_the_sleep_thing",
     "version": 1,
     "category": "health",
-    "card": { "icon": "🩺", "label": "YOUR BODY", "tint": "#EAF6F0", "color": "#3D7A5E" },
+    "card": {
+      "icon": "🩺",
+      "label": "YOUR BODY",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
     "weightClass": "major",
     "priority": 68,
     "minAge": 22,
     "maxAge": 60,
-    "conditions": { "any": [ { "field": "stats.health", "op": "<", "value": 70 }, { "field": "habit.overwork", "op": "==", "value": true } ] },
+    "conditions": {
+      "any": [
+        {
+          "field": "stats.health",
+          "op": "<",
+          "value": 70
+        },
+        {
+          "field": "habit.overwork",
+          "op": "==",
+          "value": true
+        }
+      ]
+    },
     "participants": [],
     "title": "You haven't slept properly since March.",
     "body": "Nothing is wrong, exactly. You just wake up at 4am and start thinking about work.",
     "choices": [
-      { "id": "see_doctor", "label": "Go see a doctor", "outcomes": [ { "id": "caught", "text": "Borderline blood pressure, early. She told you to fix it now, while it's cheap.", "historyLine": "A doctor caught your blood pressure early.", "effects": [ { "op": "money", "delta": -18000 }, { "op": "condition_add", "conditionId": "high_blood_pressure", "label": "High blood pressure", "annualHealthDrain": 1 }, { "op": "condition_treat", "conditionId": "high_blood_pressure" }, { "op": "stat", "stat": "health", "delta": 9 }, { "op": "stat", "stat": "smarts", "delta": 2 } ] } ] },
-      { "id": "push_through", "label": "Push through it", "outcomes": [ { "id": "pushed", "text": "You pushed through. It became the normal way you feel.", "historyLine": "You ignored the sleep thing.", "effects": [ { "op": "stat", "stat": "health", "delta": -11 }, { "op": "stat", "stat": "happiness", "delta": -5 }, { "op": "condition_add", "conditionId": "high_blood_pressure", "label": "High blood pressure", "annualHealthDrain": 2 }, { "op": "habit_add", "habitId": "overwork" }, { "op": "schedule", "eventId": "health_the_bill_comes_due", "inYears": 25 } ] } ] },
-      { "id": "week_off", "label": "Take a week off", "requires": { "field": "money.liquid", "op": ">=", "value": 90000 }, "outcomes": [ { "id": "rested", "text": "You slept for nine days and came back better than a raise would have made you.", "historyLine": "You took a week off and it worked.", "effects": [ { "op": "money", "delta": -90000 }, { "op": "stat", "stat": "health", "delta": 7 }, { "op": "stat", "stat": "happiness", "delta": 10 }, { "op": "habit_remove", "habitId": "overwork" } ] } ] }
+      {
+        "id": "see_doctor",
+        "label": "Go see a doctor",
+        "outcomes": [
+          {
+            "id": "caught",
+            "text": "Borderline blood pressure, early. She told you to fix it now, while it's cheap.",
+            "historyLine": "A doctor caught your blood pressure early.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -18000
+              },
+              {
+                "op": "condition_add",
+                "conditionId": "high_blood_pressure",
+                "label": "High blood pressure",
+                "annualHealthDrain": 1
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "high_blood_pressure"
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "push_through",
+        "label": "Push through it",
+        "outcomes": [
+          {
+            "id": "pushed",
+            "text": "You pushed through. It became the normal way you feel.",
+            "historyLine": "You ignored the sleep thing.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -11
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "condition_add",
+                "conditionId": "high_blood_pressure",
+                "label": "High blood pressure",
+                "annualHealthDrain": 2
+              },
+              {
+                "op": "habit_add",
+                "habitId": "overwork"
+              },
+              {
+                "op": "schedule",
+                "eventId": "health_the_bill_comes_due",
+                "inYears": 25
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "week_off",
+        "label": "Take a week off",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 90000
+        },
+        "outcomes": [
+          {
+            "id": "rested",
+            "text": "You slept for nine days and came back better than a raise would have made you.",
+            "historyLine": "You took a week off and it worked.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -90000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 7
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 10
+              },
+              {
+                "op": "habit_remove",
+                "habitId": "overwork"
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 8,
     "maxPerLife": 2
@@ -24,20 +150,153 @@
     "id": "health_the_bill_comes_due",
     "version": 1,
     "category": "health",
-    "card": { "icon": "🏥", "label": "HOSPITAL", "tint": "#EAF6F0", "color": "#3D7A5E" },
+    "card": {
+      "icon": "🏥",
+      "label": "HOSPITAL",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
     "weightClass": "major",
     "priority": 99,
     "minAge": 45,
     "scheduledOnly": true,
-    "participants": [ { "role": "partner", "kinds": ["spouse", "partner"], "pick": "closest", "required": false } ],
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "spouse",
+          "partner"
+        ],
+        "pick": "closest",
+        "required": false
+      }
+    ],
     "title": "You had a heart attack.",
     "body": "You survived it. What happens next is a decision, and it has a price.",
     "choices": [
-      { "id": "bypass", "label": "Triple bypass", "note": "best odds", "requires": { "field": "money.liquid", "op": ">=", "value": 1700000 }, "outcomes": [ { "id": "bypass_done", "text": "Six weeks flat on your back and then twenty more years. You do not talk about the six weeks.", "historyLine": "You had a triple bypass at {age}.", "effects": [ { "op": "money", "delta": -1700000 }, { "op": "stat", "stat": "health", "delta": 30 }, { "op": "condition_treat", "conditionId": "high_blood_pressure" }, { "op": "condition_treat", "conditionId": "heart_disease" }, { "op": "habit_remove", "habitId": "smoking" } ] } ] },
-      { "id": "stents", "label": "Stents and medication", "note": "good enough, probably", "outcomes": [ { "id": "stents_done", "text": "Good enough, probably. Pills every day for the rest of your life, and you take them for about four years.", "historyLine": "You had stents fitted at {age}.", "effects": [ { "op": "money", "delta": -400000 }, { "op": "stat", "stat": "health", "delta": 16 }, { "op": "condition_treat", "conditionId": "heart_disease" } ] } ] },
-      { "id": "go_home", "label": "Go home and change everything", "note": "$0", "outcomes": [
-        { "id": "actually_changed", "chance": 0.3, "when": { "field": "hidden.discipline", "op": ">=", "value": 65 }, "text": "Walking, salt, sleep. You did it, every day, and it worked. Most people don't.", "historyLine": "You changed everything after the heart attack, and it held.", "effects": [ { "op": "stat", "stat": "health", "delta": 22 }, { "op": "stat", "stat": "fitness", "delta": 14 }, { "op": "habit_remove", "habitId": "smoking" }, { "op": "habit_add", "habitId": "running" } ] },
-        { "id": "didnt", "text": "You meant it for about five weeks. Works for some people. You have never been one of them.", "historyLine": "You went home and didn't change anything.", "effects": [ { "op": "stat", "stat": "health", "delta": 4 }, { "op": "condition_add", "conditionId": "heart_disease", "label": "Heart disease", "annualHealthDrain": 4 } ] } ] }
+      {
+        "id": "bypass",
+        "label": "Triple bypass",
+        "note": "best odds",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 1700000
+        },
+        "outcomes": [
+          {
+            "id": "bypass_done",
+            "text": "Six weeks flat on your back and then twenty more years. You do not talk about the six weeks.",
+            "historyLine": "You had a triple bypass at {age}.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -1700000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 30
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "high_blood_pressure"
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "heart_disease"
+              },
+              {
+                "op": "habit_remove",
+                "habitId": "smoking"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stents",
+        "label": "Stents and medication",
+        "note": "good enough, probably",
+        "outcomes": [
+          {
+            "id": "stents_done",
+            "text": "Good enough, probably. Pills every day for the rest of your life, and you take them for about four years.",
+            "historyLine": "You had stents fitted at {age}.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -400000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 16
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "heart_disease"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "go_home",
+        "label": "Go home and change everything",
+        "note": "$0",
+        "outcomes": [
+          {
+            "id": "actually_changed",
+            "chance": 0.3,
+            "when": {
+              "field": "hidden.discipline",
+              "op": ">=",
+              "value": 65
+            },
+            "text": "Walking, salt, sleep. You did it, every day, and it worked. Most people don't.",
+            "historyLine": "You changed everything after the heart attack, and it held.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 22
+              },
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 14
+              },
+              {
+                "op": "habit_remove",
+                "habitId": "smoking"
+              },
+              {
+                "op": "habit_add",
+                "habitId": "running"
+              }
+            ]
+          },
+          {
+            "id": "didnt",
+            "text": "You meant it for about five weeks. Works for some people. You have never been one of them.",
+            "historyLine": "You went home and didn't change anything.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 4
+              },
+              {
+                "op": "condition_add",
+                "conditionId": "heart_disease",
+                "label": "Heart disease",
+                "annualHealthDrain": 4
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 10,
     "maxPerLife": 2
@@ -46,17 +305,86 @@
     "id": "health_a_diagnosis",
     "version": 1,
     "category": "health",
-    "card": { "icon": "🩻", "label": "YOUR BODY", "tint": "#EAF6F0", "color": "#3D7A5E" },
+    "card": {
+      "icon": "🩻",
+      "label": "YOUR BODY",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
     "weightClass": "major",
     "priority": 76,
     "minAge": 30,
-    "conditions": { "field": "health.untreated", "op": ">=", "value": 1 },
+    "conditions": {
+      "field": "health.untreated",
+      "op": ">=",
+      "value": 1
+    },
     "participants": [],
     "title": "They want to see you about the results.",
     "body": "Which is never how it goes when the results are fine.",
     "choices": [
-      { "id": "treat_it", "label": "Treat it properly", "requires": { "field": "money.liquid", "op": ">=", "value": 120000 }, "outcomes": [ { "id": "treated", "text": "You did the whole course, including the boring parts. It stopped being a thing that was happening to you.", "historyLine": "You got treated properly at {age}.", "effects": [ { "op": "money", "delta": -120000 }, { "op": "stat", "stat": "health", "delta": 12 }, { "op": "condition_treat", "conditionId": "high_blood_pressure" }, { "op": "condition_treat", "conditionId": "type_2_diabetes" }, { "op": "condition_treat", "conditionId": "anxiety" } ] } ] },
-      { "id": "manage_it", "label": "Manage it yourself", "outcomes": [ { "id": "managed", "text": "You managed it yourself, which mostly meant thinking about it and doing nothing.", "historyLine": "You decided to manage it yourself.", "effects": [ { "op": "stat", "stat": "health", "delta": -6 }, { "op": "stat", "stat": "happiness", "delta": -4 } ] } ] }
+      {
+        "id": "treat_it",
+        "label": "Treat it properly",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 120000
+        },
+        "outcomes": [
+          {
+            "id": "treated",
+            "text": "You did the whole course, including the boring parts. It stopped being a thing that was happening to you.",
+            "historyLine": "You got treated properly at {age}.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -120000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 12
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "high_blood_pressure"
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "type_2_diabetes"
+              },
+              {
+                "op": "condition_treat",
+                "conditionId": "anxiety"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "manage_it",
+        "label": "Manage it yourself",
+        "outcomes": [
+          {
+            "id": "managed",
+            "text": "You managed it yourself, which mostly meant thinking about it and doing nothing.",
+            "historyLine": "You decided to manage it yourself.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 6,
     "maxPerLife": 4
@@ -65,23 +393,161 @@
     "id": "crime_the_favour",
     "version": 1,
     "category": "crime",
-    "card": { "icon": "🕶️", "label": "SOMEONE ASKS A FAVOUR", "tint": "#FFF0E8", "color": "#C4462E" },
+    "card": {
+      "icon": "🕶️",
+      "label": "SOMEONE ASKS A FAVOUR",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
     "weightClass": "major",
     "priority": 74,
     "minAge": 17,
     "maxAge": 55,
-    "conditions": { "all": [ { "field": "money.liquid", "op": "<", "value": 200000 }, { "field": "record.incarcerated", "op": "==", "value": false } ] },
-    "participants": [ { "role": "friend", "kinds": ["friend", "acquaintance", "best_friend"], "pick": "closest", "required": false } ],
+    "conditions": {
+      "all": [
+        {
+          "field": "money.liquid",
+          "op": "<",
+          "value": 200000
+        },
+        {
+          "field": "record.incarcerated",
+          "op": "==",
+          "value": false
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "friend",
+        "kinds": [
+          "friend",
+          "acquaintance",
+          "best_friend"
+        ],
+        "pick": "closest",
+        "required": false
+      }
+    ],
     "title": "Drive a van, don't ask what's in it. $4,000.",
     "body": "It's a friend of {friend}'s. Two hours each way, tonight. He says it's the third time he's asked someone and nothing has ever gone wrong.",
     "choices": [
-      { "id": "do_it", "label": "Do it", "note": "caught 34%", "outcomes": [
-        { "id": "caught", "chance": 0.34, "text": "They were waiting at the second junction. It turns out it was the third time he'd asked someone.", "historyLine": "You were arrested driving a van you shouldn't have.", "effects": [ { "op": "convict", "offence": "Possession with intent", "sentenceYears": 3, "fine": 0, "facility": "Columbia Correctional" }, { "op": "stat", "stat": "happiness", "delta": -25 } ] },
-        { "id": "fine", "text": "Nothing happened. You were home by four and $4,000 better off, and you did not sleep.", "historyLine": "You drove a van for $4,000 and didn't ask.", "effects": [ { "op": "money", "delta": 400000 }, { "op": "stat", "stat": "happiness", "delta": -4 }, { "op": "flag", "key": "did_the_favour", "value": true }, { "op": "schedule", "eventId": "crime_they_ask_again", "inYears": 1 } ] } ] },
-      { "id": "ask_first", "label": "Ask what's in it first", "note": "caught 12%", "outcomes": [
-        { "id": "smaller_job", "chance": 0.88, "text": "He told you, and it was smaller than you'd feared and worse than he'd said. You did a shorter run for less.", "historyLine": "You asked what was in the van, and did a smaller job.", "effects": [ { "op": "money", "delta": 150000 }, { "op": "stat", "stat": "smarts", "delta": 3 } ] },
-        { "id": "caught_anyway", "text": "Asking did not help. Knowing what it was made the interview much shorter.", "historyLine": "You were caught, and you'd known what was in the van.", "effects": [ { "op": "convict", "offence": "Possession with intent", "sentenceYears": 2, "fine": 0, "facility": "Columbia Correctional" } ] } ] },
-      { "id": "say_no", "label": "Say no", "note": "{friend} −8", "outcomes": [ { "id": "no", "text": "You said no. {friend} was fine about it in the way that people are fine about it.", "historyLine": "You turned down the van job.", "effects": [ { "op": "relationship", "target": "friend", "dimension": "closeness", "delta": -8 }, { "op": "hidden", "attr": "discipline", "delta": 5 } ] } ] }
+      {
+        "id": "do_it",
+        "label": "Do it",
+        "note": "caught 34%",
+        "outcomes": [
+          {
+            "id": "caught",
+            "chance": 0.34,
+            "text": "They were waiting at the second junction. It turns out it was the third time he'd asked someone.",
+            "historyLine": "You were arrested driving a van you shouldn't have.",
+            "effects": [
+              {
+                "op": "convict",
+                "offence": "Possession with intent",
+                "sentenceYears": 3,
+                "fine": 0,
+                "facility": "Columbia Correctional"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -25
+              }
+            ]
+          },
+          {
+            "id": "fine",
+            "text": "Nothing happened. You were home by four and $4,000 better off, and you did not sleep.",
+            "historyLine": "You drove a van for $4,000 and didn't ask.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 400000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "flag",
+                "key": "did_the_favour",
+                "value": true
+              },
+              {
+                "op": "schedule",
+                "eventId": "crime_they_ask_again",
+                "inYears": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask_first",
+        "label": "Ask what's in it first",
+        "note": "caught 12%",
+        "outcomes": [
+          {
+            "id": "smaller_job",
+            "chance": 0.88,
+            "text": "He told you, and it was smaller than you'd feared and worse than he'd said. You did a shorter run for less.",
+            "historyLine": "You asked what was in the van, and did a smaller job.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 150000
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 3
+              }
+            ]
+          },
+          {
+            "id": "caught_anyway",
+            "text": "Asking did not help. Knowing what it was made the interview much shorter.",
+            "historyLine": "You were caught, and you'd known what was in the van.",
+            "effects": [
+              {
+                "op": "convict",
+                "offence": "Possession with intent",
+                "sentenceYears": 2,
+                "fine": 0,
+                "facility": "Columbia Correctional"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "say_no",
+        "label": "Say no",
+        "note": "{friend} −8",
+        "outcomes": [
+          {
+            "id": "no",
+            "text": "You said no. {friend} was fine about it in the way that people are fine about it.",
+            "historyLine": "You turned down the van job.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "closeness",
+                "delta": -8
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 5,
     "maxPerLife": 3
@@ -90,52 +556,230 @@
     "id": "crime_they_ask_again",
     "version": 1,
     "category": "crime",
-    "card": { "icon": "📦", "label": "AGAIN", "tint": "#FFF0E8", "color": "#C4462E" },
+    "card": {
+      "icon": "📦",
+      "label": "AGAIN",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
     "weightClass": "major",
     "priority": 76,
     "minAge": 17,
     "scheduledOnly": true,
-    "conditions": { "field": "record.incarcerated", "op": "==", "value": false },
+    "conditions": {
+      "field": "record.incarcerated",
+      "op": "==",
+      "value": false
+    },
     "participants": [],
     "title": "They want you to do it regularly now.",
     "body": "Same route, every second Thursday, twice the money. It stops being a favour at this point and becomes a job.",
     "choices": [
-      { "id": "go_regular", "label": "Make it regular", "outcomes": [
-        { "id": "caught", "chance": 0.55, "text": "The odds do not reset each time. They caught you in the fourth month.", "historyLine": "You went regular, and got caught.", "effects": [ { "op": "convict", "offence": "Trafficking", "sentenceYears": 5, "fine": 0, "facility": "Columbia Correctional" } ] },
-        { "id": "rich", "text": "Eleven months of it. You had more cash than you had places to put it, which turned out to be its own problem.", "historyLine": "You ran a regular route for eleven months.", "effects": [ { "op": "money", "delta": 4400000 }, { "op": "stat", "stat": "happiness", "delta": -8 }, { "op": "trait_add", "traitId": "reckless" }, { "op": "schedule", "eventId": "crime_they_ask_again", "inYears": 1 } ] } ] },
-      { "id": "walk_away", "label": "Walk away now", "outcomes": [ { "id": "walked", "text": "You walked away while it was still possible to walk away. Not everybody gets that window.", "historyLine": "You walked away from it before it got worse.", "effects": [ { "op": "hidden", "attr": "discipline", "delta": 10 }, { "op": "stat", "stat": "happiness", "delta": 5 } ] } ] }
+      {
+        "id": "go_regular",
+        "label": "Make it regular",
+        "outcomes": [
+          {
+            "id": "caught",
+            "chance": 0.55,
+            "text": "The odds do not reset each time. They caught you in the fourth month.",
+            "historyLine": "You went regular, and got caught.",
+            "effects": [
+              {
+                "op": "convict",
+                "offence": "Trafficking",
+                "sentenceYears": 5,
+                "fine": 0,
+                "facility": "Columbia Correctional"
+              }
+            ]
+          },
+          {
+            "id": "rich",
+            "text": "Eleven months of it. You had more cash than you had places to put it, which turned out to be its own problem.",
+            "historyLine": "You ran a regular route for eleven months.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 4400000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              },
+              {
+                "op": "trait_add",
+                "traitId": "reckless"
+              },
+              {
+                "op": "schedule",
+                "eventId": "crime_they_ask_again",
+                "inYears": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "walk_away",
+        "label": "Walk away now",
+        "outcomes": [
+          {
+            "id": "walked",
+            "text": "You walked away while it was still possible to walk away. Not everybody gets that window.",
+            "historyLine": "You walked away from it before it got worse.",
+            "effects": [
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 10
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      }
     ],
-    "cooldownYears": 3,
+    "cooldownYears": 5,
     "maxPerLife": 3
   },
   {
     "id": "prison_the_yard",
     "version": 1,
     "category": "prison",
-    "card": { "icon": "🚪", "label": "IN THE YARD", "tint": "#F2E8D9", "color": "#8A6A20" },
+    "card": {
+      "icon": "🚪",
+      "label": "IN THE YARD",
+      "tint": "#F2E8D9",
+      "color": "#8A6A20"
+    },
     "weightClass": "major",
     "priority": 88,
     "minAge": 16,
-    "conditions": { "field": "record.incarcerated", "op": "==", "value": true },
+    "conditions": {
+      "field": "record.incarcerated",
+      "op": "==",
+      "value": true
+    },
     "participants": [],
-    "tags": ["while_inside"],
+    "tags": [
+      "while_inside"
+    ],
     "title": "Someone offers you protection, for a price later.",
     "body": "Nothing is asked for now. That's what makes it expensive. He gets out four months before you do.",
     "choices": [
-      { "id": "accept", "label": "Accept", "outcomes": [ { "id": "accepted", "text": "Nobody bothered you again. The price arrived eleven months after you got out, as promised.", "historyLine": "You accepted protection inside.", "effects": [ { "op": "stat", "stat": "health", "delta": 6 }, { "op": "spawn_npc", "role": "cellmate", "templateId": "cellmate" }, { "op": "flag", "key": "owes_someone_inside", "value": true }, { "op": "schedule", "eventId": "crime_the_price", "inYears": 3 } ] } ] },
-      { "id": "decline", "label": "Decline politely", "outcomes": [
-        { "id": "fine", "chance": 0.55, "text": "Nothing came of it. You spent about a year expecting something to.", "historyLine": "You turned down protection inside.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -6 } ] },
-        { "id": "hurt", "text": "It came in the laundry, in February. You did not report it and neither did anyone else.", "historyLine": "You got hurt inside.", "effects": [ { "op": "stat", "stat": "health", "delta": -18 }, { "op": "condition_add", "conditionId": "bad_back", "label": "A back that never came right", "annualHealthDrain": 1 } ] } ] },
-      { "id": "tell_guard", "label": "Tell a guard", "outcomes": [ { "id": "told", "text": "You were moved to a different block, which solved the immediate thing and created a permanent one.", "historyLine": "You told a guard, and got moved.", "effects": [ { "op": "stat", "stat": "health", "delta": -4 }, { "op": "flag", "key": "known_as_a_talker", "value": true } ] } ] }
+      {
+        "id": "accept",
+        "label": "Accept",
+        "outcomes": [
+          {
+            "id": "accepted",
+            "text": "Nobody bothered you again. The price arrived eleven months after you got out, as promised.",
+            "historyLine": "You accepted protection inside.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 6
+              },
+              {
+                "op": "spawn_npc",
+                "role": "cellmate",
+                "templateId": "cellmate"
+              },
+              {
+                "op": "flag",
+                "key": "owes_someone_inside",
+                "value": true
+              },
+              {
+                "op": "schedule",
+                "eventId": "crime_the_price",
+                "inYears": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "Decline politely",
+        "outcomes": [
+          {
+            "id": "fine",
+            "chance": 0.55,
+            "text": "Nothing came of it. You spent about a year expecting something to.",
+            "historyLine": "You turned down protection inside.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              }
+            ]
+          },
+          {
+            "id": "hurt",
+            "text": "It came in the laundry, in February. You did not report it and neither did anyone else.",
+            "historyLine": "You got hurt inside.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -18
+              },
+              {
+                "op": "condition_add",
+                "conditionId": "bad_back",
+                "label": "A back that never came right",
+                "annualHealthDrain": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tell_guard",
+        "label": "Tell a guard",
+        "outcomes": [
+          {
+            "id": "told",
+            "text": "You were moved to a different block, which solved the immediate thing and created a permanent one.",
+            "historyLine": "You told a guard, and got moved.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -4
+              },
+              {
+                "op": "flag",
+                "key": "known_as_a_talker",
+                "value": true
+              }
+            ]
+          }
+        ]
+      }
     ],
-    "cooldownYears": 2,
+    "cooldownYears": 5,
     "maxPerLife": 3
   },
   {
     "id": "crime_the_price",
     "version": 1,
     "category": "crime",
-    "card": { "icon": "🧾", "label": "THE PRICE", "tint": "#FFF0E8", "color": "#C4462E" },
+    "card": {
+      "icon": "🧾",
+      "label": "THE PRICE",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
     "weightClass": "major",
     "priority": 84,
     "minAge": 18,
@@ -144,11 +788,98 @@
     "title": "He's out, and he's at your door.",
     "body": "Very friendly, very patient, and entirely clear about what he is here for. He remembers exactly what it was worth.",
     "choices": [
-      { "id": "pay", "label": "Pay him", "requires": { "field": "money.liquid", "op": ">=", "value": 1500000 }, "outcomes": [ { "id": "paid", "text": "You paid him and he was gracious about it, which was somehow the worst part.", "historyLine": "You paid off a debt from inside.", "effects": [ { "op": "money", "delta": -1500000 }, { "op": "stat", "stat": "happiness", "delta": -6 } ] } ] },
-      { "id": "do_the_job", "label": "Do what he's asking instead", "outcomes": [
-        { "id": "clean", "chance": 0.5, "text": "One night's work and the ledger was clear. You were unemployable for six weeks afterwards from the nerves.", "historyLine": "You worked off a prison debt.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -10 }, { "op": "stat", "stat": "health", "delta": -5 } ] },
-        { "id": "caught", "text": "It went wrong in the first hour. It is a much shorter sentence the second time and it lands much harder.", "historyLine": "You went back inside.", "effects": [ { "op": "convict", "offence": "Aggravated burglary", "sentenceYears": 2, "fine": 0, "facility": "Columbia Correctional" } ] } ] },
-      { "id": "refuse", "label": "Tell him no", "outcomes": [ { "id": "refused", "text": "He said that was fine, and left. Your car window went in a month later and nobody saw anything.", "historyLine": "You refused to pay what you owed him.", "effects": [ { "op": "money", "delta": -300000 }, { "op": "stat", "stat": "happiness", "delta": -8 }, { "op": "stat", "stat": "health", "delta": -4 } ] } ] }
+      {
+        "id": "pay",
+        "label": "Pay him",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 1500000
+        },
+        "outcomes": [
+          {
+            "id": "paid",
+            "text": "You paid him and he was gracious about it, which was somehow the worst part.",
+            "historyLine": "You paid off a debt from inside.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -1500000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "do_the_job",
+        "label": "Do what he's asking instead",
+        "outcomes": [
+          {
+            "id": "clean",
+            "chance": 0.5,
+            "text": "One night's work and the ledger was clear. You were unemployable for six weeks afterwards from the nerves.",
+            "historyLine": "You worked off a prison debt.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -10
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -5
+              }
+            ]
+          },
+          {
+            "id": "caught",
+            "text": "It went wrong in the first hour. It is a much shorter sentence the second time and it lands much harder.",
+            "historyLine": "You went back inside.",
+            "effects": [
+              {
+                "op": "convict",
+                "offence": "Aggravated burglary",
+                "sentenceYears": 2,
+                "fine": 0,
+                "facility": "Columbia Correctional"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "Tell him no",
+        "outcomes": [
+          {
+            "id": "refused",
+            "text": "He said that was fine, and left. Your car window went in a month later and nobody saw anything.",
+            "historyLine": "You refused to pay what you owed him.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -300000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 6,
     "maxPerLife": 2

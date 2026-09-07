@@ -3,19 +3,155 @@
     "id": "family_the_house",
     "version": 1,
     "category": "family",
-    "card": { "icon": "🏠", "label": "FAMILY", "tint": "#EEEAFB", "color": "#5F51AE" },
+    "card": {
+      "icon": "🏠",
+      "label": "FAMILY",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
     "weightClass": "major",
     "priority": 74,
     "minAge": 25,
     "maxAge": 60,
-    "conditions": { "all": [ { "field": "rel.father.alive", "op": "==", "value": true }, { "field": "money.liquid", "op": ">=", "value": 500000 } ] },
-    "participants": [ { "role": "parent", "kinds": ["father", "mother"], "pick": "oldest", "required": true } ],
+    "conditions": {
+      "all": [
+        {
+          "field": "rel.father.alive",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 500000
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "parent",
+        "kinds": [
+          "father",
+          "mother"
+        ],
+        "pick": "oldest",
+        "required": true
+      }
+    ],
     "title": "{parent} is thinking about selling the house.",
     "body": "The one you grew up in. {parent.they} called at 11pm to mention it casually, which is how {parent.they} mentions important things.",
     "choices": [
-      { "id": "buy_it", "label": "Offer to buy it", "requires": { "field": "money.liquid", "op": ">=", "value": 1800000 }, "outcomes": [ { "id": "bought", "text": "You took on the loan and a house you don't live in. {parent.they} cried, briefly, and denied it.", "historyLine": "You bought your parents' house.", "effects": [ { "op": "money", "delta": -1800000 }, { "op": "debt", "delta": 6100000 }, { "op": "asset_add", "assetId": "childhood_home" }, { "op": "stat", "stat": "happiness", "delta": 11 }, { "op": "stat", "stat": "charm", "delta": 6 }, { "op": "relationship", "target": "parent", "dimension": "affection", "delta": 20 }, { "op": "remember", "target": "parent", "factKey": "you_saved_the_house", "line": "You bought the house so {parent.they} wouldn't have to sell it.", "weight": 88 }, { "op": "flag", "key": "owns_childhood_home", "value": true } ] } ] },
-      { "id": "ask_wait", "label": "Ask {parent.them} to wait a year", "outcomes": [ { "id": "waited", "text": "{parent.they} waited. The market moved against {parent.them} and {parent.they} never said so.", "historyLine": "You talked {parent} out of selling. For now.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -2 }, { "op": "stat", "stat": "smarts", "delta": 3 }, { "op": "schedule", "eventId": "family_the_house_again", "inYears": 3 } ] } ] },
-      { "id": "their_call", "label": "Tell {parent.them} it's {parent.their} call", "outcomes": [ { "id": "sold", "text": "{parent.they} sold it in the spring. You drove past it once and didn't stop.", "historyLine": "{parent} sold the house.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -9 }, { "op": "remember", "target": "parent", "factKey": "you_let_the_house_go", "line": "You told {parent.them} it was {parent.their} call. The house went to strangers.", "weight": 72 } ] } ] }
+      {
+        "id": "buy_it",
+        "label": "Offer to buy it",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 1800000
+        },
+        "outcomes": [
+          {
+            "id": "bought",
+            "text": "You took on the loan and a house you don't live in. {parent.they} cried, briefly, and denied it.",
+            "historyLine": "You bought your parents' house.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -1800000
+              },
+              {
+                "op": "debt",
+                "delta": 6100000
+              },
+              {
+                "op": "asset_add",
+                "assetId": "childhood_home"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 11
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 6
+              },
+              {
+                "op": "relationship",
+                "target": "parent",
+                "dimension": "affection",
+                "delta": 20
+              },
+              {
+                "op": "remember",
+                "target": "parent",
+                "factKey": "you_saved_the_house",
+                "line": "You bought the house so {parent.they} wouldn't have to sell it.",
+                "weight": 88
+              },
+              {
+                "op": "flag",
+                "key": "owns_childhood_home",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask_wait",
+        "label": "Ask {parent.them} to wait a year",
+        "outcomes": [
+          {
+            "id": "waited",
+            "text": "{parent.they} waited. The market moved against {parent.them} and {parent.they} never said so.",
+            "historyLine": "You talked {parent} out of selling. For now.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 3
+              },
+              {
+                "op": "schedule",
+                "eventId": "family_the_house_again",
+                "inYears": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "their_call",
+        "label": "Tell {parent.them} it's {parent.their} call",
+        "outcomes": [
+          {
+            "id": "sold",
+            "text": "{parent.they} sold it in the spring. You drove past it once and didn't stop.",
+            "historyLine": "{parent} sold the house.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -9
+              },
+              {
+                "op": "remember",
+                "target": "parent",
+                "factKey": "you_let_the_house_go",
+                "line": "You told {parent.them} it was {parent.their} call. The house went to strangers.",
+                "weight": 72
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 10,
     "maxPerLife": 1
@@ -24,17 +160,84 @@
     "id": "family_the_house_again",
     "version": 1,
     "category": "family",
-    "card": { "icon": "🏠", "label": "FAMILY", "tint": "#EEEAFB", "color": "#5F51AE" },
+    "card": {
+      "icon": "🏠",
+      "label": "FAMILY",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
     "weightClass": "major",
     "priority": 70,
     "minAge": 26,
     "scheduledOnly": true,
-    "participants": [ { "role": "parent", "kinds": ["father", "mother"], "pick": "oldest", "required": true } ],
+    "participants": [
+      {
+        "role": "parent",
+        "kinds": [
+          "father",
+          "mother"
+        ],
+        "pick": "oldest",
+        "required": true
+      }
+    ],
     "title": "{parent} isn't asking this time.",
     "body": "The house is going on the market on Monday. This is a phone call about it, not a conversation about it.",
     "choices": [
-      { "id": "buy_now", "label": "Buy it before Monday", "requires": { "field": "money.liquid", "op": ">=", "value": 2400000 }, "outcomes": [ { "id": "bought", "text": "You paid over the odds to keep it in the family. Everyone agreed it was sentimental and nobody said it was wrong.", "historyLine": "You bought the family house at the last minute.", "effects": [ { "op": "money", "delta": -2400000 }, { "op": "asset_add", "assetId": "childhood_home" }, { "op": "stat", "stat": "happiness", "delta": 9 }, { "op": "flag", "key": "owns_childhood_home", "value": true } ] } ] },
-      { "id": "let_it_go", "label": "Let it go", "outcomes": [ { "id": "gone", "text": "It sold in nine days. There is a different door on it now.", "historyLine": "The family house was sold.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -7 } ] } ] }
+      {
+        "id": "buy_now",
+        "label": "Buy it before Monday",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 2400000
+        },
+        "outcomes": [
+          {
+            "id": "bought",
+            "text": "You paid over the odds to keep it in the family. Everyone agreed it was sentimental and nobody said it was wrong.",
+            "historyLine": "You bought the family house at the last minute.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -2400000
+              },
+              {
+                "op": "asset_add",
+                "assetId": "childhood_home"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 9
+              },
+              {
+                "op": "flag",
+                "key": "owns_childhood_home",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "let_it_go",
+        "label": "Let it go",
+        "outcomes": [
+          {
+            "id": "gone",
+            "text": "It sold in nine days. There is a different door on it now.",
+            "historyLine": "The family house was sold.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -7
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 10,
     "maxPerLife": 1
@@ -43,19 +246,160 @@
     "id": "family_kids_question",
     "version": 1,
     "category": "family",
-    "card": { "icon": "👶", "label": "A BIG ONE", "tint": "#FDE9F1", "color": "#C25585" },
+    "card": {
+      "icon": "👶",
+      "label": "A BIG ONE",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
     "weightClass": "major",
     "priority": 86,
     "minAge": 22,
     "maxAge": 45,
-    "conditions": { "all": [ { "field": "has.partner", "op": "==", "value": true }, { "field": "rel.partner.romance", "op": ">=", "value": 60 }, { "field": "count.children", "op": "<", "value": 4 } ] },
-    "participants": [ { "role": "partner", "kinds": ["spouse", "partner"], "pick": "closest", "required": true } ],
+    "conditions": {
+      "all": [
+        {
+          "field": "has.partner",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "rel.partner.romance",
+          "op": ">=",
+          "value": 60
+        },
+        {
+          "field": "count.children",
+          "op": "<",
+          "value": 4
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "partner",
+        "kinds": [
+          "spouse",
+          "partner"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
     "title": "{partner} asked what you think about kids.",
     "body": "Not hypothetically. {partner.they} asked on a Tuesday, doing the dishes, without looking up.",
     "choices": [
-      { "id": "yes_soon", "label": "\"Yes. Soon.\"", "outcomes": [ { "id": "born", "text": "The baby came the following March. Nothing about your life stayed the same shape.", "historyLine": "Your child was born.", "effects": [ { "op": "child_born" }, { "op": "stat", "stat": "happiness", "delta": 18 }, { "op": "money", "delta": -800000 }, { "op": "stat", "stat": "health", "delta": -5 }, { "op": "relationship", "target": "partner", "dimension": "closeness", "delta": 14 } ] } ] },
-      { "id": "not_yet", "label": "\"Not yet.\"", "outcomes": [ { "id": "waited", "text": "{partner.they} accepted it. {partner.they} asked again years later, and it was a harder conversation.", "historyLine": "You asked {partner} to wait on kids.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -5 }, { "op": "stat", "stat": "charm", "delta": -3 }, { "op": "relationship", "target": "partner", "dimension": "trust", "delta": -5 }, { "op": "schedule", "eventId": "family_kids_question", "inYears": 5 } ] } ] },
-      { "id": "no", "label": "\"I don't think I want them.\"", "outcomes": [ { "id": "truth", "text": "You told the truth. It cost you something you can't get back, and it was still the truth.", "historyLine": "You told {partner} you don't want kids.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -12 }, { "op": "relationship", "target": "partner", "dimension": "romance", "delta": -18 }, { "op": "stat", "stat": "smarts", "delta": 4 }, { "op": "remember", "target": "partner", "factKey": "you_dont_want_children", "line": "You told {partner.them} you don't want children.", "weight": 95 }, { "op": "flag", "key": "declined_children", "value": true } ] } ] }
+      {
+        "id": "yes_soon",
+        "label": "\"Yes. Soon.\"",
+        "outcomes": [
+          {
+            "id": "born",
+            "text": "The baby came the following March. Nothing about your life stayed the same shape.",
+            "historyLine": "Your child was born.",
+            "effects": [
+              {
+                "op": "child_born"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 18
+              },
+              {
+                "op": "money",
+                "delta": -800000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -5
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "closeness",
+                "delta": 14
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "not_yet",
+        "label": "\"Not yet.\"",
+        "outcomes": [
+          {
+            "id": "waited",
+            "text": "{partner.they} accepted it. {partner.they} asked again years later, and it was a harder conversation.",
+            "historyLine": "You asked {partner} to wait on kids.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -3
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "trust",
+                "delta": -5
+              },
+              {
+                "op": "schedule",
+                "eventId": "family_kids_question",
+                "inYears": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "no",
+        "label": "\"I don't think I want them.\"",
+        "outcomes": [
+          {
+            "id": "truth",
+            "text": "You told the truth. It cost you something you can't get back, and it was still the truth.",
+            "historyLine": "You told {partner} you don't want kids.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -12
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "romance",
+                "delta": -18
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 4
+              },
+              {
+                "op": "remember",
+                "target": "partner",
+                "factKey": "you_dont_want_children",
+                "line": "You told {partner.them} you don't want children.",
+                "weight": 95
+              },
+              {
+                "op": "flag",
+                "key": "declined_children",
+                "value": true
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 5,
     "maxPerLife": 3
@@ -64,22 +408,192 @@
     "id": "family_two_things_at_once",
     "version": 1,
     "category": "family",
-    "card": { "icon": "🎒", "label": "SATURDAY, 7AM", "tint": "#EEEAFB", "color": "#5F51AE" },
+    "card": {
+      "icon": "🎒",
+      "label": "SATURDAY, 7AM",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
     "weightClass": "major",
     "priority": 80,
     "minAge": 26,
-    "conditions": { "field": "count.children", "op": ">=", "value": 2 },
+    "conditions": {
+      "field": "count.children",
+      "op": ">=",
+      "value": 2
+    },
     "participants": [
-      { "role": "kid_a", "kinds": ["child"], "pick": "closest", "required": true },
-      { "role": "kid_b", "kinds": ["child"], "pick": "youngest", "required": true }
+      {
+        "role": "kid_a",
+        "kinds": [
+          "child"
+        ],
+        "pick": "closest",
+        "required": true
+      },
+      {
+        "role": "kid_b",
+        "kinds": [
+          "child"
+        ],
+        "pick": "youngest",
+        "required": true
+      }
     ],
     "title": "Two things at once, as usual.",
     "body": "{kid_a} wants to come with you. {kid_b} has a school thing at the same hour, and hasn't asked you to come.",
     "choices": [
-      { "id": "take_a", "label": "Take {kid_a}", "outcomes": [ { "id": "took_a", "text": "{kid_a} talked the entire way there and the entire way back. {kid_b} said it was fine.", "historyLine": "You took {kid_a} with you and missed {kid_b}'s thing.", "effects": [ { "op": "relationship", "target": "kid_a", "dimension": "closeness", "delta": 12 }, { "op": "relationship", "target": "kid_a", "dimension": "affection", "delta": 8 }, { "op": "relationship", "target": "kid_b", "dimension": "closeness", "delta": -8 }, { "op": "remember", "target": "kid_b", "factKey": "you_missed_it", "line": "You missed it. {kid_b} said it was fine.", "weight": 60 } ] } ] },
-      { "id": "go_to_b", "label": "Go to {kid_b}'s thing", "outcomes": [ { "id": "went_b", "text": "{kid_b} spotted you from the stage and forgot a line. It was the best thing that happened all year.", "historyLine": "You went to {kid_b}'s school play.", "effects": [ { "op": "relationship", "target": "kid_b", "dimension": "closeness", "delta": 16 }, { "op": "relationship", "target": "kid_b", "dimension": "affection", "delta": 12 }, { "op": "relationship", "target": "kid_a", "dimension": "closeness", "delta": -6 }, { "op": "stat", "stat": "happiness", "delta": 7 } ] } ] },
-      { "id": "split_it", "label": "Send {partner} to one, take the other", "requires": { "field": "has.partner", "op": "==", "value": true }, "outcomes": [ { "id": "split", "text": "You split it. Both of them noticed which one got you.", "historyLine": "You split the Saturday between the kids.", "effects": [ { "op": "relationship", "target": "kid_a", "dimension": "closeness", "delta": 8 }, { "op": "relationship", "target": "kid_b", "dimension": "closeness", "delta": -2 }, { "op": "relationship", "target": "partner", "dimension": "dependence", "delta": 6 } ] } ] },
-      { "id": "work", "label": "Work. It's a Saturday in November.", "outcomes": [ { "id": "worked", "text": "You worked. Nobody made a scene, and both of them added it to a list you have never been shown.", "historyLine": "You worked through a Saturday you'd promised them.", "effects": [ { "op": "career_performance", "delta": 6 }, { "op": "relationship", "target": "kid_a", "dimension": "closeness", "delta": -9 }, { "op": "relationship", "target": "kid_b", "dimension": "closeness", "delta": -9 }, { "op": "stat", "stat": "happiness", "delta": -6 }, { "op": "remember", "target": "kid_b", "factKey": "you_missed_it", "line": "You worked instead. {kid_b} stopped mentioning things after that.", "weight": 70 } ] } ] }
+      {
+        "id": "take_a",
+        "label": "Take {kid_a}",
+        "outcomes": [
+          {
+            "id": "took_a",
+            "text": "{kid_a} talked the entire way there and the entire way back. {kid_b} said it was fine.",
+            "historyLine": "You took {kid_a} with you and missed {kid_b}'s thing.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "kid_a",
+                "dimension": "closeness",
+                "delta": 12
+              },
+              {
+                "op": "relationship",
+                "target": "kid_a",
+                "dimension": "affection",
+                "delta": 8
+              },
+              {
+                "op": "relationship",
+                "target": "kid_b",
+                "dimension": "closeness",
+                "delta": -8
+              },
+              {
+                "op": "remember",
+                "target": "kid_b",
+                "factKey": "you_missed_it",
+                "line": "You missed it. {kid_b} said it was fine.",
+                "weight": 60
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "go_to_b",
+        "label": "Go to {kid_b}'s thing",
+        "outcomes": [
+          {
+            "id": "went_b",
+            "text": "{kid_b} spotted you from the stage and forgot a line. It was the best thing that happened all year.",
+            "historyLine": "You went to {kid_b}'s school play.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "kid_b",
+                "dimension": "closeness",
+                "delta": 16
+              },
+              {
+                "op": "relationship",
+                "target": "kid_b",
+                "dimension": "affection",
+                "delta": 12
+              },
+              {
+                "op": "relationship",
+                "target": "kid_a",
+                "dimension": "closeness",
+                "delta": -6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "split_it",
+        "label": "Send {partner} to one, take the other",
+        "requires": {
+          "field": "has.partner",
+          "op": "==",
+          "value": true
+        },
+        "outcomes": [
+          {
+            "id": "split",
+            "text": "You split it. Both of them noticed which one got you.",
+            "historyLine": "You split the Saturday between the kids.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "kid_a",
+                "dimension": "closeness",
+                "delta": 8
+              },
+              {
+                "op": "relationship",
+                "target": "kid_b",
+                "dimension": "closeness",
+                "delta": -2
+              },
+              {
+                "op": "relationship",
+                "target": "partner",
+                "dimension": "dependence",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "label": "Work. It's a Saturday in November.",
+        "outcomes": [
+          {
+            "id": "worked",
+            "text": "You worked. Nobody made a scene, and both of them added it to a list you have never been shown.",
+            "historyLine": "You worked through a Saturday you'd promised them.",
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 6
+              },
+              {
+                "op": "relationship",
+                "target": "kid_a",
+                "dimension": "closeness",
+                "delta": -9
+              },
+              {
+                "op": "relationship",
+                "target": "kid_b",
+                "dimension": "closeness",
+                "delta": -9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              },
+              {
+                "op": "remember",
+                "target": "kid_b",
+                "factKey": "you_missed_it",
+                "line": "You worked instead. {kid_b} stopped mentioning things after that.",
+                "weight": 70
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 2,
     "maxPerLife": 8
@@ -88,18 +602,159 @@
     "id": "family_parent_needs_you",
     "version": 1,
     "category": "family",
-    "card": { "icon": "👵", "label": "FAMILY", "tint": "#EEEAFB", "color": "#5F51AE" },
+    "card": {
+      "icon": "👵",
+      "label": "FAMILY",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
     "weightClass": "major",
     "priority": 82,
     "minAge": 28,
-    "conditions": { "all": [ { "field": "rel.mother.alive", "op": "==", "value": true }, { "field": "rel.mother.age", "op": ">=", "value": 68 } ] },
-    "participants": [ { "role": "parent", "kinds": ["mother", "father"], "pick": "oldest", "required": true } ],
+    "conditions": {
+      "all": [
+        {
+          "field": "rel.mother.alive",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "rel.mother.age",
+          "op": ">=",
+          "value": 68
+        }
+      ]
+    },
+    "participants": [
+      {
+        "role": "parent",
+        "kinds": [
+          "mother",
+          "father"
+        ],
+        "pick": "oldest",
+        "required": true
+      }
+    ],
     "title": "{parent} can't manage on {parent.their} own any more.",
     "body": "{parent.they} would never say so. Your sibling said it for {parent.them}, on the phone, at length.",
     "choices": [
-      { "id": "move_in", "label": "Move {parent.them} in with you", "outcomes": [ { "id": "moved_in", "text": "{parent.they} moved into the back room and rearranged your kitchen within a week.", "historyLine": "{parent} moved in with you.", "effects": [ { "op": "relationship", "target": "parent", "dimension": "closeness", "delta": 20 }, { "op": "relationship", "target": "parent", "dimension": "dependence", "delta": 40 }, { "op": "stat", "stat": "happiness", "delta": -4 }, { "op": "money", "delta": -600000 }, { "op": "remember", "target": "parent", "factKey": "lives_with_you", "line": "{parent.they} lives with you now.", "weight": 80 } ] } ] },
-      { "id": "pay_for_care", "label": "Pay for care instead", "requires": { "field": "money.liquid", "op": ">=", "value": 2000000 }, "outcomes": [ { "id": "paid", "text": "You paid for somewhere good. {parent.they} thanked you every visit, which was how you knew.", "historyLine": "You paid for {parent}'s care.", "effects": [ { "op": "money", "delta": -2000000 }, { "op": "relationship", "target": "parent", "dimension": "affection", "delta": 6 }, { "op": "stat", "stat": "happiness", "delta": -6 } ] } ] },
-      { "id": "sibling_handles_it", "label": "Let your sibling handle it", "requires": { "field": "count.siblings", "op": ">=", "value": 1 }, "outcomes": [ { "id": "sibling", "text": "Your sibling handled it. They have not forgotten that you didn't.", "historyLine": "Your sibling took care of {parent}.", "effects": [ { "op": "relationship", "target": "sibling", "dimension": "conflict", "delta": 30 }, { "op": "relationship", "target": "sibling", "dimension": "respect", "delta": -18 }, { "op": "stat", "stat": "happiness", "delta": -8 }, { "op": "remember", "target": "sibling", "factKey": "you_werent_there", "line": "They looked after {parent.them}. You didn't.", "weight": 85 } ] } ] }
+      {
+        "id": "move_in",
+        "label": "Move {parent.them} in with you",
+        "outcomes": [
+          {
+            "id": "moved_in",
+            "text": "{parent.they} moved into the back room and rearranged your kitchen within a week.",
+            "historyLine": "{parent} moved in with you.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "parent",
+                "dimension": "closeness",
+                "delta": 20
+              },
+              {
+                "op": "relationship",
+                "target": "parent",
+                "dimension": "dependence",
+                "delta": 40
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "money",
+                "delta": -600000
+              },
+              {
+                "op": "remember",
+                "target": "parent",
+                "factKey": "lives_with_you",
+                "line": "{parent.they} lives with you now.",
+                "weight": 80
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pay_for_care",
+        "label": "Pay for care instead",
+        "requires": {
+          "field": "money.liquid",
+          "op": ">=",
+          "value": 2000000
+        },
+        "outcomes": [
+          {
+            "id": "paid",
+            "text": "You paid for somewhere good. {parent.they} thanked you every visit, which was how you knew.",
+            "historyLine": "You paid for {parent}'s care.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -2000000
+              },
+              {
+                "op": "relationship",
+                "target": "parent",
+                "dimension": "affection",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sibling_handles_it",
+        "label": "Let your sibling handle it",
+        "requires": {
+          "field": "count.siblings",
+          "op": ">=",
+          "value": 1
+        },
+        "outcomes": [
+          {
+            "id": "sibling",
+            "text": "Your sibling handled it. They have not forgotten that you didn't.",
+            "historyLine": "Your sibling took care of {parent}.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "sibling",
+                "dimension": "conflict",
+                "delta": 30
+              },
+              {
+                "op": "relationship",
+                "target": "sibling",
+                "dimension": "respect",
+                "delta": -18
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              },
+              {
+                "op": "remember",
+                "target": "sibling",
+                "factKey": "you_werent_there",
+                "line": "They looked after {parent.them}. You didn't.",
+                "weight": 85
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 8,
     "maxPerLife": 2
@@ -108,17 +763,74 @@
     "id": "family_a_death",
     "version": 1,
     "category": "family",
-    "card": { "icon": "🕯️", "label": "FAMILY", "tint": "#EEEAFB", "color": "#5F51AE" },
+    "card": {
+      "icon": "🕯️",
+      "label": "FAMILY",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
     "weightClass": "major",
     "priority": 95,
     "minAge": 12,
     "scheduledOnly": true,
-    "participants": [ { "role": "who", "kinds": ["mother", "father", "sibling", "spouse", "best_friend"], "pick": "closest", "required": true } ],
+    "participants": [
+      {
+        "role": "who",
+        "kinds": [
+          "mother",
+          "father",
+          "sibling",
+          "spouse",
+          "best_friend"
+        ],
+        "pick": "closest",
+        "required": true
+      }
+    ],
     "title": "{who} died.",
     "body": "It was not sudden, in the end, though it felt sudden. There is a lot to organise and none of it helps.",
     "choices": [
-      { "id": "speak", "label": "Speak at the funeral", "outcomes": [ { "id": "spoke", "text": "You got most of the way through it. People told you afterwards that it was good, which you don't remember.", "historyLine": "You spoke at {who}'s funeral.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -18 }, { "op": "stat", "stat": "charm", "delta": 4 } ] } ] },
-      { "id": "sit_at_back", "label": "Sit at the back", "outcomes": [ { "id": "sat", "text": "You sat at the back and left before the tea. Nobody said anything about it and everyone noticed.", "historyLine": "You went to {who}'s funeral and left early.", "effects": [ { "op": "stat", "stat": "happiness", "delta": -20 } ] } ] }
+      {
+        "id": "speak",
+        "label": "Speak at the funeral",
+        "outcomes": [
+          {
+            "id": "spoke",
+            "text": "You got most of the way through it. People told you afterwards that it was good, which you don't remember.",
+            "historyLine": "You spoke at {who}'s funeral.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -18
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sit_at_back",
+        "label": "Sit at the back",
+        "outcomes": [
+          {
+            "id": "sat",
+            "text": "You sat at the back and left before the tea. Nobody said anything about it and everyone noticed.",
+            "historyLine": "You went to {who}'s funeral and left early.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -20
+              }
+            ]
+          }
+        ]
+      }
     ],
     "cooldownYears": 1,
     "maxPerLife": 6

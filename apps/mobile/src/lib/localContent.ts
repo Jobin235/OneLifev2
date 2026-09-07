@@ -23,6 +23,7 @@ const root = import.meta.glob<{ default: unknown }>('../../../../content/*.json'
 const countries = import.meta.glob<{ default: unknown }>('../../../../content/countries/*.json', { eager: true });
 const careers = import.meta.glob<{ default: unknown }>('../../../../content/careers/*.json', { eager: true });
 const events = import.meta.glob<{ default: unknown }>('../../../../content/events/*.json', { eager: true });
+const chronicle = import.meta.glob<{ default: unknown }>('../../../../content/chronicle/*.json', { eager: true });
 
 export const localContent = (): ContentPack =>
   buildContentPack({
@@ -33,4 +34,5 @@ export const localContent = (): ContentPack =>
     countries: all(countries),
     careers: all(careers),
     events: all(events),
+    chronicle: all(chronicle),
   });

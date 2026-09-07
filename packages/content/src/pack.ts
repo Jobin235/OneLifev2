@@ -2,6 +2,7 @@ import { z } from 'zod';
 import {
   CareerTrackSchema,
   CountryPackSchema,
+  EventCategorySchema,
   EventDefinitionSchema,
   TraitDefinitionSchema,
   type CareerTrack,
@@ -59,6 +60,28 @@ export const ActivitySchema = z.object({
 });
 export type Activity = z.infer<typeof ActivitySchema>;
 
+/**
+ * A decision-free log line: the texture of a year. Cheap to author on purpose,
+ * because a life needs hundreds of them. See packages/game/src/chronicle.ts.
+ */
+export const ChronicleLineSchema = z.object({
+  id: z.string().min(1),
+  icon: z.string().min(1),
+  /** May contain {friend} {partner} {parent} {sibling} {child} {colleague}. */
+  text: z.string().min(1),
+  category: EventCategorySchema.default('random'),
+  minAge: z.number().int().min(0).default(0),
+  maxAge: z.number().int().default(140),
+  /** Tags that must all be present. See tagsFor() for the vocabulary. */
+  requires: z.array(z.string()).default([]),
+  /** Tags that must all be absent. */
+  forbids: z.array(z.string()).default([]),
+  weight: z.number().positive().default(1),
+  /** Years before this line may appear again. */
+  cooldownYears: z.number().int().min(1).default(12),
+});
+export type ChronicleLine = z.infer<typeof ChronicleLineSchema>;
+
 export const NpcTemplateFileSchema = z.object({
   id: z.string().min(1),
   kind: z.string().min(1),
@@ -82,6 +105,7 @@ export interface ContentPack {
   events: EventDefinition[];
   eventsById: Map<string, EventDefinition>;
   activities: Activity[];
+  chronicle: ChronicleLine[];
   npcTemplates: z.infer<typeof NpcTemplateFileSchema>[];
 }
 
@@ -104,6 +128,7 @@ export interface ContentSources {
   careers: unknown[];
   events: unknown[];
   activities: unknown;
+  chronicle: unknown[];
   npcTemplates: unknown;
 }
 
@@ -138,6 +163,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
   const careers = parseGroups('careers', sources.careers, CareerTrackSchema);
   const events = parseGroups('events', sources.events, EventDefinitionSchema);
   const activities = parseArray('activities.json', sources.activities, ActivitySchema);
+  const chronicle = parseGroups('chronicle', sources.chronicle, ChronicleLineSchema);
   const npcTemplates = parseArray('npc-templates.json', sources.npcTemplates, NpcTemplateFileSchema);
 
   const pack: ContentPack = {
@@ -151,6 +177,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
     events,
     eventsById: new Map(events.map((e) => [e.id, e])),
     activities,
+    chronicle,
     npcTemplates,
   };
 
@@ -204,6 +231,12 @@ export const validateReferences = (pack: ContentPack): void => {
   for (const event of pack.events) {
     if (seen.has(event.id)) problems.push(`duplicate event id "${event.id}"`);
     seen.add(event.id);
+  }
+
+  const seenLines = new Set<string>();
+  for (const line of pack.chronicle) {
+    if (seenLines.has(line.id)) problems.push(`duplicate chronicle id "${line.id}"`);
+    seenLines.add(line.id);
   }
 
   if (problems.length > 0) {
