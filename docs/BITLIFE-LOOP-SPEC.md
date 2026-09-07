@@ -347,21 +347,34 @@ header, keyed to the calendar date.
 
 ---
 
-## 6. What our game gets wrong, measured against this
+## 6. The twelve, and where they stand
 
-| # | BitLife | One Life today |
-|---|---|---|
-| 1 | The log is the whole screen, plain dense text, one line per thing | Log is a card list, one card per year, competing with an event card and tiles |
-| 2 | 5 fixed nav slots, first one contextual, `+Age` a raised centre circle | Seven tabs, no primary action, age-up a full-width bar |
-| 3 | Stats pinned below the nav, always visible | Stats only on the Life screen |
-| 4 | Bank balance in the header all game, goes negative | Money is a separate tab |
-| 5 | Every year names NPCs and their relation; the world moves on its own | Most lines are about the player; NPCs rarely appear by name |
-| 6 | Consequences thread across years (diagnosed → suffering → cured) | One-shot effects with no follow-through |
-| 7 | Popups carry dropdowns, price lists, stat bars, confirms, minigames | Every popup is 2–4 plain buttons |
-| 8 | Written result toasts with titles | Effects applied silently or with a generic line |
-| 9 | Jobs are a salary-ranked list gated by education, with interviews | Jobs appear semi-randomly |
-| 10 | "Surprise me!" on every popup | Not present |
-| 11 | Locked content is visible and greyed | Locked content is hidden |
-| 12 | Prison / school are *places you live in*, with their own menus | Both are one-line states |
+| # | BitLife | One Life, before | Now |
+|---|---|---|---|
+| 1 | The log is the whole screen, plain dense text, one line per thing | A card list, one card per year, competing with an event card and tiles | **Done.** One scrolling document, 12.5px, oldest at top |
+| 2 | 5 fixed nav slots, first one contextual, `+Age` a raised centre circle | Seven tabs, no primary action, age-up a full-width bar | **Done.** Tabs are sheets over the log |
+| 3 | Stats pinned below the nav, always visible | Stats only on the Life screen | **Done.** Plus a ⚠ when one is in trouble |
+| 4 | Bank balance in the header all game, goes negative | Money was a separate tab | **Done.** Secured debt excluded, so it agrees with net worth |
+| 5 | Every year names NPCs and their relation; the world moves on its own | Most lines about the player; NPCs rarely named | **Done.** ~5 lines a year, a real share of them somebody else's |
+| 6 | Consequences thread across years (diagnosed → suffering → cured) | One-shot effects with no follow-through | **Done.** Illness, loans, marriages, births all close their own threads |
+| 7 | Popups carry dropdowns, price lists, stat bars, confirms, minigames | Every popup was 2–4 plain buttons | **Mostly.** Dropdowns, price lists with quality bars, fact sheets, meters, stakes, confirms. No minigames yet |
+| 8 | Written result toasts with titles | Effects applied silently or with a generic line | **Partly.** The toast is built and the systems write their own titles; 223 of 232 authored outcomes still want one |
+| 9 | Jobs are a salary-ranked list gated by education, with interviews | Jobs appeared semi-randomly | **Done.** Interview question, four answers, Hired or Denied |
+| 10 | "Surprise me!" on every popup | Not present | **Done.** It rolls the dropdowns too |
+| 11 | Locked content is visible and greyed | Locked content was hidden | **Done.** Every locked row says what it is waiting for |
+| 12 | Prison / school are *places you live in*, with their own menus | Both were one-line states | **Done.** Prison has a sentence, a behaviour meter, parole and a menu |
 
-These twelve, in this order, are the rebuild.
+### Still open
+
+- **Written outcome titles.** The toast renders one when an outcome has it and
+  no heading otherwise, which reads cleanly — but the game's voice lives in
+  those two-word headlines and most outcomes have none.
+- **Minigames.** The prison escape maze and the horse race. Rare, memorable,
+  and always skippable in BitLife ("Never mind, turn myself in").
+- **Justice.** Charges → pick a law firm by price → plea with the sentence
+  stated. The priced-choice widget that health uses is exactly the shape this
+  needs, so it is authoring rather than engineering.
+- **Deeper submenus.** BitLife's Activities go three levels (Pets → Dog Breeders
+  → Akita). Ours are one.
+- **Real-world dates.** The `Current / 📅 October 4th` popups — the "real time
+  events" layer the player wants on top, once the loop underneath is right.
