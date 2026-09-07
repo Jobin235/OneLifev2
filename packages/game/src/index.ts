@@ -5,3 +5,4 @@ export * from './views.js';
 export * from './templates.js';
 export * from './interact.js';
 export * from './shop.js';
+export * from './ribbons.js';

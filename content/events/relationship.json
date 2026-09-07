@@ -791,7 +791,7 @@
       }
     ],
     "title": "It came up, years later, the way these things do.",
-    "body": "Someone at dinner mentioned Denver. {partner} laughed and said you'd never have gone anyway.",
+    "body": "Someone at dinner mentioned the job you turned down. {partner} laughed and said you'd never have gone anyway.",
     "choices": [
       {
         "id": "tell_them",
@@ -800,7 +800,7 @@
           {
             "id": "told",
             "text": "You told {partner.them}. {partner.they} was quiet for a long time and then said you should have said something at the time.",
-            "historyLine": "You finally told {partner} about Denver.",
+            "historyLine": "You finally told {partner} why you turned it down.",
             "effects": [
               {
                 "op": "resolve_memory",
@@ -835,7 +835,7 @@
           {
             "id": "kept",
             "text": "You laughed along. It is genuinely yours now, in the way that a thing nobody else knows is yours.",
-            "historyLine": "You kept Denver to yourself.",
+            "historyLine": "You kept it to yourself.",
             "effects": [
               {
                 "op": "stat",
@@ -846,7 +846,7 @@
                 "op": "remember",
                 "target": "partner",
                 "factKey": "you_never_told_them",
-                "line": "You had the chance to tell {partner.them} about Denver and didn't.",
+                "line": "You had the chance to tell {partner.them} why you turned it down and didn't.",
                 "weight": 80
               }
             ]

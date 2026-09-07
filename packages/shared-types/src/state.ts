@@ -66,6 +66,8 @@ export const LifeStateSchema = z.object({
   chronicleLog: z.record(z.string(), z.number().int()),
   /** "npcId:interactionId" → times used this year. Cleared on age-up. */
   interactionUsage: z.record(z.string(), z.number().int().min(0)),
+  /** Ribbon ids earned by this line so far — what carries between lives. */
+  ribbonsEarned: z.array(z.string()),
 
   /** For the return-diff engine; never shown to the player (§88). */
   lastSeenWorldSnapshotId: z.string().nullable(),
@@ -79,6 +81,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 2: replaced the global per-year action budget with per-activity annual limits.
  * 3: added the chronicle (decision-free log lines) and its per-line cooldowns.
  * 4: added per-person interactions and their annual limits.
+ * 5: added ribbons, and the set the family line has collected.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 4;
+export const SCHEMA_VERSION = 5;

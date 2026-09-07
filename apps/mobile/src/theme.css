@@ -1522,3 +1522,34 @@ button {
   opacity: 0.5;
   cursor: default;
 }
+
+/* ---------- The ribbon on the gravestone ---------- */
+
+.ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--violet-tint);
+  border-radius: var(--r-pill);
+  padding: 11px 18px;
+  margin: 18px auto 0;
+}
+
+.ribbon-emoji {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.ribbon-label {
+  font: 800 15px/1 var(--display);
+  color: var(--violet-deep);
+  letter-spacing: 0.01em;
+}
+
+.ribbon-line {
+  font: 600 13.5px/1.55 var(--text);
+  color: var(--muted);
+  text-align: center;
+  margin-top: 11px;
+  text-wrap: pretty;
+}

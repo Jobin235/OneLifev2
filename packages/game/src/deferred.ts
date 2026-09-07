@@ -104,6 +104,16 @@ export const applyDeferred = (
         break;
       }
 
+      case 'move_city': {
+        if (effect.cityId !== 'auto') {
+          state.character.cityId = effect.cityId;
+          break;
+        }
+        const options = (country?.cities ?? []).filter((c) => c.id !== state.character.cityId);
+        if (options.length > 0) state.character.cityId = rng.pick(options).id;
+        break;
+      }
+
       case 'spawn_npc': {
         if (!country) break;
         const template = content.npcTemplates.find((t) => t.id === effect.templateId);

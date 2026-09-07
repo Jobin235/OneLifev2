@@ -145,8 +145,14 @@ back, less whatever is still owed on it.
 40 end-of-life ribbons that summarise the life lived and appear on the
 gravestone. A strong replay driver.
 
-**Us:** the legacy screen writes chapters, which is more literary, but there is
-no collectible summary and nothing to chase across lives.
+**Us: closed, and arguably ahead.** Sixteen ribbons — Notorious, Crooked,
+Loaded, Famous, Founder, Scholar, Ancient, Head of the family, Drifter, Beloved,
+Alone, Lazy, Unlucky, Cut short, Steady, Ordinary. Exactly one per life, checked
+from the most particular verdict to the most ordinary so a life is named by what
+was unusual about it: a rich life with two convictions is Crooked, not Loaded.
+Each carries a written line rather than a score, and the set is kept by the
+family line rather than the character, so it survives succession. The literary
+chapters stay — the ribbon sits above them.
 
 ---
 
@@ -169,7 +175,8 @@ Worth protecting while closing the gaps above:
 
 ## 7. What to build, in order
 
-Ranked by player-visible depth per unit of work:
+All eight are now done. Ranked as they were, by player-visible depth per unit of
+work:
 
 1. ~~**More life per year**~~ — **done.** The chronicle: 161 decision-free log
    lines that bind real NPCs. 0.88 → 3.28 entries a year, no silent years.
@@ -189,8 +196,10 @@ Ranked by player-visible depth per unit of work:
    existed.
 6. ~~**Assets you can buy and sell**~~ — **done.** A 16-item catalogue in the
    Money screen, priced so the annual upkeep is the interesting half.
-7. **Careers, broadened** — toward 100+ tracks, part-time and freelance work.
-8. **Ribbons** — an end-of-life summary worth collecting.
+7. ~~**Careers, broadened**~~ — **done.** 12 tracks → 76, across every level of
+   education. Still missing part-time and freelance work.
+8. ~~**Ribbons**~~ — **done.** Sixteen verdicts, one per life, earned by how it
+   was played and kept by the family line.
 
 ---
 

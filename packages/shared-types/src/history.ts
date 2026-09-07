@@ -37,6 +37,13 @@ export const LegacySchema = z.object({
   age: z.number().int(),
   cityName: z.string(),
   epitaph: z.string(),
+  /** One word for the life that just ended. The thing you collect. */
+  ribbon: z.object({
+    id: z.string(),
+    label: z.string(),
+    emoji: z.string(),
+    line: z.string(),
+  }),
   chapters: z.array(LifeChapterSchema),
   /** "His family — Loved, mostly" + the line underneath. */
   howPeopleSawYou: z.array(

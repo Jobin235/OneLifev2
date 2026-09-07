@@ -51,7 +51,7 @@
         "required": false
       }
     ],
-    "title": "They offered you the senior role — in Denver.",
+    "title": "They offered you the senior role — in another city.",
     "body": "More money, better title, 1,200 miles away. It is the kind of offer you are supposed to take.",
     "choices": [
       {
@@ -66,7 +66,7 @@
               "value": true
             },
             "text": "You took it. {partner} said {partner.they}'d visit. {partner.they} visited twice.",
-            "historyLine": "You moved to Denver for work.",
+            "historyLine": "You moved to the new office for work.",
             "effects": [
               {
                 "op": "salary",
@@ -93,12 +93,12 @@
                 "op": "remember",
                 "target": "partner",
                 "factKey": "you_left_for_a_job",
-                "line": "You moved to Denver. {partner.they} stayed.",
+                "line": "You moved for the job. {partner.they} stayed.",
                 "weight": 85
               },
               {
                 "op": "move_city",
-                "cityId": "denver"
+                "cityId": "auto"
               },
               {
                 "op": "flag",
@@ -110,7 +110,7 @@
           {
             "id": "moved_alone",
             "text": "You took it. Nobody had to be talked around, which was its own kind of quiet.",
-            "historyLine": "You moved to Denver for work.",
+            "historyLine": "You moved to the new office for work.",
             "effects": [
               {
                 "op": "salary",
@@ -123,7 +123,7 @@
               },
               {
                 "op": "move_city",
-                "cityId": "denver"
+                "cityId": "auto"
               },
               {
                 "op": "flag",
@@ -208,7 +208,7 @@
               "value": true
             },
             "text": "You said no and didn't explain why. {partner} still doesn't know {partner.they} was the reason.",
-            "historyLine": "You turned down Denver. You never said why.",
+            "historyLine": "You turned down the new office. You never said why.",
             "effects": [
               {
                 "op": "stat",
@@ -224,7 +224,7 @@
                 "op": "remember",
                 "target": "partner",
                 "factKey": "you_gave_something_up_for_them",
-                "line": "You turned down Denver because of {partner.them}. {partner.they} never found out.",
+                "line": "You turned down the move because of {partner.them}. {partner.they} never found out.",
                 "weight": 90
               },
               {
@@ -242,7 +242,7 @@
           {
             "id": "plain_no",
             "text": "You said no. It was easy, and then for about a year it wasn't.",
-            "historyLine": "You turned down the Denver role.",
+            "historyLine": "You turned down the the new office role.",
             "effects": [
               {
                 "op": "stat",

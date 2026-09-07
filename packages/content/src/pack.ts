@@ -292,6 +292,13 @@ export const validateReferences = (pack: ContentPack): void => {
           ) {
             problems.push(`${event.id}/${choice.id} joins unknown track "${effect.trackId}"`);
           }
+          if (
+            effect.op === 'move_city' &&
+            effect.cityId !== 'auto' &&
+            !pack.countries.some((c) => c.cities.some((city) => city.id === effect.cityId))
+          ) {
+            problems.push(`${event.id}/${choice.id} moves to unknown city "${effect.cityId}"`);
+          }
           if (effect.op === 'trait_add' && !pack.traitsById.has(effect.traitId)) {
             problems.push(`${event.id}/${choice.id} adds unknown trait "${effect.traitId}"`);
           }

@@ -137,12 +137,16 @@ export class Game {
 
     if (heirNpcId === null) {
       // "Somebody new" — a fresh line, but the world keeps going.
-      return this.newLife({
+      const fresh = this.newLife({
         seed,
         countryId: previous.character.countryId,
         upbringing: 'getting_by',
         birthYear: previous.character.birthYear + (previous.character.deathAge ?? 80),
       });
+      // The ribbons are the player's collection, not the character's, so they
+      // survive even a completely unrelated next life.
+      fresh.ribbonsEarned = [...previous.ribbonsEarned];
+      return fresh;
     }
 
     const heirNpc = previous.npcs.find((n) => n.id === heirNpcId);
@@ -170,6 +174,7 @@ export class Game {
     if (heirNpc.stats) state.character.stats = { ...heirNpc.stats };
     state.character.finances.savings = inheritance;
     state.lineage = lineage;
+    state.ribbonsEarned = [...previous.ribbonsEarned];
 
     // The estate arrives with everything it was attached to.
     state.assets = previous.assets.map((asset) => ({ ...asset, acquiredAtAge: heirNpc.age }));

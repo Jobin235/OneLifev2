@@ -129,6 +129,7 @@ export interface Recap {
 }
 
 export interface Legacy {
+  ribbon: { id: string; label: string; emoji: string; line: string };
   name: string;
   bornYear: number;
   diedYear: number;

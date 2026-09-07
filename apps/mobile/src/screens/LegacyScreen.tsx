@@ -23,6 +23,13 @@ export const LegacyScreen = ({
           {legacy.bornYear} – {legacy.diedYear} · {legacy.age} years · {legacy.cityName}
         </div>
         <div className="legacy-epitaph">{legacy.epitaph}</div>
+
+      {/* One word for the life. The thing you play again to change. */}
+      <div className="ribbon">
+        <span className="ribbon-emoji">{legacy.ribbon.emoji}</span>
+        <span className="ribbon-label">{legacy.ribbon.label}</span>
+      </div>
+      <div className="ribbon-line">{legacy.ribbon.line}</div>
       </div>
 
       <section className="legacy-panel">

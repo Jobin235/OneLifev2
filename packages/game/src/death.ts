@@ -4,6 +4,7 @@ import type { Ancestor, Legacy, LifeState, Npc } from '@lineage/shared-types';
 import { formatMoney, netWorth, surfacedScore } from '@lineage/simulation';
 import { rankHeirs } from '@lineage/npc-engine';
 import { buildChapters } from '@lineage/narrative';
+import { ribbonFor } from './ribbons.js';
 
 /**
  * Design 4C. The legacy screen is not a score screen — it is the last thing the
@@ -25,6 +26,10 @@ export const buildLegacy = (state: LifeState, content: ContentPack, config: Game
   );
   const lifetimeEmployees = state.businesses.reduce((sum, b) => sum + b.lifetimeEmployees, 0);
 
+  // One word for the life that just ended, and the thing that carries forward.
+  const ribbon = ribbonFor(state);
+  if (!state.ribbonsEarned.includes(ribbon.id)) state.ribbonsEarned.push(ribbon.id);
+
   return {
     name: `${character.firstName} ${character.lastName}`,
     bornYear: character.birthYear,
@@ -32,6 +37,7 @@ export const buildLegacy = (state: LifeState, content: ContentPack, config: Game
     age,
     cityName: city?.name ?? 'somewhere',
     epitaph: epitaphFor(state),
+    ribbon,
     chapters: buildChapters(state, config),
     howPeopleSawYou: howPeopleSawYou(state),
     whatYouChanged: whatYouChanged(state, lifetimeEmployees, businessYears),

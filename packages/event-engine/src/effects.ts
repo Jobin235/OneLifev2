@@ -355,9 +355,22 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
       return null;
     }
 
-    case 'move_city':
-      character.cityId = effect.cityId;
+    case 'move_city': {
+      /*
+       * "auto" means somewhere else in the character's own country. Content
+       * that names a specific city can only ever be right for one country, and
+       * a relocation event that hardcoded Denver was quietly moving Brazilian
+       * characters to a city that does not exist in Brazil — which then read as
+       * "died in somewhere" on the legacy screen.
+       */
+      if (effect.cityId !== 'auto') {
+        character.cityId = effect.cityId;
+        return null;
+      }
+      // Picking one needs the country pack, which only the deferred handler has.
+      ctx.deferred.push(effect);
       return null;
+    }
 
     case 'schedule':
       state.pending.push({
