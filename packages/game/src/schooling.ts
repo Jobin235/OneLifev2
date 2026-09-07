@@ -1,6 +1,7 @@
 import type { ContentPack } from '@lineage/content';
 import type { CountryPack, LifeState } from '@lineage/shared-types';
 import type { Rng } from '@lineage/simulation';
+import { spawnNpc } from '@lineage/npc-engine';
 import { pushHistory } from './ageup.js';
 
 /**
@@ -26,7 +27,7 @@ export const advanceSchooling = (
       institutionName: rng.pick(PRIMARY_NAMES),
       totalYears: 6,
       subjects: ['Reading', 'Numbers', 'The world'],
-    });
+    }, content, country, rng);
     pushHistory(state, 'education', '🎒', 'You started school.', 40);
     return;
   }
@@ -37,8 +38,14 @@ export const advanceSchooling = (
       institutionName: rng.pick(SECONDARY_NAMES),
       totalYears: Math.max(4, country.education.compulsoryUntilAge - 11),
       subjects: ['Math', 'English', 'Science', 'History'],
-    });
-    pushHistory(state, 'education', '🎒', `You started at ${state.education.current!.institutionName}.`, 45);
+    }, content, country, rng);
+    pushHistory(
+      state,
+      'education',
+      '🎒',
+      `You started at ${state.education.current!.institutionName}.`,
+      45,
+    );
     return;
   }
 
@@ -53,7 +60,7 @@ export const advanceSchooling = (
       subjects: [major, 'Statistics', 'An elective you picked badly'],
       debt: country.education.universityCost * 4,
       scholarship: state.character.stats.smarts >= 82 && rng.chance(0.4),
-    });
+    }, content, country, rng);
     const debt = state.education.current!.debtIncurred;
     if (debt > 0) state.character.finances.debt += debt;
     pushHistory(
@@ -76,11 +83,15 @@ export const advanceSchooling = (
       major: rng.pick(TRADES),
       totalYears: 2,
       subjects: ['Practical', 'Theory', 'Safety'],
-    });
-    pushHistory(state, 'education', '🔧', `You started at ${state.education.current!.institutionName}.`, 55);
+    }, content, country, rng);
+    pushHistory(
+      state,
+      'education',
+      '🔧',
+      `You started at ${state.education.current!.institutionName}.`,
+      55,
+    );
   }
-
-  void content;
 };
 
 interface EnrolInput {
@@ -93,23 +104,76 @@ interface EnrolInput {
   scholarship?: boolean;
 }
 
-const enrol = (state: LifeState, input: EnrolInput): void => {
+/**
+ * Starting somewhere new puts people in front of you.
+ *
+ * This is the design's central continuity bet — a classmate met at 15 is the
+ * person who turns up again at 24 — and it only works if school actually
+ * introduces anyone. It previously introduced nobody, which left "YOUR CLASS"
+ * empty and made school a progress bar with a name on it.
+ */
+const populateClass = (
+  state: LifeState,
+  stage: EnrolInput['stage'],
+  content: ContentPack,
+  country: CountryPack,
+  rng: Rng,
+): void => {
+  const templateIds =
+    stage === 'university' || stage === 'graduate'
+      ? ['classmate', 'classmate', 'school_friend', 'professor']
+      : stage === 'vocational'
+        ? ['classmate', 'school_friend', 'teacher']
+        : ['classmate', 'classmate', 'school_friend', 'teacher'];
+
+  /*
+   * Avoid handing the same first name to two people in one class. It is not
+   * impossible in life, but on a six-row list it reads as a bug, and the names
+   * are the only thing distinguishing these people at a glance.
+   */
+  const taken = new Set(state.npcs.filter((n) => n.alive).map((n) => n.firstName));
+
+  for (const templateId of templateIds) {
+    const template = content.npcTemplates.find((t) => t.id === templateId);
+    if (!template) continue;
+
+    let spawned = spawnNpc({ state, template, country, traits: content.traits, rng });
+    for (let attempt = 0; attempt < 4 && taken.has(spawned.npc.firstName); attempt++) {
+      // Undo and try again; spawnNpc registers as it goes.
+      state.npcs.pop();
+      state.relationships.pop();
+      spawned = spawnNpc({ state, template, country, traits: content.traits, rng });
+    }
+    taken.add(spawned.npc.firstName);
+  }
+};
+
+const enrol = (
+  state: LifeState,
+  input: EnrolInput,
+  content: ContentPack,
+  country: CountryPack,
+  rng: Rng,
+): void => {
+  const startingGrade = Math.round(Math.min(400, state.character.stats.smarts * 3));
+
   state.education.current = {
     stage: input.stage,
     institutionName: input.institutionName,
     major: input.major ?? null,
     yearIndex: 1,
     totalYears: input.totalYears,
-    gradePoints: Math.round(Math.min(400, state.character.stats.smarts * 3)),
-    subjects: input.subjects.map((name) => ({
-      name,
-      gradePoints: Math.round(Math.min(400, state.character.stats.smarts * 3)),
-    })),
+    gradePoints: startingGrade,
+    // You arrive with whatever standing your charm buys you, and change it from there.
+    popularity: Math.round(state.character.stats.charm * 0.8 + 10),
+    subjects: input.subjects.map((name) => ({ name, gradePoints: startingGrade })),
     clubIds: [],
     clubSlots: 3,
     debtIncurred: input.scholarship ? 0 : (input.debt ?? 0),
     onScholarship: input.scholarship ?? false,
   };
+
+  populateClass(state, input.stage, content, country, rng);
 };
 
 /** Called after graduation so the player is told, in a sentence, what changed. */

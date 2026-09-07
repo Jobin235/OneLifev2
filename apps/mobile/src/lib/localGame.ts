@@ -1,4 +1,4 @@
-import { Game, actionsView, lifeView, moneyView, moreView, peopleView, personView } from '@lineage/game';
+import { Game, actionsView, lifeView, moneyView, moreView, peopleView, personView, schoolView } from '@lineage/game';
 import { SCHEMA_VERSION, type LifeState } from '@lineage/shared-types';
 import { NEUTRAL_INDICATORS, snapshot, tickWorld } from '@lineage/world';
 import { DEFAULT_CONFIG } from '@lineage/config';
@@ -175,6 +175,8 @@ export const createLocalApi = (): Api => {
         line,
       };
     },
+
+    school: async (lifeId) => schoolView(get(lifeId), game.content) as never,
 
     actions: async (lifeId) => ({ actions: actionsView(get(lifeId), game.content) as never }),
     money: async (lifeId) => moneyView(get(lifeId), game.config) as never,

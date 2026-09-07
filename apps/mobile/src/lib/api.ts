@@ -189,6 +189,28 @@ export interface PersonView {
   stats: Array<{ icon: string; label: string; value: number }>;
 }
 
+export interface SchoolView {
+  institution: string;
+  stage: string;
+  major: string | null;
+  yearLine: string;
+  debt: string | null;
+  subjects: Array<{ name: string; grade: string }>;
+  clubs: string[];
+  clubSlots: number;
+  popularity: number;
+  gradePoints: number;
+  classmates: Array<{
+    npcId: string;
+    name: string;
+    emoji: string;
+    note: string;
+    closeness: number;
+    isTeacher: boolean;
+  }>;
+  actions: ActionCard[];
+}
+
 export interface MoneyView {
   netWorth: string;
   monthlyNet: string;
@@ -220,7 +242,7 @@ export interface CountryOption {
  * authoritative server, and by `createLocalApi` which runs the same engine in
  * the browser so the game can be played from a link with no backend.
  */
-export type ActOutcome = 'done' | 'overdone' | 'no_further_effect';
+export type ActOutcome = 'done' | 'overdone' | 'no_further_effect' | 'backfired';
 
 export interface Api {
   countries(): Promise<{ countries: CountryOption[] }>;
@@ -247,6 +269,8 @@ export interface Api {
     interactionId: string,
   ): Promise<{ life: LifeView; person: PersonView; warm: boolean; line: string }>;
   actions(lifeId: string): Promise<{ actions: ActionCard[] }>;
+  /** Null when the character is not enrolled anywhere. */
+  school(lifeId: string): Promise<SchoolView | null>;
   money(lifeId: string): Promise<MoneyView>;
   more(lifeId: string): Promise<MoreView>;
   legacy(lifeId: string): Promise<Legacy>;
@@ -309,6 +333,7 @@ export const httpApi: Api = {
     ),
 
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
+  school: (lifeId: string) => request<SchoolView | null>(`/lives/${lifeId}/school`),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
   more: (lifeId: string) => request<MoreView>(`/lives/${lifeId}/more`),
   legacy: (lifeId: string) => request<Legacy>(`/lives/${lifeId}/legacy`),

@@ -1,7 +1,7 @@
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
 import { interactionsFor } from './interact.js';
-import type { LifeState } from '@lineage/shared-types';
+import type { LifeState, Npc } from '@lineage/shared-types';
 import { STAT_DISPLAY } from '@lineage/shared-types';
 import {
   displayMemories,
@@ -381,10 +381,31 @@ const humanCostNote = (state: LifeState): string | null => {
 };
 
 /** Design 3A / 5A. */
-export const schoolView = (state: LifeState) => {
+export const schoolView = (state: LifeState, content: ContentPack) => {
   const e = state.education.current;
   if (!e) return null;
+
+  // Design 3A "YOUR CLASS": the people school actually puts in front of you.
+  const byId = new Map(state.npcs.map((n) => [n.id, n]));
+  const classmates = state.relationships
+    .filter((r) => r.kind === 'classmate' || r.kind === 'teacher')
+    .map((r) => ({ rel: r, npc: byId.get(r.npcId) }))
+    .filter((x): x is { rel: (typeof state.relationships)[number]; npc: Npc } => !!x.npc && x.npc.alive)
+    .sort((a, b) => b.rel.dimensions.closeness - a.rel.dimensions.closeness)
+    .slice(0, 6)
+    .map(({ rel, npc }) => ({
+      npcId: npc.id,
+      name: `${npc.firstName} ${npc.lastName}`,
+      emoji: npc.avatarEmoji,
+      note: rel.subtitle || npc.descriptor,
+      closeness: rel.dimensions.closeness,
+      isTeacher: rel.kind === 'teacher',
+    }));
+
   return {
+    classmates,
+    /** The school-only things to do, already filtered to what is possible. */
+    actions: actionsView(state, content).filter((a) => a.group === 'school'),
     institution: e.institutionName,
     stage: e.stage,
     major: e.major,
@@ -396,6 +417,8 @@ export const schoolView = (state: LifeState) => {
     subjects: e.subjects.map((s) => ({ name: s.name, grade: gradeLetter(s.gradePoints) })),
     clubs: e.clubIds,
     clubSlots: e.clubSlots,
+    popularity: e.popularity,
+    gradePoints: e.gradePoints,
   };
 };
 

@@ -38,6 +38,21 @@ const STAT_DISPLAY: Record<string, [string, string]> = {
  * (design 1A). Only changes the player would notice produce a pill — a hidden
  * attribute nudge or a stored memory is felt later, not announced now.
  */
+/** Clubs are flavour with a popularity cost attached; the set is deliberately short. */
+const CLUBS_BY_STAGE: Record<string, string[]> = {
+  primary: ['Choir', 'Chess club', 'Football'],
+  secondary: ['Debate', 'Drama', 'Athletics', 'School paper', 'Orchestra', 'Science club'],
+  vocational: ['Union branch', 'Trade society'],
+  university: ['Student union', 'Rowing', 'Drama society', 'Politics society', 'Rugby', 'Choir'],
+  graduate: ['Research group', 'Teaching assistants'],
+};
+
+const pickClub = (stage: string, taken: string[], ctx: EffectContext): string | null => {
+  const available = (CLUBS_BY_STAGE[stage] ?? []).filter((c) => !taken.includes(c));
+  if (available.length === 0) return null;
+  return ctx.rng.pick(available);
+};
+
 export const applyEffects = (effects: Effect[], ctx: EffectContext): AppliedDelta[] => {
   const deltas: AppliedDelta[] = [];
   for (const effect of effects) {
@@ -184,6 +199,53 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
       const gained = character.fame.following - before;
       if (gained === 0) return null;
       return { text: `${gained > 0 ? '+' : '−'}${Math.abs(gained).toLocaleString('en-US')} following`, positive: gained > 0 };
+    }
+
+    case 'grades': {
+      const enrolment = state.education.current;
+      // Out of school this is simply nothing, not an error: an event may fire
+      // during a year that ended with graduation.
+      if (!enrolment) return null;
+      enrolment.gradePoints = Math.max(0, Math.min(400, enrolment.gradePoints + effect.delta));
+      for (const subject of enrolment.subjects) {
+        subject.gradePoints = Math.max(
+          0,
+          Math.min(400, subject.gradePoints + Math.round(effect.delta * 0.7)),
+        );
+      }
+      return null;
+    }
+
+    case 'popularity': {
+      const enrolment = state.education.current;
+      if (!enrolment) return null;
+      enrolment.popularity = clampStat(enrolment.popularity + effect.delta);
+      return null;
+    }
+
+    case 'join_club': {
+      const enrolment = state.education.current;
+      if (!enrolment) return null;
+      if (enrolment.clubIds.length >= enrolment.clubSlots) return null;
+      const clubId = effect.clubId ?? pickClub(enrolment.stage, enrolment.clubIds, ctx);
+      if (clubId && !enrolment.clubIds.includes(clubId)) enrolment.clubIds.push(clubId);
+      return null;
+    }
+
+    case 'drop_out': {
+      const enrolment = state.education.current;
+      if (!enrolment) return null;
+      state.education.history.push({
+        stage: enrolment.stage,
+        institutionName: enrolment.institutionName,
+        major: enrolment.major,
+        fromAge: character.age - (enrolment.yearIndex - 1),
+        toAge: character.age,
+        completed: false,
+        finalGradePoints: enrolment.gradePoints,
+      });
+      state.education.current = null;
+      return null;
     }
 
     case 'reputation':

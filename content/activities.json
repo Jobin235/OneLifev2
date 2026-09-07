@@ -287,12 +287,12 @@
   {
     "id": "study",
     "icon": "📖",
-    "label": "Study",
+    "label": "Study harder",
     "group": "school",
     "minAge": 6,
     "maxAge": 30,
     "cost": 0,
-    "note": "🧠 +5",
+    "note": "🧠 +5 · grades up",
     "effects": [
       {
         "op": "stat",
@@ -300,9 +300,13 @@
         "delta": 5
       },
       {
-        "op": "hidden",
-        "attr": "discipline",
-        "delta": 3
+        "op": "grades",
+        "delta": 18
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": -2
       }
     ],
     "effectiveTimes": 3,
@@ -392,7 +396,7 @@
     "minAge": 8,
     "maxAge": 22,
     "cost": 0,
-    "note": "😊 +5",
+    "note": "😊 +5 · popularity up",
     "effects": [
       {
         "op": "stat",
@@ -400,9 +404,11 @@
         "delta": 5
       },
       {
-        "op": "stat",
-        "stat": "charm",
-        "delta": 3
+        "op": "popularity",
+        "delta": 9
+      },
+      {
+        "op": "join_club"
       }
     ],
     "effectiveTimes": 1,
@@ -530,5 +536,246 @@
     "onlyWhen": "incarcerated",
     "effectiveTimes": 3,
     "onRepeat": "no_effect"
+  },
+  {
+    "id": "skip_class",
+    "icon": "🚪",
+    "label": "Skip class",
+    "group": "school",
+    "minAge": 9,
+    "maxAge": 25,
+    "onlyWhen": "enrolled",
+    "effectiveTimes": 3,
+    "onRepeat": "riskier",
+    "note": "😊 +4 · grades down",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 4
+      },
+      {
+        "op": "grades",
+        "delta": -12
+      },
+      {
+        "op": "popularity",
+        "delta": 3
+      }
+    ],
+    "backfire": {
+      "chance": 0.3,
+      "reducedBy": "charm",
+      "reducedByMost": 0.5,
+      "line": "You were caught skipping, and they rang home.",
+      "effects": [
+        {
+          "op": "grades",
+          "delta": -22
+        },
+        {
+          "op": "popularity",
+          "delta": -4
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -6
+        }
+      ]
+    }
+  },
+  {
+    "id": "cheat_on_test",
+    "icon": "📋",
+    "label": "Cheat on a test",
+    "group": "school",
+    "minAge": 11,
+    "maxAge": 25,
+    "onlyWhen": "enrolled",
+    "effectiveTimes": 2,
+    "onRepeat": "riskier",
+    "note": "grades up · if it works",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "grades",
+        "delta": 26
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": -2
+      }
+    ],
+    "backfire": {
+      "chance": 0.4,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.55,
+      "line": "You were caught cheating, and it went on your record.",
+      "effects": [
+        {
+          "op": "grades",
+          "delta": -45
+        },
+        {
+          "op": "popularity",
+          "delta": -8
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -9
+        },
+        {
+          "op": "reputation",
+          "delta": -6
+        }
+      ]
+    }
+  },
+  {
+    "id": "try_out_for_team",
+    "icon": "🏅",
+    "label": "Try out for the team",
+    "group": "school",
+    "minAge": 10,
+    "maxAge": 24,
+    "onlyWhen": "enrolled",
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect",
+    "note": "💪 +6 · popularity up",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "fitness",
+        "delta": 6
+      },
+      {
+        "op": "popularity",
+        "delta": 12
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 4
+      }
+    ],
+    "backfire": {
+      "chance": 0.45,
+      "reducedBy": "fitness",
+      "reducedByMost": 0.7,
+      "line": "You did not make the team, and everyone saw the list.",
+      "effects": [
+        {
+          "op": "popularity",
+          "delta": -5
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -7
+        }
+      ]
+    }
+  },
+  {
+    "id": "run_for_office",
+    "icon": "🗳️",
+    "label": "Run for class office",
+    "group": "school",
+    "minAge": 12,
+    "maxAge": 24,
+    "onlyWhen": "enrolled",
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect",
+    "note": "popularity · charm",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "popularity",
+        "delta": 16
+      },
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 5
+      },
+      {
+        "op": "reputation",
+        "delta": 4
+      }
+    ],
+    "backfire": {
+      "chance": 0.5,
+      "reducedBy": "charm",
+      "reducedByMost": 0.7,
+      "line": "You ran, and lost to someone who did no campaigning at all.",
+      "effects": [
+        {
+          "op": "popularity",
+          "delta": -6
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -6
+        },
+        {
+          "op": "stat",
+          "stat": "charm",
+          "delta": -2
+        }
+      ]
+    }
+  },
+  {
+    "id": "school_social",
+    "icon": "🥤",
+    "label": "Hang about after school",
+    "group": "school",
+    "minAge": 8,
+    "maxAge": 24,
+    "onlyWhen": "enrolled",
+    "effectiveTimes": 3,
+    "onRepeat": "no_effect",
+    "note": "popularity · 😊 +3",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "popularity",
+        "delta": 6
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 3
+      },
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 2
+      }
+    ]
+  },
+  {
+    "id": "drop_out",
+    "icon": "🚶",
+    "label": "Drop out",
+    "group": "school",
+    "minAge": 16,
+    "maxAge": 30,
+    "onlyWhen": "enrolled",
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect",
+    "note": "ends your schooling",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "drop_out"
+      }
+    ]
   }
 ]

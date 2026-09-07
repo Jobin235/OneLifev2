@@ -232,7 +232,7 @@ export const registerLifeRoutes = (
 
   app.get('/lives/:lifeId/school', async (request, reply) => {
     const { lifeId } = request.params as { lifeId: string };
-    const view = schoolView(await load(userOf(request), lifeId));
+    const view = schoolView(await load(userOf(request), lifeId), game.content);
     if (!view) return reply.code(404).send({ error: 'not enrolled' });
     return view;
   });

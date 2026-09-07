@@ -57,6 +57,26 @@ export const ActivitySchema = z.object({
   effects: z.array(z.unknown()).default([]),
   /** The "💪 +8 · ❤️ +4" note shown on the tile. */
   note: z.string().default(''),
+  /**
+   * What happens when it goes wrong.
+   *
+   * Some things usually work until they don't — cheating, skipping class,
+   * gambling, crime. When this is set, the roll happens first: on a backfire the
+   * activity's ordinary effects do not apply at all and these do instead, so
+   * getting caught is a different outcome rather than a discount on the same one.
+   */
+  backfire: z
+    .object({
+      chance: z.number().min(0).max(1),
+      /** A stat that makes it less likely, scaled across its 0..100 range. */
+      reducedBy: z.string().nullable().default(null),
+      /** How much of `chance` the stat can remove at 100. */
+      reducedByMost: z.number().min(0).max(1).default(0.6),
+      line: z.string().min(1),
+      effects: z.array(z.unknown()).default([]),
+    })
+    .nullable()
+    .default(null),
 });
 export type Activity = z.infer<typeof ActivitySchema>;
 

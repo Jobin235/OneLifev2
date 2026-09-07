@@ -117,6 +117,14 @@ export const EffectSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('flag'), key: z.string().min(1), value: z.union([z.string(), z.number(), z.boolean()]) }),
   z.object({ op: z.literal('fame'), following: z.number().int().default(0), fans: z.number().int().default(0), haters: z.number().int().default(0), knownFor: z.string().optional() }),
   z.object({ op: z.literal('reputation'), delta: z.number().int() }),
+  /** Moves grade points (0..400, four points to a GPA decimal). No-op out of school. */
+  z.object({ op: z.literal('grades'), delta: z.number().int() }),
+  /** Standing among the other students. No-op out of school. */
+  z.object({ op: z.literal('popularity'), delta: z.number().int() }),
+  /** Joins a club if there is a free slot. */
+  z.object({ op: z.literal('join_club'), clubId: z.string().optional() }),
+  /** Leaves school for good, keeping whatever was completed before now. */
+  z.object({ op: z.literal('drop_out') }),
   z.object({
     op: z.literal('convict'),
     offence: z.string(),

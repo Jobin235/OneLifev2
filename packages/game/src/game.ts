@@ -1,4 +1,5 @@
 import { interact, interactionsFor } from './interact.js';
+import { schoolView } from './views.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import type {
@@ -59,7 +60,7 @@ export class ChoiceRejected extends Error {}
  * What an activity actually did. `no_further_effect` is a successful request
  * that deliberately changed nothing.
  */
-export type ActOutcome = 'done' | 'overdone' | 'no_further_effect';
+export type ActOutcome = 'done' | 'overdone' | 'no_further_effect' | 'backfired';
 
 export interface ActResult {
   state: LifeState;
@@ -295,20 +296,42 @@ export class Game {
       if (activity.cost > 0) {
         applyEffects([{ op: 'money', delta: -activity.cost }], effectCtx);
       }
-      applyEffects(activity.effects as never, effectCtx);
+
+      /*
+       * Risky things roll before they resolve. On a backfire the ordinary
+       * effects do not apply at all — getting caught cheating is a different
+       * outcome, not a smaller version of cheating successfully.
+       */
+      const backfired = activity.backfire !== null && rng.chance(backfireChance(activity, state));
+      if (backfired) {
+        applyEffects(activity.backfire!.effects as never, effectCtx);
+      } else {
+        applyEffects(activity.effects as never, effectCtx);
+      }
       applyDeferred(effectCtx.deferred, state, this.content, this.config, rng, {});
 
       state.activityUsage[activityId] = used + 1;
       state.step += 1;
-      pushHistory(state, 'random', activity.icon, historyLineFor(activity), 12);
+      pushHistory(
+        state,
+        'random',
+        activity.icon,
+        backfired ? activity.backfire!.line : historyLineFor(activity),
+        backfired ? 35 : 12,
+      );
 
       refreshDerived(state, this.config);
       checkInvariants(state, before);
-      return { state, outcome: 'done' };
+      return { state, outcome: backfired ? 'backfired' : 'done' };
     } catch (error) {
       Object.assign(state, before);
       throw error;
     }
+  }
+
+  /** The school screen, or null when the character is not enrolled. */
+  school(state: LifeState) {
+    return schoolView(state, this.content);
   }
 
   /** What the player can do to one specific person right now. */
@@ -328,6 +351,18 @@ export class Game {
     return state;
   }
 }
+
+/**
+ * How likely a risky activity is to go wrong. A stat can buy the odds down, but
+ * never to zero — a very clever cheat is still cheating.
+ */
+const backfireChance = (activity: Activity, state: LifeState): number => {
+  const risk = activity.backfire;
+  if (!risk) return 0;
+  if (!risk.reducedBy) return risk.chance;
+  const stat = state.character.stats[risk.reducedBy as keyof typeof state.character.stats] ?? 0;
+  return Math.max(0.02, risk.chance * (1 - (stat / 100) * risk.reducedByMost));
+};
 
 /** The price of not knowing when to stop, growing with how far past it you are. */
 const overdoIt = (state: LifeState, timesOver: number, rng: Rng): void => {

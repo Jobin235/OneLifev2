@@ -72,9 +72,21 @@ popularity, cheating on tests, bullying, student–teacher interactions, clubs,
 sports teams, majors, dropping out, expulsion, GED, student loans**, and
 specialised schools (medical, law, vet, pharmacy, business, nursing, dental).
 
-**Us: genuinely surface-level, as you said.** We have enrolment, a "study"
-activity, "join a club" as one line, and graduation. No grades, no popularity,
-no majors, no teachers, no bullying, no specialised schools.
+**Us: closed, mostly.** Grades and subjects were already modelled but invisible;
+there is now a School screen showing them beside **popularity**, which the two
+sets of actions pull against — studying moves grades and not popularity, hanging
+about does the reverse. Six actions: study harder, join a club, skip class,
+cheat on a test, try out for the team, hang about after school, and drop out
+from sixteen. Cheating, skipping, tryouts and running for office can **backfire**,
+with the odds bought down by a relevant stat but never to zero.
+
+Most importantly, school now **introduces people** — classmates and a teacher on
+every enrolment, who stay in the life afterwards. That is the design's central
+continuity bet (a classmate met at 15 turns up again at 24) and until now school
+introduced nobody at all.
+
+Still missing: majors as a player choice, specialised schools (medical, law,
+vet), and bullying.
 
 ### Careers
 **200+ collectible careers**, plus part-time and freelance work, and ten
@@ -151,8 +163,10 @@ Ranked by player-visible depth per unit of work:
    a warm and a cool outcome chosen by the relationship's current warmth, each
    writing a memory. Where we beat BitLife: the same "Talk" lands differently on
    a trusted friend and someone you have been avoiding, and the log says which.
-3. **School with substance** — grades, popularity, clubs and teams, majors,
-   cheating, bullying, dropping out, specialised schools.
+3. ~~**School with substance**~~ — **done.** A School screen (design 3A/5A),
+   popularity as a stat that pulls against grades, six school actions with real
+   risk, and — the important one — school now introduces classmates and teachers
+   who persist for the rest of the life.
 4. **Work with substance** — named coworkers and a boss as real NPCs, a
    performance bar, office incidents.
 5. **Crime as a menu** with age gates and a real justice chain.

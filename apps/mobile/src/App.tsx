@@ -9,6 +9,7 @@ import type {
   MoreView,
   PeopleView,
   PersonView,
+  SchoolView,
 } from './lib/api';
 import { safeStorage } from './lib/storage';
 import { Tabs, type Tab } from './components/Tabs';
@@ -16,6 +17,7 @@ import { LifeScreen } from './screens/LifeScreen';
 import { PeopleScreen } from './screens/PeopleScreen';
 import { PersonScreen } from './screens/PersonScreen';
 import { DoScreen } from './screens/DoScreen';
+import { SchoolScreen } from './screens/SchoolScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { MoreScreen } from './screens/MoreScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
@@ -40,6 +42,7 @@ export const App = () => {
   const [people, setPeople] = useState<PeopleView | null>(null);
   const [person, setPerson] = useState<PersonView | null>(null);
   const [actions, setActions] = useState<ActionCard[] | null>(null);
+  const [school, setSchool] = useState<SchoolView | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
   const [more, setMore] = useState<MoreView | null>(null);
 
@@ -110,7 +113,14 @@ export const App = () => {
     void (async () => {
       try {
         if (tab === 'people' && !person) setPeople(await api.people(lifeId));
-        if (tab === 'do') setActions((await api.actions(lifeId)).actions);
+        if (tab === 'do') {
+          const [{ actions: list }, enrolled] = await Promise.all([
+            api.actions(lifeId),
+            api.school(lifeId),
+          ]);
+          setActions(list);
+          setSchool(enrolled);
+        }
         if (tab === 'money') setMoney(await api.money(lifeId));
         if (tab === 'more') setMore(await api.more(lifeId));
       } catch {
@@ -171,6 +181,9 @@ export const App = () => {
         show('That has done all it can for you this year.');
       } else if (result.outcome === 'overdone') {
         show('You overdid it.');
+      } else if (result.outcome === 'backfired') {
+        // The log carries the detail; this is just so it does not pass unnoticed.
+        show('That did not go the way you wanted.');
       }
     },
     [life, run, setLifeAndRemember, show],
@@ -265,7 +278,22 @@ export const App = () => {
           <div className="spinner">…</div>
         ))}
 
+      {/*
+        School is the Do tab while you are in it. A separate tab would be dead
+        for two thirds of a life, and the design puts school behind Do (3A).
+      */}
+      {tab === 'do' && school && (
+        <SchoolScreen
+          school={school}
+          busy={busy}
+          decisionOpen={life.activeEvent !== null}
+          onAct={onAct}
+          onOpenPerson={openPerson}
+        />
+      )}
+
       {tab === 'do' &&
+        !school &&
         (actions ? (
           <DoScreen
             actions={actions}

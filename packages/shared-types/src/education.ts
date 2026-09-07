@@ -21,6 +21,12 @@ export const EnrolmentSchema = z.object({
   /** 0..400 → GPA 0.0–4.0, kept integral. Design 3A shows "B+ average", 5A "GPA 3.4". */
   gradePoints: z.number().int().min(0).max(400),
   subjects: z.array(z.object({ name: z.string(), gradePoints: z.number().int().min(0).max(400) })),
+  /**
+   * 0..100. Standing among the other students, separate from grades — being
+   * liked and being top of the class are different projects, and the game is
+   * more interesting when a player has to choose.
+   */
+  popularity: z.number().int().min(0).max(100).default(50),
   clubIds: z.array(z.string()).default([]),
   clubSlots: z.number().int().min(0).default(3),
   /** Design 5A pins this in the header, in red, for a decade. */
