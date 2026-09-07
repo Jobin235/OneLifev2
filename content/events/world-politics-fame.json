@@ -215,7 +215,10 @@
             "effects": [
               {
                 "op": "debt",
-                "delta": 900000
+                "delta": 900000,
+                "label": "Mortgage on your parents’ house",
+                "holder": "Northgate Bank",
+                "rate": 0.05
               },
               {
                 "op": "money",

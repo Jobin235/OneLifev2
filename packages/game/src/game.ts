@@ -1,4 +1,5 @@
 import { interact, interactionsFor } from './interact.js';
+import { applyFor, openings } from './jobs.js';
 import { buy, sell, shopView } from './shop.js';
 import { actionsView, schoolView, workView } from './views.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
@@ -345,6 +346,16 @@ export class Game {
       Object.assign(state, before);
       throw error;
     }
+  }
+
+  /** What work is going this year, with its requirements stated. */
+  openings(state: LifeState) {
+    return openings(state, this.content);
+  }
+
+  /** Apply for one of them. Meeting the bar is not the same as being hired. */
+  applyFor(state: LifeState, trackId: string) {
+    return applyFor(state, trackId, this.content, this.config);
   }
 
   /** What is for sale, with reasons where it is not. */

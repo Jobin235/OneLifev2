@@ -76,7 +76,16 @@ export const EffectSchema = z.discriminatedUnion('op', [
     /** Minor units. Negative spends; the engine draws cash first, then savings. */
     delta: z.number().int(),
   }),
-  z.object({ op: z.literal('debt'), delta: z.number().int() }),
+  z.object({
+    op: z.literal('debt'),
+    delta: z.number().int(),
+    /** What it is for. Required when borrowing; ignored when repaying. */
+    label: z.string().optional(),
+    /** Who holds it. */
+    holder: z.string().optional(),
+    /** Annual interest as a fraction; family lends interest-free. */
+    rate: z.number().min(0).max(1).optional(),
+  }),
   z.object({ op: z.literal('salary'), delta: z.number().int().optional(), multiplier: z.number().optional() }),
   z.object({
     op: z.literal('relationship'),

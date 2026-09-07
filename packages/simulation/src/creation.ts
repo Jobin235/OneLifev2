@@ -146,6 +146,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
       cash: 0,
       savings: 0,
       debt: 0,
+    debts: [],
       salary: 0,
       otherIncome: 0,
       // Recomputed every year by updateCostOfLiving; a newborn owes nothing.
@@ -297,6 +298,9 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     chronicleLog: {},
     interactionUsage: {},
     ribbonsEarned: [],
+    ambitionId: null,
+    yearsOutOfWork: 0,
+    applicationsThisYear: 0,
     lastSeenWorldSnapshotId: null,
     lastReturnEventAt: null,
     legacy: null,

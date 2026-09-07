@@ -68,6 +68,12 @@ export const LifeStateSchema = z.object({
   interactionUsage: z.record(z.string(), z.number().int().min(0)),
   /** Ribbon ids earned by this line so far — what carries between lives. */
   ribbonsEarned: z.array(z.string()),
+  /** What this life is for. Chosen at the start; judged at the end. */
+  ambitionId: z.string().nullable(),
+  /** Consecutive years an adult has been out of work. Drives desperation. */
+  yearsOutOfWork: z.number().int().min(0),
+  /** Applications made this year. Cleared on age-up. */
+  applicationsThisYear: z.number().int().min(0),
 
   /** For the return-diff engine; never shown to the player (§88). */
   lastSeenWorldSnapshotId: z.string().nullable(),
@@ -82,6 +88,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 3: added the chronicle (decision-free log lines) and its per-line cooldowns.
  * 4: added per-person interactions and their annual limits.
  * 5: added ribbons, and the set the family line has collected.
+ * 6: added ambitions — what a life is for.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 5;
+export const SCHEMA_VERSION = 6;

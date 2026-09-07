@@ -31,10 +31,28 @@ export const checkInvariants = (state: LifeState, previous?: LifeState): void =>
   }
 
   for (const [key, value] of Object.entries(character.finances)) {
+    if (key === 'debts') continue;
     if (!Number.isFinite(value)) fail('money_finite', `${key} is ${value}`);
     if (!Number.isInteger(value)) fail('money_integral', `${key} is ${value}`);
   }
   if (character.finances.debt < 0) fail('debt_non_negative', `${character.finances.debt}`);
+
+  /*
+   * The headline balance must equal what it is itemised into. This is the
+   * invariant that stops the Money screen lying: if the player is told they owe
+   * $61,000, there has to be a list of who to, adding up to $61,000.
+   */
+  let owed = 0;
+  for (const debt of character.finances.debts) {
+    if (!Number.isInteger(debt.balance) || debt.balance <= 0) {
+      fail('debt_balances_positive', `${debt.label} is ${debt.balance}`);
+    }
+    if (!debt.label || !debt.holder) fail('debt_is_attributed', `${debt.id} has no holder`);
+    owed += debt.balance;
+  }
+  if (owed !== character.finances.debt) {
+    fail('debt_total_matches_items', `${character.finances.debt} but items total ${owed}`);
+  }
 
   if (!character.alive && character.deathAge === null) {
     fail('dead_has_death_age', 'character is dead with no death age');

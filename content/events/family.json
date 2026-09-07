@@ -61,7 +61,10 @@
               },
               {
                 "op": "debt",
-                "delta": 6100000
+                "delta": 6100000,
+                "label": "Mortgage on your parents’ house",
+                "holder": "Northgate Bank",
+                "rate": 0.05
               },
               {
                 "op": "asset_add",

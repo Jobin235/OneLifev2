@@ -91,12 +91,38 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
       };
     }
 
-    case 'debt':
-      character.finances.debt = Math.max(0, character.finances.debt + effect.delta);
+    case 'debt': {
+      const f = character.finances;
+      if (effect.delta > 0) {
+        /*
+         * Borrowing creates a named debt. A bare number could not answer "to
+         * whom, and what for", which is what made every balance look arbitrary.
+         */
+        f.debts.push({
+          id: makeId('debt', state.seed, effect.label ?? 'borrowing', state.step),
+          label: effect.label ?? 'Money you borrowed',
+          holder: effect.holder ?? 'a lender',
+          balance: effect.delta,
+          rate: effect.rate ?? config.money.debtInterest,
+          takenAtAge: character.age,
+        });
+      } else if (effect.delta < 0) {
+        // Repayment comes off the most expensive debt first.
+        let left = -effect.delta;
+        for (const debt of [...f.debts].sort((a, b) => b.rate - a.rate)) {
+          if (left <= 0) break;
+          const paid = Math.min(debt.balance, left);
+          debt.balance -= paid;
+          left -= paid;
+        }
+        f.debts = f.debts.filter((d) => d.balance > 0);
+      }
+      f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
       return {
         text: `${effect.delta >= 0 ? 'Debt +' : 'Debt −'}${formatMoneyExact(Math.abs(effect.delta))}`,
         positive: effect.delta < 0,
       };
+    }
 
     case 'salary': {
       const before = character.finances.salary;
@@ -418,7 +444,25 @@ const spend = (state: LifeState, delta: number): void => {
     f.savings -= fromSavings;
     owed -= fromSavings;
   }
-  if (owed > 0) f.debt += owed;
+  /*
+   * What you cannot pay, you go without — you do not silently acquire a loan.
+   *
+   * This is the same rule settleYear already followed and states plainly:
+   * nobody borrows indefinitely against no income. `spend` was breaking it,
+   * inventing an unattributed balance whenever an event cost more than the
+   * character had, which is exactly the "random debt, to whom?" problem — and
+   * because it compounded with no repayment path, a poor life ended millions in
+   * the red.
+   *
+   * Debt now only ever comes from deciding to borrow, where content names the
+   * lender and the rate.
+   */
+  if (owed > 0) {
+    const severity = Math.min(1, owed / Math.max(1, f.annualExpenses || owed));
+    state.character.stats.happiness = clampStat(
+      state.character.stats.happiness - Math.round(severity * 7),
+    );
+  }
 };
 
 const bind = (ctx: EffectContext, target: string): Relationship | undefined => {

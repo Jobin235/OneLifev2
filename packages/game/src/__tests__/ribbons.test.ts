@@ -36,9 +36,13 @@ describe('ribbons', () => {
     const state = liveOut('ribbon-rich');
 
     // A life that ends rich is "Loaded" even if it was also perfectly steady.
-    // Money is in cents, so this is five million dollars.
+    // Money is in cents, so this is five million dollars. Convictions are
+    // cleared first because this seed happens to produce some, and a record
+    // outranks money — which the second half of this test then checks.
+    state.character.record.convictions = [];
     state.character.finances.savings = 5_000_000_00;
     state.character.finances.debt = 0;
+    state.character.finances.debts = [];
     state.character.finances.cash = 0;
     expect(ribbonFor(state).id).toBe('loaded');
 

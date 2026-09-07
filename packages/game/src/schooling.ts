@@ -1,6 +1,7 @@
 import type { ContentPack } from '@lineage/content';
 import type { CountryPack, LifeState } from '@lineage/shared-types';
 import type { Rng } from '@lineage/simulation';
+import { makeId } from '@lineage/simulation';
 import { spawnNpc } from '@lineage/npc-engine';
 import { pushHistory } from './ageup.js';
 
@@ -62,7 +63,21 @@ export const advanceSchooling = (
       scholarship: state.character.stats.smarts >= 82 && rng.chance(0.4),
     }, content, country, rng);
     const debt = state.education.current!.debtIncurred;
-    if (debt > 0) state.character.finances.debt += debt;
+    if (debt > 0) {
+      // Named, so the Money screen can say what the balance is and who holds it.
+      state.character.finances.debts.push({
+        id: makeId('debt', state.seed, 'student', state.character.age),
+        label: `Student loan · ${state.education.current!.institutionName}`,
+        holder: 'the student loans company',
+        balance: debt,
+        rate: 0.045,
+        takenAtAge: state.character.age,
+      });
+      state.character.finances.debt = state.character.finances.debts.reduce(
+        (sum, d) => sum + d.balance,
+        0,
+      );
+    }
     pushHistory(
       state,
       'education',

@@ -34,11 +34,33 @@ export const HiddenAttributesSchema = z.object({
 });
 export type HiddenAttributes = z.infer<typeof HiddenAttributesSchema>;
 
+/**
+ * Something you owe, to somebody, for a reason.
+ *
+ * A single `debt` number could not answer "to whom, and what for", which made
+ * every balance look arbitrary — and there was no way to pay it off, so an $800
+ * scrape at seventeen compounded quietly for the rest of the life.
+ */
+export const DebtSchema = z.object({
+  id: z.string(),
+  /** "Student loan", "Mortgage on the flat", "Court fine". */
+  label: z.string().min(1),
+  /** Who holds it: "the government", "Northgate Bank", "your brother". */
+  holder: z.string().min(1),
+  balance: MoneySchema,
+  /** Annual interest, as a fraction. 0 for an interest-free family loan. */
+  rate: z.number().min(0).max(1),
+  takenAtAge: z.number().int().min(0),
+});
+export type Debt = z.infer<typeof DebtSchema>;
+
 export const FinancesSchema = z.object({
   /** Liquid money. Design 3C shows one "what you're worth" figure built from these. */
   cash: MoneySchema,
   savings: MoneySchema,
+  /** Total owed. Derived from `debts`; never written directly. */
   debt: MoneySchema,
+  debts: z.array(DebtSchema).default([]),
   /** Gross annual salary; 0 when unemployed. */
   salary: MoneySchema,
   /** Annual non-salary income: business distributions, pension, brand deals. */

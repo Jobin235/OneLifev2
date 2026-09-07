@@ -176,21 +176,48 @@ export const applyDeferred = (
 const EMPLOYER_WORDS: Record<string, string[]> = {
   Technology: ['Northgate Labs', 'Halcyon Systems', 'Brightwater', 'Ardent Data', 'Kestrel Software'],
   Transport: ['Meridian Freight', 'Cascade Logistics', 'Ironline Haulage'],
-  Healthcare: ["St. Vincent's", 'Riverside General', 'Mercy North'],
+  Logistics: ['Meridian Freight', 'Bellhouse Distribution', 'Tallow Yard'],
+  Healthcare: ["St. Vincent's", 'Riverside General', 'Mercy North', 'The Alder Practice'],
   Legal: ['Farrow & Bell', 'Ashcombe Partners', 'Ludlow Kane'],
   Education: ['Lincoln High', 'Grantham Academy', 'Portland State'],
   Retail: ['Marlowe & Sons', 'Fairhaven Stores', 'The Corner Group'],
   Construction: ['Ridgeway Contracting', 'Callum Build', 'Stonefield'],
   'Professional services': ['Harrowgate Advisory', 'Linden Partners'],
   'Public office': ['Ward 4', 'City Hall', 'The County'],
+  'Public service': ['The County', 'City Hall', 'the Force', 'the Service'],
   Sport: ['Cascade FC', 'Northside Athletic', 'Rivermouth United'],
   Media: ['Channel Nine', 'The Daily', 'Longwave Radio'],
+  Finance: ['Northgate Bank', 'Ashwell & Co.', 'Pellinore Capital', 'Braddock Mutual'],
+  Business: ['Halloway Group', 'Trent & Mowbray', 'Fenwick Holdings'],
+  Hospitality: ['The Hollow Oak', 'Bellamy House', 'The Quarry Kitchen'],
+  Agriculture: ['Thorn Farm', 'Bracken Fields', 'Wexley Estate'],
+  Automotive: ['Dalton Motors', 'The Arch Garage', 'Fenner Autos'],
+  Creative: ['Studio Vell', 'Marrow & Ink', 'The Print Room'],
+  Engineering: ['Ansell Engineering', 'Vance Works', 'Redbourne Group'],
+  Facilities: ['Crestwell Services', 'The Estate Office', 'Fairmile FM'],
+  Manufacturing: ['Harlow Steel', 'Verity Works', 'Cobb & Daughters'],
+  Property: ['Bellweather Homes', 'Anselm Estates', 'Priory Property'],
+  Science: ['The Institute', 'Vane Laboratory', 'Aldergate Research'],
+  Security: ['Blackthorn Security', 'Sentinel Group'],
+  Services: ['Aldridge & Co.', 'The Bureau', 'Quillon Services'],
 };
 
-const employerNameFor = (industry: string, rng: Rng): string => {
-  const pool = EMPLOYER_WORDS[industry] ?? ['A company you had not heard of'];
-  return rng.pick(pool);
+/*
+ * A fallback that still reads like a real employer.
+ *
+ * This used to return the literal string "A company you had not heard of",
+ * which then appeared in the log as "You left A company you had not heard of."
+ * Sixty-three new career tracks brought industries the table did not cover, and
+ * the placeholder started showing up in people's life stories.
+ */
+const FALLBACK_NAMES = ['Ellerby', 'Hartnell', 'Vosper', 'Cranleigh', 'Whitlock', 'Padgett'];
+
+export const employerNameFor = (industry: string, rng: Rng): string => {
+  const pool = EMPLOYER_WORDS[industry];
+  if (pool) return rng.pick(pool);
+  return `${rng.pick(FALLBACK_NAMES)} ${rng.pick(['& Co.', 'Group', 'Partners', 'Limited'])}`;
 };
+
 
 /**
  * Chooses a ladder the character could plausibly be on, weighted by how well they
@@ -255,7 +282,7 @@ export const takeAvailableJob = (
   content: ContentPack,
   config: GameConfig,
   rng: Rng,
-): void => {
+): string | null => {
   /*
    * Drifting into work means drifting into *paid* work. Some ladders start on
    * an unpaid rung — a football academy, a party volunteer — and those are
@@ -263,7 +290,7 @@ export const takeAvailableJob = (
    * one as an ordinary job gave an eighteen-year-old a career with no wages.
    */
   const track = pickTrack(state, content, rng, (t) => (t.rungs[0]?.salary ?? 0) > 0);
-  if (!track) return;
+  if (!track) return null;
 
   applyDeferred(
     [{ op: 'career_join', trackId: track.id, rungIndex: 0 }] as never,
@@ -273,4 +300,5 @@ export const takeAvailableJob = (
     rng,
     {},
   );
+  return state.career.current?.title ?? null;
 };

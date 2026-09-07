@@ -66,7 +66,14 @@ export const updateCostOfLiving = (
     Math.round(base * studentDiscount) + inflation + dependents * config.money.perChildAnnualCost;
 };
 
-export const settleYear = (state: LifeState, config: GameConfig): void => {
+/** What the year's money actually did, in words, for the log. */
+export interface YearOfMoney {
+  wentWithout: number;
+  drewOnSavings: number;
+  debtInterest: number;
+}
+
+export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney => {
   const { character } = state;
   const f = character.finances;
 
@@ -83,16 +90,39 @@ export const settleYear = (state: LifeState, config: GameConfig): void => {
   const dependentCost = childCount * config.money.perChildAnnualCost;
 
   const expenses = f.annualExpenses + assetCosts + dependentCost;
-  // Interest only accrues on debt the character actually took on.
-  const debtInterest = Math.round(f.debt * config.money.debtInterest);
-  const savingsInterest = Math.round(f.savings * config.money.savingsInterest);
+  // Each debt carries its own rate, so a family loan does not compound like a
+  // credit card and the player can see which one is eating them.
+  const before = f.debt;
+  for (const debt of f.debts) {
+    debt.balance += Math.round(debt.balance * debt.rate);
+  }
+  f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
+  const debtInterest = f.debt - before;
 
-  f.debt += debtInterest;
+  const savingsInterest = Math.round(f.savings * config.money.savingsInterest);
   f.savings += savingsInterest;
 
   // A loss-making business still costs you money.
   const businessLoss = Math.min(0, businessIncome);
   f.cash += net - expenses + businessLoss;
+
+  /*
+   * Surplus goes at the debts before it goes anywhere else, most expensive
+   * first. Without this a balance compounds for a whole life no matter how well
+   * the character does, which is neither true nor any fun to look at.
+   */
+  if (f.cash > 0 && f.debts.length > 0) {
+    let spare = Math.round(f.cash * 0.5);
+    for (const debt of [...f.debts].sort((a, b) => b.rate - a.rate)) {
+      if (spare <= 0) break;
+      const paid = Math.min(debt.balance, spare);
+      debt.balance -= paid;
+      spare -= paid;
+      f.cash -= paid;
+    }
+    f.debts = f.debts.filter((d) => d.balance > 0);
+    f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
+  }
 
   // Overflow into savings so cash stays a plausible current-account figure.
   const cashBuffer = Math.max(expenses, 500_000);
@@ -111,13 +141,16 @@ export const settleYear = (state: LifeState, config: GameConfig): void => {
    * shows up where the player will actually feel it. Debt only ever comes from
    * borrowing something specific: a loan, a mortgage, a fine.
    */
+  let wentWithout = 0;
+  let drewOnSavings = 0;
+
   if (f.cash < 0) {
     const shortfall = -f.cash;
-    const drawn = Math.min(f.savings, shortfall);
-    f.savings -= drawn;
+    drewOnSavings = Math.min(f.savings, shortfall);
+    f.savings -= drewOnSavings;
     f.cash = 0;
 
-    const wentWithout = shortfall - drawn;
+    wentWithout = shortfall - drewOnSavings;
     if (wentWithout > 0) {
       const severity = Math.min(1, wentWithout / Math.max(1, expenses));
       state.character.stats.happiness = clampStat(
@@ -128,6 +161,8 @@ export const settleYear = (state: LifeState, config: GameConfig): void => {
       );
     }
   }
+
+  return { wentWithout, drewOnSavings, debtInterest };
 
   // Debt is serviced from whatever is left above a working buffer, so a mortgage
   // actually clears over a working life instead of outliving the character.

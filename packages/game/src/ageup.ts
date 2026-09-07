@@ -1,4 +1,7 @@
 import { chronicleYear } from './chronicle.js';
+
+// Re-exported so the modules that already import it from here keep working.
+export { pushHistory } from '@lineage/simulation';
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
 import type { EventInstance, LifeState, WorldIndicators } from '@lineage/shared-types';
@@ -12,7 +15,7 @@ import {
   graduate,
   isGraduating,
   isPromotable,
-  makeId,
+  pushHistory,
   makeRng,
   mortalityChance,
   promote,
@@ -125,13 +128,15 @@ export const advanceYear = (
     }
   }
   /*
-   * Most adults end up in work without deciding to. Employment used to arrive
-   * only through one probabilistic event, which left a third of lives never
-   * working at all and only a quarter employed at thirty — a simulation where
-   * most people are permanently unemployed is not one anybody recognises.
+   * Being out of work is a situation, not a gap to be filled at random.
    *
-   * The player can still go looking (the "Look for a job" action); this is the
-   * floor under a player who never opens the tab.
+   * This used to hire the character into a random job at 45% a year, which read
+   * exactly as it was: a job appearing from nowhere with no application, no
+   * bearing on what they had studied, and sometimes at a lower wage than the
+   * one they had. Getting hired is now something the player does — "Look for
+   * work" on the Do screen, against real openings — and the only automatic
+   * route is the one that is actually true of life: if you need money badly
+   * enough for long enough, you take whatever is going.
    */
   if (
     !state.career.current &&
@@ -139,10 +144,28 @@ export const advanceYear = (
     !state.education.current &&
     !state.character.record.incarceration &&
     state.character.age >= 18 &&
-    state.character.age < 62 &&
-    rng.chance(0.45)
+    state.character.age < 62
   ) {
-    takeAvailableJob(state, content, config, rng);
+    state.yearsOutOfWork += 1;
+    const desperate =
+      state.yearsOutOfWork >= 2 &&
+      state.character.finances.cash + state.character.finances.savings <
+        state.character.finances.annualExpenses;
+
+    if (desperate && rng.chance(0.55)) {
+      const title = takeAvailableJob(state, content, config, rng);
+      if (title) {
+        pushHistory(
+          state,
+          'career',
+          '💼',
+          `You needed the money, so you took work as a ${title.toLowerCase()}.`,
+          40,
+        );
+      }
+    }
+  } else {
+    state.yearsOutOfWork = 0;
   }
 
   for (const business of state.businesses) advanceBusinessYear(business, world, rng);
@@ -176,6 +199,7 @@ export const advanceYear = (
   // Diminishing returns reset with the year: training helps again in January.
   state.activityUsage = {};
   state.interactionUsage = {};
+  state.applicationsThisYear = 0;
 
   // 7. Death check, before events — a dead character gets no card.
   if (rng.chance(mortalityChance(state.character, config))) {
@@ -273,27 +297,6 @@ const causeOfDeath = (state: LifeState): string => {
   return 'age';
 };
 
-export const pushHistory = (
-  state: LifeState,
-  category: string,
-  icon: string,
-  line: string,
-  significance: number,
-  npcIds: string[] = [],
-): void => {
-  const entry = {
-    id: makeId('his', state.seed, line, state.character.age, state.history.length),
-    atAge: state.character.age,
-    category: category as never,
-    icon,
-    line,
-    significance,
-    eventInstanceId: null,
-    npcIds,
-  };
-  state.history.push(entry);
-  state.currentYearEntryIds.push(entry.id);
-};
 
 /**
  * Design 1B: four lines, the stats that actually moved, and one line hinting at

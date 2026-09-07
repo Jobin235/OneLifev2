@@ -1,6 +1,7 @@
 import type { GameConfig } from '@lineage/config';
 import type { CareerTrack, LifeState, PerformanceBand } from '@lineage/shared-types';
 import { clampStat } from '@lineage/shared-types';
+import { pushHistory } from './history.js';
 import type { Rng } from './rng.js';
 
 export const performanceBand = (performance: number): PerformanceBand => {
@@ -98,6 +99,27 @@ export const leaveJob = (
   state.career.current = null;
   state.character.finances.salary = 0;
   if (reason === 'retired') state.career.retired = true;
+
+  /*
+   * Say it out loud. Losing a job used to happen silently — the header simply
+   * went blank and the log said nothing — which made employment look like it
+   * came and went at random when in fact something specific had happened.
+   */
+  // Some employers are called "Ashwell & Co." — do not give them two full stops.
+  const employer = job.employerName;
+  const stop = employer.endsWith('.') ? '' : '.';
+  const said: Record<typeof reason, string> = {
+    quit: `You left ${employer}${stop}`,
+    fired: `You were fired from ${employer}${stop}`,
+    laid_off: `${employer} let you go.`,
+    retired: `You retired from ${employer}${stop}`,
+    imprisoned: `You lost your job at ${employer} when you went inside.`,
+    died: `You were still working at ${employer}${stop}`,
+  };
+  const icon: Record<typeof reason, string> = {
+    quit: '🚪', fired: '📦', laid_off: '📉', retired: '🎣', imprisoned: '⚖️', died: '💼',
+  };
+  pushHistory(state, 'career', icon[reason], said[reason], reason === 'retired' ? 70 : 50);
 };
 
 export const jobLine = (state: LifeState): string => {

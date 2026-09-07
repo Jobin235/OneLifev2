@@ -10,3 +10,4 @@ export * from './fame.js';
 export * from './health.js';
 export * from './creation.js';
 export * from './invariants.js';
+export * from './history.js';
