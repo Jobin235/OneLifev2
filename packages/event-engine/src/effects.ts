@@ -7,6 +7,7 @@ import {
   formatMoneyExact,
   leaveJob,
   makeId,
+  pushHistory,
   type Rng,
 } from '@lineage/simulation';
 
@@ -333,6 +334,54 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
         };
       }
       return { text: `⚖️ ${effect.offence}`, positive: false };
+    }
+
+    case 'behaviour': {
+      const inside = character.record.incarceration;
+      if (!inside) return null;
+      inside.behaviour = clampStat(inside.behaviour + effect.delta);
+      return {
+        text: `${effect.delta > 0 ? '🙂' : '😠'} behaviour ${effect.delta > 0 ? '+' : ''}${effect.delta}`,
+        positive: effect.delta > 0,
+      };
+    }
+
+    case 'extend_sentence': {
+      const inside = character.record.incarceration;
+      if (!inside) return null;
+      inside.totalYears += effect.years;
+      inside.paroleEligibleIn += effect.years;
+      pushHistory(
+        state,
+        'prison',
+        '⛓️',
+        `Your prison sentence was extended by ${effect.years === 1 ? 'a year' : `${effect.years} years`}.`,
+        60,
+      );
+      return { text: `⛓️ +${effect.years}y`, positive: false };
+    }
+
+    case 'release': {
+      const inside = character.record.incarceration;
+      if (!inside) return null;
+      // Parole is a door that has to be open. Appeal and escape make their own.
+      if (effect.how === 'parole' && inside.paroleEligibleIn > 0) return null;
+
+      const served = inside.yearsServed;
+      character.record.incarceration = null;
+      pushHistory(
+        state,
+        'prison',
+        '🚪',
+        effect.how === 'escape'
+          ? 'You escaped, and stopped using your own name.'
+          : effect.how === 'appeal'
+            ? `Your conviction was overturned after ${served === 1 ? 'a year' : `${served} years`}.`
+            : `You were released on parole after ${served === 1 ? 'a year' : `${served} years`}.`,
+        80,
+      );
+      if (effect.how === 'escape') state.flags.fugitive = true;
+      return { text: '🚪 out', positive: true };
     }
 
     case 'career_performance':

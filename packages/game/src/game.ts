@@ -1,7 +1,7 @@
 import { interact, interactionsFor } from './interact.js';
 import { applyFor, openings } from './jobs.js';
 import { buy, sell, shopView } from './shop.js';
-import { actionsView, schoolView, workView } from './views.js';
+import { actionsView, prisonView, schoolView, workView } from './views.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import type {
@@ -394,6 +394,11 @@ export class Game {
 
   sell(state: LifeState, assetId: string) {
     return sell(state, assetId, this.config);
+  }
+
+  /** The sentence, how it is going, and what there is to do with the years. */
+  prison(state: LifeState) {
+    return prisonView(state, this.content);
   }
 
   /** Everything the player could do right now, with reasons where they cannot. */

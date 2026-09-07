@@ -26,7 +26,16 @@ export const ActivitySchema = z.object({
   icon: z.string().min(1),
   label: z.string().min(1),
   /** Design 2C groups tiles by the kind of thing you are doing. */
-  group: z.enum(['body_and_head', 'fun_and_trouble', 'bigger_moves', 'relationship', 'work', 'school']),
+  group: z.enum([
+    'body_and_head',
+    'fun_and_trouble',
+    'bigger_moves',
+    'relationship',
+    'work',
+    'school',
+    /** Prison has its own menu, because prison is a place you live in for years. */
+    'prison',
+  ]),
   minAge: z.number().int().min(0).default(0),
   maxAge: z.number().int().default(140),
   /** Cost in cents; 0 is free. */

@@ -176,6 +176,7 @@ export const createLocalApi = (): Api => {
       };
     },
 
+    prison: async (lifeId) => game.prison(get(lifeId)) as never,
     school: async (lifeId) => schoolView(get(lifeId), game.content) as never,
     work: async (lifeId) => workView(get(lifeId), game.content) as never,
 

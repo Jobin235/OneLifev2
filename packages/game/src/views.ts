@@ -234,6 +234,7 @@ const GROUP_TINT: Record<string, { tint: string; noteColor: string }> = {
   relationship: { tint: '#FDE9F1', noteColor: '#C25585' },
   work: { tint: '#EAF2FA', noteColor: '#2E6FA8' },
   school: { tint: '#EEEAFB', noteColor: '#5F51AE' },
+  prison: { tint: '#F0EBE2', noteColor: '#6E6255' },
 };
 
 /**
@@ -256,7 +257,15 @@ export const actionsView = (state: LifeState, content: ContentPack) => {
     if (state.character.age < a.minAge) return `You have to be ${a.minAge}`;
     if (state.character.age > a.maxAge) return 'That time has passed';
 
-    if (a.onlyWhen === 'incarcerated') return inside ? null : 'Only in prison';
+    if (a.onlyWhen === 'incarcerated') {
+      if (!inside) return 'Only in prison';
+      // Parole is a door that has to be open before it is worth asking about.
+      if (a.id === 'prison_parole') {
+        const left = state.character.record.incarceration!.paroleEligibleIn;
+        return left > 0 ? `Not eligible for ${left} more ${left === 1 ? 'year' : 'years'}` : null;
+      }
+      return null;
+    }
     if (inside) {
       const allowedInside = a.group === 'body_and_head' || a.id === 'study';
       return allowedInside ? null : 'Not from in here';
@@ -583,4 +592,60 @@ const storySoFar = (state: LifeState): string => {
     parts.push(`and ${formatMoneyExact(debt.data.amount)} you'll probably never see again`);
   }
   return parts.join(', ').replace(/,([^,]*)$/, ',$1') + '.';
+};
+
+/**
+ * Prison, as a place rather than a state.
+ *
+ * BitLife replaces the Occupation slot with a Prison one and gives it its own
+ * screen — sentence, behaviour, and a menu of things to do with the years. Ours
+ * said "You are serving a sentence." and nothing else, which is exactly the
+ * "half baked" the player meant: a decade of a life with no surface at all.
+ * See docs/BITLIFE-LOOP-SPEC.md §5.
+ */
+export const prisonView = (state: LifeState, content: ContentPack) => {
+  const inside = state.character.record.incarceration;
+  if (!inside) return null;
+
+  const left = Math.max(0, inside.totalYears - inside.yearsServed);
+  const years = (n: number) => `${n} ${n === 1 ? 'year' : 'years'}`;
+
+  return {
+    facility: inside.facility,
+    offence: inside.offence,
+    sentence: `${years(inside.yearsServed)} of ${years(inside.totalYears)} served`,
+    yearsLeft: left,
+    served: Math.round((inside.yearsServed / inside.totalYears) * 100),
+    behaviour: inside.behaviour,
+    behaviourLabel:
+      inside.behaviour >= 75
+        ? 'Model prisoner'
+        : inside.behaviour >= 45
+          ? 'No trouble so far'
+          : 'A problem, on paper',
+    parole:
+      inside.paroleEligibleIn > 0
+        ? `Eligible for parole in ${years(inside.paroleEligibleIn)}`
+        : 'Eligible for parole now',
+    /** Everyone you are in here with. */
+    inmates: state.relationships
+      .filter((r) => r.kind === 'cellmate')
+      .map((rel) => {
+        const npc = state.npcs.find((n) => n.id === rel.npcId);
+        return npc
+          ? { npcId: npc.id, name: `${npc.firstName} ${npc.lastName}`, emoji: npc.avatarEmoji }
+          : null;
+      })
+      .filter((row): row is NonNullable<typeof row> => row !== null),
+    /*
+     * Only what there is to do in here. A row whose entire message is "not from
+     * in here" is noise on the one screen where that is true of everything —
+     * the prison menu should read as a set of options, not a list of refusals.
+     */
+    actions: actionsView(state, content).filter(
+      (a) =>
+        (a.group === 'prison' || a.group === 'body_and_head' || a.group === 'school') &&
+        a.blockedReason !== 'Not from in here',
+    ),
+  };
 };

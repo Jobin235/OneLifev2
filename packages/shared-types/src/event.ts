@@ -130,6 +130,16 @@ export const EffectSchema = z.discriminatedUnion('op', [
    * hire chance — which is what turns "a job appeared" into "you got the job".
    */
   z.object({ op: z.literal('interview_answer'), fit: z.number().int().min(-2).max(2) }),
+  /** How you are getting on inside. Parole reads it; so do the guards. */
+  z.object({ op: z.literal('behaviour'), delta: z.number().int() }),
+  /**
+   * Out early, or out now. `parole` only works once the sentence says you are
+   * eligible; `escape` is the minigame's success branch and adds to the sentence
+   * when it is not.
+   */
+  z.object({ op: z.literal('release'), how: z.enum(['parole', 'appeal', 'escape']) }),
+  /** Adds years for something done inside. */
+  z.object({ op: z.literal('extend_sentence'), years: z.number().int().min(1) }),
   z.object({ op: z.literal('fame'), following: z.number().int().default(0), fans: z.number().int().default(0), haters: z.number().int().default(0), knownFor: z.string().optional() }),
   z.object({ op: z.literal('reputation'), delta: z.number().int() }),
   /** Moves grade points (0..400, four points to a GPA decimal). No-op out of school. */

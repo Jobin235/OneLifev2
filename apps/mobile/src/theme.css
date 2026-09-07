@@ -2974,3 +2974,81 @@ button {
   color: var(--faint);
   text-wrap: pretty;
 }
+
+/* ---- prison ---- */
+
+.pr-facility {
+  margin: 10px 0 2px;
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.pr-offence {
+  margin: 0 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--coral);
+}
+
+.pr-meter + .pr-meter {
+  margin-top: 12px;
+}
+
+.pr-meter-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--body);
+}
+
+.pr-track {
+  height: 10px;
+  border-radius: var(--r-pill);
+  background: var(--track);
+  overflow: hidden;
+}
+
+.pr-fill {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  transition: width 300ms ease;
+}
+
+.pr-parole {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.pr-inmates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pr-inmate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 6px;
+  border-radius: var(--r-pill);
+  background: var(--app-bg);
+}
+
+.pr-inmate-face {
+  font-size: 15px;
+}
+
+.pr-inmate-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink);
+}

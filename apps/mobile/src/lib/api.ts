@@ -218,6 +218,19 @@ export interface PersonView {
   stats: Array<{ icon: string; label: string; value: number }>;
 }
 
+export interface PrisonView {
+  facility: string;
+  offence: string;
+  sentence: string;
+  yearsLeft: number;
+  served: number;
+  behaviour: number;
+  behaviourLabel: string;
+  parole: string;
+  inmates: Array<{ npcId: string; name: string; emoji: string }>;
+  actions: ActionCard[];
+}
+
 export interface SchoolView {
   institution: string;
   stage: string;
@@ -369,6 +382,7 @@ export interface Api {
   actions(lifeId: string): Promise<{ actions: ActionCard[] }>;
   /** Null when the character is not enrolled anywhere. */
   school(lifeId: string): Promise<SchoolView | null>;
+  prison(lifeId: string): Promise<PrisonView | null>;
   /** Null when the character has no job. */
   work(lifeId: string): Promise<WorkView | null>;
   openings(lifeId: string): Promise<{ openings: Opening[]; applicationsLeft: number }>;
@@ -441,6 +455,9 @@ export const httpApi: Api = {
     ),
 
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
+  prison: (lifeId: string) =>
+    request<PrisonView>(`/lives/${lifeId}/prison`).catch(() => null),
+
   school: (lifeId: string) => request<SchoolView | null>(`/lives/${lifeId}/school`),
   work: (lifeId: string) => request<WorkView | null>(`/lives/${lifeId}/work`),
 

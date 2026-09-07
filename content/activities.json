@@ -1168,5 +1168,134 @@
         }
       ]
     }
+  },
+  {
+    "id": "behave_yourself",
+    "icon": "🙂",
+    "label": "Keep your head down",
+    "group": "prison",
+    "onlyWhen": "incarcerated",
+    "minAge": 10,
+    "cost": 0,
+    "note": "behaviour up · parole likes it",
+    "effects": [
+      {
+        "op": "behaviour",
+        "delta": 12
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": -3
+      }
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
+  },
+  {
+    "id": "prison_gym",
+    "icon": "🏋️",
+    "label": "Use the yard",
+    "group": "prison",
+    "onlyWhen": "incarcerated",
+    "minAge": 10,
+    "cost": 0,
+    "note": "💪 +10 · people notice",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "fitness",
+        "delta": 10
+      },
+      {
+        "op": "behaviour",
+        "delta": -2
+      }
+    ],
+    "effectiveTimes": 3,
+    "onRepeat": "riskier"
+  },
+  {
+    "id": "prison_infirmary",
+    "icon": "🏥",
+    "label": "Go to the infirmary",
+    "group": "prison",
+    "onlyWhen": "incarcerated",
+    "minAge": 10,
+    "cost": 0,
+    "note": "❤️ +7",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "health",
+        "delta": 7
+      }
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
+  },
+  {
+    "id": "prison_letter",
+    "icon": "✉️",
+    "label": "Write to somebody outside",
+    "group": "prison",
+    "onlyWhen": "incarcerated",
+    "minAge": 10,
+    "cost": 0,
+    "note": "😊 +6 · they remember you",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 6
+      },
+      {
+        "op": "behaviour",
+        "delta": 3
+      }
+    ],
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect"
+  },
+  {
+    "id": "prison_bribe",
+    "icon": "💵",
+    "label": "Bribe a guard",
+    "group": "prison",
+    "onlyWhen": "incarcerated",
+    "minAge": 10,
+    "cost": 250000,
+    "note": "$2,500 · easier time",
+    "effects": [
+      {
+        "op": "behaviour",
+        "delta": 18
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 5
+      }
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "riskier"
+  },
+  {
+    "id": "prison_parole",
+    "icon": "🚪",
+    "label": "Ask for parole",
+    "group": "prison",
+    "onlyWhen": "incarcerated",
+    "minAge": 10,
+    "cost": 0,
+    "note": "only if you are eligible",
+    "effects": [
+      {
+        "op": "release",
+        "how": "parole"
+      }
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
   }
 ]

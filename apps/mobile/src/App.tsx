@@ -9,6 +9,7 @@ import type {
   PeopleView,
   PersonView,
   Opening,
+  PrisonView,
   SchoolView,
   WorkView,
 } from './lib/api';
@@ -22,6 +23,7 @@ import { DoScreen } from './screens/DoScreen';
 import { SchoolScreen } from './screens/SchoolScreen';
 import { WorkScreen } from './screens/WorkScreen';
 import { JobsScreen } from './screens/JobsScreen';
+import { PrisonScreen } from './screens/PrisonScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
@@ -58,6 +60,7 @@ export const App = () => {
   const [work, setWork] = useState<WorkView | null>(null);
   const [jobs, setJobs] = useState<{ openings: Opening[]; applicationsLeft: number } | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
+  const [prison, setPrison] = useState<PrisonView | null>(null);
 
   // Design 5D: prison recolours the app's chrome.
   useEffect(() => {
@@ -125,14 +128,16 @@ export const App = () => {
       try {
         if (slot === 'relationships' && !person) setPeople(await api.people(lifeId));
         if (slot === 'context') {
-          const [enrolled, employed, market] = await Promise.all([
+          const [enrolled, employed, market, inside] = await Promise.all([
             api.school(lifeId),
             api.work(lifeId),
             api.openings(lifeId),
+            api.prison(lifeId),
           ]);
           setSchool(enrolled);
           setWork(employed);
           setJobs(market);
+          setPrison(inside);
         }
         if (slot === 'activities') setActions((await api.actions(lifeId)).actions);
         if (slot === 'assets') setMoney(await api.money(lifeId));
@@ -361,9 +366,17 @@ export const App = () => {
               />
             )}
             {life.navSlot === 'occupation' && !work && !jobs && <div className="spinner">…</div>}
-            {life.navSlot === 'prison' && (
-              <p className="sh-empty">You are serving a sentence.</p>
-            )}
+            {life.navSlot === 'prison' &&
+              (prison ? (
+                <PrisonScreen
+                  prison={prison}
+                  busy={busy}
+                  decisionOpen={decisionOpen}
+                  onAct={onAct}
+                />
+              ) : (
+                <div className="spinner">…</div>
+              ))}
           </Sheet>
         )}
 

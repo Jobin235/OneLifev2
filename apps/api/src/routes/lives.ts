@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
+import { ApplicationRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -289,6 +289,13 @@ export const registerLifeRoutes = (
     const { lifeId } = request.params as { lifeId: string };
     const view = schoolView(await load(userOf(request), lifeId), game.content);
     if (!view) return reply.code(404).send({ error: 'not enrolled' });
+    return view;
+  });
+
+  app.get('/lives/:lifeId/prison', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const view = prisonView(await load(userOf(request), lifeId), game.content);
+    if (!view) return reply.code(404).send({ error: 'not inside' });
     return view;
   });
 
