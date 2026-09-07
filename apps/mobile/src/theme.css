@@ -1400,3 +1400,61 @@ button {
   border: 1.5px dashed var(--line-3);
   color: var(--faint);
 }
+
+/* ---------- Work (design 3B) ---------- */
+
+.work-outlook {
+  font: 600 13px/1.5 var(--text);
+  color: var(--muted);
+  margin-top: 11px;
+  text-wrap: pretty;
+}
+
+.ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rung {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: var(--r-tile);
+  font: 700 13.5px/1.2 var(--text);
+  color: var(--faint);
+}
+
+.rung-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 99px;
+  background: var(--line-3);
+  flex: none;
+}
+
+.rung.reached {
+  color: var(--muted);
+}
+
+.rung.reached .rung-dot {
+  background: var(--green);
+}
+
+/* Where you are now, rather than where you have been. */
+.rung.current {
+  background: var(--green-tint);
+  color: var(--green-deep);
+  font-weight: 800;
+}
+
+.rung-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.rung-salary {
+  font: 800 12.5px/1 var(--text);
+  flex: none;
+}

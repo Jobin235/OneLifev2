@@ -211,6 +211,26 @@ export interface SchoolView {
   actions: ActionCard[];
 }
 
+export interface WorkView {
+  employer: string;
+  title: string;
+  salary: string;
+  yearsIn: number;
+  performance: number;
+  performanceLabel: string;
+  outlook: string;
+  ladder: Array<{ title: string; salary: string; current: boolean; reached: boolean }>;
+  people: Array<{
+    npcId: string;
+    name: string;
+    emoji: string;
+    role: string;
+    closeness: number;
+    score: number;
+  }>;
+  actions: ActionCard[];
+}
+
 export interface MoneyView {
   netWorth: string;
   monthlyNet: string;
@@ -271,6 +291,8 @@ export interface Api {
   actions(lifeId: string): Promise<{ actions: ActionCard[] }>;
   /** Null when the character is not enrolled anywhere. */
   school(lifeId: string): Promise<SchoolView | null>;
+  /** Null when the character has no job. */
+  work(lifeId: string): Promise<WorkView | null>;
   money(lifeId: string): Promise<MoneyView>;
   more(lifeId: string): Promise<MoreView>;
   legacy(lifeId: string): Promise<Legacy>;
@@ -334,6 +356,7 @@ export const httpApi: Api = {
 
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
   school: (lifeId: string) => request<SchoolView | null>(`/lives/${lifeId}/school`),
+  work: (lifeId: string) => request<WorkView | null>(`/lives/${lifeId}/work`),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
   more: (lifeId: string) => request<MoreView>(`/lives/${lifeId}/more`),
   legacy: (lifeId: string) => request<Legacy>(`/lives/${lifeId}/legacy`),

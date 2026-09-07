@@ -1,22 +1,237 @@
 [
-  { "id": "sc_first_day", "icon": "🎒", "text": "You cried on the first day and denied it for years.", "category": "education", "minAge": 5, "maxAge": 7, "requires": ["enrolled"], "cooldownYears": 99 },
-  { "id": "sc_teacher_liked", "icon": "🍎", "text": "A teacher decided you were clever, and you tried to keep it up.", "category": "education", "minAge": 7, "maxAge": 17, "requires": ["enrolled"] },
-  { "id": "sc_teacher_hated", "icon": "📐", "text": "A teacher took against you for reasons never made clear.", "category": "education", "minAge": 8, "maxAge": 17, "requires": ["enrolled"] },
-  { "id": "sc_test_panic", "icon": "📝", "text": "You revised the wrong chapter and found out during the exam.", "category": "education", "minAge": 9, "maxAge": 22, "requires": ["enrolled"], "cooldownYears": 5 },
-  { "id": "sc_group_project", "icon": "👥", "text": "You did most of a group project and everyone got the same mark.", "category": "education", "minAge": 10, "maxAge": 22, "requires": ["enrolled"] },
-  { "id": "sc_lunch_alone", "icon": "🍱", "text": "You ate lunch alone for a week and told nobody.", "category": "education", "minAge": 8, "maxAge": 17, "requires": ["enrolled"], "forbids": ["has_friend"] },
-  { "id": "sc_friend_lunch", "icon": "🥪", "text": "You and {friend} had the same lunch every day for a term.", "category": "education", "minAge": 8, "maxAge": 18, "requires": ["enrolled", "has_friend"] },
-  { "id": "sc_detention", "icon": "🕓", "text": "You got detention for something that was genuinely funny.", "category": "education", "minAge": 9, "maxAge": 17, "requires": ["enrolled"] },
-  { "id": "sc_sport_picked", "icon": "🏐", "text": "You were picked early for once, and played badly out of nerves.", "category": "education", "minAge": 8, "maxAge": 17, "requires": ["enrolled", "fit"] },
-  { "id": "sc_sport_last", "icon": "🥅", "text": "You were picked last and made a joke about it first.", "category": "education", "minAge": 8, "maxAge": 16, "requires": ["enrolled"], "forbids": ["fit"] },
-  { "id": "sc_school_play", "icon": "🎭", "text": "You were in the school play, three rows back, one line.", "category": "education", "minAge": 7, "maxAge": 16, "requires": ["enrolled"] },
-  { "id": "sc_crush", "icon": "💭", "text": "You thought about someone constantly and said nothing at all.", "category": "relationship", "minAge": 12, "maxAge": 18, "requires": ["enrolled"], "cooldownYears": 4 },
-  { "id": "sc_bad_haircut", "icon": "💇", "text": "You had a haircut that is still mentioned at family gatherings.", "category": "education", "minAge": 11, "maxAge": 17 },
-  { "id": "sc_late_bus", "icon": "🚌", "text": "You missed the bus and walked, and it was better.", "category": "education", "minAge": 9, "maxAge": 17, "requires": ["enrolled"] },
-  { "id": "sc_essay_praise", "icon": "✍️", "text": "Something you wrote was read out loud, and you went red.", "category": "education", "minAge": 10, "maxAge": 20, "requires": ["enrolled", "sharp"] },
-  { "id": "sc_maths_wall", "icon": "🧮", "text": "You hit a wall in maths and never quite got back over it.", "category": "education", "minAge": 11, "maxAge": 17, "requires": ["enrolled"], "forbids": ["sharp"] },
-  { "id": "sc_uni_reading", "icon": "📚", "text": "You did the reading for one seminar all term and it showed, once.", "category": "education", "minAge": 18, "maxAge": 24, "requires": ["enrolled"] },
-  { "id": "sc_uni_night", "icon": "🌃", "text": "You stayed up all night for a deadline and handed in something worse.", "category": "education", "minAge": 18, "maxAge": 25, "requires": ["enrolled"], "cooldownYears": 4 },
-  { "id": "sc_uni_friend", "icon": "☕", "text": "You and {friend} solved the world over coffee that went cold.", "category": "education", "minAge": 18, "maxAge": 25, "requires": ["enrolled", "has_friend"] },
-  { "id": "sc_uni_broke", "icon": "🥫", "text": "You lived on the same three meals for a month.", "category": "education", "minAge": 18, "maxAge": 25, "requires": ["enrolled", "broke"] }
+  {
+    "id": "sc_first_day",
+    "icon": "🎒",
+    "text": "You cried on the first day and denied it for years.",
+    "category": "education",
+    "minAge": 5,
+    "maxAge": 7,
+    "requires": [
+      "enrolled"
+    ],
+    "cooldownYears": 99
+  },
+  {
+    "id": "sc_teacher_liked",
+    "icon": "🍎",
+    "text": "A teacher decided you were clever, and you tried to keep it up.",
+    "category": "education",
+    "minAge": 7,
+    "maxAge": 17,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_teacher_hated",
+    "icon": "📐",
+    "text": "A teacher took against you for reasons never made clear.",
+    "category": "education",
+    "minAge": 8,
+    "maxAge": 17,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_test_panic",
+    "icon": "📝",
+    "text": "You revised the wrong chapter and found out during the exam.",
+    "category": "education",
+    "minAge": 9,
+    "maxAge": 22,
+    "requires": [
+      "enrolled"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "sc_group_project",
+    "icon": "👥",
+    "text": "You did most of a group project and everyone got the same mark.",
+    "category": "education",
+    "minAge": 10,
+    "maxAge": 22,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_lunch_alone",
+    "icon": "🍱",
+    "text": "You ate lunch alone for a week and told nobody.",
+    "category": "education",
+    "minAge": 8,
+    "maxAge": 17,
+    "requires": [
+      "enrolled"
+    ],
+    "forbids": [
+      "has_friend"
+    ]
+  },
+  {
+    "id": "sc_friend_lunch",
+    "icon": "🥪",
+    "text": "You and {friend} had the same lunch every day for a term.",
+    "category": "education",
+    "minAge": 8,
+    "maxAge": 18,
+    "requires": [
+      "enrolled",
+      "has_friend"
+    ]
+  },
+  {
+    "id": "sc_detention",
+    "icon": "🕓",
+    "text": "You got detention for something that was genuinely funny.",
+    "category": "education",
+    "minAge": 9,
+    "maxAge": 17,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_sport_picked",
+    "icon": "🏐",
+    "text": "You were picked early for once, and played badly out of nerves.",
+    "category": "education",
+    "minAge": 8,
+    "maxAge": 17,
+    "requires": [
+      "enrolled",
+      "fit"
+    ]
+  },
+  {
+    "id": "sc_sport_last",
+    "icon": "🥅",
+    "text": "You were picked last and made a joke about it first.",
+    "category": "education",
+    "minAge": 8,
+    "maxAge": 16,
+    "requires": [
+      "enrolled"
+    ],
+    "forbids": [
+      "fit"
+    ]
+  },
+  {
+    "id": "sc_school_play",
+    "icon": "🎭",
+    "text": "You were in the school play, three rows back, one line.",
+    "category": "education",
+    "minAge": 7,
+    "maxAge": 16,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_crush",
+    "icon": "💭",
+    "text": "You thought about someone constantly and said nothing at all.",
+    "category": "relationship",
+    "minAge": 12,
+    "maxAge": 18,
+    "requires": [
+      "enrolled"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "sc_bad_haircut",
+    "icon": "💇",
+    "text": "You had a haircut that is still mentioned at family gatherings.",
+    "category": "education",
+    "minAge": 11,
+    "maxAge": 17
+  },
+  {
+    "id": "sc_late_bus",
+    "icon": "🚌",
+    "text": "You missed the bus and walked, and it was better.",
+    "category": "education",
+    "minAge": 9,
+    "maxAge": 17,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_essay_praise",
+    "icon": "✍️",
+    "text": "Something you wrote was read out loud, and you went red.",
+    "category": "education",
+    "minAge": 10,
+    "maxAge": 20,
+    "requires": [
+      "enrolled",
+      "sharp"
+    ]
+  },
+  {
+    "id": "sc_maths_wall",
+    "icon": "🧮",
+    "text": "You hit a wall in maths and never quite got back over it.",
+    "category": "education",
+    "minAge": 11,
+    "maxAge": 17,
+    "requires": [
+      "enrolled"
+    ],
+    "forbids": [
+      "sharp"
+    ]
+  },
+  {
+    "id": "sc_uni_reading",
+    "icon": "📚",
+    "text": "You did the reading for one seminar all term and it showed, once.",
+    "category": "education",
+    "minAge": 18,
+    "maxAge": 24,
+    "requires": [
+      "enrolled"
+    ]
+  },
+  {
+    "id": "sc_uni_night",
+    "icon": "🌃",
+    "text": "You stayed up all night for a deadline and handed in something worse.",
+    "category": "education",
+    "minAge": 18,
+    "maxAge": 25,
+    "requires": [
+      "enrolled"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "sc_uni_friend",
+    "icon": "☕",
+    "text": "You and {friend} solved the world over coffee that went cold.",
+    "category": "education",
+    "minAge": 18,
+    "maxAge": 25,
+    "requires": [
+      "enrolled",
+      "has_friend"
+    ]
+  },
+  {
+    "id": "sc_uni_broke",
+    "icon": "🥫",
+    "text": "You lived on the same three meals for a month.",
+    "category": "education",
+    "minAge": 18,
+    "maxAge": 25,
+    "requires": [
+      "enrolled",
+      "broke"
+    ]
+  }
 ]

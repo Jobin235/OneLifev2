@@ -1,5 +1,5 @@
 import { interact, interactionsFor } from './interact.js';
-import { schoolView } from './views.js';
+import { schoolView, workView } from './views.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import type {
@@ -70,6 +70,18 @@ export interface ActResult {
 /**
  * The application service. Everything above this line is presentation or
  * transport; everything below it is pure domain (spec §128).
+ */
+/**
+ * The composition root.
+ *
+ * Every method here **mutates the state it is given** and returns that same
+ * reference; none of them clone. That keeps age-up cheap on a large life and
+ * matches how the simulation packages work internally, but it means a caller
+ * holding a "before" reference is holding the "after" one too. Snapshot the
+ * values you need, or `structuredClone` first.
+ *
+ * On a thrown error the state is rolled back to where it started, so a rejected
+ * action never leaves a half-applied life behind.
  */
 export class Game {
   readonly content: ContentPack;
@@ -332,6 +344,11 @@ export class Game {
   /** The school screen, or null when the character is not enrolled. */
   school(state: LifeState) {
     return schoolView(state, this.content);
+  }
+
+  /** The work screen, or null when the character has no job. */
+  work(state: LifeState) {
+    return workView(state, this.content);
   }
 
   /** What the player can do to one specific person right now. */

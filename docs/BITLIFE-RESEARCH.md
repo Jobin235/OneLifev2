@@ -95,8 +95,17 @@ Politician, Street Hustler, Model, Dealer). The Office update added coworkers
 and supervisors as real NPCs with their own interactions, HR investigations,
 grievances, office romance, and a visible performance bar.
 
-**Us:** 12 career tracks. Work is `work_harder` / `ask_for_a_raise` /
-`get_closer_to_boss` / `look_elsewhere`. No named coworkers, no office drama.
+**Us: closed on depth, still behind on breadth.** A Work screen showing the
+ladder (which rung you are on, what the next one pays), a performance meter with
+an outlook line that names your rival, and seven actions — work harder, ask for
+a raise, get closer to your manager, look elsewhere, take the credit, quit, and
+look for a job when out of work. Four can backfire: asking too early costs
+performance, taking credit that is not yours costs reputation, and being caught
+looking costs both.
+
+A workplace now spawns a manager, sometimes a rival, and one to three
+colleagues, all tappable straight through to the interaction menu. Still behind
+on career *breadth* (12 tracks against 200+) — that is item 7.
 
 ### Relationships
 Per-person interaction menu: **Ask Out, Compliment, Conversation, Gift, Hook
@@ -167,8 +176,9 @@ Ranked by player-visible depth per unit of work:
    popularity as a stat that pulls against grades, six school actions with real
    risk, and — the important one — school now introduces classmates and teachers
    who persist for the rest of the life.
-4. **Work with substance** — named coworkers and a boss as real NPCs, a
-   performance bar, office incidents.
+4. ~~**Work with substance**~~ — **done.** A Work screen (design 3B) with the
+   ladder, a performance meter, seven actions, and colleagues you can act on.
+   Also fixed the balance bug it exposed: a third of lives never worked at all.
 5. **Crime as a menu** with age gates and a real justice chain.
 6. **Assets you can buy and sell.**
 7. **Careers, broadened** — toward 100+ tracks, part-time and freelance work.

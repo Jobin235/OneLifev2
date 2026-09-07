@@ -215,21 +215,21 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "note": "performance up, health down",
+    "note": "performance up · health down",
     "effects": [
       {
-        "op": "career_performance",
-        "delta": 9
+        "op": "performance",
+        "delta": 14
       },
       {
         "op": "stat",
         "stat": "health",
-        "delta": -3
+        "delta": -4
       },
       {
         "op": "stat",
         "stat": "happiness",
-        "delta": -2
+        "delta": -3
       }
     ],
     "effectiveTimes": 3,
@@ -242,10 +242,36 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "note": "",
-    "effects": [],
+    "note": "more money · if they say yes",
+    "effects": [
+      {
+        "op": "raise",
+        "percent": 12
+      },
+      {
+        "op": "performance",
+        "delta": -4
+      }
+    ],
     "effectiveTimes": 1,
-    "onRepeat": "no_effect"
+    "onRepeat": "no_effect",
+    "backfire": {
+      "chance": 0.5,
+      "reducedBy": "charm",
+      "reducedByMost": 0.6,
+      "line": "You asked for a raise and were told to wait.",
+      "effects": [
+        {
+          "op": "performance",
+          "delta": -8
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -6
+        }
+      ]
+    }
   },
   {
     "id": "get_closer_to_boss",
@@ -254,19 +280,16 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "note": "",
+    "note": "they notice you",
     "effects": [
       {
-        "op": "relationship",
-        "target": "boss",
-        "dimension": "closeness",
-        "delta": 9
+        "op": "performance",
+        "delta": 6
       },
       {
-        "op": "relationship",
-        "target": "boss",
-        "dimension": "trust",
-        "delta": 6
+        "op": "stat",
+        "stat": "charm",
+        "delta": 2
       }
     ],
     "effectiveTimes": 2,
@@ -279,10 +302,33 @@
     "group": "work",
     "minAge": 16,
     "cost": 0,
-    "note": "",
-    "effects": [],
+    "note": "see what is out there",
+    "effects": [
+      {
+        "op": "stat",
+        "stat": "charm",
+        "delta": 2
+      }
+    ],
     "effectiveTimes": 2,
-    "onRepeat": "no_effect"
+    "onRepeat": "no_effect",
+    "backfire": {
+      "chance": 0.22,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "Word got back that you were looking.",
+      "effects": [
+        {
+          "op": "performance",
+          "delta": -14
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -5
+        }
+      ]
+    }
   },
   {
     "id": "study",
@@ -777,5 +823,103 @@
         "op": "drop_out"
       }
     ]
+  },
+  {
+    "id": "take_the_credit",
+    "icon": "🏆",
+    "label": "Take the credit",
+    "group": "work",
+    "minAge": 18,
+    "onlyWhen": "employed",
+    "effectiveTimes": 1,
+    "onRepeat": "riskier",
+    "note": "performance up · people notice",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "performance",
+        "delta": 16
+      },
+      {
+        "op": "stat",
+        "stat": "confidence",
+        "delta": 3
+      }
+    ],
+    "backfire": {
+      "chance": 0.45,
+      "reducedBy": "charm",
+      "reducedByMost": 0.5,
+      "line": "You took credit for someone else's work, and everyone knew.",
+      "effects": [
+        {
+          "op": "performance",
+          "delta": -10
+        },
+        {
+          "op": "reputation",
+          "delta": -10
+        },
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -5
+        }
+      ]
+    }
+  },
+  {
+    "id": "quit",
+    "icon": "🚪",
+    "label": "Quit",
+    "group": "work",
+    "minAge": 18,
+    "onlyWhen": "employed",
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect",
+    "note": "walk out",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "quit_job"
+      },
+      {
+        "op": "stat",
+        "stat": "happiness",
+        "delta": 6
+      }
+    ]
+  },
+  {
+    "id": "apply_for_work",
+    "icon": "📮",
+    "label": "Look for a job",
+    "group": "work",
+    "minAge": 16,
+    "maxAge": 70,
+    "onlyWhen": "unemployed",
+    "effectiveTimes": 2,
+    "onRepeat": "no_effect",
+    "note": "find something",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "career_join",
+        "trackId": "auto"
+      }
+    ],
+    "backfire": {
+      "chance": 0.4,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You applied for everything going and heard nothing back.",
+      "effects": [
+        {
+          "op": "stat",
+          "stat": "happiness",
+          "delta": -5
+        }
+      ]
+    }
   }
 ]

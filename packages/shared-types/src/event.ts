@@ -125,6 +125,12 @@ export const EffectSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('join_club'), clubId: z.string().optional() }),
   /** Leaves school for good, keeping whatever was completed before now. */
   z.object({ op: z.literal('drop_out') }),
+  /** Moves job performance (0..100). No-op when unemployed. */
+  z.object({ op: z.literal('performance'), delta: z.number().int() }),
+  /** Raises salary by a percentage. No-op when unemployed. */
+  z.object({ op: z.literal('raise'), percent: z.number() }),
+  /** Leaves the job, on your own terms. */
+  z.object({ op: z.literal('quit_job') }),
   z.object({
     op: z.literal('convict'),
     offence: z.string(),

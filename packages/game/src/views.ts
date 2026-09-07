@@ -217,6 +217,9 @@ export const actionsView = (state: LifeState, content: ContentPack) => {
       if (inside) return a.group === 'body_and_head' || a.id === 'study';
       if (a.onlyWhen === 'enrolled') return state.education.current !== null;
       if (a.onlyWhen === 'employed') return state.career.current !== null;
+      if (a.onlyWhen === 'unemployed') {
+        return state.career.current === null && !state.career.retired;
+      }
       if (a.group === 'work') return state.career.current !== null;
       if (a.group === 'school') return state.education.current !== null;
       if (a.group === 'relationship') {
@@ -279,21 +282,39 @@ export const workView = (state: LifeState, content: ContentPack) => {
     performance: job.performance,
     performanceLabel: PERFORMANCE_LABEL[performanceBand(job.performance)],
     outlook: outlookLine(job.performance, rival?.firstName ?? null),
+    /** The work-only things to do, already filtered to what is possible. */
+    actions: actionsView(state, content).filter((a) => a.group === 'work'),
     ladder: track.rungs.map((rung) => ({
       title: rung.title,
       salary: formatMoney(rung.salary),
       current: rung.id === job.rungId,
       reached: track.rungs.findIndex((r) => r.id === rung.id) <= track.rungs.findIndex((r) => r.id === job.rungId),
     })),
-    people: [manager, rival]
-      .filter((n): n is NonNullable<typeof n> => !!n)
+    people: [
+      manager,
+      rival,
+      // Everyone else you work with, closest first.
+      ...state.relationships
+        .filter((r) => r.kind === 'colleague' && r.npcId !== rival?.id)
+        .sort((a, b) => b.dimensions.closeness - a.dimensions.closeness)
+        .slice(0, 4)
+        .map((r) => state.npcs.find((n) => n.id === r.npcId)),
+    ]
+      .filter((n): n is NonNullable<typeof n> => !!n && n.alive)
       .map((n) => {
         const rel = state.relationships.find((r) => r.npcId === n.id);
         return {
           npcId: n.id,
           name: `${n.firstName} ${n.lastName}`,
           emoji: n.avatarEmoji,
-          subtitle: n.id === manager?.id ? 'Your manager' : `Also up for ${nextTitle(track, job.rungId)}`,
+          // Only the actual rival is after your job; the rest just work there.
+          role:
+            n.id === manager?.id
+              ? 'Your manager'
+              : n.id === rival?.id
+                ? `Also up for ${nextTitle(track, job.rungId)}`
+                : (n.occupation ?? 'You work together'),
+          closeness: rel?.dimensions.closeness ?? 0,
           score: rel ? surfacedScore(rel) : 0,
         };
       }),

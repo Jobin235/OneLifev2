@@ -10,6 +10,7 @@ import type {
   PeopleView,
   PersonView,
   SchoolView,
+  WorkView,
 } from './lib/api';
 import { safeStorage } from './lib/storage';
 import { Tabs, type Tab } from './components/Tabs';
@@ -18,6 +19,7 @@ import { PeopleScreen } from './screens/PeopleScreen';
 import { PersonScreen } from './screens/PersonScreen';
 import { DoScreen } from './screens/DoScreen';
 import { SchoolScreen } from './screens/SchoolScreen';
+import { WorkScreen } from './screens/WorkScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { MoreScreen } from './screens/MoreScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
@@ -43,6 +45,7 @@ export const App = () => {
   const [person, setPerson] = useState<PersonView | null>(null);
   const [actions, setActions] = useState<ActionCard[] | null>(null);
   const [school, setSchool] = useState<SchoolView | null>(null);
+  const [work, setWork] = useState<WorkView | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
   const [more, setMore] = useState<MoreView | null>(null);
 
@@ -114,12 +117,14 @@ export const App = () => {
       try {
         if (tab === 'people' && !person) setPeople(await api.people(lifeId));
         if (tab === 'do') {
-          const [{ actions: list }, enrolled] = await Promise.all([
+          const [{ actions: list }, enrolled, employed] = await Promise.all([
             api.actions(lifeId),
             api.school(lifeId),
+            api.work(lifeId),
           ]);
           setActions(list);
           setSchool(enrolled);
+          setWork(employed);
         }
         if (tab === 'money') setMoney(await api.money(lifeId));
         if (tab === 'more') setMore(await api.more(lifeId));
@@ -292,8 +297,19 @@ export const App = () => {
         />
       )}
 
+      {tab === 'do' && !school && work && (
+        <WorkScreen
+          work={work}
+          busy={busy}
+          decisionOpen={life.activeEvent !== null}
+          onAct={onAct}
+          onOpenPerson={openPerson}
+        />
+      )}
+
       {tab === 'do' &&
         !school &&
+        !work &&
         (actions ? (
           <DoScreen
             actions={actions}

@@ -248,6 +248,37 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
       return null;
     }
 
+    case 'performance': {
+      const job = state.career.current;
+      if (!job) return null;
+      job.performance = clampStat(job.performance + effect.delta);
+      return null;
+    }
+
+    case 'raise': {
+      const job = state.career.current;
+      if (!job) return null;
+      job.salary = Math.round(job.salary * (1 + effect.percent / 100));
+      character.finances.salary = job.salary;
+      return null;
+    }
+
+    case 'quit_job': {
+      const job = state.career.current;
+      if (!job) return null;
+      state.career.history.push({
+        trackId: job.trackId,
+        employerName: job.employerName,
+        title: job.title,
+        fromAge: character.age - job.yearsAtEmployer,
+        toAge: character.age,
+        endedBy: 'quit',
+      });
+      state.career.current = null;
+      character.finances.salary = 0;
+      return null;
+    }
+
     case 'reputation':
       // Reputation is carried by charm plus record; the pill is what matters here.
       character.stats.charm = clampStat(character.stats.charm + Math.round(effect.delta * 0.4));

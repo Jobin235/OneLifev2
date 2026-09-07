@@ -1,32 +1,273 @@
 [
-  { "id": "li_flat_move", "icon": "📦", "text": "You moved, and found things you had not thought about in years.", "category": "random", "minAge": 18, "cooldownYears": 8 },
-  { "id": "li_broken_boiler", "icon": "🔧", "text": "Something expensive broke at the worst possible time.", "category": "money", "minAge": 20, "cooldownYears": 6 },
-  { "id": "li_small_win", "icon": "🍀", "text": "You found money in an old coat and it made your whole week.", "category": "money", "minAge": 12, "cooldownYears": 9 },
-  { "id": "li_bills_juggle", "icon": "📉", "text": "You paid one bill late so another could be on time.", "category": "money", "minAge": 20, "requires": ["broke"], "cooldownYears": 5 },
-  { "id": "li_first_savings", "icon": "🏦", "text": "You looked at your savings and, for once, were not alarmed.", "category": "money", "minAge": 22, "requires": ["comfortable"], "cooldownYears": 8 },
-  { "id": "li_expensive_taste", "icon": "🥂", "text": "You bought something you would once have thought absurd, and enjoyed it.", "category": "money", "minAge": 28, "requires": ["wealthy"], "cooldownYears": 7 },
-  { "id": "li_debt_thought", "icon": "🧾", "text": "You thought about the debt at 3am and did nothing about it until morning.", "category": "money", "minAge": 20, "requires": ["in_debt"], "cooldownYears": 5 },
-  { "id": "li_new_hobby", "icon": "🎨", "text": "You took up something new and were bad at it in a way you enjoyed.", "category": "random", "minAge": 14, "cooldownYears": 8 },
-  { "id": "li_abandoned_hobby", "icon": "🧶", "text": "The thing you took up last year sat in a cupboard all year.", "category": "random", "minAge": 15, "cooldownYears": 8 },
-  { "id": "li_long_walk", "icon": "🚶", "text": "You walked further than you meant to and felt better for it.", "category": "health", "minAge": 12, "cooldownYears": 6 },
-  { "id": "li_sleep_bad", "icon": "😴", "text": "You did not sleep properly for a month and blamed the mattress.", "category": "health", "minAge": 18, "cooldownYears": 6 },
-  { "id": "li_cold", "icon": "🤧", "text": "You had a cold that outstayed its welcome by two weeks.", "category": "health", "minAge": 5, "cooldownYears": 4 },
-  { "id": "li_back", "icon": "🪑", "text": "Your back started having opinions about how you sit.", "category": "health", "minAge": 35, "cooldownYears": 8 },
-  { "id": "li_glasses", "icon": "👓", "text": "You held something at arm's length to read it, and understood.", "category": "health", "minAge": 40, "maxAge": 55, "cooldownYears": 99 },
-  { "id": "li_stairs", "icon": "🪜", "text": "The stairs said something to you that they had not said before.", "category": "health", "minAge": 55, "cooldownYears": 9 },
-  { "id": "li_check_up", "icon": "🩺", "text": "A routine check-up went fine, which was its own small relief.", "category": "health", "minAge": 30, "forbids": ["unwell"], "cooldownYears": 7 },
-  { "id": "li_tired_all_year", "icon": "🫠", "text": "You were tired all year and could not point at why.", "category": "health", "minAge": 25, "requires": ["unwell"], "cooldownYears": 6 },
-  { "id": "li_city_changed", "icon": "🏗️", "text": "They knocked down somewhere you used to go.", "category": "world", "minAge": 20, "cooldownYears": 10 },
-  { "id": "li_favourite_closed", "icon": "🪧", "text": "Your favourite place closed and the sign stayed up for months.", "category": "world", "minAge": 18, "cooldownYears": 11 },
-  { "id": "li_weather", "icon": "🌡️", "text": "It was the hottest summer anyone could remember, again.", "category": "world", "minAge": 10, "cooldownYears": 9 },
-  { "id": "li_prices", "icon": "🛒", "text": "Everything cost slightly more and nobody could say exactly when it started.", "category": "world", "minAge": 20, "cooldownYears": 8 },
-  { "id": "li_good_year", "icon": "✨", "text": "Nothing much happened, and it was one of the better years.", "category": "random", "minAge": 16, "requires": ["content"], "cooldownYears": 9 },
-  { "id": "li_flat_year", "icon": "🌫️", "text": "The year went past without leaving much of a mark.", "category": "random", "minAge": 16, "cooldownYears": 7 },
-  { "id": "li_prison_routine", "icon": "🧱", "text": "You learned the routine, and the routine learned you.", "category": "prison", "minAge": 14, "requires": ["incarcerated"], "cooldownYears": 3 },
-  { "id": "li_prison_letter", "icon": "✉️", "text": "A letter came. You read it more times than it needed.", "category": "prison", "minAge": 14, "requires": ["incarcerated"], "cooldownYears": 3 },
-  { "id": "li_famous_recognised", "icon": "📸", "text": "Someone recognised you in a queue and you did not know where to look.", "category": "fame", "minAge": 16, "requires": ["famous"], "cooldownYears": 5 },
-  { "id": "li_old_photos", "icon": "🖼️", "text": "You found old photographs and lost an evening to them.", "category": "random", "minAge": 35, "cooldownYears": 9 },
-  { "id": "li_old_friend_news", "icon": "📰", "text": "You heard news about someone you have not spoken to in twenty years.", "category": "relationship", "minAge": 40, "cooldownYears": 10 },
-  { "id": "li_quiet_sunday", "icon": "🫖", "text": "You had a Sunday with nothing in it and did not waste it.", "category": "random", "minAge": 25, "cooldownYears": 8 },
-  { "id": "li_elder_slow", "icon": "🕰️", "text": "The year went quickly, the way they do now.", "category": "random", "minAge": 70, "cooldownYears": 6 }
+  {
+    "id": "li_flat_move",
+    "icon": "📦",
+    "text": "You moved, and found things you had not thought about in years.",
+    "category": "random",
+    "minAge": 18,
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_broken_boiler",
+    "icon": "🔧",
+    "text": "Something expensive broke at the worst possible time.",
+    "category": "money",
+    "minAge": 20,
+    "cooldownYears": 6
+  },
+  {
+    "id": "li_small_win",
+    "icon": "🍀",
+    "text": "You found money in an old coat and it made your whole week.",
+    "category": "money",
+    "minAge": 12,
+    "cooldownYears": 9
+  },
+  {
+    "id": "li_bills_juggle",
+    "icon": "📉",
+    "text": "You paid one bill late so another could be on time.",
+    "category": "money",
+    "minAge": 20,
+    "requires": [
+      "broke"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "li_first_savings",
+    "icon": "🏦",
+    "text": "You looked at your savings and, for once, were not alarmed.",
+    "category": "money",
+    "minAge": 22,
+    "requires": [
+      "comfortable"
+    ],
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_expensive_taste",
+    "icon": "🥂",
+    "text": "You bought something you would once have thought absurd, and enjoyed it.",
+    "category": "money",
+    "minAge": 28,
+    "requires": [
+      "wealthy"
+    ],
+    "cooldownYears": 7
+  },
+  {
+    "id": "li_debt_thought",
+    "icon": "🧾",
+    "text": "You thought about the debt at 3am and did nothing about it until morning.",
+    "category": "money",
+    "minAge": 20,
+    "requires": [
+      "in_debt"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "li_new_hobby",
+    "icon": "🎨",
+    "text": "You took up something new and were bad at it in a way you enjoyed.",
+    "category": "random",
+    "minAge": 14,
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_abandoned_hobby",
+    "icon": "🧶",
+    "text": "The thing you took up last year sat in a cupboard all year.",
+    "category": "random",
+    "minAge": 15,
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_long_walk",
+    "icon": "🚶",
+    "text": "You walked further than you meant to and felt better for it.",
+    "category": "health",
+    "minAge": 12,
+    "cooldownYears": 6
+  },
+  {
+    "id": "li_sleep_bad",
+    "icon": "😴",
+    "text": "You did not sleep properly for a month and blamed the mattress.",
+    "category": "health",
+    "minAge": 18,
+    "cooldownYears": 6
+  },
+  {
+    "id": "li_cold",
+    "icon": "🤧",
+    "text": "You had a cold that outstayed its welcome by two weeks.",
+    "category": "health",
+    "minAge": 5,
+    "cooldownYears": 5
+  },
+  {
+    "id": "li_back",
+    "icon": "🪑",
+    "text": "Your back started having opinions about how you sit.",
+    "category": "health",
+    "minAge": 35,
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_glasses",
+    "icon": "👓",
+    "text": "You held something at arm's length to read it, and understood.",
+    "category": "health",
+    "minAge": 40,
+    "maxAge": 55,
+    "cooldownYears": 99
+  },
+  {
+    "id": "li_stairs",
+    "icon": "🪜",
+    "text": "The stairs said something to you that they had not said before.",
+    "category": "health",
+    "minAge": 55,
+    "cooldownYears": 9
+  },
+  {
+    "id": "li_check_up",
+    "icon": "🩺",
+    "text": "A routine check-up went fine, which was its own small relief.",
+    "category": "health",
+    "minAge": 30,
+    "forbids": [
+      "unwell"
+    ],
+    "cooldownYears": 7
+  },
+  {
+    "id": "li_tired_all_year",
+    "icon": "🫠",
+    "text": "You were tired all year and could not point at why.",
+    "category": "health",
+    "minAge": 25,
+    "requires": [
+      "unwell"
+    ],
+    "cooldownYears": 6
+  },
+  {
+    "id": "li_city_changed",
+    "icon": "🏗️",
+    "text": "They knocked down somewhere you used to go.",
+    "category": "world",
+    "minAge": 20,
+    "cooldownYears": 10
+  },
+  {
+    "id": "li_favourite_closed",
+    "icon": "🪧",
+    "text": "Your favourite place closed and the sign stayed up for months.",
+    "category": "world",
+    "minAge": 18,
+    "cooldownYears": 11
+  },
+  {
+    "id": "li_weather",
+    "icon": "🌡️",
+    "text": "It was the hottest summer anyone could remember, again.",
+    "category": "world",
+    "minAge": 10,
+    "cooldownYears": 9
+  },
+  {
+    "id": "li_prices",
+    "icon": "🛒",
+    "text": "Everything cost slightly more and nobody could say exactly when it started.",
+    "category": "world",
+    "minAge": 20,
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_good_year",
+    "icon": "✨",
+    "text": "Nothing much happened, and it was one of the better years.",
+    "category": "random",
+    "minAge": 16,
+    "requires": [
+      "content"
+    ],
+    "cooldownYears": 9
+  },
+  {
+    "id": "li_flat_year",
+    "icon": "🌫️",
+    "text": "The year went past without leaving much of a mark.",
+    "category": "random",
+    "minAge": 16,
+    "cooldownYears": 7
+  },
+  {
+    "id": "li_prison_routine",
+    "icon": "🧱",
+    "text": "You learned the routine, and the routine learned you.",
+    "category": "prison",
+    "minAge": 14,
+    "requires": [
+      "incarcerated"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "li_prison_letter",
+    "icon": "✉️",
+    "text": "A letter came. You read it more times than it needed.",
+    "category": "prison",
+    "minAge": 14,
+    "requires": [
+      "incarcerated"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "li_famous_recognised",
+    "icon": "📸",
+    "text": "Someone recognised you in a queue and you did not know where to look.",
+    "category": "fame",
+    "minAge": 16,
+    "requires": [
+      "famous"
+    ],
+    "cooldownYears": 5
+  },
+  {
+    "id": "li_old_photos",
+    "icon": "🖼️",
+    "text": "You found old photographs and lost an evening to them.",
+    "category": "random",
+    "minAge": 35,
+    "cooldownYears": 9
+  },
+  {
+    "id": "li_old_friend_news",
+    "icon": "📰",
+    "text": "You heard news about someone you have not spoken to in twenty years.",
+    "category": "relationship",
+    "minAge": 40,
+    "cooldownYears": 10
+  },
+  {
+    "id": "li_quiet_sunday",
+    "icon": "🫖",
+    "text": "You had a Sunday with nothing in it and did not waste it.",
+    "category": "random",
+    "minAge": 25,
+    "cooldownYears": 8
+  },
+  {
+    "id": "li_elder_slow",
+    "icon": "🕰️",
+    "text": "The year went quickly, the way they do now.",
+    "category": "random",
+    "minAge": 70,
+    "cooldownYears": 6
+  }
 ]

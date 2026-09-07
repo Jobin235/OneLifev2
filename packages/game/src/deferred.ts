@@ -81,6 +81,25 @@ export const applyDeferred = (
               resolved: false,
             });
           }
+
+          /*
+           * And the people you actually sit near. A workplace of exactly two —
+           * your boss and your enemy — is a sitcom, not a job, and it left the
+           * work screen with nobody on it worth talking to.
+           */
+          const friendTemplate = content.npcTemplates.find((t) => t.id === 'coworker_friend');
+          if (friendTemplate) {
+            const taken = new Set(state.npcs.filter((n) => n.alive).map((n) => n.firstName));
+            for (let i = 0; i < rng.int(1, 3); i++) {
+              let spawned = spawnNpc({ state, template: friendTemplate, country, traits: content.traits, rng });
+              for (let attempt = 0; attempt < 4 && taken.has(spawned.npc.firstName); attempt++) {
+                state.npcs.pop();
+                state.relationships.pop();
+                spawned = spawnNpc({ state, template: friendTemplate, country, traits: content.traits, rng });
+              }
+              taken.add(spawned.npc.firstName);
+            }
+          }
         }
         break;
       }
@@ -172,6 +191,8 @@ const pickTrack = (
   state: LifeState,
   content: ContentPack,
   rng: Rng,
+  /** Extra filter, e.g. "must actually pay". */
+  accept: (track: CareerTrack) => boolean = () => true,
 ): CareerTrack | undefined => {
   const order: EducationStage[] = [
     'none',
@@ -184,6 +205,7 @@ const pickTrack = (
   const held = order.indexOf(state.education.highestCompleted);
 
   const eligible = content.careers.filter((track) => {
+    if (!accept(track)) return false;
     if (state.career.closedTrackIds.includes(track.id)) return false;
     if (order.indexOf(track.requiredEducation as EducationStage) > held) return false;
     if (track.countryIds.length > 0 && !track.countryIds.includes(state.character.countryId)) {
@@ -209,4 +231,36 @@ const pickTrack = (
     const fit = margins.length === 0 ? 10 : margins.reduce((a, b) => a + b, 0) / margins.length;
     return Math.max(1, 20 + fit);
   });
+};
+
+/**
+ * Puts an unemployed adult into whatever work is open to them.
+ *
+ * Delegates to the same `career_join` path events use, so a job taken passively
+ * is indistinguishable from one taken through a decision — same ladder, same
+ * manager, same colleagues.
+ */
+export const takeAvailableJob = (
+  state: LifeState,
+  content: ContentPack,
+  config: GameConfig,
+  rng: Rng,
+): void => {
+  /*
+   * Drifting into work means drifting into *paid* work. Some ladders start on
+   * an unpaid rung — a football academy, a party volunteer — and those are
+   * things a person chooses, not somewhere they end up by default. Assigning
+   * one as an ordinary job gave an eighteen-year-old a career with no wages.
+   */
+  const track = pickTrack(state, content, rng, (t) => (t.rungs[0]?.salary ?? 0) > 0);
+  if (!track) return;
+
+  applyDeferred(
+    [{ op: 'career_join', trackId: track.id, rungIndex: 0 }] as never,
+    state,
+    content,
+    config,
+    rng,
+    {},
+  );
 };

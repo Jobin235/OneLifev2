@@ -23,7 +23,7 @@ import {
 } from '@lineage/simulation';
 import { advanceNpcYear } from '@lineage/npc-engine';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
-import { applyDeferred } from './deferred.js';
+import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
 import { buildLegacy } from './death.js';
 import { advanceSchooling, graduationLine } from './schooling.js';
@@ -124,6 +124,27 @@ export const advanceYear = (
       }
     }
   }
+  /*
+   * Most adults end up in work without deciding to. Employment used to arrive
+   * only through one probabilistic event, which left a third of lives never
+   * working at all and only a quarter employed at thirty — a simulation where
+   * most people are permanently unemployed is not one anybody recognises.
+   *
+   * The player can still go looking (the "Look for a job" action); this is the
+   * floor under a player who never opens the tab.
+   */
+  if (
+    !state.career.current &&
+    !state.career.retired &&
+    !state.education.current &&
+    !state.character.record.incarceration &&
+    state.character.age >= 18 &&
+    state.character.age < 62 &&
+    rng.chance(0.45)
+  ) {
+    takeAvailableJob(state, content, config, rng);
+  }
+
   for (const business of state.businesses) advanceBusinessYear(business, world, rng);
   serveTime(state);
 
