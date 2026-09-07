@@ -218,6 +218,8 @@ export class Game {
     state: LifeState,
     eventInstanceId: string,
     choiceId: string,
+    /** What the player picked in the popup's dropdowns, keyed by select id. */
+    selections: Record<string, string> = {},
     world: WorldIndicators = NEUTRAL_INDICATORS,
   ): LifeState {
     const instance = state.activeEvent;
@@ -238,6 +240,7 @@ export class Game {
         state,
         ctx,
         this.config,
+        selections,
       );
 
       const rng = makeRng(state.seed, 'deferred', instance.id);
@@ -250,6 +253,9 @@ export class Game {
        * person the player will read about for the next fifty years.
        */
       if (deferred.length > 0) {
+        if (templates.outcomeTitle !== null) {
+          instance.outcomeTitle = interpolate(templates.outcomeTitle, state, instance.participants);
+        }
         instance.outcomeText = interpolate(templates.outcomeText, state, instance.participants);
         historyEntry.line = interpolate(templates.historyLine, state, instance.participants);
       }
@@ -382,8 +388,8 @@ export class Game {
     return shopView(state, this.content);
   }
 
-  buy(state: LifeState, purchasableId: string) {
-    return buy(state, purchasableId, this.content, this.config);
+  buy(state: LifeState, purchasableId: string, onFinance = false) {
+    return buy(state, purchasableId, this.content, this.config, onFinance);
   }
 
   sell(state: LifeState, assetId: string) {

@@ -25,7 +25,7 @@ export interface ResolutionResult {
    * naming somebody the choice creates cannot be filled in yet. The caller
    * re-runs interpolation once those effects have landed.
    */
-  templates: { outcomeText: string; historyLine: string };
+  templates: { outcomeTitle: string | null; outcomeText: string; historyLine: string };
 }
 
 /**
@@ -42,6 +42,8 @@ export const resolveChoice = (
   state: LifeState,
   ctx: ConditionContext,
   config: GameConfig,
+  /** What the player picked in the popup's dropdowns, keyed by select id. */
+  selections: Record<string, string> = {},
 ): ResolutionResult => {
   if (instance.chosenChoiceId !== null) {
     throw new InvalidChoiceError(`event ${instance.id} has already been resolved`);
@@ -58,6 +60,21 @@ export const resolveChoice = (
   }
   if (!instance.choices.some((c) => c.id === choiceId)) {
     throw new InvalidChoiceError(`choice ${choiceId} was not offered`);
+  }
+
+  /*
+   * The dropdowns land in flags before anything runs, so an effect handler reads
+   * the chosen major the same way it reads any other fact about the character,
+   * and content can interpolate it as {select.major}. An unrecognised value is
+   * rejected rather than trusted: the client offers the options, it does not get
+   * to invent them.
+   */
+  for (const select of instance.selects) {
+    const picked = selections[select.id] ?? select.options[0]!.value;
+    if (!select.options.some((option) => option.value === picked)) {
+      throw new InvalidChoiceError(`"${picked}" is not an option for ${select.id}`);
+    }
+    state.flags[`select_${select.id}`] = picked;
   }
 
   const rng = makeRng(state.seed, 'resolve', instance.id, choiceId);
@@ -117,7 +134,11 @@ export const resolveChoice = (
      * caller re-runs interpolation once the deferred effects have landed and
      * their bindings exist.
      */
-    templates: { outcomeText: outcome.text, historyLine: outcome.historyLine },
+    templates: {
+      outcomeTitle: outcome.title ?? null,
+      outcomeText: outcome.text,
+      historyLine: outcome.historyLine,
+    },
   };
 };
 

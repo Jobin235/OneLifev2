@@ -1,0 +1,98 @@
+[
+  {
+    "id": "job_interview",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "💼",
+      "label": "JOB",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 99,
+    "minAge": 14,
+    "maxAge": 90,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "Interview",
+    "body": "While being interviewed for the {flag.interview_title} position at {flag.interview_employer}, you are asked the following question.\n\n“{flag.interview_question}”",
+    "question": "How will you respond?",
+    "choices": [
+      {
+        "id": "a",
+        "label": "{flag.interview_answer_a}",
+        "outcomes": [
+          {
+            "id": "a",
+            "title": "{flag.interview_result_title}",
+            "text": "{flag.interview_result}",
+            "historyLine": "{flag.interview_history}",
+            "effects": [
+              {
+                "op": "interview_answer",
+                "fit": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "label": "{flag.interview_answer_b}",
+        "outcomes": [
+          {
+            "id": "b",
+            "title": "{flag.interview_result_title}",
+            "text": "{flag.interview_result}",
+            "historyLine": "{flag.interview_history}",
+            "effects": [
+              {
+                "op": "interview_answer",
+                "fit": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c",
+        "label": "{flag.interview_answer_c}",
+        "outcomes": [
+          {
+            "id": "c",
+            "title": "{flag.interview_result_title}",
+            "text": "{flag.interview_result}",
+            "historyLine": "{flag.interview_history}",
+            "effects": [
+              {
+                "op": "interview_answer",
+                "fit": -1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "d",
+        "label": "{flag.interview_answer_d}",
+        "outcomes": [
+          {
+            "id": "d",
+            "title": "{flag.interview_result_title}",
+            "text": "{flag.interview_result}",
+            "historyLine": "{flag.interview_history}",
+            "effects": [
+              {
+                "op": "interview_answer",
+                "fit": 2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]

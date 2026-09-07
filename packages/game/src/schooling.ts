@@ -52,7 +52,13 @@ export const advanceSchooling = (
 
   if (state.flags.enrol_university) {
     delete state.flags.enrol_university;
-    const major = rng.pick(MAJORS);
+    /*
+     * The major is the player's, chosen in the dropdown on the popup that got
+     * them here. Rolling it was the single worst thing about this system: the
+     * one education decision that shapes forty years of work was a die roll the
+     * player watched happen.
+     */
+    const major = typeof state.flags.select_major === 'string' ? state.flags.select_major : rng.pick(MAJORS);
     enrol(state, {
       stage: 'university',
       institutionName: rng.pick(UNIVERSITY_NAMES),
@@ -71,6 +77,7 @@ export const advanceSchooling = (
         holder: 'the student loans company',
         balance: debt,
         rate: 0.045,
+        originalAmount: debt,
         takenAtAge: state.character.age,
       });
       state.character.finances.debt = state.character.finances.debts.reduce(
@@ -83,10 +90,19 @@ export const advanceSchooling = (
       'education',
       '🎓',
       debt > 0
-        ? `You started ${major} at ${state.education.current!.institutionName}, on borrowed money.`
-        : `You started ${major} at ${state.education.current!.institutionName}.`,
+        ? `You started ${major} at ${state.education.current!.institutionName}.`
+        : `You started ${major} at ${state.education.current!.institutionName}, on a scholarship.`,
       65,
     );
+    if (debt > 0) {
+      pushHistory(
+        state,
+        'money',
+        '🏦',
+        'You took out a student loan to pay for your university tuition.',
+        55,
+      );
+    }
     return;
   }
 
@@ -95,7 +111,7 @@ export const advanceSchooling = (
     enrol(state, {
       stage: 'vocational',
       institutionName: rng.pick(TRADE_NAMES),
-      major: rng.pick(TRADES),
+      major: typeof state.flags.select_trade === 'string' ? state.flags.select_trade : rng.pick(TRADES),
       totalYears: 2,
       subjects: ['Practical', 'Theory', 'Safety'],
     }, content, country, rng);

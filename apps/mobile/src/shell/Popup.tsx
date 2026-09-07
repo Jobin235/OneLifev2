@@ -15,13 +15,23 @@ export const Popup = ({
 }: {
   event: ActiveEvent;
   busy: boolean;
-  onChoose: (choiceId: string) => void;
+  onChoose: (choiceId: string, selections: Record<string, string>) => void;
 }) => {
   const [confirming, setConfirming] = useState<{ id: string; label: string } | null>(null);
 
+  /*
+   * The dropdowns default to their first option, so a player who ignores them
+   * still gets a valid answer — the popup is never a form you can fail to fill
+   * in. Keyed by event id so a new popup does not inherit the last one's picks.
+   */
+  const [picked, setPicked] = useState<Record<string, string>>({});
+  const selections = Object.fromEntries(
+    event.selects.map((select) => [select.id, picked[select.id] ?? select.options[0]!.value]),
+  );
+
   const pick = (choice: { id: string; label: string; confirm?: string | null }) => {
     if (choice.confirm) setConfirming({ id: choice.id, label: choice.confirm });
-    else onChoose(choice.id);
+    else onChoose(choice.id, selections);
   };
 
   /*
@@ -31,7 +41,15 @@ export const Popup = ({
    */
   const surprise = () => {
     const choice = event.choices[Math.floor(Math.random() * event.choices.length)];
-    if (choice) onChoose(choice.id);
+    if (!choice) return;
+    // It surprises you with the dropdowns too, or it is not a surprise.
+    const rolled = Object.fromEntries(
+      event.selects.map((select) => [
+        select.id,
+        select.options[Math.floor(Math.random() * select.options.length)]!.value,
+      ]),
+    );
+    onChoose(choice.id, rolled);
   };
 
   return (
@@ -63,6 +81,28 @@ export const Popup = ({
               <strong>{event.stake.value}</strong>
             </div>
           )}
+
+          {/*
+            Dropdowns sit between the question and the buttons, which is how one
+            Attack popup covers seven moves and four targets without a second
+            screen — and how choosing a major is a decision rather than a roll.
+          */}
+          {event.selects.map((select) => (
+            <label className="sh-select" key={select.id}>
+              <span className="sh-select-label">{select.label}</span>
+              <select
+                className="sh-select-input"
+                value={picked[select.id] ?? select.options[0]!.value}
+                onChange={(e) => setPicked((prev) => ({ ...prev, [select.id]: e.target.value }))}
+              >
+                {select.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
 
           {event.question && <p className="sh-popup-q">{event.question}</p>}
 
@@ -101,7 +141,7 @@ export const Popup = ({
                   onClick={() => {
                     const id = confirming.id;
                     setConfirming(null);
-                    onChoose(id);
+                    onChoose(id, selections);
                   }}
                 >
                   Yes

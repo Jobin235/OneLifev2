@@ -103,6 +103,7 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
           label: effect.label ?? 'Money you borrowed',
           holder: effect.holder ?? 'a lender',
           balance: effect.delta,
+          originalAmount: effect.delta,
           rate: effect.rate ?? config.money.debtInterest,
           takenAtAge: character.age,
         });
@@ -416,6 +417,7 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
     case 'business_start':
     case 'spawn_npc':
     case 'child_born':
+    case 'interview_answer':
       ctx.deferred.push(effect);
       return null;
 

@@ -48,6 +48,12 @@ export const DebtSchema = z.object({
   /** Who holds it: "the government", "Northgate Bank", "your brother". */
   holder: z.string().min(1),
   balance: MoneySchema,
+  /**
+   * What was borrowed. Kept so the balance can be capped at it: a student loan
+   * repaid out of income can accrue faster than it is paid, and without a
+   * ceiling a degree becomes a debt that only ever grows.
+   */
+  originalAmount: MoneySchema.default(0),
   /** Annual interest, as a fraction. 0 for an interest-free family loan. */
   rate: z.number().min(0).max(1),
   takenAtAge: z.number().int().min(0),

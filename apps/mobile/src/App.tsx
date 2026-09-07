@@ -156,9 +156,11 @@ export const App = () => {
   }, [life, run, setLifeAndRemember]);
 
   const onChoose = useCallback(
-    async (choiceId: string) => {
+    async (choiceId: string, selections: Record<string, string>) => {
       if (!life?.activeEvent) return;
-      const result = await run(() => api.choose(life.lifeId, life.activeEvent!.id, choiceId));
+      const result = await run(() =>
+        api.choose(life.lifeId, life.activeEvent!.id, choiceId, selections),
+      );
       if (result) setLifeAndRemember(result.life);
     },
     [life, run, setLifeAndRemember],
@@ -194,9 +196,9 @@ export const App = () => {
   );
 
   const onBuy = useCallback(
-    async (purchasableId: string) => {
+    async (purchasableId: string, onFinance: boolean) => {
       if (!life) return;
-      const result = await run(() => api.buy(life.lifeId, purchasableId));
+      const result = await run(() => api.buy(life.lifeId, purchasableId, onFinance));
       if (!result) return;
       setLifeAndRemember(result.life);
       setMoney(result.money);

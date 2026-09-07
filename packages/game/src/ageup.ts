@@ -12,18 +12,20 @@ import {
   applyAgeDrift,
   checkInvariants,
   decayRelationships,
+  driftAssetValues,
   graduate,
   isGraduating,
   isPromotable,
   pushHistory,
   makeRng,
   mortalityChance,
-  narrativeTerm,
+  narrativeSubject,
   promote,
   refreshDerived,
   rollNewConditions,
   type Rng,
   settleYear,
+  syncAssetLoans,
   updateCostOfLiving,
 } from '@lineage/simulation';
 import { advanceNpcYear } from '@lineage/npc-engine';
@@ -97,7 +99,9 @@ export const advanceYear = (
       state,
       'family',
       '🕯️',
-      `${narrativeTerm(relationship, npc, state.character.age)} died ${deathManner(npc, rng)}.`,
+      // Named, always. A life has several supervisors and several nephews, and
+      // "Your supervisor died" twice reads as the log stuttering.
+      `${narrativeSubject(relationship, npc, state.character.age, state)} died ${deathManner(npc, rng)}.`,
       relationship.band === 'close' ? 75 : 40,
     );
     inheritanceFrom(state, npc, relationship, rng);
@@ -207,6 +211,7 @@ export const advanceYear = (
   }
 
   for (const business of state.businesses) advanceBusinessYear(business, world, rng);
+  driftAssetValues(state, rng);
   serveTime(state);
 
   // 4. Health, then money.
@@ -214,6 +219,7 @@ export const advanceYear = (
   const city = country?.cities.find((c) => c.id === state.character.cityId);
   updateCostOfLiving(state, config, city?.costOfLiving ?? 1);
   const money = settleYear(state, config);
+  syncAssetLoans(state);
 
   /*
    * Say when the year did not add up.

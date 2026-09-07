@@ -6,28 +6,188 @@
     "region": "Europe",
     "populationWeight": 0.07,
     "cities": [
-      { "id": "aarhus", "name": "Aarhus", "costOfLiving": 1.28, "crime": 18, "opportunity": 61, "blurb": "Free school, free doctors, high taxes." },
-      { "id": "copenhagen", "name": "København", "costOfLiving": 1.52, "crime": 24, "opportunity": 79, "blurb": "Bikes, design, and rent that quietly eats everything." },
-      { "id": "odense", "name": "Odense", "costOfLiving": 1.1, "crime": 17, "opportunity": 45, "blurb": "Small, tidy, and everyone knows your business." }
+      {
+        "id": "aarhus",
+        "name": "Aarhus",
+        "costOfLiving": 1.28,
+        "crime": 18,
+        "opportunity": 61,
+        "blurb": "Free school, free doctors, high taxes."
+      },
+      {
+        "id": "copenhagen",
+        "name": "København",
+        "costOfLiving": 1.52,
+        "crime": 24,
+        "opportunity": 79,
+        "blurb": "Bikes, design, and rent that quietly eats everything."
+      },
+      {
+        "id": "odense",
+        "name": "Odense",
+        "costOfLiving": 1.1,
+        "crime": 17,
+        "opportunity": 45,
+        "blurb": "Small, tidy, and everyone knows your business."
+      }
     ],
     "changes": [
-      { "icon": "🏥", "text": "Healthcare costs you nothing. You'd be treated early, too." },
-      { "icon": "🎓", "text": "University is free and they pay you to attend it." },
-      { "icon": "💼", "text": "Fewer ladders, flatter ones, and half your pay goes to tax." },
-      { "icon": "👨‍👩‍👧", "text": "Nobody expects to live with you. Loneliness is the trade." },
-      { "icon": "⚖️", "text": "Short sentences, real rehabilitation, and a record that fades." }
+      {
+        "icon": "🏥",
+        "text": "Healthcare costs you nothing. You'd be treated early, too."
+      },
+      {
+        "icon": "🎓",
+        "text": "University is free and they pay you to attend it."
+      },
+      {
+        "icon": "💼",
+        "text": "Fewer ladders, flatter ones, and half your pay goes to tax."
+      },
+      {
+        "icon": "👨‍👩‍👧",
+        "text": "Nobody expects to live with you. Loneliness is the trade."
+      },
+      {
+        "icon": "⚖️",
+        "text": "Short sentences, real rehabilitation, and a record that fades."
+      }
     ],
-    "healthcare": { "patientShare": 0.0, "screening": "strong", "unavailable": [] },
-    "education": { "universityCost": 0, "entranceExam": false, "compulsoryUntilAge": 16 },
-    "law": { "drinkingAge": 16, "marriageAge": 18, "enforcement": 72, "convictionCost": 0.6, "militaryService": true },
-    "family": { "expectationToHouseParents": 10, "typicalSiblings": 1 },
+    "healthcare": {
+      "patientShare": 0.0,
+      "screening": "strong",
+      "unavailable": []
+    },
+    "education": {
+      "universityCost": 0,
+      "entranceExam": false,
+      "compulsoryUntilAge": 16
+    },
+    "law": {
+      "drinkingAge": 16,
+      "marriageAge": 18,
+      "enforcement": 72,
+      "convictionCost": 0.6,
+      "militaryService": true
+    },
+    "family": {
+      "expectationToHouseParents": 10,
+      "typicalSiblings": 1
+    },
     "extraTrackIds": [],
     "wageMultiplier": 1.05,
     "nationalSportTrackId": "sport_football_us",
-    "surnames": ["Strand", "Jensen", "Nielsen", "Hansen", "Andersen", "Møller", "Kristensen", "Lund", "Dahl", "Holm"],
+    "surnames": [
+      "Strand",
+      "Jensen",
+      "Nielsen",
+      "Hansen",
+      "Andersen",
+      "Møller",
+      "Kristensen",
+      "Lund",
+      "Dahl",
+      "Holm",
+      "Pedersen",
+      "Christensen",
+      "Larsen",
+      "Sørensen",
+      "Rasmussen",
+      "Jørgensen",
+      "Petersen",
+      "Madsen",
+      "Olsen",
+      "Thomsen",
+      "Christiansen",
+      "Poulsen",
+      "Johansen",
+      "Knudsen",
+      "Mortensen",
+      "Jespersen",
+      "Frandsen",
+      "Bech"
+    ],
     "firstNames": {
-      "male": ["Mads", "Emil", "Frederik", "Oskar", "Villads", "Anton", "Jonas", "Rasmus"],
-      "female": ["Freja", "Ida", "Astrid", "Alma", "Karla", "Liv", "Sofie", "Maja"]
+      "male": [
+        "Mads",
+        "Emil",
+        "Frederik",
+        "Oskar",
+        "Villads",
+        "Anton",
+        "Jonas",
+        "Rasmus",
+        "Magnus",
+        "Lucas",
+        "Noah",
+        "Elias",
+        "Alfred",
+        "Valdemar",
+        "Christian",
+        "Nikolaj",
+        "Sebastian",
+        "Andreas",
+        "Malthe",
+        "August",
+        "Aksel",
+        "Bertram",
+        "Carl",
+        "Ditlev",
+        "Erik",
+        "Frode",
+        "Gustav",
+        "Hjalte",
+        "Ivan",
+        "Jeppe",
+        "Kasper",
+        "Lauge",
+        "Morten",
+        "Niels",
+        "Otto",
+        "Peder",
+        "Rune",
+        "Søren"
+      ],
+      "female": [
+        "Freja",
+        "Ida",
+        "Astrid",
+        "Alma",
+        "Karla",
+        "Liv",
+        "Sofie",
+        "Maja",
+        "Clara",
+        "Ella",
+        "Emma",
+        "Josefine",
+        "Laura",
+        "Marie",
+        "Nanna",
+        "Olivia",
+        "Rosa",
+        "Signe",
+        "Thea",
+        "Victoria",
+        "Agnes",
+        "Birgitte",
+        "Cecilie",
+        "Dagmar",
+        "Ellen",
+        "Filippa",
+        "Gry",
+        "Hannah",
+        "Inge",
+        "Johanne",
+        "Karen",
+        "Lærke",
+        "Merete",
+        "Nikoline",
+        "Pernille",
+        "Ronja",
+        "Sara",
+        "Tilde"
+      ]
     }
   }
 ]

@@ -18,6 +18,7 @@ const FAMILY_KINDS: ReadonlySet<RelationshipKind> = new Set([
   'grandparent',
   'grandchild',
   'spouse',
+  'niece_nephew',
 ]);
 
 /**
@@ -38,7 +39,18 @@ export const surfacedScore = (rel: Relationship): number => {
 export const bandFor = (rel: Relationship, config: GameConfig): ClosenessBand => {
   const score = surfacedScore(rel);
   if (score >= config.relationships.closeThreshold) return 'close';
-  if (score < config.relationships.driftedThreshold) return 'drifted';
+  /*
+   * Family does not drift out of your life the way an acquaintance does.
+   *
+   * Contact decay pushed every sibling and parent to "drifted" by mid-life,
+   * which is not what happens to families and had a consequence beyond the
+   * people list: the band decides how much of somebody's year you hear about,
+   * so a character's own brother could get married, have two children and
+   * retire without the log mentioning any of it.
+   */
+  if (score < config.relationships.driftedThreshold) {
+    return FAMILY_KINDS.has(rel.kind) ? 'around' : 'drifted';
+  }
   return 'around';
 };
 
@@ -90,9 +102,29 @@ export const relationshipLabel = (rel: Relationship, npc: Npc, sexAware = true):
  * game is written in. BitLife's log is a first-person diary; ours is not, and
  * mixing "Your mother" with "I graduated" would read as two narrators.
  */
-export const narrativeName = (rel: Relationship, npc: Npc, playerAge: number): string => {
+export const narrativeName = (
+  rel: Relationship,
+  npc: Npc,
+  playerAge: number,
+  state?: { npcs: Npc[] },
+): string => {
   const term = familyTerm(rel, npc, playerAge);
-  return term ? `Your ${term}, ${npc.firstName}` : `${npc.firstName} ${npc.lastName}`;
+  return term ? `Your ${term}, ${nameIn(npc, state)}` : `${npc.firstName} ${npc.lastName}`;
+};
+
+/**
+ * A first name, unless somebody else alive is using it.
+ *
+ * Name pools are finite and a long life outgrows them, so two nephews really can
+ * both be called Dean. When that happens the log has to say which one, or the
+ * same sentence appears twice and reads as a bug rather than as a coincidence.
+ */
+const nameIn = (npc: Npc, state?: { npcs: Npc[] }): string => {
+  if (!state) return npc.firstName;
+  const clash = state.npcs.some(
+    (other) => other.id !== npc.id && other.alive && other.firstName === npc.firstName,
+  );
+  return clash ? `${npc.firstName} ${npc.lastName}` : npc.firstName;
 };
 
 /**
@@ -100,9 +132,14 @@ export const narrativeName = (rel: Relationship, npc: Npc, playerAge: number): s
  * — "Your mother, Iris, retired" — and a bare full name must not be, so the
  * comma belongs to the phrase rather than to every caller that writes one.
  */
-export const narrativeSubject = (rel: Relationship, npc: Npc, playerAge: number): string => {
+export const narrativeSubject = (
+  rel: Relationship,
+  npc: Npc,
+  playerAge: number,
+  state?: { npcs: Npc[] },
+): string => {
   const term = familyTerm(rel, npc, playerAge);
-  return term ? `Your ${term}, ${npc.firstName},` : `${npc.firstName} ${npc.lastName}`;
+  return term ? `Your ${term}, ${nameIn(npc, state)},` : `${npc.firstName} ${npc.lastName}`;
 };
 
 /** Just the relation, for lines that do not need the name: "Your mother". */

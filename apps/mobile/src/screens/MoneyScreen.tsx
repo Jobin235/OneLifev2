@@ -13,19 +13,13 @@ export const MoneyScreen = ({
 }: {
   money: MoneyView;
   busy: boolean;
-  onBuy: (purchasableId: string) => void;
+  onBuy: (purchasableId: string, onFinance: boolean) => void;
   onSell: (assetId: string) => void;
 }) => {
   const [shopOpen, setShopOpen] = useState(false);
 
   return (
-  <>
-    <header className="header">
-      <h1 className="screen-title">Money</h1>
-      <div className="screen-sub">What you're worth, and where it goes</div>
-    </header>
-
-    <div className="scroll" style={{ gap: 18 }}>
+    <div className="sheet-scroll">
       <section className="panel">
         <div className="eyebrow">WHAT YOU'RE WORTH</div>
         <div className="big-figure" style={{ marginTop: 10 }}>
@@ -105,22 +99,43 @@ export const MoneyScreen = ({
           {shopOpen && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 14 }}>
               {money.forSale.map((item: ShopEntry) => (
-                <button
-                  className="shop-row"
-                  key={item.id}
-                  disabled={!item.available || busy}
-                  onClick={() => onBuy(item.id)}
-                >
-                  <span className="owned-emoji">{item.emoji}</span>
-                  <span style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
-                    <span className="owned-label">{item.label}</span>
-                    {/* The upkeep is the half of the decision people forget. */}
-                    <span className="owned-detail">
-                      {item.blockedReason ?? item.upkeep}
+                <div className="shop-item" key={item.id}>
+                  <div className="shop-head">
+                    <span className="owned-emoji">{item.emoji}</span>
+                    <span style={{ flex: 1, minWidth: 0 }}>
+                      <span className="owned-label">{item.label}</span>
+                      {/* The upkeep is the half of the decision people forget. */}
+                      <span className="owned-detail">{item.upkeep}</span>
                     </span>
-                  </span>
-                  <span className="shop-price">{item.price}</span>
-                </button>
+                    <span className="shop-price">{item.price}</span>
+                  </div>
+                  {/*
+                    Two ways to buy, because there are two ways to buy: the whole
+                    price today, or a deposit and twenty-five years of payments.
+                    Only offering the first meant the shop was empty for most of
+                    most lives — the cheapest house is eleven years of wages.
+                  */}
+                  <div className="shop-buttons">
+                    <button
+                      className="shop-buy"
+                      disabled={!item.available || busy}
+                      onClick={() => onBuy(item.id, false)}
+                    >
+                      {item.available ? `Pay ${item.price}` : (item.blockedReason ?? 'Not available')}
+                    </button>
+                    {item.finance.terms !== 'Cash only' && (
+                      <button
+                        className="shop-buy finance"
+                        disabled={!item.finance.available || busy}
+                        onClick={() => onBuy(item.id, true)}
+                      >
+                        {item.finance.available
+                          ? item.finance.terms
+                          : (item.finance.blockedReason ?? 'No credit')}
+                      </button>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -166,6 +181,5 @@ export const MoneyScreen = ({
         </div>
       )}
     </div>
-  </>
-);
+  );
 };

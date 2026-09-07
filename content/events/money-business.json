@@ -501,7 +501,7 @@
       }
     ],
     "cooldownYears": 10,
-    "maxPerLife": 2
+    "maxPerLife": 1
   },
   {
     "id": "business_scale_up",

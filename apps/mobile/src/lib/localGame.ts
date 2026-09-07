@@ -131,8 +131,8 @@ export const createLocalApi = (): Api => {
       return { ...view(result.state), recap: result.recap, died: result.died };
     },
 
-    choose: async (lifeId, eventId, choiceId) => {
-      const state = game.choose(get(lifeId), eventId, choiceId, indicators);
+    choose: async (lifeId, eventId, choiceId, selections) => {
+      const state = game.choose(get(lifeId), eventId, choiceId, selections ?? {}, indicators);
       save(state);
       return view(state);
     },
@@ -195,8 +195,8 @@ export const createLocalApi = (): Api => {
 
     actions: async (lifeId) => ({ actions: actionsView(get(lifeId), game.content) as never }),
     money: async (lifeId) => moneyView(get(lifeId), game.config, game.content) as never,
-    buy: async (lifeId, purchasableId) => {
-      const state = game.buy(get(lifeId), purchasableId);
+    buy: async (lifeId, purchasableId, onFinance) => {
+      const state = game.buy(get(lifeId), purchasableId, onFinance === true);
       save(state);
       return { ...view(state), money: moneyView(state, game.config, game.content) as never };
     },

@@ -48,7 +48,7 @@ const sample = (count: number, world: WorldIndicators = NEUTRAL_INDICATORS): Sam
         events += 1;
         const choices = state.activeEvent.choices;
         // Vary the strategy across lives so the sample is not one playstyle.
-        state = game.choose(state, state.activeEvent.id, choices[i % choices.length]!.id, world);
+        state = game.choose(state, state.activeEvent.id, choices[i % choices.length]!.id, {}, world);
       }
       if (state.relationships.some((r) => r.kind === 'spouse')) everMarried = true;
     }

@@ -124,6 +124,12 @@ export const EffectSchema = z.discriminatedUnion('op', [
   }),
   z.object({ op: z.literal('condition_treat'), conditionId: z.string() }),
   z.object({ op: z.literal('flag'), key: z.string().min(1), value: z.union([z.string(), z.number(), z.boolean()]) }),
+  /**
+   * Answers the interview question on the application currently in flight.
+   * `fit` is how well the answer lands with this employer, and it moves the
+   * hire chance — which is what turns "a job appeared" into "you got the job".
+   */
+  z.object({ op: z.literal('interview_answer'), fit: z.number().int().min(-2).max(2) }),
   z.object({ op: z.literal('fame'), following: z.number().int().default(0), fans: z.number().int().default(0), haters: z.number().int().default(0), knownFor: z.string().optional() }),
   z.object({ op: z.literal('reputation'), delta: z.number().int() }),
   /** Moves grade points (0..400, four points to a GPA decimal). No-op out of school. */
@@ -293,6 +299,28 @@ export const EventDefinitionSchema = z.object({
    * player is not doing arithmetic in their head.
    */
   stake: z.object({ label: z.string(), value: z.string() }).nullable().default(null),
+  /**
+   * Dropdowns inside the popup, above the buttons: "Pick your major", "Pick
+   * your move" / "Pick your target", "Pick your objective".
+   *
+   * They are how BitLife gets combinatorial choices without more screens — one
+   * Attack popup covers seven moves and four targets — and they are the reason
+   * choosing a major is the player's decision rather than a die roll. The chosen
+   * values land in `flags.select_<id>` before effects run, so a handler reads
+   * them the same way it reads anything else about the character.
+   */
+  selects: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        /** A fixed list, written in content. */
+        options: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
+        /** Or a named catalogue the engine supplies: "majors", "trades". */
+        optionsFrom: z.string().optional(),
+      }),
+    )
+    .default([]),
   choices: z.array(ChoiceSchema).min(1),
   /** Life years before this definition may fire again for the same character. */
   cooldownYears: z.number().int().min(0).default(5),
@@ -330,6 +358,16 @@ export const EventInstanceSchema = z.object({
   body: z.string(),
   question: z.string().default('What will you do?'),
   stake: z.object({ label: z.string(), value: z.string() }).nullable().default(null),
+  /** Resolved dropdowns: the options are real by the time the client sees them. */
+  selects: z
+    .array(
+      z.object({
+        id: z.string(),
+        label: z.string(),
+        options: z.array(z.object({ value: z.string(), label: z.string() })).min(1),
+      }),
+    )
+    .default([]),
   choices: z.array(
     z.object({
       id: z.string(),

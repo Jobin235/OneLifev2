@@ -3,7 +3,7 @@ import type { ContentPack } from '@lineage/content';
 import type { CareerTrack, EducationStage, LifeState } from '@lineage/shared-types';
 import { checkInvariants, makeRng, refreshDerived } from '@lineage/simulation';
 import { employerNameFor } from './deferred.js';
-import { pushHistory } from './ageup.js';
+import { openInterview } from './interview.js';
 
 /**
  * Looking for work.
@@ -45,6 +45,8 @@ export interface Opening {
   salary: string;
   salaryCents: number;
   industry: string;
+  /** The company running the opening, named in the interview. */
+  employerName: string;
   /** "Needs a degree · smarts 65" — stated before you apply. */
   requirements: string[];
   /** Whether the character meets every requirement. */
@@ -105,6 +107,7 @@ const requirementsOf = (state: LifeState, track: CareerTrack): { lines: string[]
 export const openings = (state: LifeState, content: ContentPack): Opening[] => {
   const rng = makeRng(state.seed, 'jobmarket', state.character.age);
   const held = EDUCATION_ORDER.indexOf(state.education.highestCompleted);
+  const wage = content.countriesById.get(state.character.countryId)?.wageMultiplier ?? 1;
 
   const reachable = content.careers.filter((track) => {
     if (state.career.closedTrackIds.includes(track.id)) return false;
@@ -132,8 +135,15 @@ export const openings = (state: LifeState, content: ContentPack): Opening[] => {
          * ("Apprentice"), so without this the list shows the same job twice.
          */
         employer: track.label === rung.title ? track.industry : track.label,
-        salary: money(Math.round(rung.salary * 1)),
-        salaryCents: rung.salary,
+        /*
+         * The company itself, for the interview. The list shows the kind of
+         * place ("Mental Health Center"); the interview names it ("The Phillips
+         * Group"), the way it works when you actually apply for something.
+         */
+        employerName: employerNameFor(track.industry, rng),
+        // The listed wage is what this country actually pays for the work.
+        salary: money(Math.round(rung.salary * wage)),
+        salaryCents: Math.round(rung.salary * wage),
         industry: track.industry,
         requirements: lines,
         qualified: missing.length === 0,
@@ -177,54 +187,66 @@ export const applyFor = (
     state.applicationsThisYear = applied + 1;
     state.step += 1;
 
-    if (!rng.chance(opening.chance)) {
-      pushHistory(state, 'career', '📮', `You applied to be a ${opening.title.toLowerCase()} and heard nothing back.`, 15);
-      refreshDerived(state, config);
-      checkInvariants(state, before);
-      return { state, hired: false, line: `They went with someone else.` };
-    }
+    /*
+     * Applying does not decide anything any more — it gets you an interview.
+     *
+     * The old version rolled the dice the instant you tapped the row, which is
+     * why getting a job read as something that happened to you. Now there is a
+     * question in the way, and the answer moves the odds; the qualifications
+     * still decide most of it, and being turned down is still normal.
+     */
+    openInterview(state, opening, content, rng);
 
-    const track = content.careersById.get(trackId)!;
-    const rung = track.rungs[0]!;
-    const country = content.countriesById.get(state.character.countryId);
-
-    if (state.career.current) {
-      state.career.history.push({
-        trackId: state.career.current.trackId,
-        employerName: state.career.current.employerName,
-        title: state.career.current.title,
-        fromAge: state.character.age - state.career.current.yearsAtEmployer,
-        toAge: state.character.age,
-        endedBy: 'quit',
-      });
-    }
-
-    const salary = Math.round(rung.salary * (country?.wageMultiplier ?? 1));
-    state.career.current = {
-      trackId: track.id,
-      employerName: employerNameFor(track.industry, rng),
-      rungId: rung.id,
-      title: rung.title,
-      salary,
-      yearsInRole: 0,
-      yearsAtEmployer: 0,
-      performance: 50,
-      satisfaction: 62,
-      rivalNpcId: null,
-      managerNpcId: null,
-    };
-    state.career.retired = false;
-    state.character.finances.salary = salary;
-    state.yearsOutOfWork = 0;
-
-    pushHistory(state, 'career', '💼', `You got the job: ${rung.title}.`, 55);
     refreshDerived(state, config);
     checkInvariants(state, before);
-    return { state, hired: true, line: `You start as a ${rung.title.toLowerCase()}.` };
+    return { state, hired: false, line: `${opening.employer} want to talk to you.` };
   } catch (error) {
     Object.assign(state, before);
     throw error;
   }
 };
 
+/**
+ * Puts the character into a job. Used by the interview handler once the answer
+ * has been rolled against, and nowhere else — the only other route into work is
+ * `takeAvailableJob`, which is the floor under a player who never opens the tab.
+ */
+export const hireInto = (
+  state: LifeState,
+  trackId: string,
+  employerName: string,
+  salary: number,
+  content: ContentPack,
+): void => {
+  const track = content.careersById.get(trackId);
+  if (!track) return;
+  const rung = track.rungs[0]!;
 
+  if (state.career.current) {
+    state.career.history.push({
+      trackId: state.career.current.trackId,
+      employerName: state.career.current.employerName,
+      title: state.career.current.title,
+      fromAge: state.character.age - state.career.current.yearsAtEmployer,
+      toAge: state.character.age,
+      endedBy: 'quit',
+    });
+  }
+
+  state.career.current = {
+    trackId: track.id,
+    employerName,
+    rungId: rung.id,
+    title: rung.title,
+    salary,
+    yearsInRole: 0,
+    yearsAtEmployer: 0,
+    performance: 50,
+    satisfaction: 62,
+    rivalNpcId: null,
+    managerNpcId: null,
+  };
+  state.career.retired = false;
+  state.character.finances.salary = salary;
+  state.yearsOutOfWork = 0;
+};

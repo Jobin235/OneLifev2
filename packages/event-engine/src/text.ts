@@ -74,6 +74,18 @@ const lookup = (
   const [head, tail] = token.split('.');
   if (!head) return null;
 
+  // A flag the simulation set for this popup to read, e.g. "{flag.interview_result}".
+  if (head === 'flag' && tail) {
+    const value = state.flags[tail];
+    return value === undefined ? null : String(value);
+  }
+
+  // What the player picked in this popup's dropdown, e.g. "{select.major}".
+  if (head === 'select' && tail) {
+    const value = state.flags[`select_${tail}`];
+    return value === undefined ? null : String(value);
+  }
+
   if (head === 'me') return state.character.firstName;
   if (head === 'surname') return state.character.lastName;
   if (head === 'age') return String(state.character.age);

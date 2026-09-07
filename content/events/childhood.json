@@ -633,13 +633,17 @@
                 "line": "You both read the paper that night. Neither of you has brought it up since.",
                 "weight": 75
               }
-            ]
+            ],
+            "title": "Nobody found out"
           },
           {
             "id": "caught",
             "text": "You read it, and so did a boy who could not keep his mouth shut. You were both out by the Friday.",
             "historyLine": "You were caught cheating and thrown out.",
             "effects": [
+              {
+                "op": "drop_out"
+              },
               {
                 "op": "stat",
                 "stat": "happiness",
@@ -654,7 +658,8 @@
                 "op": "career_close_track",
                 "trackId": "medicine"
               }
-            ]
+            ],
+            "title": "Out by Friday"
           }
         ]
       },
@@ -760,8 +765,8 @@
         "outcomes": [
           {
             "id": "enrolled",
-            "text": "You got in. The debt started on the first day and so did everything else.",
-            "historyLine": "You started university.",
+            "text": "You got in to read {select.major}. The debt started on the first day and so did everything else.",
+            "historyLine": "You applied to university to study {select.major} and were accepted.",
             "effects": [
               {
                 "op": "flag",
@@ -773,7 +778,8 @@
                 "stat": "happiness",
                 "delta": 8
               }
-            ]
+            ],
+            "title": "Accepted"
           }
         ]
       },
@@ -784,8 +790,8 @@
         "outcomes": [
           {
             "id": "trade",
-            "text": "Two years, no debt, and a skill somebody will always need.",
-            "historyLine": "You went to trade school.",
+            "text": "Two years of {select.trade}, no debt, and a skill somebody will always need.",
+            "historyLine": "You went to trade school to learn {select.trade}.",
             "effects": [
               {
                 "op": "flag",
@@ -797,7 +803,8 @@
                 "stat": "fitness",
                 "delta": 5
               }
-            ]
+            ],
+            "title": "A trade"
           }
         ]
       },
@@ -820,12 +827,26 @@
                 "op": "money",
                 "delta": 200000
               }
-            ]
+            ],
+            "title": "Straight to work"
           }
         ]
       }
     ],
     "cooldownYears": 20,
-    "maxPerLife": 1
+    "maxPerLife": 1,
+    "question": "What will you do?",
+    "selects": [
+      {
+        "id": "major",
+        "label": "Pick your major:",
+        "optionsFrom": "majors"
+      },
+      {
+        "id": "trade",
+        "label": "Or a trade, if you go that way:",
+        "optionsFrom": "trades"
+      }
+    ]
   }
 ]

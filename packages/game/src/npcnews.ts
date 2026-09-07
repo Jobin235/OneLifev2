@@ -95,8 +95,13 @@ const tellOne = (
   rng: Rng,
   playerAge: number,
 ): void => {
-  const who = narrativeSubject(rel, npc, playerAge);
-  const term = narrativeTerm(rel, npc, playerAge);
+  const who = narrativeSubject(rel, npc, playerAge, state);
+  /*
+   * "Your mother" needs no name; "Your nephew" does, because you can have four
+   * of them. Without this, two nephews diagnosed in consecutive years produced
+   * the identical sentence twice, which reads as the log stuttering.
+   */
+  const term = ONE_OF_THEM.has(rel.kind) ? narrativeTerm(rel, npc, playerAge) : who;
 
   /*
    * Schooling is not news that might happen — it is the year they turned that
@@ -281,6 +286,9 @@ const tellOne = (
 
 /** Marriage is news when it is somebody else's. The player's own is an event. */
 const CAN_MARRY = new Set<RelationshipKind>(['sibling', 'child', 'friend', 'best_friend']);
+
+/** Relations there can only be one of, so the log can leave the name off. */
+const ONE_OF_THEM = new Set<RelationshipKind>(['mother', 'father', 'spouse', 'partner']);
 
 /** People whose childhood the player watches happen. */
 const GROWS_UP_IN_THE_LOG = new Set<RelationshipKind>([

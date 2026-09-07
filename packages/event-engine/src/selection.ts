@@ -214,6 +214,14 @@ export const instantiate = (
     title: interpolate(definition.title, state, bindings),
     body: interpolate(definition.body, state, bindings),
     question: interpolate(definition.question, state, bindings),
+    selects: definition.selects.map((select) => ({
+      id: select.id,
+      label: select.label,
+      options:
+        select.options.length > 0
+          ? select.options
+          : (SELECT_CATALOGUES[select.optionsFrom ?? ''] ?? [{ value: 'none', label: '—' }]),
+    })),
     stake: definition.stake
       ? {
           label: definition.stake.label,
@@ -228,4 +236,31 @@ export const instantiate = (
     historyLine: null,
     deltas: [],
   };
+};
+
+
+/**
+ * Option lists the engine owns rather than content, because they have to agree
+ * with the simulation — a major has to be one the career tracks recognise, and
+ * a trade has to be one the trade school teaches.
+ */
+export const SELECT_CATALOGUES: Record<string, Array<{ value: string; label: string }>> = {
+  majors: [
+    'Computer Science',
+    'Business',
+    'Nursing',
+    'English',
+    'Engineering',
+    'Economics',
+    'Psychology',
+    'Law',
+    'Biology',
+    'Education',
+    'Graphic Design',
+    'Political Science',
+  ].map((label) => ({ value: label, label })),
+  trades: ['Electrical', 'Plumbing', 'Welding', 'Automotive', 'Carpentry', 'HVAC'].map((label) => ({
+    value: label,
+    label,
+  })),
 };

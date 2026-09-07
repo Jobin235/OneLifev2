@@ -6,29 +6,202 @@
     "region": "Africa",
     "populationWeight": 2.7,
     "cities": [
-      { "id": "lagos", "name": "Lagos", "costOfLiving": 0.55, "crime": 64, "opportunity": 78, "blurb": "Hard, huge, everything is hustle." },
-      { "id": "abuja", "name": "Abuja", "costOfLiving": 0.62, "crime": 44, "opportunity": 66, "blurb": "Planned, political, and quieter than it looks." },
-      { "id": "kano", "name": "Kano", "costOfLiving": 0.33, "crime": 52, "opportunity": 41, "blurb": "Old trade city, older families." },
-      { "id": "port_harcourt", "name": "Port Harcourt", "costOfLiving": 0.51, "crime": 61, "opportunity": 58, "blurb": "Oil money, and everything that comes with it." }
+      {
+        "id": "lagos",
+        "name": "Lagos",
+        "costOfLiving": 0.55,
+        "crime": 64,
+        "opportunity": 78,
+        "blurb": "Hard, huge, everything is hustle."
+      },
+      {
+        "id": "abuja",
+        "name": "Abuja",
+        "costOfLiving": 0.62,
+        "crime": 44,
+        "opportunity": 66,
+        "blurb": "Planned, political, and quieter than it looks."
+      },
+      {
+        "id": "kano",
+        "name": "Kano",
+        "costOfLiving": 0.33,
+        "crime": 52,
+        "opportunity": 41,
+        "blurb": "Old trade city, older families."
+      },
+      {
+        "id": "port_harcourt",
+        "name": "Port Harcourt",
+        "costOfLiving": 0.51,
+        "crime": 61,
+        "opportunity": 58,
+        "blurb": "Oil money, and everything that comes with it."
+      }
     ],
     "changes": [
-      { "icon": "🏥", "text": "You pay for care up front, in cash, or you don't get it." },
-      { "icon": "🎓", "text": "University is competitive and strikes can cost you a year." },
-      { "icon": "💼", "text": "Trade, oil, tech and the informal economy. Nothing is a straight line." },
-      { "icon": "👨‍👩‍👧", "text": "Family is a network and an obligation. Both directions." },
-      { "icon": "⚖️", "text": "Enforcement is uneven. Who you know changes the odds." }
+      {
+        "icon": "🏥",
+        "text": "You pay for care up front, in cash, or you don't get it."
+      },
+      {
+        "icon": "🎓",
+        "text": "University is competitive and strikes can cost you a year."
+      },
+      {
+        "icon": "💼",
+        "text": "Trade, oil, tech and the informal economy. Nothing is a straight line."
+      },
+      {
+        "icon": "👨‍👩‍👧",
+        "text": "Family is a network and an obligation. Both directions."
+      },
+      {
+        "icon": "⚖️",
+        "text": "Enforcement is uneven. Who you know changes the odds."
+      }
     ],
-    "healthcare": { "patientShare": 0.85, "screening": "none", "unavailable": ["triple_bypass"] },
-    "education": { "universityCost": 180000, "entranceExam": true, "compulsoryUntilAge": 15 },
-    "law": { "drinkingAge": 18, "marriageAge": 18, "enforcement": 48, "convictionCost": 1.4, "militaryService": false },
-    "family": { "expectationToHouseParents": 80, "typicalSiblings": 3 },
+    "healthcare": {
+      "patientShare": 0.85,
+      "screening": "none",
+      "unavailable": [
+        "triple_bypass"
+      ]
+    },
+    "education": {
+      "universityCost": 180000,
+      "entranceExam": true,
+      "compulsoryUntilAge": 15
+    },
+    "law": {
+      "drinkingAge": 18,
+      "marriageAge": 18,
+      "enforcement": 48,
+      "convictionCost": 1.4,
+      "militaryService": false
+    },
+    "family": {
+      "expectationToHouseParents": 80,
+      "typicalSiblings": 3
+    },
     "extraTrackIds": [],
     "wageMultiplier": 0.16,
     "nationalSportTrackId": "sport_football_us",
-    "surnames": ["Okafor", "Adeyemi", "Abara", "Eze", "Balogun", "Nwosu", "Okonkwo", "Bello", "Chukwu", "Ogundipe", "Danjuma", "Obi"],
+    "surnames": [
+      "Okafor",
+      "Adeyemi",
+      "Abara",
+      "Eze",
+      "Balogun",
+      "Nwosu",
+      "Okonkwo",
+      "Bello",
+      "Chukwu",
+      "Ogundipe",
+      "Danjuma",
+      "Obi",
+      "Ogunleye",
+      "Afolabi",
+      "Ezenwa",
+      "Iwu",
+      "Lawal",
+      "Mohammed",
+      "Nwachukwu",
+      "Olawale",
+      "Udo",
+      "Emeka",
+      "Kalu",
+      "Ojo",
+      "Sani",
+      "Uzoma",
+      "Yakubu",
+      "Anyanwu"
+    ],
     "firstNames": {
-      "male": ["Chidi", "Emeka", "Tunde", "Segun", "Ifeanyi", "Kelechi", "Musa", "Ayo", "Uche", "Femi"],
-      "female": ["Adaeze", "Ngozi", "Amaka", "Chinelo", "Folake", "Zainab", "Ifeoma", "Yewande", "Nneka", "Halima"]
+      "male": [
+        "Chidi",
+        "Emeka",
+        "Tunde",
+        "Segun",
+        "Ifeanyi",
+        "Kelechi",
+        "Musa",
+        "Ayo",
+        "Uche",
+        "Femi",
+        "Obinna",
+        "Chinedu",
+        "Adebayo",
+        "Ikenna",
+        "Nnamdi",
+        "Olumide",
+        "Yakubu",
+        "Chukwuma",
+        "Bashir",
+        "Sunday",
+        "Abiodun",
+        "Ekene",
+        "Gbenga",
+        "Hassan",
+        "Ismail",
+        "Jide",
+        "Kunle",
+        "Lanre",
+        "Maduka",
+        "Nonso",
+        "Okey",
+        "Peter",
+        "Rotimi",
+        "Sadiq",
+        "Tobi",
+        "Usman",
+        "Wale",
+        "Yusuf",
+        "Zubair",
+        "Ade"
+      ],
+      "female": [
+        "Adaeze",
+        "Ngozi",
+        "Amaka",
+        "Chinelo",
+        "Folake",
+        "Zainab",
+        "Ifeoma",
+        "Yewande",
+        "Nneka",
+        "Halima",
+        "Chioma",
+        "Aisha",
+        "Funmi",
+        "Titilayo",
+        "Obiageli",
+        "Bukola",
+        "Kemi",
+        "Nkechi",
+        "Sade",
+        "Uchenna",
+        "Adaobi",
+        "Blessing",
+        "Chidinma",
+        "Damilola",
+        "Ebele",
+        "Fatima",
+        "Grace",
+        "Hauwa",
+        "Ijeoma",
+        "Jumoke",
+        "Khadija",
+        "Lola",
+        "Mercy",
+        "Nkiru",
+        "Omolara",
+        "Patience",
+        "Rukayat",
+        "Simisola",
+        "Temitope",
+        "Uzoma"
+      ]
     }
   }
 ]

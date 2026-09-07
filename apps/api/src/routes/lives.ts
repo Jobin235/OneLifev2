@@ -14,7 +14,11 @@ const NewLifeBody = z.object({
   upbringing: z.enum(['rough', 'getting_by', 'comfortable']),
 });
 
-const ChooseBody = z.object({ choiceId: z.string().min(1) });
+const ChooseBody = z.object({
+  choiceId: z.string().min(1),
+  /** What the player picked in the popup's dropdowns, keyed by select id. */
+  selections: z.record(z.string(), z.string()).default({}),
+});
 const ActBody = z.object({ activityId: z.string().min(1) });
 const SucceedBody = z.object({ heirNpcId: z.string().nullable() });
 
@@ -120,13 +124,13 @@ export const registerLifeRoutes = (
 
   app.post('/lives/:lifeId/events/:eventId/choose', async (request, reply) => {
     const { lifeId, eventId } = request.params as { lifeId: string; eventId: string };
-    const { choiceId } = ChooseBody.parse(request.body);
+    const { choiceId, selections } = ChooseBody.parse(request.body);
     const userId = userOf(request);
     const indicators = await currentWorld();
 
     try {
       const payload = await lives.withLock(userId, lifeId, (state) => {
-        game.choose(state, eventId, choiceId, indicators);
+        game.choose(state, eventId, choiceId, selections, indicators);
         return { life: lifeView(state, game.content) };
       });
       return payload;
@@ -214,10 +218,13 @@ export const registerLifeRoutes = (
 
   app.post('/lives/:lifeId/buy', async (request, reply) => {
     const { lifeId } = request.params as { lifeId: string };
-    const { purchasableId } = request.body as { purchasableId: string };
+    const { purchasableId, onFinance } = request.body as {
+      purchasableId: string;
+      onFinance?: boolean;
+    };
     try {
       return await lives.withLock(userOf(request), lifeId, (state) => {
-        game.buy(state, purchasableId);
+        game.buy(state, purchasableId, onFinance === true);
         return { life: lifeView(state, game.content), money: moneyView(state, game.config, game.content) };
       });
     } catch (error) {

@@ -1,6 +1,7 @@
 import type { GameConfig } from '@lineage/config';
 import type { LifeState } from '@lineage/shared-types';
 import { clampStat } from '@lineage/shared-types';
+import { pushHistory } from './history.js';
 
 /**
  * One year of money, settled in the order a person actually experiences it:
@@ -72,11 +73,72 @@ export const updateCostOfLiving = (
    */
   const assetUpkeep = state.assets.reduce((sum, a) => sum + a.annualCost, 0);
 
+  /*
+   * Owning where you live replaces paying for where you live.
+   *
+   * Without this, buying a house was strictly worse than not buying one: it took
+   * the cash, added upkeep, and changed nothing else. Roughly a third of an
+   * ordinary year's spending is rent, and a homeowner stops paying it — which is
+   * the entire reason anybody buys a house, and the reason the shop is worth
+   * opening at all.
+   */
+  const owned = state.assets.some((a) => a.kind === 'house' || a.kind === 'apartment');
+  const housing = owned ? 0 : Math.round(base * studentDiscount * 0.34);
+
   character.finances.annualExpenses =
-    Math.round(base * studentDiscount) +
+    Math.round(base * studentDiscount * 0.66) +
+    housing +
     inflation +
     dependents * config.money.perChildAnnualCost +
     assetUpkeep;
+};
+
+/**
+ * What things are worth after another year of owning them.
+ *
+ * Assets used to hold their purchase price for ever, which made buying and
+ * selling pointless in both directions — you could never lose on a car and never
+ * gain on a house, so net worth was just a record of what you had spent.
+ */
+/**
+ * Keeps what an asset still owes in step with the debt that bought it.
+ *
+ * The two are stored separately — the debt so the player can see who they owe,
+ * the asset so selling can work out what is actually left over — and if they
+ * drift apart you can sell a house you finished paying for and hand the bank
+ * the proceeds anyway.
+ */
+export const syncAssetLoans = (state: LifeState): void => {
+  for (const asset of state.assets) {
+    if (asset.loanOutstanding <= 0) continue;
+    const debt = state.character.finances.debts.find((d) => d.label.endsWith(asset.label));
+    asset.loanOutstanding = debt?.balance ?? 0;
+  }
+};
+
+export const driftAssetValues = (state: LifeState, rng: { jitter: () => number }): void => {
+  for (const asset of state.assets) {
+    const rate = ASSET_DRIFT[asset.kind] ?? -0.03;
+    const noise = rng.jitter() * 0.02;
+    asset.value = Math.max(
+      // A car is worth something as scrap; nothing goes to zero.
+      Math.round(asset.value * 0.05),
+      Math.round(asset.value * (1 + rate + noise)),
+    );
+  }
+};
+
+/**
+ * Houses drift up with the market, cars fall off a cliff and keep falling, and
+ * the things people buy to enjoy sit somewhere in between.
+ */
+const ASSET_DRIFT: Record<string, number> = {
+  house: 0.035,
+  apartment: 0.03,
+  investment: 0.05,
+  collectible: 0.02,
+  car: -0.12,
+  luxury: -0.04,
 };
 
 /** What the year's money actually did, in words, for the log. */
@@ -107,10 +169,6 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
   const tax = Math.round(gross * config.money.taxRate);
   const net = gross - tax;
 
-  const assetCosts = state.assets.reduce((sum, a) => sum + a.annualCost, 0);
-  const childCount = state.relationships.filter((r) => r.kind === 'child').length;
-  const dependentCost = childCount * config.money.perChildAnnualCost;
-
   /*
    * Debts are paid down, not merely accrued.
    *
@@ -123,11 +181,42 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
    * The payment is capped at a share of income so it cannot itself bankrupt
    * somebody; what it cannot cover simply takes longer.
    */
-  const minimumPayments = f.debts.reduce(
-    (sum, d) => sum + Math.max(Math.round(d.balance * 0.08), Math.min(d.balance, 60_000)),
-    0,
-  );
-  const affordablePayment = Math.min(minimumPayments, Math.round((gross - tax) * 0.25));
+  /*
+   * A student loan is repaid out of income, not out of its own balance.
+   *
+   * Charging eight per cent of the balance meant a $124,000 degree took a third
+   * of a $30,000 salary for life, so a graduate never had a spare dollar in
+   * forty years — which is not how income-driven repayment works and is not a
+   * game. Everything else keeps the balance-based minimum, because a mortgage
+   * really does want its payment whatever you earn.
+   */
+  const minimumPayments = f.debts.reduce((sum, d) => {
+    if (d.label.startsWith('Student loan')) {
+      return sum + Math.min(d.balance, Math.round(net * 0.1));
+    }
+    return sum + Math.max(Math.round(d.balance * 0.08), Math.min(d.balance, 60_000));
+  }, 0);
+  const affordablePayment = Math.min(minimumPayments, Math.round(net * 0.25));
+
+  /*
+   * The first year a loan is actually being repaid is worth saying out loud.
+   * A player who took a loan at eighteen should be told when the repayments
+   * start, not left to notice a number moving.
+   */
+  if (
+    affordablePayment > 0 &&
+    !state.flags.repaying_student_loan &&
+    f.debts.some((d) => d.label.startsWith('Student loan'))
+  ) {
+    state.flags.repaying_student_loan = true;
+    pushHistory(
+      state,
+      'money',
+      '🏦',
+      'You started paying back your student loan for university.',
+      40,
+    );
+  }
 
   let toRepay = Math.max(0, affordablePayment);
   for (const debt of [...f.debts].sort((a, b) => b.rate - a.rate)) {
@@ -136,10 +225,17 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
     debt.balance -= paid;
     toRepay -= paid;
   }
-  f.debts = f.debts.filter((d) => d.balance > 0);
-  f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
+  clearDebts(state, 'paid');
 
-  const expenses = f.annualExpenses + assetCosts + dependentCost + affordablePayment;
+  /*
+   * `annualExpenses` already carries asset upkeep and the cost of dependants —
+   * `updateCostOfLiving` puts them there so the figure on screen is the figure
+   * charged. Adding them again here billed every house and every child twice,
+   * which is most of "money doesn't add up": a character with a mortgage and two
+   * kids paid for all three of them twice a year, every year, and never got
+   * ahead no matter what they earned.
+   */
+  const expenses = f.annualExpenses + affordablePayment;
   // Each debt carries its own rate, so a family loan does not compound like a
   // credit card and the player can see which one is eating them.
   /*
@@ -155,15 +251,39 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
    * that year.
    */
   const age = character.age;
-  f.debts = f.debts.filter(
-    (d) => !(d.label.startsWith('Student loan') && age - d.takenAtAge >= 30),
-  );
+  for (const debt of f.debts) {
+    if (debt.label.startsWith('Student loan') && age - debt.takenAtAge >= 30) {
+      debt.balance = 0;
+      pushHistory(
+        state,
+        'money',
+        '📜',
+        'Your student loan was written off. It had been thirty years.',
+        45,
+      );
+    }
+  }
+  f.debts = f.debts.filter((d) => d.balance > 0);
+  f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
 
   const before = f.debt;
   const couldCover = f.cash + f.savings + f.salary + f.otherIncome >= f.annualExpenses;
   if (couldCover) {
     for (const debt of f.debts) {
-      debt.balance += Math.round(debt.balance * debt.rate);
+      const grown = debt.balance + Math.round(debt.balance * debt.rate);
+      /*
+       * A student loan's balance never rises above what was borrowed.
+       *
+       * Income-driven repayment pays a share of what you earn, and on a modest
+       * salary that share is smaller than the interest — so the balance grew
+       * every year for thirty years and a degree became a debt the character
+       * could never touch, which is a spiral rather than a decision. Capping it
+       * at the principal keeps the loan a real weight without making it a
+       * sentence.
+       */
+      debt.balance = debt.label.startsWith('Student loan')
+        ? Math.min(grown, debt.originalAmount)
+        : grown;
     }
   }
   f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
@@ -190,8 +310,7 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
       spare -= paid;
       f.cash -= paid;
     }
-    f.debts = f.debts.filter((d) => d.balance > 0);
-    f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
+    clearDebts(state, 'paid');
   }
 
   // Overflow into savings so cash stays a plausible current-account figure.
@@ -282,4 +401,46 @@ export const monthlyLines = (
   }
   lines.push({ icon: '🍜', label: 'Living', cents: -perMonth(f.annualExpenses) });
   return lines;
+};
+
+
+/**
+ * Drops settled debts and says so.
+ *
+ * Clearing a balance is one of the few unambiguously good things that happens to
+ * a person's money, and it used to happen in silence — the number simply stopped
+ * being there. Saying it is most of what makes twenty years of repayments feel
+ * like they were leading somewhere.
+ */
+/**
+ * Debt labels are stored as "Mortgage · A trailer on the edge of town" so the
+ * money screen can list them, which does not survive being dropped into a
+ * sentence. Split it back apart, and fall back to the age it was taken for the
+ * labels that carry no subject — a character can take two loans against the same
+ * business a decade apart, and "You paid off the loan" twice reads as the log
+ * stuttering rather than as two real debts cleared.
+ */
+const paidOffLine = (debt: { label: string; takenAtAge: number }): string => {
+  const [kind, subject] = debt.label.split('·').map((part) => part.trim());
+  if (kind && subject) return `You paid off the ${kind.toLowerCase()} on ${subject.toLowerCase()}.`;
+  return `You paid off the ${debt.label.toLowerCase()} you took at ${debt.takenAtAge}.`;
+};
+
+const clearDebts = (state: LifeState, how: 'paid'): void => {
+  const f = state.character.finances;
+  for (const debt of f.debts) {
+    if (debt.balance > 0) continue;
+    const student = debt.label.startsWith('Student loan');
+    pushHistory(
+      state,
+      'money',
+      '🎉',
+      student ? 'You fully paid off your student loan for university.' : paidOffLine(debt),
+      student ? 60 : 45,
+    );
+    if (student) delete state.flags.repaying_student_loan;
+  }
+  void how;
+  f.debts = f.debts.filter((d) => d.balance > 0);
+  f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
 };

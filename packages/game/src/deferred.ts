@@ -3,6 +3,8 @@ import type { ContentPack } from '@lineage/content';
 import type { CareerTrack, EducationStage, Effect, LifeState } from '@lineage/shared-types';
 import { makeId, promote, type Rng } from '@lineage/simulation';
 import { bearChild, spawnNpc } from '@lineage/npc-engine';
+import { settleInterview } from './interview.js';
+import { hireInto } from './jobs.js';
 import { ASSET_TEMPLATES, BUSINESS_TEMPLATES, businessNameFor } from './templates.js';
 
 /**
@@ -101,6 +103,13 @@ export const applyDeferred = (
             }
           }
         }
+        break;
+      }
+
+      case 'interview_answer': {
+        settleInterview(state, effect.fit, content, (trackId, employerName, salary) =>
+          hireInto(state, trackId, employerName, salary, content),
+        );
         break;
       }
 

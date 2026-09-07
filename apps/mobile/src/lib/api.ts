@@ -90,6 +90,12 @@ export interface ActiveEvent {
   body: string;
   /** The line directly above the buttons: "What will you do?" */
   question: string;
+  /** Dropdowns rendered above the buttons; the values ride along with the choice. */
+  selects: Array<{
+    id: string;
+    label: string;
+    options: Array<{ value: string; label: string }>;
+  }>;
   /** One named quantity: "Possible Sentence: 2 years". */
   stake: { label: string; value: string } | null;
   choices: EventChoice[];
@@ -263,6 +269,13 @@ export interface ShopEntry {
   available: boolean;
   blockedReason: string | null;
   owned: boolean;
+  /** Whether it can be bought on a loan, and what that would take. */
+  finance: {
+    available: boolean;
+    terms: string;
+    depositCents: number;
+    blockedReason: string | null;
+  };
 }
 
 export interface DebtLine {
@@ -334,7 +347,12 @@ export interface Api {
   }): Promise<{ life: LifeView }>;
   life(lifeId: string): Promise<{ life: LifeView }>;
   ageUp(lifeId: string, idempotencyKey: string): Promise<{ life: LifeView; recap: Recap; died: boolean }>;
-  choose(lifeId: string, eventId: string, choiceId: string): Promise<{ life: LifeView }>;
+  choose(
+    lifeId: string,
+    eventId: string,
+    choiceId: string,
+    selections?: Record<string, string>,
+  ): Promise<{ life: LifeView }>;
   dismiss(lifeId: string): Promise<{ life: LifeView }>;
   /** `outcome` is 'no_further_effect' when the tap was a deliberate no-op. */
   act(lifeId: string, activityId: string): Promise<{ life: LifeView; outcome: ActOutcome }>;
@@ -354,7 +372,11 @@ export interface Api {
   openings(lifeId: string): Promise<{ openings: Opening[]; applicationsLeft: number }>;
   applyFor(lifeId: string, trackId: string): Promise<{ life: LifeView; hired: boolean; line: string }>;
   money(lifeId: string): Promise<MoneyView>;
-  buy(lifeId: string, purchasableId: string): Promise<{ life: LifeView; money: MoneyView }>;
+  buy(
+    lifeId: string,
+    purchasableId: string,
+    onFinance?: boolean,
+  ): Promise<{ life: LifeView; money: MoneyView }>;
   sell(lifeId: string, assetId: string): Promise<{ life: LifeView; money: MoneyView }>;
   more(lifeId: string): Promise<MoreView>;
   legacy(lifeId: string): Promise<Legacy>;
@@ -386,10 +408,10 @@ export const httpApi: Api = {
       idempotencyKey,
     }),
 
-  choose: (lifeId: string, eventId: string, choiceId: string) =>
+  choose: (lifeId: string, eventId: string, choiceId: string, selections: Record<string, string> = {}) =>
     request<{ life: LifeView }>(`/lives/${lifeId}/events/${eventId}/choose`, {
       method: 'POST',
-      body: JSON.stringify({ choiceId }),
+      body: JSON.stringify({ choiceId, selections }),
     }),
 
   dismiss: (lifeId: string) =>
@@ -430,10 +452,10 @@ export const httpApi: Api = {
     }),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
 
-  buy: (lifeId: string, purchasableId: string) =>
+  buy: (lifeId: string, purchasableId: string, onFinance = false) =>
     request<{ life: LifeView; money: MoneyView }>(`/lives/${lifeId}/buy`, {
       method: 'POST',
-      body: JSON.stringify({ purchasableId }),
+      body: JSON.stringify({ purchasableId, onFinance }),
     }),
 
   sell: (lifeId: string, assetId: string) =>
