@@ -12,7 +12,6 @@ const NewLifeBody = z.object({
   countryId: z.string().min(1),
   cityId: z.string().min(1).optional(),
   upbringing: z.enum(['rough', 'getting_by', 'comfortable']),
-  ambitionId: z.string().nullable().optional(),
 });
 
 const ChooseBody = z.object({ choiceId: z.string().min(1) });
@@ -56,15 +55,6 @@ export const registerLifeRoutes = (
       region: c.region,
       changes: c.changes,
       cities: c.cities.map((city) => ({ id: city.id, name: city.name, blurb: city.blurb })),
-    })),
-  }));
-
-  app.get('/content/ambitions', async () => ({
-    ambitions: game.ambitions.map((a) => ({
-      id: a.id,
-      label: a.label,
-      emoji: a.emoji,
-      pitch: a.pitch,
     })),
   }));
 

@@ -30,16 +30,6 @@ export const LegacyScreen = ({
         <span className="ribbon-label">{legacy.ribbon.label}</span>
       </div>
       <div className="ribbon-line">{legacy.ribbon.line}</div>
-
-      {/* What they were trying to do, answered. */}
-      {legacy.ambition && (
-        <div className={`verdict ${legacy.ambition.achieved ? 'met' : 'missed'}`} style={{ marginTop: 20 }}>
-          <div className="verdict-wanted">
-            {legacy.ambition.emoji} {legacy.ambition.wanted}
-          </div>
-          <div className="verdict-line">{legacy.ambition.verdict}</div>
-        </div>
-      )}
       </div>
 
       <section className="legacy-panel">

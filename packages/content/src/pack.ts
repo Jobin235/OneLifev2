@@ -160,46 +160,6 @@ export const PurchasableSchema = z.object({
 });
 export type Purchasable = z.infer<typeof PurchasableSchema>;
 
-/**
- * What this life is *for*.
- *
- * The single biggest finding from the competitive research: BitLife's retention
- * comes from weekly challenges rather than from its loop, because a goal makes
- * you play differently. An ambition is that, but native — chosen at birth,
- * changing what the life actually contains from the first year, and answered by
- * the ending rather than expiring on a Saturday.
- */
-export const AmbitionSchema = z.object({
-  id: z.string().min(1),
-  label: z.string().min(1),
-  emoji: z.string().min(1),
-  /** Shown when choosing. Second person, present tense. */
-  pitch: z.string().min(1),
-  /** Shown on the legacy screen above the verdict. */
-  judgedBy: z.string().min(1),
-  /** Event categories this ambition makes more likely. */
-  favours: z.array(EventCategorySchema),
-  /** How the ending decides. */
-  test: z.object({
-    kind: z.enum([
-      'net_worth',
-      'children',
-      'following',
-      'married_years',
-      'business_years',
-      'education',
-      'close_people',
-      'age',
-      'moved_city',
-      'rich_and_clean',
-    ]),
-    atLeast: z.union([z.number(), z.string()]).optional(),
-  }),
-  won: z.string().min(1),
-  lost: z.string().min(1),
-});
-export type Ambition = z.infer<typeof AmbitionSchema>;
-
 export const NpcTemplateFileSchema = z.object({
   id: z.string().min(1),
   kind: z.string().min(1),
@@ -226,7 +186,6 @@ export interface ContentPack {
   chronicle: ChronicleLine[];
   interactions: Interaction[];
   purchasables: Purchasable[];
-  ambitions: Ambition[];
   npcTemplates: z.infer<typeof NpcTemplateFileSchema>[];
 }
 
@@ -252,7 +211,6 @@ export interface ContentSources {
   chronicle: unknown[];
   interactions: unknown;
   purchasables: unknown;
-  ambitions: unknown;
   npcTemplates: unknown;
 }
 
@@ -290,7 +248,6 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
   const chronicle = parseGroups('chronicle', sources.chronicle, ChronicleLineSchema);
   const interactions = parseArray('interactions.json', sources.interactions, InteractionSchema);
   const purchasables = parseArray('assets.json', sources.purchasables, PurchasableSchema);
-  const ambitions = parseArray('ambitions.json', sources.ambitions, AmbitionSchema);
   const npcTemplates = parseArray('npc-templates.json', sources.npcTemplates, NpcTemplateFileSchema);
 
   const pack: ContentPack = {
@@ -307,7 +264,6 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
     chronicle,
     interactions,
     purchasables,
-    ambitions,
     npcTemplates,
   };
 

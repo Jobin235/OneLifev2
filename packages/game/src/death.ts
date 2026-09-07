@@ -4,7 +4,6 @@ import type { Ancestor, Legacy, LifeState, Npc } from '@lineage/shared-types';
 import { formatMoney, netWorth, surfacedScore } from '@lineage/simulation';
 import { rankHeirs } from '@lineage/npc-engine';
 import { buildChapters } from '@lineage/narrative';
-import { judgeAmbition } from './ambition.js';
 import { ribbonFor } from './ribbons.js';
 
 /**
@@ -30,10 +29,8 @@ export const buildLegacy = (state: LifeState, content: ContentPack, config: Game
   // One word for the life that just ended, and the thing that carries forward.
   const ribbon = ribbonFor(state);
   if (!state.ribbonsEarned.includes(ribbon.id)) state.ribbonsEarned.push(ribbon.id);
-  const ambition = judgeAmbition(state, content);
 
   return {
-    ambition,
     name: `${character.firstName} ${character.lastName}`,
     bornYear: character.birthYear,
     diedYear,

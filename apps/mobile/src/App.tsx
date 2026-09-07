@@ -9,7 +9,6 @@ import type {
   MoreView,
   PeopleView,
   PersonView,
-  AmbitionOption,
   Opening,
   SchoolView,
   WorkView,
@@ -39,7 +38,6 @@ const api = import.meta.env.VITE_LOCAL === '1' ? createLocalApi() : httpApi;
 
 export const App = () => {
   const [countries, setCountries] = useState<CountryOption[] | null>(null);
-  const [ambitions, setAmbitions] = useState<AmbitionOption[]>([]);
   const [life, setLife] = useState<LifeView | null>(null);
   const [tab, setTab] = useState<Tab>('life');
   const [busy, setBusy] = useState(false);
@@ -84,12 +82,8 @@ export const App = () => {
   useEffect(() => {
     void (async () => {
       try {
-        const [{ countries: list }, { ambitions: goals }] = await Promise.all([
-          api.countries(),
-          api.ambitions(),
-        ]);
+        const { countries: list } = await api.countries();
         setCountries(list);
-        setAmbitions(goals);
       } catch {
         setCountries([]);
         show('Cannot reach the server. Your life is safe — try again in a moment.');
@@ -283,7 +277,7 @@ export const App = () => {
   if (!life) {
     return (
       <div className="app">
-        <CreateScreen countries={countries} ambitions={ambitions} busy={busy} onCreate={onCreate} />
+        <CreateScreen countries={countries} busy={busy} onCreate={onCreate} />
         {toast && <div className="toast">{toast}</div>}
       </div>
     );
@@ -307,7 +301,6 @@ export const App = () => {
           busy={busy}
           onChoose={onChoose}
           onDismiss={onDismiss}
-          onAct={onAct}
           onAgeUp={onAgeUp}
         />
       )}

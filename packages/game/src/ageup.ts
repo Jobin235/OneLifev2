@@ -218,18 +218,7 @@ export const advanceYear = (
 
   // 8. Choose what happens this year.
   const ctx: ConditionContext = { state, world, bindings: {} };
-  const ambition = state.ambitionId
-    ? content.ambitions.find((x) => x.id === state.ambitionId)
-    : undefined;
-  const selection = selectEvents(
-    content.events,
-    state,
-    ctx,
-    config,
-    content.traitsById,
-    rng,
-    ambition?.favours,
-  );
+  const selection = selectEvents(content.events, state, ctx, config, content.traitsById, rng);
 
   let card: EventInstance | null = null;
   if (selection.major) {

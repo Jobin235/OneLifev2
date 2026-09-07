@@ -7,4 +7,3 @@ export * from './interact.js';
 export * from './shop.js';
 export * from './ribbons.js';
 export * from './jobs.js';
-export * from './ambition.js';

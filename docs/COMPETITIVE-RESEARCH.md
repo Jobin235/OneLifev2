@@ -82,17 +82,26 @@ these:
 
 Three changes. Everything else the field offers is deliberately declined.
 
-### 1. Ambitions — a spine for the life
+### 1. ~~Ambitions~~ — tried, and removed
 
-A goal, chosen at the start, that gates and weights content and is judged at
-death beside the ribbon.
+A goal chosen at the start that weighted content and was judged at death. The
+reasoning was that BitLife's retention comes from weekly challenges rather than
+its loop, so a native, non-expiring version of that should work better.
 
-This is the native version of BitLife's weekly challenges, and it is better than
-theirs for a specific reason: a weekly challenge needs live operations, expires,
-and sits *beside* the game. An ambition is chosen at birth, changes what the
-life actually contains from year one, and is answered by the ending. It attacks
-both measured problems at once — lives diverge from the first decision, and
-there is a reason to keep playing to the end rather than to age 40.
+**It was built and then taken out**, on the product owner's call, and the
+measurements say that was right. Ambitions moved distinct openings from 9/30 to
+only 11/30; the childhood content below took it from 11/30 to 30/30. Nearly all
+the divergence came from having events to choose between, not from weighting
+which ones were picked.
+
+And the end-of-life verdict it provided already existed: **ribbons** name what
+kind of life it was without asking a newborn to declare a goal first. A stated
+ambition turned out to be a mechanic sitting beside the game — exactly the
+criticism levelled at the weekly challenges it was copying.
+
+What survives: the finding that a life needs a reason to be played to the end.
+Ribbons and succession carry that, and they are earned by how the life went
+rather than announced in advance.
 
 ### 2. Late-life content
 

@@ -1643,81 +1643,460 @@ button {
   margin-top: 3px;
 }
 
-/* ---------- What this life is for ---------- */
+/* ---------- Buying and selling ---------- */
 
-.ambition-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
+.shop-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
 }
 
-.ambition {
-  background: var(--surface);
-  border: 1.5px solid var(--line);
-  border-radius: var(--r-tile);
-  padding: 13px 13px 14px;
+.shop-chevron {
+  font: 800 17px/1 var(--text);
+  color: var(--faint);
+}
+
+.shop-row {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-tile);
+  background: var(--app-bg);
   cursor: pointer;
   min-height: 44px;
-  transition:
-    border-color 0.14s ease,
-    background 0.14s ease;
+  transition: border-color 0.14s ease;
 }
 
-.ambition:hover {
-  border-color: var(--violet);
+.shop-row:hover:not(:disabled) {
+  border-color: var(--green);
 }
 
-.ambition.selected {
-  border-color: var(--violet);
+.shop-row:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.shop-row .owned-label,
+.shop-row .owned-detail {
+  display: block;
+}
+
+.shop-price {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.sell {
+  font: 800 12px/1 var(--text);
+  color: var(--coral-deep);
+  background: var(--coral-tint);
+  border-radius: var(--r-pill);
+  padding: 9px 13px;
+  flex: none;
+  cursor: pointer;
+  min-height: 34px;
+}
+
+.sell:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- The ribbon on the gravestone ---------- */
+
+.ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   background: var(--violet-tint);
+  border-radius: var(--r-pill);
+  padding: 11px 18px;
+  margin: 18px auto 0;
 }
 
-.ambition-emoji {
+.ribbon-emoji {
   font-size: 19px;
   line-height: 1;
 }
 
-.ambition-label {
-  font: 800 14px/1.2 var(--display);
-  color: var(--ink);
+.ribbon-label {
+  font: 800 15px/1 var(--display);
+  color: var(--violet-deep);
+  letter-spacing: 0.01em;
 }
 
-.ambition-pitch {
-  font: 600 11.5px/1.4 var(--text);
+.ribbon-line {
+  font: 600 13.5px/1.55 var(--text);
   color: var(--muted);
+  text-align: center;
+  margin-top: 11px;
   text-wrap: pretty;
 }
 
-/* ---------- The verdict on the ambition ---------- */
+/* ---------- What you owe ---------- */
 
-.verdict {
+.debt-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.debt-balance {
+  font: 800 14px/1 var(--text);
+  color: var(--coral-deep);
+  flex: none;
+}
+
+/* ---------- The job market ---------- */
+
+.opening {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--r-panel);
-  padding: 18px;
-  text-align: center;
+  border-radius: var(--r-tile);
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: stretch;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.14s ease;
 }
 
-.verdict-wanted {
-  font: 700 12.5px/1.4 var(--text);
+.opening:hover:not(:disabled) {
+  border-color: var(--green);
+}
+
+.opening:disabled {
+  opacity: 0.62;
+  cursor: default;
+}
+
+.opening-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.opening-title {
+  font: 800 15px/1.2 var(--display);
+}
+
+.opening-salary {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.opening-req {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.req {
+  font: 700 11px/1 var(--text);
+  background: var(--app-bg);
+  border-radius: var(--r-pill);
+  padding: 6px 9px;
   color: var(--muted);
 }
 
-.verdict-line {
-  font: 700 15.5px/1.5 var(--display);
-  margin-top: 9px;
+/* The one thing standing in the way, said plainly. */
+.opening-missing {
+  font: 700 12px/1.4 var(--text);
+  color: var(--coral-deep);
+}
+
+.opening-odds {
+  font: 700 12px/1 var(--text);
+  color: var(--faint);
+}
+
+.opening-where {
+  display: block;
+  font: 700 12px/1.3 var(--text);
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ---------- What you owe ---------- */
+
+.debt-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.debt-balance {
+  font: 800 14px/1 var(--text);
+  color: var(--coral-deep);
+  flex: none;
+}
+
+/* ---------- The job market ---------- */
+
+.opening {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-tile);
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: stretch;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.14s ease;
+}
+
+.opening:hover:not(:disabled) {
+  border-color: var(--green);
+}
+
+.opening:disabled {
+  opacity: 0.62;
+  cursor: default;
+}
+
+.opening-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.opening-title {
+  font: 800 15px/1.2 var(--display);
+}
+
+.opening-salary {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.opening-req {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.req {
+  font: 700 11px/1 var(--text);
+  background: var(--app-bg);
+  border-radius: var(--r-pill);
+  padding: 6px 9px;
+  color: var(--muted);
+}
+
+/* The one thing standing in the way, said plainly. */
+.opening-missing {
+  font: 700 12px/1.4 var(--text);
+  color: var(--coral-deep);
+}
+
+.opening-odds {
+  font: 700 12px/1 var(--text);
+  color: var(--faint);
+}
+
+.opening-where {
+  display: block;
+  font: 700 12px/1.3 var(--text);
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ---------- Buying and selling ---------- */
+
+.shop-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+}
+
+.shop-chevron {
+  font: 800 17px/1 var(--text);
+  color: var(--faint);
+}
+
+.shop-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-tile);
+  background: var(--app-bg);
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.14s ease;
+}
+
+.shop-row:hover:not(:disabled) {
+  border-color: var(--green);
+}
+
+.shop-row:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.shop-row .owned-label,
+.shop-row .owned-detail {
+  display: block;
+}
+
+.shop-price {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.sell {
+  font: 800 12px/1 var(--text);
+  color: var(--coral-deep);
+  background: var(--coral-tint);
+  border-radius: var(--r-pill);
+  padding: 9px 13px;
+  flex: none;
+  cursor: pointer;
+  min-height: 34px;
+}
+
+.sell:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- The ribbon on the gravestone ---------- */
+
+.ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--violet-tint);
+  border-radius: var(--r-pill);
+  padding: 11px 18px;
+  margin: 18px auto 0;
+}
+
+.ribbon-emoji {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.ribbon-label {
+  font: 800 15px/1 var(--display);
+  color: var(--violet-deep);
+  letter-spacing: 0.01em;
+}
+
+.ribbon-line {
+  font: 600 13.5px/1.55 var(--text);
+  color: var(--muted);
+  text-align: center;
+  margin-top: 11px;
   text-wrap: pretty;
 }
 
-.verdict.met .verdict-line {
-  color: var(--green-deep);
+/* ---------- What you owe ---------- */
+
+.debt-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.verdict.missed .verdict-line {
-  color: var(--ink);
+.debt-balance {
+  font: 800 14px/1 var(--text);
+  color: var(--coral-deep);
+  flex: none;
 }
+
+/* ---------- The job market ---------- */
+
+.opening {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-tile);
+  padding: 14px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: stretch;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.14s ease;
+}
+
+.opening:hover:not(:disabled) {
+  border-color: var(--green);
+}
+
+.opening:disabled {
+  opacity: 0.62;
+  cursor: default;
+}
+
+.opening-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.opening-title {
+  font: 800 15px/1.2 var(--display);
+}
+
+.opening-salary {
+  font: 800 13px/1 var(--text);
+  color: var(--green-deep);
+  flex: none;
+}
+
+.opening-req {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.req {
+  font: 700 11px/1 var(--text);
+  background: var(--app-bg);
+  border-radius: var(--r-pill);
+  padding: 6px 9px;
+  color: var(--muted);
+}
+
+/* The one thing standing in the way, said plainly. */
+.opening-missing {
+  font: 700 12px/1.4 var(--text);
+  color: var(--coral-deep);
+}
+
+.opening-odds {
+  font: 700 12px/1 var(--text);
+  color: var(--faint);
+}
+
+.opening-where {
+  display: block;
+  font: 700 12px/1.3 var(--text);
+  color: var(--muted);
+  margin-top: 3px;
+}
+

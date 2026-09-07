@@ -67,7 +67,6 @@ export const LifeViewSchema = z.object({
       major: z.boolean(),
     }),
   ),
-  quickActions: z.array(ActionCardSchema),
   canAgeUp: z.boolean(),
   ageUpLabel: z.string(),
 });

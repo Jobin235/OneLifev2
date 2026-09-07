@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import type { ActionCard, LifeView } from '../lib/api';
+import type { LifeView } from '../lib/api';
 import { EventCard, ResultCard } from '../components/EventCard';
 
 /**
@@ -19,19 +19,21 @@ export const LifeScreen = ({
   busy,
   onChoose,
   onDismiss,
-  onAct,
   onAgeUp,
 }: {
   life: LifeView;
   busy: boolean;
   onChoose: (choiceId: string) => void;
   onDismiss: () => void;
-  onAct: (activityId: string) => void;
   onAgeUp: () => void;
 }) => {
-  const idle = !life.activeEvent && !life.resolvedEvent;
-
-  /** Group the flat log into years, so each age is a labelled run of lines. */
+  /**
+   * Group the flat log into years, newest first.
+   *
+   * The log arrives oldest-first because that is how a life is lived, but the
+   * screen reads the other way round: what just happened is what you came to
+   * see, and childhood is something you scroll back to.
+   */
   const years = useMemo(() => {
     const out: { age: number; entries: LifeView['log'] }[] = [];
     for (const entry of life.log) {
@@ -39,24 +41,17 @@ export const LifeScreen = ({
       if (last && last.age === entry.atAge) last.entries.push(entry);
       else out.push({ age: entry.atAge, entries: [entry] });
     }
-    return out;
+    return out.reverse();
   }, [life.log]);
 
   /*
-   * Keep the newest year in view. The log grows downward, so without this a
-   * player who ages up at 60 is left looking at their childhood.
+   * Back to the top on every age-up. The newest year is rendered first, so
+   * "the top" is where the year that just happened is.
    */
-  const bottom = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = scroller.current;
-    if (!el) return;
-    // Jump on first paint, glide on later updates.
-    el.scrollTo({
-      top: el.scrollHeight,
-      behavior: life.revision <= 1 ? 'auto' : 'smooth',
-    });
-  }, [life.revision, life.age]);
+    scroller.current?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [life.age]);
 
   return (
     <>
@@ -92,6 +87,12 @@ export const LifeScreen = ({
       </header>
 
       <div className="scroll log" ref={scroller}>
+        {/* What is happening now, above the record of what already did. */}
+        {life.activeEvent && (
+          <EventCard event={life.activeEvent} onChoose={onChoose} busy={busy} />
+        )}
+        {life.resolvedEvent && <ResultCard event={life.resolvedEvent} onDismiss={onDismiss} />}
+
         {years.map((year) => (
           <section className="log-year" key={year.age}>
             <div className="log-age">
@@ -107,30 +108,6 @@ export const LifeScreen = ({
           </section>
         ))}
 
-        {/* The open decision sits at the end of the log, where the year is. */}
-        {life.activeEvent && (
-          <EventCard event={life.activeEvent} onChoose={onChoose} busy={busy} />
-        )}
-        {life.resolvedEvent && <ResultCard event={life.resolvedEvent} onDismiss={onDismiss} />}
-
-        {idle && life.quickActions.length > 0 && (
-          <div className="action-grid">
-            {life.quickActions.map((action: ActionCard) => (
-              <button
-                key={action.id}
-                className="action"
-                disabled={!action.available || busy}
-                onClick={() => onAct(action.id)}
-                title={action.blockedReason ?? action.note}
-              >
-                <span style={{ fontSize: 19, lineHeight: 1 }}>{action.icon}</span>
-                <span className="action-label">{action.label}</span>
-              </button>
-            ))}
-          </div>
-        )}
-
-        <div ref={bottom} />
       </div>
 
       <div className="footer">

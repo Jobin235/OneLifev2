@@ -38,8 +38,6 @@ export const selectEvents = (
   config: GameConfig,
   traits: Map<string, TraitDefinition>,
   rng: Rng,
-  /** Event categories the character's ambition pulls their life toward. */
-  ambitionFavours?: string[],
 ): SelectionResult => {
   const byId = new Map(definitions.map((d) => [d.id, d]));
   const candidates: Candidate[] = [];
@@ -81,7 +79,7 @@ export const selectEvents = (
     candidates.push({
       definition,
       bindings,
-      score: scoreCandidate(definition, state, config, traits, rng, ambitionFavours),
+      score: scoreCandidate(definition, state, config, traits, rng),
       scheduled: null,
     });
   }
@@ -147,7 +145,6 @@ const scoreCandidate = (
   config: GameConfig,
   traits: Map<string, TraitDefinition>,
   rng: Rng,
-  ambitionFavours: string[] | undefined,
 ): number => {
   let score = definition.priority;
 
@@ -163,14 +160,6 @@ const scoreCandidate = (
     if (affinity) score *= affinity;
   }
 
-  /*
-   * And what they are trying to do with their life pulls harder still.
-   *
-   * This is what makes two lives diverge from the first year rather than
-   * producing the same opening five decisions — the measured problem behind
-   * every "the same things happen in different lives" review in the category.
-   */
-  if (ambitionFavours?.includes(definition.category)) score *= 1.9;
 
   // Never seen it: nudge it up, so a life reaches for its unused content.
   if (!state.eventLog[definition.id]) score *= 1.25;

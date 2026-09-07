@@ -83,9 +83,6 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
       text: e.line,
       major: e.significance >= 60,
     })),
-    quickActions: actionsView(state, content)
-      .filter((a) => a.available)
-      .slice(0, 6),
     canAgeUp: character.alive && state.activeEvent === null,
     ageUpLabel: !character.alive
       ? 'Your life is over'

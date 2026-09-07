@@ -25,8 +25,6 @@ export interface CreateLifeInput {
   country: CountryPack;
   cityId?: string;
   upbringing: Upbringing;
-  /** What this life is for. Null means the player did not pick one. */
-  ambitionId?: string | null;
   traits: TraitDefinition[];
   birthYear: number;
   contentVersion: number;
@@ -300,8 +298,6 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     chronicleLog: {},
     interactionUsage: {},
     ribbonsEarned: [],
-    ambitionId: input.ambitionId ?? null,
-    bornCityId: city.id,
     yearsOutOfWork: 0,
     applicationsThisYear: 0,
     lastSeenWorldSnapshotId: null,

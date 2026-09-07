@@ -37,17 +37,6 @@ export const LegacySchema = z.object({
   age: z.number().int(),
   cityName: z.string(),
   epitaph: z.string(),
-  /** What they were trying to do, and whether they did it. Null if unchosen. */
-  ambition: z
-    .object({
-      id: z.string(),
-      label: z.string(),
-      emoji: z.string(),
-      wanted: z.string(),
-      achieved: z.boolean(),
-      verdict: z.string(),
-    })
-    .nullable(),
   /** One word for the life that just ended. The thing you collect. */
   ribbon: z.object({
     id: z.string(),
