@@ -1,5 +1,6 @@
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
+import { interactionsFor } from './interact.js';
 import type { LifeState } from '@lineage/shared-types';
 import { STAT_DISPLAY } from '@lineage/shared-types';
 import {
@@ -147,7 +148,12 @@ export const peopleView = (state: LifeState) => {
 };
 
 /** Design 2B: a memory list, not a meter. */
-export const personView = (state: LifeState, npcId: string, config: GameConfig) => {
+export const personView = (
+  state: LifeState,
+  npcId: string,
+  config: GameConfig,
+  content: ContentPack,
+) => {
   const rel = state.relationships.find((r) => r.npcId === npcId);
   const npc = state.npcs.find((n) => n.id === npcId);
   if (!rel || !npc) return null;
@@ -178,6 +184,7 @@ export const personView = (state: LifeState, npcId: string, config: GameConfig) 
           { icon: '🫱', label: 'Closeness', value: rel.dimensions.closeness },
         ],
     memories: displayMemories(rel, config).map((m) => ({ atAge: m.atAge, line: m.line })),
+    interactions: interactionsFor(state, npcId, content),
     onTheirMind: rel.onTheirMind,
     stats: npc.stats
       ? (Object.keys(npc.stats) as (keyof typeof npc.stats)[]).map((key) => ({

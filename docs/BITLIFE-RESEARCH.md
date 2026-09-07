@@ -91,10 +91,13 @@ Per-person interaction menu: **Ask Out, Compliment, Conversation, Gift, Hook
 Up, Insult, Prank, Rumor, Spend Time**, with results depending on current
 relationship level, and low relationships producing hostile responses.
 
-**Us:** people have real memory and multi-dimensional relationships — *deeper
-than BitLife underneath* — but the player cannot **act** on a specific person
-at all. There is no per-person interaction menu. This is our worst
-depth-to-surface ratio: the model is there and unreachable.
+**Us: now ahead.** Fourteen interactions — talk, spend time, compliment,
+confide, ask advice, gift, apologise, have it out, insult, ask for money, lend
+money, ask out, be romantic, cut off — gated by relationship kind, age, money
+and warmth. Each has two outcomes chosen by where the relationship already
+stands, so confiding in someone who has earned it is not the same act as
+confiding in someone who has not, and the wrong one costs you fourteen points of
+trust and a memory that stays on their screen.
 
 ### Crime
 Bank Robbery, Burglary, Grand Theft Auto, Pickpocket, Porch Pirate, Shoplift,
@@ -142,10 +145,12 @@ Worth protecting while closing the gaps above:
 
 Ranked by player-visible depth per unit of work:
 
-1. **More life per year** — several log entries a year, most without decisions.
-   Pure content plus a generator; the loop already supports it.
-2. **Per-person interactions** — surface the NPC model we already have. Biggest
-   win available.
+1. ~~**More life per year**~~ — **done.** The chronicle: 161 decision-free log
+   lines that bind real NPCs. 0.88 → 3.28 entries a year, no silent years.
+2. ~~**Per-person interactions**~~ — **done.** Fourteen interactions, each with
+   a warm and a cool outcome chosen by the relationship's current warmth, each
+   writing a memory. Where we beat BitLife: the same "Talk" lands differently on
+   a trusted friend and someone you have been avoiding, and the log says which.
 3. **School with substance** — grades, popularity, clubs and teams, majors,
    cheating, bullying, dropping out, specialised schools.
 4. **Work with substance** — named coworkers and a boss as real NPCs, a

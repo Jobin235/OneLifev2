@@ -165,6 +165,17 @@ export interface PeopleView {
   drifted: PersonRow[];
 }
 
+export interface InteractionCard {
+  id: string;
+  icon: string;
+  label: string;
+  /** Cents. */
+  cost: number;
+  timesLeft: number | null;
+  available: boolean;
+  blockedReason: string | null;
+}
+
 export interface PersonView {
   npcId: string;
   name: string;
@@ -173,6 +184,7 @@ export interface PersonView {
   descriptor: string;
   meters: Array<{ icon: string; label: string; value: number }>;
   memories: Array<{ atAge: number; line: string }>;
+  interactions: InteractionCard[];
   onTheirMind: string | null;
   stats: Array<{ icon: string; label: string; value: number }>;
 }
@@ -229,6 +241,11 @@ export interface Api {
   succeed(lifeId: string, heirNpcId: string | null): Promise<{ life: LifeView }>;
   people(lifeId: string): Promise<PeopleView>;
   person(lifeId: string, npcId: string): Promise<PersonView>;
+  interact(
+    lifeId: string,
+    npcId: string,
+    interactionId: string,
+  ): Promise<{ life: LifeView; person: PersonView; warm: boolean; line: string }>;
   actions(lifeId: string): Promise<{ actions: ActionCard[] }>;
   money(lifeId: string): Promise<MoneyView>;
   more(lifeId: string): Promise<MoreView>;
@@ -284,6 +301,13 @@ export const httpApi: Api = {
 
   people: (lifeId: string) => request<PeopleView>(`/lives/${lifeId}/people`),
   person: (lifeId: string, npcId: string) => request<PersonView>(`/lives/${lifeId}/people/${npcId}`),
+
+  interact: (lifeId: string, npcId: string, interactionId: string) =>
+    request<{ life: LifeView; person: PersonView; warm: boolean; line: string }>(
+      `/lives/${lifeId}/people/${npcId}/interact`,
+      { method: 'POST', body: JSON.stringify({ interactionId }) },
+    ),
+
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
   money: (lifeId: string) => request<MoneyView>(`/lives/${lifeId}/money`),
   more: (lifeId: string) => request<MoreView>(`/lives/${lifeId}/more`),

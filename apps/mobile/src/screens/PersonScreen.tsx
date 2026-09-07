@@ -1,4 +1,7 @@
-import type { PersonView } from '../lib/api';
+import type { InteractionCard, PersonView } from '../lib/api';
+
+const money = (cents: number) =>
+  `$${Math.round(cents / 100).toLocaleString('en-US')}`;
 
 /**
  * Design 2B. The relationship is a memory list, not a meter — a stored fact from
@@ -6,10 +9,16 @@ import type { PersonView } from '../lib/api';
  */
 export const PersonScreen = ({
   person,
+  busy,
+  decisionOpen,
   onBack,
+  onInteract,
 }: {
   person: PersonView;
+  busy: boolean;
+  decisionOpen: boolean;
   onBack: () => void;
+  onInteract: (interactionId: string) => void;
 }) => (
   <>
     <div className="person-hero">
@@ -42,6 +51,42 @@ export const PersonScreen = ({
     </div>
 
     <div className="scroll" style={{ gap: 18 }}>
+      {decisionOpen && (
+        <div className="notice">
+          <span>👆</span>
+          <span>Something is waiting on your answer. Decide first.</span>
+        </div>
+      )}
+
+      {person.interactions.length > 0 && (
+        <section>
+          <div className="eyebrow" style={{ marginBottom: 12 }}>
+            WHAT YOU CAN DO
+          </div>
+          <div className="interaction-grid">
+            {person.interactions.map((action: InteractionCard) => (
+              <button
+                key={action.id}
+                className="interaction"
+                disabled={!action.available || busy}
+                onClick={() => onInteract(action.id)}
+                title={action.blockedReason ?? undefined}
+              >
+                <span className="interaction-icon">{action.icon}</span>
+                <span className="interaction-label">{action.label}</span>
+                {action.blockedReason ? (
+                  <span className="interaction-note blocked">{action.blockedReason}</span>
+                ) : action.cost > 0 ? (
+                  <span className="interaction-note">{money(action.cost)}</span>
+                ) : action.timesLeft !== null && action.timesLeft <= 1 ? (
+                  <span className="interaction-note">{action.timesLeft} left this year</span>
+                ) : null}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
       {person.memories.length > 0 && (
         <div>
           <div className="eyebrow" style={{ marginBottom: 12 }}>

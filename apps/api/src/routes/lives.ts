@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ChoiceRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
+import { ChoiceRejected, InteractionRejected, Game, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView, actionsView } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -184,9 +184,32 @@ export const registerLifeRoutes = (
   app.get('/lives/:lifeId/people/:npcId', async (request, reply) => {
     const { lifeId, npcId } = request.params as { lifeId: string; npcId: string };
     const state = await load(userOf(request), lifeId);
-    const person = personView(state, npcId, game.config);
+    const person = personView(state, npcId, game.config, game.content);
     if (!person) return reply.code(404).send({ error: 'no such person in this life' });
     return person;
+  });
+
+  /**
+   * Doing something to one specific person. Server-authoritative like every
+   * other mutation: the client's menu renders what the server said was
+   * possible, it never decides it.
+   */
+  app.post('/lives/:lifeId/people/:npcId/interact', async (request, reply) => {
+    const { lifeId, npcId } = request.params as { lifeId: string; npcId: string };
+    const { interactionId } = request.body as { interactionId: string };
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        const { warm, line } = game.interact(state, npcId, interactionId);
+        return {
+          life: lifeView(state, game.content),
+          person: personView(state, npcId, game.config, game.content),
+          warm,
+          line,
+        };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
   });
 
   app.get('/lives/:lifeId/actions', async (request) => {
@@ -237,6 +260,7 @@ export const registerLifeRoutes = (
 
 const statusFor = (error: unknown): number => {
   if (error instanceof ChoiceRejected) return 409;
+  if (error instanceof InteractionRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };
   if (typeof withCode.statusCode === 'number') return withCode.statusCode;

@@ -161,10 +161,21 @@ export const createLocalApi = (): Api => {
 
     people: async (lifeId) => peopleView(get(lifeId)) as never,
     person: async (lifeId, npcId) => {
-      const person = personView(get(lifeId), npcId, game.config);
+      const person = personView(get(lifeId), npcId, game.config, game.content);
       if (!person) throw new Error('no such person in this life');
       return person as never;
     },
+    interact: async (lifeId, npcId, interactionId) => {
+      const { state, warm, line } = game.interact(get(lifeId), npcId, interactionId);
+      save(state);
+      return {
+        ...view(state),
+        person: personView(state, npcId, game.config, game.content) as never,
+        warm,
+        line,
+      };
+    },
+
     actions: async (lifeId) => ({ actions: actionsView(get(lifeId), game.content) as never }),
     money: async (lifeId) => moneyView(get(lifeId), game.config) as never,
     more: async (lifeId) => moreView(get(lifeId)) as never,

@@ -1,3 +1,4 @@
+import { interact, interactionsFor } from './interact.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import type {
@@ -308,6 +309,16 @@ export class Game {
       Object.assign(state, before);
       throw error;
     }
+  }
+
+  /** What the player can do to one specific person right now. */
+  interactions(state: LifeState, npcId: string) {
+    return interactionsFor(state, npcId, this.content);
+  }
+
+  /** Does something to one specific person. */
+  interact(state: LifeState, npcId: string, interactionId: string) {
+    return interact(state, npcId, interactionId, this.content, this.config);
   }
 
   /** Dismisses the result card (design 1A "Got it"). */

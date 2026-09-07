@@ -82,6 +82,48 @@ export const ChronicleLineSchema = z.object({
 });
 export type ChronicleLine = z.infer<typeof ChronicleLineSchema>;
 
+/** One branch of an interaction: what happened, and what it did. */
+export const InteractionResultSchema = z.object({
+  /** May contain {them}. Becomes both a memory and a log line. */
+  line: z.string().min(1),
+  dimensions: z.record(z.string(), z.number()).default({}),
+  stats: z.record(z.string(), z.number()).default({}),
+  /** Cents. Negative spends. */
+  money: z.number().int().default(0),
+  memoryWeight: z.number().int().min(0).max(100).default(20),
+});
+export type InteractionResult = z.infer<typeof InteractionResultSchema>;
+
+/**
+ * Something the player can do to one specific person.
+ *
+ * Every interaction has two outcomes rather than one fixed delta, chosen by how
+ * the relationship already stands. See packages/game/src/interact.ts.
+ */
+export const InteractionSchema = z.object({
+  id: z.string().min(1),
+  icon: z.string().min(1),
+  label: z.string().min(1),
+  /** Relationship kinds this applies to, or ["*"] for anyone. */
+  kinds: z.array(z.string()).min(1),
+  excludeKinds: z.array(z.string()).default([]),
+  minAge: z.number().int().min(0).default(0),
+  /** Cents. */
+  cost: z.number().int().min(0).default(0),
+  /** 0 means unlimited. */
+  timesPerYear: z.number().int().min(0).default(3),
+  /** Warmth below this and the option is offered but refused. */
+  minWarmth: z.number().int().min(0).max(100).default(0),
+  /** Odds of the warm branch before warmth is added in. */
+  baseWarmChance: z.number().min(0).max(1).default(0.35),
+  allowedInPrison: z.boolean().default(false),
+  /** Cutting someone off demotes them to an acquaintance. */
+  endsRelationship: z.boolean().default(false),
+  warm: InteractionResultSchema,
+  cool: InteractionResultSchema,
+});
+export type Interaction = z.infer<typeof InteractionSchema>;
+
 export const NpcTemplateFileSchema = z.object({
   id: z.string().min(1),
   kind: z.string().min(1),
@@ -106,6 +148,7 @@ export interface ContentPack {
   eventsById: Map<string, EventDefinition>;
   activities: Activity[];
   chronicle: ChronicleLine[];
+  interactions: Interaction[];
   npcTemplates: z.infer<typeof NpcTemplateFileSchema>[];
 }
 
@@ -129,6 +172,7 @@ export interface ContentSources {
   events: unknown[];
   activities: unknown;
   chronicle: unknown[];
+  interactions: unknown;
   npcTemplates: unknown;
 }
 
@@ -164,6 +208,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
   const events = parseGroups('events', sources.events, EventDefinitionSchema);
   const activities = parseArray('activities.json', sources.activities, ActivitySchema);
   const chronicle = parseGroups('chronicle', sources.chronicle, ChronicleLineSchema);
+  const interactions = parseArray('interactions.json', sources.interactions, InteractionSchema);
   const npcTemplates = parseArray('npc-templates.json', sources.npcTemplates, NpcTemplateFileSchema);
 
   const pack: ContentPack = {
@@ -178,6 +223,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
     eventsById: new Map(events.map((e) => [e.id, e])),
     activities,
     chronicle,
+    interactions,
     npcTemplates,
   };
 

@@ -154,6 +154,7 @@ export const advanceYear = (
   refreshDerived(state, config);
   // Diminishing returns reset with the year: training helps again in January.
   state.activityUsage = {};
+  state.interactionUsage = {};
 
   // 7. Death check, before events — a dead character gets no card.
   if (rng.chance(mortalityChance(state.character, config))) {

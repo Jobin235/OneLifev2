@@ -145,6 +145,20 @@ export const App = () => {
     if (result) setLifeAndRemember(result.life);
   }, [life, run, setLifeAndRemember]);
 
+  const onInteract = useCallback(
+    async (interactionId: string) => {
+      if (!life || !person) return;
+      const result = await run(() => api.interact(life.lifeId, person.npcId, interactionId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setPerson(result.person);
+      // The outcome is the point, so say it rather than leaving the meters to
+      // move silently.
+      show(result.line);
+    },
+    [life, person, run, setLifeAndRemember, show],
+  );
+
   const onAct = useCallback(
     async (activityId: string) => {
       if (!life) return;
@@ -238,7 +252,13 @@ export const App = () => {
 
       {tab === 'people' &&
         (person ? (
-          <PersonScreen person={person} onBack={() => setPerson(null)} />
+          <PersonScreen
+            person={person}
+            busy={busy}
+            decisionOpen={life.activeEvent !== null}
+            onBack={() => setPerson(null)}
+            onInteract={onInteract}
+          />
         ) : people ? (
           <PeopleScreen people={people} onOpen={openPerson} />
         ) : (

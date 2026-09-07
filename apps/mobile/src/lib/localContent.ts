@@ -35,4 +35,5 @@ export const localContent = (): ContentPack =>
     careers: all(careers),
     events: all(events),
     chronicle: all(chronicle),
+    interactions: one(root, 'interactions.json'),
   });
