@@ -5,6 +5,7 @@ import type {
   ActionCard,
   CountryOption,
   LifeView,
+  MarketView,
   MoneyView,
   PeopleView,
   PersonView,
@@ -27,6 +28,7 @@ import { JobsScreen } from './screens/JobsScreen';
 import { PrisonScreen } from './screens/PrisonScreen';
 import { RewindScreen } from './screens/RewindScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
+import { MarketScreen } from './screens/MarketScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
@@ -64,6 +66,8 @@ export const App = () => {
   const [money, setMoney] = useState<MoneyView | null>(null);
   const [prison, setPrison] = useState<PrisonView | null>(null);
   const [rewinds, setRewinds] = useState<RewindOption[]>([]);
+  const [market, setMarket] = useState<MarketView | null>(null);
+  const [showMarket, setShowMarket] = useState(false);
   const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
@@ -146,7 +150,11 @@ export const App = () => {
           setPrison(inside);
         }
         if (slot === 'activities') setActions((await api.actions(lifeId)).actions);
-        if (slot === 'assets') setMoney(await api.money(lifeId));
+        if (slot === 'assets') {
+          const [worth, board] = await Promise.all([api.money(lifeId), api.market(lifeId)]);
+          setMoney(worth);
+          setMarket(board);
+        }
       } catch {
         /* A stale sheet is better than a crash; the log stays authoritative. */
       }
@@ -267,6 +275,19 @@ export const App = () => {
         setPerson(null);
         setSlot(null);
       }
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onTrade = useCallback(
+    async (stockId: string, shares: number, sell: boolean) => {
+      if (!life) return;
+      const result = await run(() => api.trade(life.lifeId, stockId, shares, sell));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setMarket(result.market);
+      // The money screen's figures move too, and it is one tap away.
+      void api.money(life.lifeId).then(setMoney);
     },
     [life, run, setLifeAndRemember],
   );
@@ -426,15 +447,38 @@ export const App = () => {
           </Sheet>
         )}
 
-        {slot === 'assets' && (
-          <Sheet title="Assets" onClose={() => setSlot(null)}>
-            {money ? (
-              <MoneyScreen money={money} busy={busy} onBuy={onBuy} onSell={onSell} />
-            ) : (
-              <div className="spinner">…</div>
-            )}
-          </Sheet>
-        )}
+        {slot === 'assets' &&
+          (showMarket ? (
+            <Sheet
+              title="Stock Market"
+              onBack={() => setShowMarket(false)}
+              onClose={() => {
+                setShowMarket(false);
+                setSlot(null);
+              }}
+            >
+              {market ? (
+                <MarketScreen market={market} busy={busy} onTrade={onTrade} />
+              ) : (
+                <div className="spinner">…</div>
+              )}
+            </Sheet>
+          ) : (
+            <Sheet title="Assets" onClose={() => setSlot(null)}>
+              {money ? (
+                <MoneyScreen
+                  money={money}
+                  market={market}
+                  busy={busy}
+                  onBuy={onBuy}
+                  onSell={onSell}
+                  onOpenMarket={() => setShowMarket(true)}
+                />
+              ) : (
+                <div className="spinner">…</div>
+              )}
+            </Sheet>
+          ))}
       </main>
 
       <BottomNav

@@ -205,6 +205,19 @@ export const createLocalApi = (): Api => {
     },
 
     prison: async (lifeId) => game.prison(get(lifeId)) as never,
+
+    market: async (lifeId) => game.market(get(lifeId), indicators) as never,
+
+    trade: async (lifeId, stockId, shares, sell) => {
+      const state = sell
+        ? game.sellShares(get(lifeId), stockId, shares, indicators)
+        : game.buyShares(get(lifeId), stockId, shares, indicators);
+      save(state);
+      return {
+        life: lifeView(state, game.content) as never,
+        market: game.market(state, indicators) as never,
+      };
+    },
     school: async (lifeId) => schoolView(get(lifeId), game.content) as never,
     work: async (lifeId) => workView(get(lifeId), game.content) as never,
 

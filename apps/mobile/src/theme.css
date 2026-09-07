@@ -3185,3 +3185,200 @@ button {
   font-size: 17px;
   line-height: 1.2;
 }
+
+/* ---- the market ---- */
+
+.mk-basis {
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.mk-row {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.mk-row.open {
+  background: var(--app-bg);
+}
+
+.mk-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mk-ticker {
+  flex: none;
+  width: 42px;
+  padding: 3px 0;
+  border-radius: var(--r-cell);
+  background: var(--violet-tint);
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--violet-deep);
+  text-align: center;
+}
+
+.mk-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.mk-title {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.mk-sub {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mk-figures {
+  flex: none;
+  text-align: right;
+}
+
+.mk-price {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-change {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.mk-change.up {
+  color: var(--green-text);
+}
+
+.mk-change.down {
+  color: var(--coral);
+}
+
+.mk-detail {
+  padding: 2px 16px 13px;
+}
+
+.mk-risk {
+  display: grid;
+  grid-template-columns: 34px 1fr 54px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.mk-risk-label,
+.mk-risk-word {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--label);
+  text-transform: uppercase;
+}
+
+.mk-risk-word {
+  text-align: right;
+}
+
+.mk-risk-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: var(--track);
+  overflow: hidden;
+}
+
+.mk-risk-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+}
+
+.mk-risk-fill.low {
+  background: var(--green);
+}
+
+.mk-risk-fill.medium {
+  background: var(--amber);
+}
+
+.mk-risk-fill.high {
+  background: var(--coral);
+}
+
+.mk-gain {
+  margin: 0 0 9px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mk-gain.up {
+  color: var(--green-text);
+}
+
+.mk-gain.down {
+  color: var(--coral);
+}
+
+.mk-shares {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 9px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--body);
+}
+
+.mk-shares input {
+  width: 100%;
+  padding: 6px 9px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-cell);
+  background: var(--surface);
+  font-family: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.mk-cost {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--green-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.mk-buttons {
+  display: flex;
+  gap: 7px;
+}
+
+/* The market's way in, on the Assets sheet. */
+.mk-entry {
+  border: 2px solid var(--ink);
+  border-radius: var(--r-tile);
+  box-shadow: 0 3px 0 var(--ink);
+}

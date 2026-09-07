@@ -66,6 +66,23 @@ export const LifeStateSchema = z.object({
   chronicleLog: z.record(z.string(), z.number().int()),
   /** "npcId:interactionId" → times used this year. Cleared on age-up. */
   interactionUsage: z.record(z.string(), z.number().int().min(0)),
+  /**
+   * Shares held, and what was paid for them.
+   *
+   * Prices are not stored: they are a deterministic walk from the world's start,
+   * so the market needs no state of its own and two players in the same year see
+   * the same board.
+   */
+  portfolio: z
+    .array(
+      z.object({
+        stockId: z.string(),
+        shares: z.number().int().min(0),
+        /** Cost basis in cents, so a sale can report a real profit or loss. */
+        spent: z.number().int().min(0),
+      }),
+    )
+    .default([]),
   /** Ribbon ids earned by this line so far — what carries between lives. */
   ribbonsEarned: z.array(z.string()),
   /**

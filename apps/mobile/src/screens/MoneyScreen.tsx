@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { DebtLine, MoneyView, ShopEntry } from '../lib/api';
+import type { DebtLine, MarketView, MoneyView, ShopEntry } from '../lib/api';
 
 /**
  * Design 3C. Money in plain language — "what you own", "every month" — with a
@@ -7,14 +7,18 @@ import type { DebtLine, MoneyView, ShopEntry } from '../lib/api';
  */
 export const MoneyScreen = ({
   money,
+  market,
   busy,
   onBuy,
   onSell,
+  onOpenMarket,
 }: {
   money: MoneyView;
+  market: MarketView | null;
   busy: boolean;
   onBuy: (purchasableId: string, onFinance: boolean) => void;
   onSell: (assetId: string) => void;
+  onOpenMarket: () => void;
 }) => {
   /*
    * Open. The shop was behind a "+" and stayed shut, which on a screen the
@@ -73,6 +77,20 @@ export const MoneyScreen = ({
           </div>
         </section>
       )}
+
+      {/* The market is a place you go, the way BitLife puts it under Assets. */}
+      <button className="act-row mk-entry" onClick={onOpenMarket}>
+        <span className="act-icon">📈</span>
+        <span className="act-text">
+          <span className="act-label">Stock Market</span>
+          <span className="act-note">
+            {market && market.totalCents > 0
+              ? `${market.total} in shares · ${market.invested} put in`
+              : 'Buy shares in twelve companies'}
+          </span>
+        </span>
+        <span className="act-chev">›</span>
+      </button>
 
       {money.debts.length > 0 && (
         <section className="panel">

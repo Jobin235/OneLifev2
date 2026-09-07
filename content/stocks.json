@@ -1,0 +1,14 @@
+[
+  { "id": "meridian_grid",   "name": "Meridian Grid",        "ticker": "MGR", "sector": "utilities",  "risk": "low",    "basePrice": 4200,  "blurb": "Power lines and water. Dull on purpose." },
+  { "id": "hallow_foods",    "name": "Hallow Foods",         "ticker": "HLW", "sector": "staples",    "risk": "low",    "basePrice": 2850,  "blurb": "Tins, bread, nappies. People buy them in any weather." },
+  { "id": "castellan_banc",  "name": "Castellan Banc",       "ticker": "CBQ", "sector": "finance",    "risk": "medium", "basePrice": 7600,  "blurb": "Makes money when money is expensive." },
+  { "id": "ridgeway_rail",   "name": "Ridgeway Rail",        "ticker": "RGW", "sector": "industry",   "risk": "medium", "basePrice": 5100,  "blurb": "Freight. Moves whatever the country is buying." },
+  { "id": "bellhouse_homes", "name": "Bellhouse Homes",      "ticker": "BLH", "sector": "housing",    "risk": "medium", "basePrice": 3900,  "blurb": "Builds estates on the edge of town." },
+  { "id": "kestrel_air",     "name": "Kestrel Air",          "ticker": "KSA", "sector": "travel",     "risk": "high",   "basePrice": 1650,  "blurb": "Thin margins and a fuel bill." },
+  { "id": "orrery_systems",  "name": "Orrery Systems",       "ticker": "ORR", "sector": "tech",       "risk": "high",   "basePrice": 9400,  "blurb": "Nobody can explain what it does, including them." },
+  { "id": "vantage_labs",    "name": "Vantage Labs",         "ticker": "VNT", "sector": "biotech",    "risk": "high",   "basePrice": 2100,  "blurb": "One trial away from everything or nothing." },
+  { "id": "harlow_retail",   "name": "Harlow Retail",        "ticker": "HRL", "sector": "retail",     "risk": "medium", "basePrice": 3300,  "blurb": "Whatever people spend when they feel flush." },
+  { "id": "pellinore_oil",   "name": "Pellinore Energy",     "ticker": "PEL", "sector": "energy",     "risk": "medium", "basePrice": 6800,  "blurb": "Goes up when it costs you more to drive." },
+  { "id": "sable_defence",   "name": "Sable Defence",        "ticker": "SBL", "sector": "defence",    "risk": "medium", "basePrice": 8200,  "blurb": "Does better the worse things get." },
+  { "id": "argent_gold",     "name": "Argent Metals",        "ticker": "ARG", "sector": "commodity",  "risk": "low",    "basePrice": 5400,  "blurb": "What people buy when they stop trusting the rest." }
+]

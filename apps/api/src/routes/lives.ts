@@ -15,6 +15,11 @@ const NewLifeBody = z.object({
 });
 
 const RewindBody = z.object({ toAge: z.number().int().min(0) });
+const TradeBody = z.object({
+  stockId: z.string().min(1),
+  shares: z.number().int().min(1),
+  sell: z.boolean().default(false),
+});
 const ChooseBody = z.object({
   choiceId: z.string().min(1),
   /** What the player picked in the popup's dropdowns, keyed by select id. */
@@ -319,6 +324,28 @@ export const registerLifeRoutes = (
       });
       await lives.putHistory(userId, lifeId, forget(history, toAge));
       return payload;
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/market', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return game.market(state, await currentWorld());
+  });
+
+  app.post('/lives/:lifeId/trade', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { stockId, shares, sell } = TradeBody.parse(request.body);
+    const userId = userOf(request);
+    const world = await currentWorld();
+    try {
+      return await lives.withLock(userId, lifeId, (state) => {
+        if (sell) game.sellShares(state, stockId, shares, world);
+        else game.buyShares(state, stockId, shares, world);
+        return { life: lifeView(state, game.content), market: game.market(state, world) };
+      });
     } catch (error) {
       return reply.code(statusFor(error)).send({ error: messageFor(error) });
     }

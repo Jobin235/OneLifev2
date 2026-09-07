@@ -165,6 +165,28 @@ export const InteractionSchema = z.object({
 export type Interaction = z.infer<typeof InteractionSchema>;
 
 /** Something you can buy. Story assets live in code; these are the shop. */
+/**
+ * A company you can hold shares in.
+ *
+ * `sector` is what ties it to the world the game already simulates: a fuel
+ * shock lifts energy and hurts travel, rates lift finance and hurt housing. The
+ * alternative was a private die roll per stock, which is what BitLife does and
+ * which makes the market unreadable — there is no reason to follow the news if
+ * the news does not move anything.
+ */
+export const StockSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  ticker: z.string().min(1).max(5),
+  sector: z.string().min(1),
+  /** Decides volatility, and whether it can go to nearly nothing. */
+  risk: z.enum(['low', 'medium', 'high']),
+  /** Cents per share at the start of the world. */
+  basePrice: z.number().int().min(1),
+  blurb: z.string().min(1),
+});
+export type Stock = z.infer<typeof StockSchema>;
+
 export const PurchasableSchema = z.object({
   id: z.string().min(1),
   kind: z.enum(['house', 'apartment', 'car', 'luxury', 'collectible', 'investment']),
@@ -204,6 +226,7 @@ export interface ContentPack {
   chronicle: ChronicleLine[];
   interactions: Interaction[];
   purchasables: Purchasable[];
+  stocks: Stock[];
   npcTemplates: z.infer<typeof NpcTemplateFileSchema>[];
 }
 
@@ -229,6 +252,7 @@ export interface ContentSources {
   chronicle: unknown[];
   interactions: unknown;
   purchasables: unknown;
+  stocks: unknown;
   npcTemplates: unknown;
 }
 
@@ -266,6 +290,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
   const chronicle = parseGroups('chronicle', sources.chronicle, ChronicleLineSchema);
   const interactions = parseArray('interactions.json', sources.interactions, InteractionSchema);
   const purchasables = parseArray('assets.json', sources.purchasables, PurchasableSchema);
+  const stocks = parseArray('stocks.json', sources.stocks, StockSchema);
   const npcTemplates = parseArray('npc-templates.json', sources.npcTemplates, NpcTemplateFileSchema);
 
   const pack: ContentPack = {
@@ -282,6 +307,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
     chronicle,
     interactions,
     purchasables,
+    stocks,
     npcTemplates,
   };
 

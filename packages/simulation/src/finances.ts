@@ -371,7 +371,7 @@ export const netWorth = (state: LifeState): number => {
   const businessEquity = state.businesses
     .filter((b) => !b.closed)
     .reduce((sum, b) => sum + Math.round(((b.annualRevenue - b.annualCosts) * 3 * b.equity) / 100), 0);
-  return f.cash + f.savings + assetEquity + businessEquity - f.debt;
+  return f.cash + f.savings + f.investments + assetEquity + businessEquity - f.debt;
 };
 
 export const monthlyLines = (

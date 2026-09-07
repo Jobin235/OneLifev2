@@ -48,5 +48,6 @@ export const loadContent = (root: string = defaultContentRoot()): ContentPack =>
     chronicle: readDirectory(join(root, 'chronicle')),
     interactions: readJson(join(root, 'interactions.json')),
     purchasables: readJson(join(root, 'assets.json')),
+    stocks: readJson(join(root, 'stocks.json')),
     npcTemplates: readJson(join(root, 'npc-templates.json')),
   });

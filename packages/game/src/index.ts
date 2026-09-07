@@ -8,3 +8,4 @@ export * from './shop.js';
 export * from './ribbons.js';
 export * from './jobs.js';
 export * from './timemachine.js';
+export * from './stocks.js';

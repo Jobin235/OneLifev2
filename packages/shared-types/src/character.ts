@@ -64,6 +64,15 @@ export const FinancesSchema = z.object({
   /** Liquid money. Design 3C shows one "what you're worth" figure built from these. */
   cash: MoneySchema,
   savings: MoneySchema,
+  /**
+   * What the share portfolio was worth at the last valuation.
+   *
+   * Written by the market and read by net worth, because prices need the
+   * content pack and the world, and the finance layer has neither. It is also
+   * the honest figure: what anybody actually knows a portfolio is worth is what
+   * it was worth the last time they looked.
+   */
+  investments: MoneySchema.default(0),
   /** Total owed. Derived from `debts`; never written directly. */
   debt: MoneySchema,
   debts: z.array(DebtSchema).default([]),

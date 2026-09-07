@@ -145,6 +145,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     finances: {
       cash: 0,
       savings: 0,
+      investments: 0,
       debt: 0,
     debts: [],
       salary: 0,
@@ -303,6 +304,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     activityUsage: {},
     chronicleLog: {},
     interactionUsage: {},
+    portfolio: [],
     ribbonsEarned: [],
     fated: [],
     yearsOutOfWork: 0,

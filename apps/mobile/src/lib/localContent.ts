@@ -37,4 +37,5 @@ export const localContent = (): ContentPack =>
     chronicle: all(chronicle),
     interactions: one(root, 'interactions.json'),
     purchasables: one(root, 'assets.json'),
+    stocks: one(root, 'stocks.json'),
   });

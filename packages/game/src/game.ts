@@ -31,6 +31,7 @@ import {
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import { advanceYear, applyDeferred, pushHistory, type AgeUpResult } from './ageup.js';
 import { toAncestor } from './death.js';
+import { buyShares, marketView, sellShares } from './stocks.js';
 
 export interface GameOptions {
   /**
@@ -411,6 +412,29 @@ export class Game {
 
   sell(state: LifeState, assetId: string) {
     return sell(state, assetId, this.config);
+  }
+
+  /** The market, what it costs, and what you are holding. */
+  market(state: LifeState, world: WorldIndicators = NEUTRAL_INDICATORS) {
+    return marketView(state, this.content, world);
+  }
+
+  buyShares(
+    state: LifeState,
+    stockId: string,
+    shares: number,
+    world: WorldIndicators = NEUTRAL_INDICATORS,
+  ) {
+    return buyShares(state, this.content, world, this.config, stockId, shares);
+  }
+
+  sellShares(
+    state: LifeState,
+    stockId: string,
+    shares: number,
+    world: WorldIndicators = NEUTRAL_INDICATORS,
+  ) {
+    return sellShares(state, this.content, world, this.config, stockId, shares);
   }
 
   /** The sentence, how it is going, and what there is to do with the years. */

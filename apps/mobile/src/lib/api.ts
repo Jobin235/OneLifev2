@@ -231,6 +231,31 @@ export interface RewindOption {
   note: string;
 }
 
+export interface StockRow {
+  id: string;
+  name: string;
+  ticker: string;
+  blurb: string;
+  risk: 'low' | 'medium' | 'high';
+  riskBar: number;
+  price: string;
+  priceCents: number;
+  change: string;
+  up: boolean;
+  shares: number;
+  holdingValue: string;
+  gain: string;
+  gainUp: boolean;
+  affordable: boolean;
+}
+
+export interface MarketView {
+  rows: StockRow[];
+  total: string;
+  totalCents: number;
+  invested: string;
+}
+
 export interface PrisonView {
   facility: string;
   offence: string;
@@ -396,6 +421,13 @@ export interface Api {
   /** Null when the character is not enrolled anywhere. */
   school(lifeId: string): Promise<SchoolView | null>;
   prison(lifeId: string): Promise<PrisonView | null>;
+  market(lifeId: string): Promise<MarketView>;
+  trade(
+    lifeId: string,
+    stockId: string,
+    shares: number,
+    sell: boolean,
+  ): Promise<{ life: LifeView; market: MarketView }>;
   /** The years the Time Machine can reach. Empty means it cannot help. */
   rewindOptions(lifeId: string): Promise<RewindOption[]>;
   rewind(lifeId: string, toAge: number): Promise<LifeView>;
@@ -473,6 +505,14 @@ export const httpApi: Api = {
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),
   prison: (lifeId: string) =>
     request<PrisonView>(`/lives/${lifeId}/prison`).catch(() => null),
+
+  market: (lifeId: string) => request<MarketView>(`/lives/${lifeId}/market`),
+
+  trade: (lifeId: string, stockId: string, shares: number, sell: boolean) =>
+    request<{ life: LifeView; market: MarketView }>(`/lives/${lifeId}/trade`, {
+      method: 'POST',
+      body: JSON.stringify({ stockId, shares, sell }),
+    }),
 
   rewindOptions: (lifeId: string) =>
     request<{ options: RewindOption[] }>(`/lives/${lifeId}/rewind`)
