@@ -33,6 +33,7 @@ import { advanceYear, applyDeferred, pushHistory, type AgeUpResult } from './age
 import { toAncestor } from './death.js';
 import { buyShares, marketView, sellShares } from './stocks.js';
 import { amenitiesFor, manageProperty, propertiesView } from './landlord.js';
+import { audition, fameView } from './fame.js';
 
 export interface GameOptions {
   /**
@@ -449,6 +450,16 @@ export class Game {
     world: WorldIndicators = NEUTRAL_INDICATORS,
   ) {
     return sellShares(state, this.content, world, this.config, stockId, shares);
+  }
+
+  /** Who knows who you are, and what there is to be seen in. */
+  fame(state: LifeState) {
+    return fameView(state, this.content);
+  }
+
+  /** Go up for a part. Raises the audition rather than deciding anything. */
+  audition(state: LifeState, trackId: string) {
+    return audition(state, trackId, this.content, this.config);
   }
 
   /** The sentence, how it is going, and what there is to do with the years. */

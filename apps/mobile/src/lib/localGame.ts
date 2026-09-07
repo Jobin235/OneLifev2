@@ -208,6 +208,14 @@ export const createLocalApi = (): Api => {
 
     market: async (lifeId) => game.market(get(lifeId), indicators) as never,
 
+    fame: async (lifeId) => game.fame(get(lifeId)) as never,
+
+    audition: async (lifeId, trackId) => {
+      const state = game.audition(get(lifeId), trackId);
+      save(state);
+      return { life: lifeView(state, game.content) as never };
+    },
+
     properties: async (lifeId) => game.properties(get(lifeId)) as never,
 
     amenities: async (lifeId, assetId) => game.amenities(get(lifeId), assetId) as never,

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "audition",
+    "version": 1,
+    "category": "career",
+    "card": { "icon": "🎬", "label": "AUDITION", "tint": "#F6EEFA", "color": "#6B3FA0" },
+    "weightClass": "major",
+    "priority": 97,
+    "minAge": 10,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "In the room",
+    "body": "You are up for {flag.audition_part}. There are more of you than there are parts, and the people behind the table have been here since nine.",
+    "question": "How do you play it?",
+    "choices": [
+      {
+        "id": "safe",
+        "label": "Do it the way they asked",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.audition_result_title}",
+            "text": "{flag.audition_result}",
+            "historyLine": "{flag.audition_history}",
+            "effects": [{ "op": "audition_effort", "effort": "safe" }]
+          }
+        ]
+      },
+      {
+        "id": "bold",
+        "label": "Do something they will remember",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.audition_result_title}",
+            "text": "{flag.audition_result}",
+            "historyLine": "{flag.audition_history}",
+            "effects": [{ "op": "audition_effort", "effort": "bold" }]
+          }
+        ]
+      },
+      {
+        "id": "leave",
+        "label": "Leave before they call you",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You went home",
+            "text": "You sat in the corridor with the others for two hours, and then you did not.",
+            "historyLine": "You walked out of an audition before they called your name.",
+            "effects": [{ "op": "stat", "stat": "happiness", "delta": -4 }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 900
+  }
+]

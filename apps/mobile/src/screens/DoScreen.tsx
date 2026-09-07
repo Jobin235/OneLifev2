@@ -33,12 +33,17 @@ export const DoScreen = ({
   busy,
   decisionOpen,
   onAct,
+  fameLine,
+  onOpenFame,
 }: {
   actions: ActionCard[];
   age: number;
   busy: boolean;
   decisionOpen: boolean;
   onAct: (activityId: string) => void;
+  /** One line about who knows you, for the row that opens the Fame screen. */
+  fameLine: string | null;
+  onOpenFame: () => void;
 }) => {
   /*
    * Everything you can do first, then everything you cannot — within each
@@ -59,6 +64,23 @@ export const DoScreen = ({
           <span>👆</span>
           <span>Something is waiting on your answer. Decide first.</span>
         </div>
+      )}
+
+      {/*
+        Fame is a screen, not an activity: casting is a list of doors rather
+        than a thing you tap. It sits at the top of this sheet because that is
+        where BitLife keeps it and because the one activity that feeds it,
+        posting, is in the list below.
+      */}
+      {fameLine && (
+        <button className="act-row" disabled={busy} onClick={onOpenFame}>
+          <span className="act-icon">🌟</span>
+          <span className="act-text">
+            <span className="act-label">Fame</span>
+            <span className="act-note">{fameLine}</span>
+          </span>
+          <span className="act-chev">›</span>
+        </button>
       )}
 
       {grouped.map(({ group, items }) => (

@@ -1170,6 +1170,23 @@
     }
   },
   {
+    "id": "post_online",
+    "icon": "📱",
+    "label": "Post online",
+    "group": "fun_and_trouble",
+    "minAge": 13,
+    "cost": 0,
+    "note": "keep an audience",
+    "effects": [
+      {
+        "op": "post_online"
+      }
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect",
+    "silent": true
+  },
+  {
     "id": "behave_yourself",
     "icon": "🙂",
     "label": "Keep your head down",

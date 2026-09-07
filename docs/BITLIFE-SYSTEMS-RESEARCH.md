@@ -104,9 +104,27 @@ Sources: [The Gamer](https://www.thegamer.com/bitlife-become-famous-how-to-guide
   twice as much.
 - **A famous spouse roughly doubles your own fame.**
 
-**Our version.** The three-way opinion model already exists and almost nothing
-feeds it. This is careers, auditions, posting, and making fame open doors that
-are otherwise shut.
+**Our version.** Built. `packages/game/src/fame.ts`, `content/careers/fame.json`,
+`content/events/audition.json`, and the Fame screen at the top of Activities.
+
+Two things diverge from the research, deliberately:
+
+- **There is no Looks stat here.** Our five are health, happiness, smarts,
+  fitness and charm, which is a decision the game made long before this system
+  and which the pinned stats bar renders. "The camera likes you" is read as
+  `charm * 0.7 + fitness * 0.3` instead, and the two tracks the guides gate on
+  Looks are gated on charm (acting 55) and on charm plus fitness (modelling
+  68/60).
+- **You do not apply to be an actor.** Acting, music and modelling are pulled
+  out of the ordinary job listing entirely and reached only through auditions:
+  three a year, odds stated on the button, worse odds the bigger the
+  profession (27% for acting against 31% for modelling, for the same person).
+  Most of them say no, which is the texture the professions actually have and
+  which a job listing cannot express.
+
+Posting is one activity a year from 13. The run matters more than the size of
+the account, a quiet year costs 12% of the following, and the fame line at
+300,000 is BitLife's.
 
 ## Organised crime
 

@@ -12,6 +12,8 @@
       { "id": "first_div", "title": "First division", "salary": 31000000, "minExperience": 3, "minPerformance": 78 },
       { "id": "national", "title": "National team", "salary": 62000000, "minExperience": 6, "minPerformance": 92 }
     ],
+    "fameGain": 10,
+    "knownFor": "sport",
     "retiresAtAge": 35,
     "exitTrackIds": ["coaching", "punditry"]
   },
@@ -42,6 +44,8 @@
       { "id": "tv_pundit", "title": "TV pundit", "salary": 12000000, "minExperience": 3, "minPerformance": 65 },
       { "id": "lead_pundit", "title": "Lead pundit", "salary": 24000000, "minExperience": 8, "minPerformance": 80 }
     ],
+    "fameGain": 5,
+    "knownFor": "being on television",
     "retiresAtAge": null,
     "exitTrackIds": []
   }

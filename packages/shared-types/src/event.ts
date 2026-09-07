@@ -154,6 +154,14 @@ export const EffectSchema = z.discriminatedUnion('op', [
     fine: z.number().int().min(0).default(0),
     facility: z.string().default('the county jail'),
   }),
+  /**
+   * A year spent posting. The size of the account, the streak and how the
+   * character comes across decide what it does; the op carries nothing because
+   * none of that belongs to the activity row that raised it.
+   */
+  z.object({ op: z.literal('post_online') }),
+  /** Answers the audition currently on screen: play it safe, or go for it. */
+  z.object({ op: z.literal('audition_effort'), effort: z.enum(['safe', 'bold']) }),
   /** Picks one of the three firms on the charge sheet. */
   z.object({ op: z.literal('hire_lawyer'), tier: z.number().int().min(0).max(2) }),
   /** Picks a tenant off the applicant list, or pays to check them first. */

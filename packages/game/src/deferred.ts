@@ -1,13 +1,14 @@
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
 import type { CareerTrack, EducationStage, Effect, LifeState } from '@lineage/shared-types';
-import { makeId, promote, type Rng } from '@lineage/simulation';
+import { makeId, promote, pushHistory, type Rng } from '@lineage/simulation';
 import { bearChild, spawnNpc } from '@lineage/npc-engine';
 import { settleInterview } from './interview.js';
 import { settleTreatment } from './health.js';
 import { openLoveInterest, settleLoveInterest } from './love.js';
 import { openCharges, settleLawyer, settlePlea } from './justice.js';
 import { settleLetting } from './landlord.js';
+import { postOnline, settleAudition } from './fame.js';
 import { hireInto } from './jobs.js';
 import { ASSET_TEMPLATES, BUSINESS_TEMPLATES, businessNameFor } from './templates.js';
 
@@ -127,6 +128,30 @@ export const applyDeferred = (
 
       case 'hire_lawyer': {
         settleLawyer(state, effect.tier, content);
+        break;
+      }
+
+      case 'post_online': {
+        const { line } = postOnline(state, rng);
+        pushHistory(state, 'fame', '📱', line, 14);
+        break;
+      }
+
+      case 'audition_effort': {
+        settleAudition(state, effect.effort, content, rng, (trackId) => {
+          const track = content.careersById.get(trackId);
+          if (!track) return;
+          hireInto(
+            state,
+            trackId,
+            employerNameFor(track.industry, rng),
+            Math.round(
+              track.rungs[0]!.salary *
+                (content.countriesById.get(state.character.countryId)?.wageMultiplier ?? 1),
+            ),
+            content,
+          );
+        });
         break;
       }
 
@@ -256,6 +281,11 @@ const EMPLOYER_WORDS: Record<string, string[]> = {
   'Public service': ['The County', 'City Hall', 'the Force', 'the Service'],
   Sport: ['Cascade FC', 'Northside Athletic', 'Rivermouth United'],
   Media: ['Channel Nine', 'The Daily', 'Longwave Radio'],
+  Screen: ['Vardon Pictures', 'Third Floor Films', 'Callow Bros.', 'Nightjar Studios'],
+  Music: ['Ashgrove Records', 'Tin Church', 'Vellum Recordings'],
+  Fashion: ['Ines Marchetti', 'The Sable Agency', 'Corvid Studio'],
+  Publishing: ['Marchmont & Sons', 'Little Fen Press', 'Ravensworth Books'],
+  Games: ['Ninefold Games', 'Blackwater Interactive', 'Tinderbox Studio'],
   Finance: ['Northgate Bank', 'Ashwell & Co.', 'Pellinore Capital', 'Braddock Mutual'],
   Business: ['Halloway Group', 'Trent & Mowbray', 'Fenwick Holdings'],
   Hospitality: ['The Hollow Oak', 'Bellamy House', 'The Quarry Kitchen'],

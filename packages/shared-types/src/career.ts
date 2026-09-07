@@ -25,6 +25,22 @@ export const CareerTrackSchema = z.object({
   retiresAtAge: z.number().int().nullable().default(null),
   /** Where a retired athlete or executive can go next. */
   exitTrackIds: z.array(z.string()).default([]),
+  /**
+   * A ladder the public can see you on.
+   *
+   * How many people know your name each year you stay on it, roughly. Zero for
+   * the ordinary jobs, which is nearly all of them: an accountant is not
+   * famous, and fame that arrives from a career nobody watches is the reason
+   * BitLife ties it to a specific short list of professions.
+   */
+  fameGain: z.number().int().min(0).default(0),
+  /** What the public would say you are, if they said anything. */
+  knownFor: z.string().nullable().default(null),
+  /**
+   * Auditions rather than applications: you cannot apply to be an actor, you go
+   * up for parts and are mostly turned down.
+   */
+  auditions: z.boolean().default(false),
 });
 export type CareerTrack = z.infer<typeof CareerTrackSchema>;
 

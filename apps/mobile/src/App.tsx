@@ -9,6 +9,7 @@ import type {
   MarketView,
   MoneyView,
   PropertyRow,
+  FameView,
   PeopleView,
   PersonView,
   Opening,
@@ -32,6 +33,7 @@ import { RewindScreen } from './screens/RewindScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
 import { MarketScreen } from './screens/MarketScreen';
 import { PropertyScreen } from './screens/PropertyScreen';
+import { FameScreen } from './screens/FameScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
@@ -73,6 +75,8 @@ export const App = () => {
   const [showMarket, setShowMarket] = useState(false);
   const [properties, setProperties] = useState<PropertyRow[]>([]);
   const [showProperties, setShowProperties] = useState(false);
+  const [fame, setFame] = useState<FameView | null>(null);
+  const [showFame, setShowFame] = useState(false);
   const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
@@ -154,7 +158,11 @@ export const App = () => {
           setJobs(market);
           setPrison(inside);
         }
-        if (slot === 'activities') setActions((await api.actions(lifeId)).actions);
+        if (slot === 'activities') {
+          const [rows, known] = await Promise.all([api.actions(lifeId), api.fame(lifeId)]);
+          setActions(rows.actions);
+          setFame(known);
+        }
         if (slot === 'assets') {
           const [worth, board, owned] = await Promise.all([
             api.money(lifeId),
@@ -316,6 +324,19 @@ export const App = () => {
     [life, run, setLifeAndRemember],
   );
 
+  const onAudition = useCallback(
+    async (trackId: string) => {
+      if (!life) return;
+      const result = await run(() => api.audition(life.lifeId, trackId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      // The audition itself is a popup; get out of its way.
+      setShowFame(false);
+      setSlot(null);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
   const loadAmenities = useCallback(
     async (assetId: string): Promise<AmenityRow[]> =>
       life ? await api.amenities(life.lifeId, assetId) : [],
@@ -455,21 +476,40 @@ export const App = () => {
           </Sheet>
         )}
 
-        {slot === 'activities' && (
-          <Sheet title="Activities" onClose={() => setSlot(null)}>
-            {actions ? (
-              <DoScreen
-                actions={actions}
-                age={life.age}
+        {slot === 'activities' &&
+          (showFame && fame ? (
+            <Sheet
+              title="Fame"
+              onBack={() => setShowFame(false)}
+              onClose={() => {
+                setShowFame(false);
+                setSlot(null);
+              }}
+            >
+              <FameScreen
+                fame={fame}
                 busy={busy}
                 decisionOpen={decisionOpen}
-                onAct={onAct}
+                onAudition={onAudition}
               />
-            ) : (
-              <div className="spinner">…</div>
-            )}
-          </Sheet>
-        )}
+            </Sheet>
+          ) : (
+            <Sheet title="Activities" onClose={() => setSlot(null)}>
+              {actions ? (
+                <DoScreen
+                  actions={actions}
+                  age={life.age}
+                  busy={busy}
+                  decisionOpen={decisionOpen}
+                  onAct={onAct}
+                  fameLine={fame && life.age >= 10 ? fame.line : null}
+                  onOpenFame={() => setShowFame(true)}
+                />
+              ) : (
+                <div className="spinner">…</div>
+              )}
+            </Sheet>
+          ))}
 
         {timeMachine && (
           <Sheet title="Time Machine" onClose={() => setTimeMachine(false)}>

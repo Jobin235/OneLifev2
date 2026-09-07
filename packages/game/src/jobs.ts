@@ -72,7 +72,7 @@ const strengthFor = (state: LifeState, track: CareerTrack): number => {
   return margins.reduce((sum, m) => sum + m, 0) / margins.length;
 };
 
-const requirementsOf = (state: LifeState, track: CareerTrack): { lines: string[]; missing: string[] } => {
+export const requirementsOf = (state: LifeState, track: CareerTrack): { lines: string[]; missing: string[] } => {
   const lines: string[] = [];
   const missing: string[] = [];
 
@@ -110,6 +110,13 @@ export const openings = (state: LifeState, content: ContentPack): Opening[] => {
   const wage = content.countriesById.get(state.character.countryId)?.wageMultiplier ?? 1;
 
   const reachable = content.careers.filter((track) => {
+    /*
+     * Nobody advertises for a movie star. The tracks you have to be seen for
+     * live on the Fame screen instead, behind an audition — putting them in the
+     * ordinary listing would make becoming an actor a matter of clicking apply
+     * on a Tuesday, which is the one thing the profession is famously not.
+     */
+    if (track.auditions) return false;
     if (state.career.closedTrackIds.includes(track.id)) return false;
     if (track.id === state.career.current?.trackId) return false;
     if (track.countryIds.length > 0 && !track.countryIds.includes(state.character.countryId)) {

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "acting",
+    "label": "Acting",
+    "industry": "Screen",
+    "requiredEducation": "none",
+    "requiredStats": { "charm": 55 },
+    "auditions": true,
+    "fameGain": 9,
+    "knownFor": "acting",
+    "rungs": [
+      { "id": "acting_0", "title": "Extra", "salary": 1400000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "acting_1", "title": "Bit part actor", "salary": 3200000, "minExperience": 2, "minPerformance": 40 },
+      { "id": "acting_2", "title": "Supporting actor", "salary": 9500000, "minExperience": 5, "minPerformance": 58 },
+      { "id": "acting_3", "title": "Lead actor", "salary": 42000000, "minExperience": 9, "minPerformance": 72 },
+      { "id": "acting_4", "title": "Movie star", "salary": 180000000, "minExperience": 14, "minPerformance": 84 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["punditry"]
+  },
+  {
+    "id": "music",
+    "label": "Music",
+    "industry": "Music",
+    "requiredEducation": "none",
+    "requiredStats": {},
+    "auditions": true,
+    "fameGain": 8,
+    "knownFor": "music",
+    "rungs": [
+      { "id": "music_0", "title": "Pub circuit musician", "salary": 900000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "music_1", "title": "Session musician", "salary": 3400000, "minExperience": 2, "minPerformance": 42 },
+      { "id": "music_2", "title": "Signed artist", "salary": 12000000, "minExperience": 5, "minPerformance": 60 },
+      { "id": "music_3", "title": "Touring headliner", "salary": 56000000, "minExperience": 9, "minPerformance": 74 },
+      { "id": "music_4", "title": "Stadium act", "salary": 240000000, "minExperience": 15, "minPerformance": 86 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["punditry"]
+  },
+  {
+    "id": "modelling",
+    "label": "Modelling",
+    "industry": "Fashion",
+    "requiredEducation": "none",
+    "requiredStats": { "charm": 68, "fitness": 60 },
+    "auditions": true,
+    "fameGain": 7,
+    "knownFor": "modelling",
+    "rungs": [
+      { "id": "modelling_0", "title": "Catalogue model", "salary": 2200000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "modelling_1", "title": "Runway model", "salary": 6400000, "minExperience": 2, "minPerformance": 45 },
+      { "id": "modelling_2", "title": "Campaign face", "salary": 26000000, "minExperience": 5, "minPerformance": 64 },
+      { "id": "modelling_3", "title": "Supermodel", "salary": 95000000, "minExperience": 9, "minPerformance": 80 }
+    ],
+    "retiresAtAge": 42,
+    "exitTrackIds": ["beauty", "acting"]
+  },
+  {
+    "id": "writing",
+    "label": "Writing",
+    "industry": "Publishing",
+    "requiredEducation": "secondary",
+    "requiredStats": { "smarts": 58 },
+    "auditions": false,
+    "fameGain": 4,
+    "knownFor": "writing",
+    "rungs": [
+      { "id": "writing_0", "title": "Copywriter", "salary": 3100000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "writing_1", "title": "Staff writer", "salary": 4800000, "minExperience": 3, "minPerformance": 45 },
+      { "id": "writing_2", "title": "Published author", "salary": 9200000, "minExperience": 7, "minPerformance": 62 },
+      { "id": "writing_3", "title": "Bestselling author", "salary": 48000000, "minExperience": 12, "minPerformance": 80 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["journalism"]
+  },
+  {
+    "id": "influencing",
+    "label": "Social media",
+    "industry": "Media",
+    "requiredEducation": "none",
+    "requiredStats": { "charm": 55 },
+    "auditions": false,
+    "fameGain": 6,
+    "knownFor": "posting",
+    "rungs": [
+      { "id": "influencing_0", "title": "Content creator", "salary": 800000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "influencing_1", "title": "Sponsored creator", "salary": 4200000, "minExperience": 2, "minPerformance": 44 },
+      { "id": "influencing_2", "title": "Full-time influencer", "salary": 16000000, "minExperience": 4, "minPerformance": 62 },
+      { "id": "influencing_3", "title": "Media personality", "salary": 62000000, "minExperience": 8, "minPerformance": 78 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["punditry", "marketing"]
+  },
+  {
+    "id": "games_dev",
+    "label": "Games",
+    "industry": "Games",
+    "requiredEducation": "secondary",
+    "requiredStats": { "smarts": 62 },
+    "auditions": false,
+    "fameGain": 3,
+    "knownFor": "making games",
+    "rungs": [
+      { "id": "games_dev_0", "title": "QA tester", "salary": 3200000, "minExperience": 0, "minPerformance": 0 },
+      { "id": "games_dev_1", "title": "Gameplay programmer", "salary": 7400000, "minExperience": 3, "minPerformance": 48 },
+      { "id": "games_dev_2", "title": "Lead designer", "salary": 14500000, "minExperience": 7, "minPerformance": 66 },
+      { "id": "games_dev_3", "title": "Studio head", "salary": 52000000, "minExperience": 12, "minPerformance": 82 }
+    ],
+    "retiresAtAge": null,
+    "exitTrackIds": ["software", "consulting"]
+  }
+]

@@ -33,6 +33,7 @@ import { inheritanceFrom, runNpcNews } from './npcnews.js';
 import { openSymptom } from './health.js';
 import { reportMarketYear } from './stocks.js';
 import { advanceProperties } from './landlord.js';
+import { advanceFameYear } from './fame.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -226,6 +227,7 @@ export const advanceYear = (
   driftAssetValues(state, rng);
   advanceProperties(state, rng);
   reportMarketYear(state, content, world);
+  advanceFameYear(state, content, rng);
   serveTime(state);
 
   // 4. Health, then money.

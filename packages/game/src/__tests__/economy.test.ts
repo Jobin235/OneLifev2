@@ -168,7 +168,13 @@ describe('a job is taken, not handed out', () => {
   it('says which job and which company, hired or not', () => {
     let hired = 0;
     let denied = 0;
-    for (let i = 0; i < 12; i++) {
+    /*
+     * Wide, because most seeds skip: at twenty-two a lot of characters are
+     * still enrolled, inside, or looking at a shortlist they do not qualify
+     * for. Being turned down is roughly one application in six, so a dozen
+     * seeds is not enough to see one reliably.
+     */
+    for (let i = 0; i < 40; i++) {
       const state = readyToWork(`iv-out-${i}`);
       if (state.character.record.incarceration || state.education.current) continue;
       const opening = game.openings(state).find((o) => o.qualified);

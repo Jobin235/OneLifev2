@@ -471,7 +471,9 @@
     "retiresAtAge": null,
     "exitTrackIds": [
       "punditry"
-    ]
+    ],
+    "fameGain": 4,
+    "knownFor": "reporting"
   },
   {
     "id": "photography",
