@@ -85,6 +85,10 @@ export const spawnNpc = (input: SpawnInput): { npc: Npc; relationship: Relations
     wealth: template.detailed ? clampStat(40 + rng.int(-25, 35)) : null,
     isBloodline: false,
     parentNpcIds: [],
+    ailments: [],
+    retired: false,
+    spouseNpcId: null,
+    employerName: null,
   };
 
   const dimensions: RelationshipDimensions = { ...DEFAULT_DIMENSIONS };
@@ -156,6 +160,10 @@ export const bearChild = (
     wealth: null,
     isBloodline: true,
     parentNpcIds: partnerNpc ? [partnerNpc.id] : [],
+    ailments: [],
+    retired: false,
+    spouseNpcId: null,
+    employerName: null,
   };
 
   const relationship: Relationship = {

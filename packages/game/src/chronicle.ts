@@ -114,18 +114,34 @@ const eligible = (line: ChronicleLine, state: LifeState, tags: Set<string>): boo
 };
 
 /**
- * How full a year should feel. An ordinary adult year gets a couple of lines; a
- * year at school or in a first job gets more, because more is happening to you
- * and you are noticing more of it.
+ * How full a year should feel, and therefore how much padding it still needs.
+ *
+ * This is a deficit, not a quota. The world now writes its own news — your
+ * sister's promotion, your father's diagnosis — and events write theirs, so a
+ * year that already has five things in it does not want four more. Chronicle
+ * lines are the filler that stops a quiet year reading as a bug, and nothing
+ * more.
  */
 const linesThisYear = (state: LifeState, tags: Set<string>, rng: Rng): number => {
-  let n = 2;
-  if (tags.has('enrolled')) n += 1;
-  if (state.character.age <= 12) n += 1;
-  if (tags.has('incarcerated')) n -= 1;
-  if (state.character.age >= 75) n -= 1;
-  return Math.max(1, Math.min(4, n + (rng.chance(0.35) ? 1 : 0)));
+  let target = 4;
+  if (tags.has('enrolled')) target += 1;
+  if (state.character.age <= 12) target += 1;
+  if (tags.has('incarcerated')) target -= 1;
+  if (state.character.age >= 75) target -= 1;
+  if (rng.chance(0.35)) target += 1;
+
+  const already = state.currentYearEntryIds.length;
+  return Math.max(0, Math.min(4, target - already));
 };
+
+/**
+ * Two lines about the same thing in one year read as a bug even when both are
+ * true — "A teacher decided you were clever" next to "A teacher took against
+ * you" is the game contradicting itself in consecutive sentences. The id's
+ * stem is the theme (`sc_teacher_liked` and `sc_teacher_hated` are both
+ * `sc_teacher`), which costs nothing to author and catches exactly these pairs.
+ */
+const themeOf = (line: ChronicleLine): string => line.id.replace(/_[^_]+$/, '');
 
 /**
  * Appends this year's texture to the log.
@@ -150,7 +166,9 @@ export const chronicleYear = (
   if (pool.length === 0) return;
 
   const wanted = linesThisYear(state, tags, rng);
+  if (wanted === 0) return;
   const chosen: ChronicleLine[] = [];
+  const themes = new Set<string>();
   const remaining = [...pool];
 
   /*
@@ -177,7 +195,13 @@ export const chronicleYear = (
       if (roll <= 0) break;
     }
     const [picked] = remaining.splice(index, 1);
-    if (picked) chosen.push(picked);
+    if (!picked) continue;
+    if (themes.has(themeOf(picked))) {
+      i -= 1;
+      continue;
+    }
+    themes.add(themeOf(picked));
+    chosen.push(picked);
   }
 
   for (const line of chosen) {

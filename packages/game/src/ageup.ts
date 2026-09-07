@@ -4,7 +4,7 @@ import { chronicleYear } from './chronicle.js';
 export { pushHistory } from '@lineage/simulation';
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
-import type { EventInstance, LifeState, WorldIndicators } from '@lineage/shared-types';
+import type { EventInstance, LifeState, Npc, WorldIndicators } from '@lineage/shared-types';
 import {
   advanceBusinessYear,
   advanceCareerYear,
@@ -18,13 +18,16 @@ import {
   pushHistory,
   makeRng,
   mortalityChance,
+  narrativeTerm,
   promote,
   refreshDerived,
   rollNewConditions,
+  type Rng,
   settleYear,
   updateCostOfLiving,
 } from '@lineage/simulation';
 import { advanceNpcYear } from '@lineage/npc-engine';
+import { inheritanceFrom, runNpcNews } from './npcnews.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -82,8 +85,30 @@ export const advanceYear = (
 
   // 2. Time passing, to the body and to the people.
   applyAgeDrift(state.character, config, rng);
-  advanceNpcYear(state, config, rng);
+  const npcYear = advanceNpcYear(state, config, rng);
   decayRelationships(state, config);
+
+  /*
+   * People you know die, and until now the log said nothing about it — they
+   * simply stopped appearing. Say it, name them, and settle what they left.
+   */
+  for (const { npc, relationship } of npcYear.deaths) {
+    pushHistory(
+      state,
+      'family',
+      '🕯️',
+      `${narrativeTerm(relationship, npc, state.character.age)} died ${deathManner(npc, rng)}.`,
+      relationship.band === 'close' ? 75 : 40,
+    );
+    inheritanceFrom(state, npc, relationship, rng);
+  }
+
+  /*
+   * And then the rest of everybody's year. Most of what the player reads in a
+   * given year happened to somebody else — that is what makes a log a life
+   * rather than a record of one person's stats.
+   */
+  runNpcNews(state, content, rng);
 
   // 3. Institutions: school, work, businesses, prison.
   const country = content.countriesById.get(state.character.countryId);
@@ -163,13 +188,16 @@ export const advanceYear = (
     if (rng.chance(lookingHarder)) {
       const title = takeAvailableJob(state, content, config, rng);
       if (title) {
+        // "a agent" is the kind of thing a player notices immediately and
+        // never stops noticing.
+        const article = /^[aeiou]/i.test(title) ? 'an' : 'a';
         pushHistory(
           state,
           'career',
           '💼',
           state.yearsOutOfWork >= 3
-            ? `After a long stretch out of work, you took a job as a ${title.toLowerCase()}.`
-            : `You found work as a ${title.toLowerCase()}.`,
+            ? `After a long stretch out of work, you took a job as ${article} ${title}.`
+            : `You found work as ${article} ${title}.`,
           40,
         );
       }
@@ -398,3 +426,23 @@ const foreshadow = (state: LifeState): string | null => {
 };
 
 export { applyDeferred };
+
+
+/**
+ * How somebody went. Deliberately plain: most people die of being old, at home,
+ * and the log should not turn every death into a set piece.
+ */
+const deathManner = (npc: Npc, rng: Rng): string => {
+  if (npc.age >= 75) {
+    return rng.pick([
+      'while sleeping peacefully',
+      'peacefully, at home',
+      'after a short illness',
+      'of old age',
+    ]);
+  }
+  if (npc.age >= 45) {
+    return rng.pick(['of a heart attack', 'after a short illness', 'suddenly, at work']);
+  }
+  return rng.pick(['in a car accident', 'suddenly', 'after a long illness']);
+};

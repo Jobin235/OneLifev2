@@ -77,7 +77,12 @@ const lookup = (
   if (head === 'me') return state.character.firstName;
   if (head === 'surname') return state.character.lastName;
   if (head === 'age') return String(state.character.age);
-  if (head === 'city') return state.character.cityId;
+  /*
+   * The name, not the id. `{city}` used to render "portland", which reads as a
+   * database key leaking into the prose — and it would have, the first time a
+   * line used it.
+   */
+  if (head === 'city') return state.flags.city_name ? String(state.flags.city_name) : null;
 
   if (head === 'business') {
     const business = state.businesses.find((b) => !b.closed);

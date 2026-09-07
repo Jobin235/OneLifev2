@@ -23,6 +23,8 @@ export const RelationshipKindSchema = z.enum([
   'acquaintance',
   'cellmate',
   'in_law',
+  /** Your sibling's children. They arrive on their own and grow up in the log. */
+  'niece_nephew',
 ]);
 export type RelationshipKind = z.infer<typeof RelationshipKindSchema>;
 

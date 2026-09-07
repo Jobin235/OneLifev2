@@ -19,6 +19,13 @@ export interface ResolutionResult {
   historyEntry: HistoryEntry;
   /** Effects the event engine could not apply alone; the game layer handles them. */
   deferred: Effect[];
+  /**
+   * The uninterpolated originals. Deferred effects run after resolution — they
+   * are the ones that need content, and `child_born` is one of them — so a line
+   * naming somebody the choice creates cannot be filled in yet. The caller
+   * re-runs interpolation once those effects have landed.
+   */
+  templates: { outcomeText: string; historyLine: string };
 }
 
 /**
@@ -99,7 +106,19 @@ export const resolveChoice = (
 
   state.step += 1;
 
-  return { instance, historyEntry, deferred: effectCtx.deferred };
+  return {
+    instance,
+    historyEntry,
+    deferred: effectCtx.deferred,
+    /*
+     * The uninterpolated originals. Deferred effects run after this function —
+     * they are the ones that need content, and `child_born` is one of them — so
+     * a line naming somebody the choice creates cannot be filled in yet. The
+     * caller re-runs interpolation once the deferred effects have landed and
+     * their bindings exist.
+     */
+    templates: { outcomeText: outcome.text, historyLine: outcome.historyLine },
+  };
 };
 
 /**

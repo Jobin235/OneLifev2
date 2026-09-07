@@ -157,7 +157,7 @@
         ]
       }
     ],
-    "cooldownYears": 6,
+    "cooldownYears": 10,
     "maxPerLife": 2
   },
   {
@@ -295,7 +295,7 @@
         ]
       }
     ],
-    "cooldownYears": 4,
+    "cooldownYears": 10,
     "maxPerLife": 2
   },
   {
@@ -449,7 +449,7 @@
         ]
       }
     ],
-    "cooldownYears": 5,
+    "cooldownYears": 10,
     "maxPerLife": 3
   },
   {
@@ -567,7 +567,7 @@
         ]
       }
     ],
-    "cooldownYears": 5,
+    "cooldownYears": 10,
     "maxPerLife": 8
   },
   {
@@ -748,7 +748,7 @@
         ]
       }
     ],
-    "cooldownYears": 5,
+    "cooldownYears": 10,
     "maxPerLife": 3
   },
   {

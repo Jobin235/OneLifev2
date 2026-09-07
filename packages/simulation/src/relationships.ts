@@ -64,6 +64,7 @@ const KIND_LABEL: Record<RelationshipKind, string> = {
   acquaintance: 'Acquaintance',
   cellmate: 'Cellmate',
   in_law: 'In-law',
+  niece_nephew: 'Niece/Nephew',
 };
 
 export const relationshipLabel = (rel: Relationship, npc: Npc, sexAware = true): string => {
@@ -71,7 +72,82 @@ export const relationshipLabel = (rel: Relationship, npc: Npc, sexAware = true):
   if (rel.kind === 'partner') return sexAware && npc.sex === 'female' ? 'Girlfriend' : 'Boyfriend';
   if (rel.kind === 'child') return sexAware && npc.sex === 'female' ? 'Daughter' : 'Son';
   if (rel.kind === 'sibling') return sexAware && npc.sex === 'female' ? 'Sister' : 'Brother';
+  if (rel.kind === 'niece_nephew') return sexAware && npc.sex === 'female' ? 'Niece' : 'Nephew';
   return KIND_LABEL[rel.kind];
+};
+
+/**
+ * How the log refers to somebody: "Your big sister, Aretha", "Your mother",
+ * "Johnny McCoy".
+ *
+ * The relation is restated on every single line a person appears in, which is
+ * the trick that lets a life carry forty named people without a directory
+ * screen — you are never asked to remember who Aretha is. Family gets the
+ * relation and a first name; everyone else gets their full name, because
+ * "Your acquaintance, Dave" is not a sentence anybody says.
+ *
+ * Second person throughout, because that is the voice every other line in this
+ * game is written in. BitLife's log is a first-person diary; ours is not, and
+ * mixing "Your mother" with "I graduated" would read as two narrators.
+ */
+export const narrativeName = (rel: Relationship, npc: Npc, playerAge: number): string => {
+  const term = familyTerm(rel, npc, playerAge);
+  return term ? `Your ${term}, ${npc.firstName}` : `${npc.firstName} ${npc.lastName}`;
+};
+
+/**
+ * The same phrase, punctuated to lead a sentence. An appositive has to be closed
+ * — "Your mother, Iris, retired" — and a bare full name must not be, so the
+ * comma belongs to the phrase rather than to every caller that writes one.
+ */
+export const narrativeSubject = (rel: Relationship, npc: Npc, playerAge: number): string => {
+  const term = familyTerm(rel, npc, playerAge);
+  return term ? `Your ${term}, ${npc.firstName},` : `${npc.firstName} ${npc.lastName}`;
+};
+
+/** Just the relation, for lines that do not need the name: "Your mother". */
+export const narrativeTerm = (rel: Relationship, npc: Npc, playerAge: number): string => {
+  const term = familyTerm(rel, npc, playerAge);
+  return term ? `Your ${term}` : `${npc.firstName} ${npc.lastName}`;
+};
+
+const familyTerm = (rel: Relationship, npc: Npc, playerAge: number): string | null => {
+  switch (rel.kind) {
+    case 'mother':
+      return 'mother';
+    case 'father':
+      return 'father';
+    // Older or younger matters to how a sibling is spoken about, and it is the
+    // one relation where the game already knows the answer.
+    case 'sibling':
+      return npc.age > playerAge
+        ? npc.sex === 'female'
+          ? 'big sister'
+          : 'big brother'
+        : npc.sex === 'female'
+          ? 'little sister'
+          : 'little brother';
+    case 'child':
+      return npc.sex === 'female' ? 'daughter' : 'son';
+    case 'spouse':
+      return npc.sex === 'female' ? 'wife' : 'husband';
+    case 'partner':
+      return npc.sex === 'female' ? 'girlfriend' : 'boyfriend';
+    case 'grandparent':
+      return npc.sex === 'female' ? 'grandmother' : 'grandfather';
+    case 'grandchild':
+      return npc.sex === 'female' ? 'granddaughter' : 'grandson';
+    case 'niece_nephew':
+      return npc.sex === 'female' ? 'niece' : 'nephew';
+    case 'boss':
+      return 'supervisor';
+    case 'cellmate':
+      return 'cellmate';
+    case 'classmate':
+      return 'classmate';
+    default:
+      return null;
+  }
 };
 
 /**

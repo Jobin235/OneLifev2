@@ -299,7 +299,7 @@
           {
             "id": "born",
             "text": "The baby came the following March. Nothing about your life stayed the same shape.",
-            "historyLine": "Your child was born.",
+            "historyLine": "You had a baby, and named {child} {surname}.",
             "effects": [
               {
                 "op": "child_born"
@@ -404,7 +404,7 @@
         ]
       }
     ],
-    "cooldownYears": 5,
+    "cooldownYears": 10,
     "maxPerLife": 3
   },
   {
@@ -598,7 +598,7 @@
         ]
       }
     ],
-    "cooldownYears": 5,
+    "cooldownYears": 10,
     "maxPerLife": 8
   },
   {
@@ -759,7 +759,7 @@
         ]
       }
     ],
-    "cooldownYears": 8,
+    "cooldownYears": 10,
     "maxPerLife": 2
   },
   {
@@ -835,7 +835,7 @@
         ]
       }
     ],
-    "cooldownYears": 1,
+    "cooldownYears": 10,
     "maxPerLife": 6
   }
 ]

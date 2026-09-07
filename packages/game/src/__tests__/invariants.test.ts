@@ -66,6 +66,14 @@ describe('the rules the client cannot be trusted with', () => {
       if (state.activeEvent) state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
     }
 
+    /*
+     * This test is about the plateau, not about the economy — whether this
+     * particular seed happens to be able to afford four courses is beside the
+     * point, and letting it decide made the test fail whenever unrelated content
+     * shifted the random stream.
+     */
+    state.character.finances.cash = 500_000_00;
+
     // "Take a course" fades after three goes and never turns harmful.
     for (let i = 0; i < 3; i++) {
       const result = game.act(state, 'take_a_course');

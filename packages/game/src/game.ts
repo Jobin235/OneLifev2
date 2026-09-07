@@ -23,6 +23,7 @@ import {
 import {
   InvalidChoiceError,
   applyEffects,
+  interpolate,
   resolveChoice,
   type ConditionContext,
   type EffectContext,
@@ -230,10 +231,28 @@ export class Game {
     const ctx: ConditionContext = { state, world, bindings: instance.participants };
 
     try {
-      const { deferred } = resolveChoice(instance, definition, choiceId, state, ctx, this.config);
+      const { deferred, historyEntry, templates } = resolveChoice(
+        instance,
+        definition,
+        choiceId,
+        state,
+        ctx,
+        this.config,
+      );
 
       const rng = makeRng(state.seed, 'deferred', instance.id);
       applyDeferred(deferred, state, this.content, this.config, rng, instance.participants);
+
+      /*
+       * Now that the deferred effects have run, say what actually happened. A
+       * child born by this choice only has a name at this point, so "Your child
+       * was born." becomes "You had a daughter, Nadia." — the log naming a
+       * person the player will read about for the next fifty years.
+       */
+      if (deferred.length > 0) {
+        instance.outcomeText = interpolate(templates.outcomeText, state, instance.participants);
+        historyEntry.line = interpolate(templates.historyLine, state, instance.participants);
+      }
 
       state.resolvedEvent = instance;
       state.activeEvent = null;

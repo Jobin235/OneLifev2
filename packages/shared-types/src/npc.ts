@@ -31,5 +31,33 @@ export const NpcSchema = z.object({
   /** Set for the player's own children so succession can rank them. */
   isBloodline: z.boolean().default(false),
   parentNpcIds: z.array(z.string()).default([]),
+  /**
+   * What is currently wrong with them. Named, and it persists: the log says
+   * "My mother has been diagnosed with sciatica" one year and "My mother is no
+   * longer suffering from sciatica" three years later, and both lines are true
+   * of the same stored fact rather than two unrelated pieces of flavour.
+   */
+  ailments: z
+    .array(
+      z.object({
+        id: z.string(),
+        label: z.string(),
+        sinceAge: z.number().int().min(0),
+        /**
+         * Healed entries stay in the list. Dropping them let somebody catch
+         * gallstones, recover, and catch gallstones again three years later,
+         * which put the identical sentence in the log twice — a life having
+         * patterns is fine, a life repeating itself verbatim reads as a bug.
+         */
+        healedAtAge: z.number().int().min(0).nullable().default(null),
+      }),
+    )
+    .default([]),
+  /** Set once they stop working, so the log does not retire them twice. */
+  retired: z.boolean().default(false),
+  /** Their partner, when they have one. Lets the log name them in later years. */
+  spouseNpcId: z.string().nullable().default(null),
+  /** Their employer, so "promoted to X at Y" stays consistent year to year. */
+  employerName: z.string().nullable().default(null),
 });
 export type Npc = z.infer<typeof NpcSchema>;

@@ -394,7 +394,7 @@
         ]
       }
     ],
-    "cooldownYears": 5,
+    "cooldownYears": 10,
     "maxPerLife": 2
   },
   {

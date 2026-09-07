@@ -105,12 +105,20 @@ export const applyDeferred = (
       }
 
       case 'move_city': {
-        if (effect.cityId !== 'auto') {
-          state.character.cityId = effect.cityId;
-          break;
+        const moveTo =
+          effect.cityId !== 'auto'
+            ? (country?.cities.find((c) => c.id === effect.cityId) ?? null)
+            : (() => {
+                const options = (country?.cities ?? []).filter(
+                  (c) => c.id !== state.character.cityId,
+                );
+                return options.length > 0 ? rng.pick(options) : null;
+              })();
+        if (moveTo) {
+          state.character.cityId = moveTo.id;
+          // Kept in step so "{city}" never names the place they just left.
+          state.flags.city_name = moveTo.name;
         }
-        const options = (country?.cities ?? []).filter((c) => c.id !== state.character.cityId);
-        if (options.length > 0) state.character.cityId = rng.pick(options).id;
         break;
       }
 

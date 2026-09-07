@@ -187,6 +187,10 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
       wealth: clampStat(30 + profile.wealth * 12 + rng.int(0, 20)),
       isBloodline: kind === 'sibling',
       parentNpcIds: [],
+      ailments: [],
+      retired: false,
+      spouseNpcId: null,
+      employerName: null,
     };
     npcs.push(npc);
     relationships.push({
@@ -274,6 +278,8 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
       upbringing: input.upbringing,
       family_wealth: profile.wealth,
       birth_country: input.country.id,
+      // So content can write "{city}" and get "Portland" rather than "portland".
+      city_name: city.name,
     },
     history: [
       {
