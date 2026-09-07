@@ -1,4 +1,5 @@
 import { interact, interactionsFor } from './interact.js';
+import { judgeAmbition } from './ambition.js';
 import { applyFor, openings } from './jobs.js';
 import { buy, sell, shopView } from './shop.js';
 import { actionsView, schoolView, workView } from './views.js';
@@ -114,6 +115,7 @@ export class Game {
         country,
         ...(options.cityId ? { cityId: options.cityId } : {}),
         upbringing: options.upbringing,
+        ambitionId: options.ambitionId ?? null,
         traits: this.content.traits,
         birthYear: options.birthYear ?? new Date().getFullYear(),
         contentVersion: this.content.version,
@@ -347,6 +349,11 @@ export class Game {
       Object.assign(state, before);
       throw error;
     }
+  }
+
+  /** Re-judges a finished life. Used to check every ambition is answerable. */
+  legacyFor(state: LifeState) {
+    return judgeAmbition(state, this.content);
   }
 
   /** The ambitions a new life can be given. */

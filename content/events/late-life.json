@@ -1,0 +1,994 @@
+[
+  {
+    "id": "late_the_will",
+    "version": 1,
+    "category": "family",
+    "card": {
+      "icon": "📜",
+      "label": "YOUR WILL",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 74,
+    "minAge": 58,
+    "maxAge": 95,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "You have been putting off writing a will.",
+    "body": "The solicitor's letter has been on the side for two months. It is not going to write itself.",
+    "choices": [
+      {
+        "id": "split",
+        "label": "Split it evenly",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Even shares, no arguments. It was the safe answer and probably the right one.",
+            "historyLine": "You left everything split evenly.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "favour",
+        "label": "Favour the one who stayed",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You wrote it the way you actually felt. Somebody is going to find out eventually.",
+            "historyLine": "You wrote a will that did not split things evenly.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "later",
+        "label": "Put it off again",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You put it off. It was still on the side a long time afterwards.",
+            "historyLine": "You put off writing a will, again.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "count.children",
+      "op": ">=",
+      "value": 1
+    }
+  },
+  {
+    "id": "late_grandchild",
+    "version": 1,
+    "category": "family",
+    "card": {
+      "icon": "👶",
+      "label": "FAMILY",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 78,
+    "minAge": 55,
+    "maxAge": 95,
+    "cooldownYears": 12,
+    "participants": [],
+    "title": "There is a baby, and it is yours to hold.",
+    "body": "Your own child is standing there looking exactly as frightened as you remember being.",
+    "choices": [
+      {
+        "id": "say_it",
+        "label": "Tell them they'll be fine",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You said it and they believed you, which is most of what the job is.",
+            "historyLine": "You became a grandparent.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 16
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "help",
+        "label": "Move closer and help",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You gave up a quiet retirement for school runs and it was not a hard choice.",
+            "historyLine": "You moved closer to help with the grandchildren.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 12
+              },
+              {
+                "op": "money",
+                "delta": -1200000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "count.children",
+      "op": ">=",
+      "value": 1
+    }
+  },
+  {
+    "id": "late_the_diagnosis",
+    "version": 1,
+    "category": "health",
+    "card": {
+      "icon": "🩺",
+      "label": "YOUR BODY",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 82,
+    "minAge": 55,
+    "maxAge": 100,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "The results came back and the doctor sat down.",
+    "body": "It is treatable. Treatable is doing a lot of work in that sentence, and you both know it.",
+    "choices": [
+      {
+        "id": "fight",
+        "label": "Throw everything at it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Months of it. You came out the other side smaller and still here.",
+            "historyLine": "You threw everything at the diagnosis.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -2400000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 12
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "manage",
+        "label": "Manage it and get on",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You took the tablets and stopped talking about it, which suited you.",
+            "historyLine": "You decided to manage it rather than fight it.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 4
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ignore",
+        "label": "Don't tell anyone",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You carried it alone for two years before anybody worked it out.",
+            "historyLine": "You kept the diagnosis to yourself.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "stats.health",
+      "op": "<",
+      "value": 70
+    }
+  },
+  {
+    "id": "late_child_asks",
+    "version": 1,
+    "category": "family",
+    "card": {
+      "icon": "🤲",
+      "label": "FAMILY",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 76,
+    "minAge": 50,
+    "maxAge": 90,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "Your child needs money and has finally asked.",
+    "body": "They have clearly rehearsed it. They are nearly forty and they hated every second of asking.",
+    "choices": [
+      {
+        "id": "give",
+        "label": "Give it, no conditions",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You transferred it that afternoon and never mentioned it again.",
+            "historyLine": "You gave your child money and never brought it up.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -3000000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "lend",
+        "label": "Lend it properly",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You wrote terms. They paid it back over four years and it was strange between you for two.",
+            "historyLine": "You lent your child money, with terms.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -3000000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "no",
+        "label": "Say no",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You had your reasons and they were good ones. It did not help.",
+            "historyLine": "You turned your child down.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -9
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "count.children",
+      "op": ">=",
+      "value": 1
+    }
+  },
+  {
+    "id": "late_old_friend",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "☎️",
+      "label": "SOMEONE",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 70,
+    "minAge": 58,
+    "maxAge": 100,
+    "cooldownYears": 11,
+    "participants": [],
+    "title": "Somebody you have not spoken to in twenty years has died.",
+    "body": "You found out from a message from somebody else. The funeral is on Thursday.",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Go",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You went. You knew four people and stayed three hours and were glad you did.",
+            "historyLine": "You went to the funeral of a friend you had lost touch with.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dont",
+        "label": "Don't go",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You did not go. You thought about it on and off for the rest of the year.",
+            "historyLine": "You did not go to the funeral.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -7
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "late_the_house",
+    "version": 1,
+    "category": "money",
+    "card": {
+      "icon": "🏠",
+      "label": "THE HOUSE",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 72,
+    "minAge": 62,
+    "maxAge": 100,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "The house is too big now.",
+    "body": "There are three rooms you have not been into since spring, and the stairs are a project.",
+    "choices": [
+      {
+        "id": "sell",
+        "label": "Sell it and downsize",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Smaller, warmer, and near a shop. You missed the garden and nothing else.",
+            "historyLine": "You sold the house and downsized.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 4000000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "Stay in it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You stayed. It was cold in the winter and it was yours.",
+            "historyLine": "You stayed in the house that was too big.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "money.total",
+      "op": ">=",
+      "value": 2000000
+    }
+  },
+  {
+    "id": "late_asked_to_speak",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🎤",
+      "label": "LOOKING BACK",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 66,
+    "minAge": 60,
+    "maxAge": 95,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "They want you to talk to a room of people starting out.",
+    "body": "You are being introduced as someone who knows how it is done, which is not how it felt.",
+    "choices": [
+      {
+        "id": "honest",
+        "label": "Tell them the truth",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You told them how much of it was luck. Two of them looked genuinely relieved.",
+            "historyLine": "You told a room of beginners how much of it was luck.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 8
+              },
+              {
+                "op": "reputation",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tidy",
+        "label": "Give them the tidy version",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You gave the version with the arc in it. They liked it. You did not.",
+            "historyLine": "You gave the tidy version of your career.",
+            "effects": [
+              {
+                "op": "reputation",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "decline",
+        "label": "Say no",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You said you were not the right person, which was not really true.",
+            "historyLine": "You turned down speaking to people starting out.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "late_regret",
+    "version": 1,
+    "category": "random",
+    "card": {
+      "icon": "🪞",
+      "label": "LOOKING BACK",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 68,
+    "minAge": 62,
+    "maxAge": 100,
+    "cooldownYears": 14,
+    "participants": [],
+    "title": "There is one thing you never did.",
+    "body": "It comes back at odd hours. You are old enough now that it is either this year or never.",
+    "choices": [
+      {
+        "id": "do_it",
+        "label": "Do it now",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You did it badly and far too late and it was one of the best years you had.",
+            "historyLine": "You finally did the thing you never did.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 17
+              },
+              {
+                "op": "money",
+                "delta": -800000
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "let_go",
+        "label": "Let it go",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You decided to stop carrying it. That took longer than doing it would have.",
+            "historyLine": "You let go of the thing you never did.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 7
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "late_who_visits",
+    "version": 1,
+    "category": "family",
+    "card": {
+      "icon": "🚪",
+      "label": "FAMILY",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 71,
+    "minAge": 68,
+    "maxAge": 100,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "One of them visits every week. The others do not.",
+    "body": "You have never said anything about it. You have noticed every single time.",
+    "choices": [
+      {
+        "id": "say",
+        "label": "Say something",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You said it badly and they heard it anyway. Two of them started coming.",
+            "historyLine": "You told your children you noticed who visited.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "say_nothing",
+        "label": "Say nothing",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You never mentioned it. The one who came kept coming.",
+            "historyLine": "You never mentioned who visited and who did not.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "count.children",
+      "op": ">=",
+      "value": 2
+    }
+  },
+  {
+    "id": "late_the_offer",
+    "version": 1,
+    "category": "business",
+    "card": {
+      "icon": "🤝",
+      "label": "MONEY",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 69,
+    "minAge": 60,
+    "maxAge": 95,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "Someone wants to buy what you built.",
+    "body": "The number is real and the buyer is serious and they will not keep the name.",
+    "choices": [
+      {
+        "id": "sell",
+        "label": "Take the money",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You signed it and felt nothing for a fortnight, then quite a lot all at once.",
+            "historyLine": "You sold what you built.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 9000000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              },
+              {
+                "op": "business_close"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "Keep it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You kept it. It was worth less every year and you never regretted it.",
+            "historyLine": "You refused to sell what you built.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 9
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "has.business",
+      "op": "==",
+      "value": true
+    }
+  },
+  {
+    "id": "late_moving_in",
+    "version": 1,
+    "category": "family",
+    "card": {
+      "icon": "🧳",
+      "label": "FAMILY",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 75,
+    "minAge": 72,
+    "maxAge": 100,
+    "cooldownYears": 9,
+    "participants": [],
+    "title": "They think you should not be on your own any more.",
+    "body": "Nobody has said the word yet. Everybody is circling it politely.",
+    "choices": [
+      {
+        "id": "move_in",
+        "label": "Move in with them",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You gave up your front door. It was warm and busy and not yours.",
+            "historyLine": "You moved in with your children.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "home",
+        "label": "Somewhere with people around",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "The food was poor and there were three people you genuinely liked.",
+            "historyLine": "You moved somewhere with people around.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": -2000000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 2
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stay_put",
+        "label": "Stay where you are",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You stayed. It was harder every year and you would do it again.",
+            "historyLine": "You stayed in your own home.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 7
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -7
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "count.children",
+      "op": ">=",
+      "value": 1
+    }
+  },
+  {
+    "id": "late_the_letter",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "✉️",
+      "label": "SOMEONE",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 67,
+    "minAge": 65,
+    "maxAge": 100,
+    "cooldownYears": 14,
+    "participants": [],
+    "title": "You have started writing to somebody you fell out with.",
+    "body": "It was forty years ago. You cannot now defend your side of it with a straight face.",
+    "choices": [
+      {
+        "id": "send",
+        "label": "Send it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "They wrote back. It was shorter than yours and it was enough.",
+            "historyLine": "You wrote to someone you had not spoken to in forty years.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 13
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "burn",
+        "label": "Burn it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Some things you take with you. You decided this was one.",
+            "historyLine": "You wrote the letter and never sent it.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "late_still_here",
+    "version": 1,
+    "category": "health",
+    "card": {
+      "icon": "🌅",
+      "label": "YOUR BODY",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 64,
+    "minAge": 80,
+    "maxAge": 110,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You have outlived nearly everyone you started with.",
+    "body": "There is almost nobody left who remembers you young. It is a strange kind of quiet.",
+    "choices": [
+      {
+        "id": "write",
+        "label": "Write it down",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You filled two notebooks. Somebody read them eventually and was glad of them.",
+            "historyLine": "You wrote down what you remembered, for whoever came after.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 11
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tell",
+        "label": "Tell whoever will listen",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You told the same stories a great many times and were mostly forgiven for it.",
+            "historyLine": "You told your stories to anyone who would sit still.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "keep",
+        "label": "Keep it to yourself",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You kept it. All of it went with you.",
+            "historyLine": "You kept what you remembered to yourself.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
