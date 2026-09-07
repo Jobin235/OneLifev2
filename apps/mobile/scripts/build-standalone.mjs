@@ -53,10 +53,9 @@ const favicon =
 const body = `<style>
 ${fontCss}
 ${css}
-/* The frame is the phone. */
+/* The frame is the phone. The app column centres itself and sets its own width. */
 html, body, #root { height: 100%; }
 body { margin: 0; background: #EFE6D8; }
-#root { display: flex; justify-content: center; }
 </style>
 <div id="root"></div>
 <script type="module">

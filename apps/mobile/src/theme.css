@@ -125,6 +125,13 @@ button {
   display: flex;
   flex-direction: column;
   background: var(--app-bg);
+  /*
+   * `width: 100%` is load-bearing, not belt-and-braces. Without it the phone
+   * column is a shrink-to-fit box whenever its parent is a flex container, so
+   * every tab renders at the width of its own widest element and the app
+   * appears to change size as you move between them.
+   */
+  width: 100%;
   max-width: 520px;
   margin: 0 auto;
   position: relative;
@@ -1174,4 +1181,65 @@ button {
   font: 700 13.5px/1.5 var(--text);
   color: var(--amber-deep);
   text-wrap: pretty;
+}
+
+
+/* ---------- The life log ---------- */
+
+/*
+ * The main screen: one continuous run of years. Entries are prose, not stat
+ * readouts — the numbers are already in the header, and a log that reported
+ * "+4 fitness" on every line would read like a changelog rather than a life.
+ */
+.log {
+  gap: 0;
+  padding-bottom: 24px;
+}
+
+.log-year {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 14px 0 4px;
+  flex: none;
+}
+
+.log-age {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 800 11.5px/1 var(--text);
+  letter-spacing: 0.07em;
+  color: var(--label);
+  text-transform: uppercase;
+}
+
+.log-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line-2);
+}
+
+.log-row {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+}
+
+.log-icon {
+  font-size: 15px;
+  line-height: 1.35;
+  flex: none;
+}
+
+.log-text {
+  font: 600 13.5px/1.5 var(--text);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* A milestone should be findable when scrolling back through eighty years. */
+.log-row.major .log-text {
+  font-weight: 700;
+  color: var(--ink);
 }

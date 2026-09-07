@@ -113,7 +113,7 @@ export interface LifeView {
   gameState: string;
   activeEvent: ActiveEvent | null;
   resolvedEvent: ActiveEvent | null;
-  earlierThisYear: Array<{ icon: string; text: string }>;
+  log: Array<{ atAge: number; icon: string; text: string; major: boolean }>;
   quickActions: ActionCard[];
   canAgeUp: boolean;
   ageUpLabel: string;

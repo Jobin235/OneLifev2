@@ -1,0 +1,174 @@
+# BitLife: research, and where we stand against it
+
+Gathered September 2026 via web search. The Fandom wiki, mrguider and several
+other guide sites are blocked by this environment's egress proxy, so everything
+here comes from search-result summaries rather than full page reads. Sources are
+listed at the bottom. `tools/wiki-ingest` exists to pull the primary pages
+properly from a network that can reach them.
+
+Treat this as a competitive brief, not a specification to copy. We are not
+cloning BitLife's UI or content; we are matching the *depth* players expect and
+beating it where our simulation already goes further.
+
+---
+
+## 1. The loop
+
+> "Read an event, choose a path, see the outcome, and advance to the next year."
+
+- One button, bottom centre, marked `+`. Each press advances a year (or six
+  months, a setting).
+- The main screen is a **continuous scrolling log of the whole life**. Pressing
+  Age appends that year's events to the bottom. Nothing is a separate screen.
+- Decisions surface as alerts over the log.
+- No interstitial between years. The birthday is a line in the log.
+
+**Us:** matched, as of the life-log rewrite. This was the single biggest
+structural difference and it is now closed.
+
+## 2. Events per year
+
+BitLife produces **several** log lines a year — school notes, family news,
+friend gossip, health blips, job noise — most of them flavour with no decision
+attached, punctuated by decisions.
+
+**Us: the biggest remaining gap.** A 26-year test life produced 23 log entries
+across 16 years, so a third of years are silent and the rest average under one
+line. A year should rarely be empty and often hold three or four lines.
+
+## 3. Stats
+
+Four headline stats — **Happiness, Health, Smarts, Looks** — plus **Karma**,
+which is hidden and drives luck.
+
+**Us:** we carry ten (health, happiness, smarts, looks, fitness, charm,
+discipline, creativity, social, luck). The design file shows five. Karma has no
+equivalent. Ours is arguably better, but the five-stat header is the design's
+and should stay; the rest are internal.
+
+## 4. Menus
+
+Nine top-level areas: **Mind & Body, Relationships, School, Assets, Activities,
+Crime, Jobs, Licenses, Time Machine**.
+
+**Us:** Life / People / Do / Money / More. Broadly equivalent, with School and
+Jobs living inside Do, and Assets inside Money. Licenses and Time Machine have
+no counterpart.
+
+## 5. Where we are shallow
+
+### Activities
+BitLife's Mind & Body alone: Gym, Library, Meditate, Memory Test, Read Books,
+Diet, Gardening, Martial Arts, Walks — plus doctor, therapist, plastic surgery,
+haircut, casino, clubbing, lottery, horse racing, vacations, cruises, dating
+apps. Roughly **25–30 distinct activities**, many with sub-menus and outcomes.
+
+**Us:** 25 activities, but most are a single stat nudge with one line of text.
+Comparable in count, much thinner in consequence.
+
+### School
+BitLife: elementary → middle → high → university → graduate, with **grades,
+popularity, cheating on tests, bullying, student–teacher interactions, clubs,
+sports teams, majors, dropping out, expulsion, GED, student loans**, and
+specialised schools (medical, law, vet, pharmacy, business, nursing, dental).
+
+**Us: genuinely surface-level, as you said.** We have enrolment, a "study"
+activity, "join a club" as one line, and graduation. No grades, no popularity,
+no majors, no teachers, no bullying, no specialised schools.
+
+### Careers
+**200+ collectible careers**, plus part-time and freelance work, and ten
+premium special careers (Actor, Astronaut, Athlete, Business, Mafia, Musician,
+Politician, Street Hustler, Model, Dealer). The Office update added coworkers
+and supervisors as real NPCs with their own interactions, HR investigations,
+grievances, office romance, and a visible performance bar.
+
+**Us:** 12 career tracks. Work is `work_harder` / `ask_for_a_raise` /
+`get_closer_to_boss` / `look_elsewhere`. No named coworkers, no office drama.
+
+### Relationships
+Per-person interaction menu: **Ask Out, Compliment, Conversation, Gift, Hook
+Up, Insult, Prank, Rumor, Spend Time**, with results depending on current
+relationship level, and low relationships producing hostile responses.
+
+**Us:** people have real memory and multi-dimensional relationships — *deeper
+than BitLife underneath* — but the player cannot **act** on a specific person
+at all. There is no per-person interaction menu. This is our worst
+depth-to-surface ratio: the model is there and unreachable.
+
+### Crime
+Bank Robbery, Burglary, Grand Theft Auto, Pickpocket, Porch Pirate, Shoplift,
+Train Robbery, murder, with **age gates** (porch pirate 8, burglary 10, murder
+and GTA 15, train robbery 16, bank robbery 18), plus prison, escape attempts,
+lawyers, appeals.
+
+**Us:** one `something_illegal` activity. Prison exists as a state with its own
+activities, which is good, but there is nothing to *do* to get there
+deliberately.
+
+### Assets
+Six classes — cars, houses, jewellery, instruments, aircraft, boats — bought
+with cash or finance, requiring licences, sellable with haggling.
+
+**Us:** assets exist in the money model but cannot be bought or sold.
+
+### Ribbons
+40 end-of-life ribbons that summarise the life lived and appear on the
+gravestone. A strong replay driver.
+
+**Us:** the legacy screen writes chapters, which is more literary, but there is
+no collectible summary and nothing to chase across lives.
+
+---
+
+## 6. Where we are already ahead
+
+Worth protecting while closing the gaps above:
+
+- **NPC memory.** Our people remember specific interactions and the event engine
+  reads that history. BitLife's relationships are a bar.
+- **Relationship dimensions.** Affection, trust, respect, conflict, romance,
+  dependence — not one "relationship" number.
+- **Event chains.** Choices schedule future events years out.
+- **Succession.** Play on as your heir, with an estate and heirlooms.
+- **A living world.** Economic conditions that reach the player only when
+  relevant, rather than a news feed.
+- **Writing.** Our event prose is better than BitLife's, which is mostly
+  templated. This is a real differentiator and cheap to keep.
+
+---
+
+## 7. What to build, in order
+
+Ranked by player-visible depth per unit of work:
+
+1. **More life per year** — several log entries a year, most without decisions.
+   Pure content plus a generator; the loop already supports it.
+2. **Per-person interactions** — surface the NPC model we already have. Biggest
+   win available.
+3. **School with substance** — grades, popularity, clubs and teams, majors,
+   cheating, bullying, dropping out, specialised schools.
+4. **Work with substance** — named coworkers and a boss as real NPCs, a
+   performance bar, office incidents.
+5. **Crime as a menu** with age gates and a real justice chain.
+6. **Assets you can buy and sell.**
+7. **Careers, broadened** — toward 100+ tracks, part-time and freelance work.
+8. **Ribbons** — an end-of-life summary worth collecting.
+
+---
+
+## Sources
+
+- [Careers/Occupation — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Careers/Occupation)
+- [Activities — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Activities)
+- [Mind & Body — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Mind_%26_Body)
+- [Education — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Education)
+- [Relationships — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Relationships)
+- [Crime — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Crime)
+- [Assets — BitLife Wiki](https://bitlife-life-simulator.fandom.com/wiki/Assets)
+- [BitLife Office Update Guide — Level Winner](https://www.levelwinner.com/bitlife-office-update-guide-a-complete-look-at-bitlife-version-1-26-aka-the-office-update/)
+- [BitLife School Update Guide — Level Winner](https://www.levelwinner.com/bitlife-school-update-guide-version-1-23-grades-and-popularity-cheating-on-tests-school-bullying-student-teacher-interactions-and-college-life-explained/)
+- [BitLife Mind & Body Update Guide — Gamezebo](https://www.gamezebo.com/walkthroughs/bitlife-version-1-30-1-mind-body-update-guide-surprise-me-new-disease-system-martial-arts-diets-activities-and-more/)
+- [All Special Careers in BitLife — Pro Game Guides](https://progameguides.com/bitlife/how-to-get-special-careers-in-bitlife/)
+- [BitLife Ribbons List — Pro Game Guides](https://progameguides.com/bitlife/ribbons-list-guide/)
+- [BitLife Schools Guide — Pro Game Guides](https://progameguides.com/bitlife/bitlife-schools-guide/)

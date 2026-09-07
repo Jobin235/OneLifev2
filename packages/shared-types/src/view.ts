@@ -57,7 +57,16 @@ export const LifeViewSchema = z.object({
   activeEvent: z.unknown().nullable(),
   resolvedEvent: z.unknown().nullable(),
   birthdayLine: z.string().nullable(),
-  earlierThisYear: z.array(z.object({ icon: z.string(), text: z.string() })),
+  /** The whole life so far, oldest first. */
+  log: z.array(
+    z.object({
+      atAge: z.number().int(),
+      icon: z.string(),
+      text: z.string(),
+      /** Milestones are set apart in the log rather than reading as one more line. */
+      major: z.boolean(),
+    }),
+  ),
   quickActions: z.array(ActionCardSchema),
   canAgeUp: z.boolean(),
   ageUpLabel: z.string(),

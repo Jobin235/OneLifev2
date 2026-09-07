@@ -9,12 +9,10 @@ import type {
   MoreView,
   PeopleView,
   PersonView,
-  Recap,
 } from './lib/api';
 import { safeStorage } from './lib/storage';
 import { Tabs, type Tab } from './components/Tabs';
 import { LifeScreen } from './screens/LifeScreen';
-import { RecapScreen } from './screens/RecapScreen';
 import { PeopleScreen } from './screens/PeopleScreen';
 import { PersonScreen } from './screens/PersonScreen';
 import { DoScreen } from './screens/DoScreen';
@@ -39,7 +37,6 @@ export const App = () => {
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
-  const [recap, setRecap] = useState<Recap | null>(null);
   const [people, setPeople] = useState<PeopleView | null>(null);
   const [person, setPerson] = useState<PersonView | null>(null);
   const [actions, setActions] = useState<ActionCard[] | null>(null);
@@ -130,7 +127,6 @@ export const App = () => {
     const result = await run(() => api.ageUp(life.lifeId, idempotencyKey.current));
     if (!result) return;
     setLifeAndRemember(result.life);
-    setRecap(result.recap);
     setTab('life');
   }, [life, run, setLifeAndRemember]);
 
@@ -183,7 +179,6 @@ export const App = () => {
       const result = await run(() => api.succeed(life.lifeId, heirNpcId));
       if (result) {
         setLifeAndRemember(result.life);
-        setRecap(null);
         setPeople(null);
         setPerson(null);
         setTab('life');
@@ -279,15 +274,6 @@ export const App = () => {
           setTab(next);
         }}
       />
-
-      {recap && (
-        <RecapScreen
-          recap={recap}
-          dateLine={life.dateLine}
-          cityName={life.subtitle.split(' · ')[1] ?? ''}
-          onContinue={() => setRecap(null)}
-        />
-      )}
 
       {toast && <div className="toast">{toast}</div>}
     </div>

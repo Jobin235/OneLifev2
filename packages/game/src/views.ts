@@ -66,12 +66,21 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
     gameState: state.gameState,
     activeEvent: state.activeEvent,
     resolvedEvent: state.resolvedEvent,
-    earlierThisYear: state.currentYearEntryIds
-      .map((id) => state.history.find((e) => e.id === id))
-      .filter((e): e is NonNullable<typeof e> => !!e)
-      .slice(-4)
-      .reverse()
-      .map((e) => ({ icon: e.icon, text: e.line })),
+    /*
+     * The whole life, oldest first — this is the main screen, not a summary of
+     * the current year. A life is the log; scrolling back through it is how a
+     * player remembers who Daniel was and when the business started.
+     *
+     * History is append-only and never truncated, so this is complete back to
+     * birth. A 90-year life is a few hundred short entries, which is nothing to
+     * send and nothing to render.
+     */
+    log: state.history.map((e) => ({
+      atAge: e.atAge,
+      icon: e.icon,
+      text: e.line,
+      major: e.significance >= 60,
+    })),
     quickActions: actionsView(state, content)
       .filter((a) => a.available)
       .slice(0, 6),
