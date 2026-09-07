@@ -102,6 +102,15 @@ export const createLocalApi = (): Api => {
       })),
     }),
 
+    ambitions: async () => ({
+      ambitions: game.ambitions.map((a) => ({
+        id: a.id,
+        label: a.label,
+        emoji: a.emoji,
+        pitch: a.pitch,
+      })),
+    }),
+
     listLives: async () => ({
       lives: store.order
         .map((id) => store.lives[id])

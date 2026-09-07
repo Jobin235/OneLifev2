@@ -50,6 +50,7 @@ export interface NewLifeOptions {
   countryId: string;
   cityId?: string;
   upbringing: Upbringing;
+  ambitionId?: string | null;
   birthYear?: number;
   /** Present when continuing a family line (design 4C). */
   previousLife?: LifeState;
@@ -346,6 +347,11 @@ export class Game {
       Object.assign(state, before);
       throw error;
     }
+  }
+
+  /** The ambitions a new life can be given. */
+  get ambitions() {
+    return this.content.ambitions;
   }
 
   /** What work is going this year, with its requirements stated. */

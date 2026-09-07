@@ -29,13 +29,13 @@ describe('work is a place', () => {
      * one anybody recognises.
      */
     let everEmployed = 0;
-    let employedAt30 = 0;
+    let workingAt30 = 0;
+    let couldWorkAt30 = 0;
     const lives = 24;
 
     for (let i = 0; i < lives; i++) {
       let state = game.newLife({ countryId: 'us', upbringing: 'getting_by', seed: `hire-${i}` });
       let sawJob = false;
-      let at30 = false;
       while (state.character.alive && state.character.age < 45) {
         if (state.activeEvent) {
           state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
@@ -43,14 +43,26 @@ describe('work is a place', () => {
         }
         state = game.ageUp(state).state;
         if (state.career.current) sawJob = true;
-        if (state.character.age === 30 && state.career.current) at30 = true;
+
+        if (state.character.age === 30) {
+          /*
+           * Measure the thing that matters: of the people who *could* be
+           * working at thirty, are most of them? Counting students and
+           * prisoners as failures made this assert something it did not mean —
+           * being inside is a reason to have no job, and a good one.
+           */
+          const blocked = state.education.current || state.character.record.incarceration;
+          if (!blocked) {
+            couldWorkAt30++;
+            if (state.career.current) workingAt30++;
+          }
+        }
       }
       if (sawJob) everEmployed++;
-      if (at30) employedAt30++;
     }
 
     expect(everEmployed).toBe(lives);
-    expect(employedAt30 / lives).toBeGreaterThan(0.6);
+    expect(workingAt30 / couldWorkAt30).toBeGreaterThan(0.7);
   });
 
   it('puts colleagues in the workplace, not just a boss and an enemy', () => {

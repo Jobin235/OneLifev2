@@ -89,7 +89,35 @@ export const settleYear = (state: LifeState, config: GameConfig): YearOfMoney =>
   const childCount = state.relationships.filter((r) => r.kind === 'child').length;
   const dependentCost = childCount * config.money.perChildAnnualCost;
 
-  const expenses = f.annualExpenses + assetCosts + dependentCost;
+  /*
+   * Debts are paid down, not merely accrued.
+   *
+   * A minimum payment comes out of the year like any other bill, which is how
+   * debt actually behaves — a mortgage taken at twenty-eight should be smaller
+   * at fifty, not larger. Without this a balance only ever fell when there was
+   * spare cash at the end of the year, so a poor character carried a growing
+   * mortgage for forty-seven years.
+   *
+   * The payment is capped at a share of income so it cannot itself bankrupt
+   * somebody; what it cannot cover simply takes longer.
+   */
+  const minimumPayments = f.debts.reduce(
+    (sum, d) => sum + Math.max(Math.round(d.balance * 0.08), Math.min(d.balance, 60_000)),
+    0,
+  );
+  const affordablePayment = Math.min(minimumPayments, Math.round((gross - tax) * 0.25));
+
+  let toRepay = Math.max(0, affordablePayment);
+  for (const debt of [...f.debts].sort((a, b) => b.rate - a.rate)) {
+    if (toRepay <= 0) break;
+    const paid = Math.min(debt.balance, toRepay);
+    debt.balance -= paid;
+    toRepay -= paid;
+  }
+  f.debts = f.debts.filter((d) => d.balance > 0);
+  f.debt = f.debts.reduce((sum, d) => sum + d.balance, 0);
+
+  const expenses = f.annualExpenses + assetCosts + dependentCost + affordablePayment;
   // Each debt carries its own rate, so a family loan does not compound like a
   // credit card and the player can see which one is eating them.
   /*

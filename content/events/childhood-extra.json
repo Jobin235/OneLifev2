@@ -1,0 +1,1268 @@
+[
+  {
+    "id": "child_the_dark",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🌙",
+      "label": "AT HOME",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 55,
+    "minAge": 4,
+    "maxAge": 8,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You are certain something is under the bed.",
+    "body": "You have been certain for three weeks. Nobody else is certain of anything.",
+    "choices": [
+      {
+        "id": "say_nothing",
+        "label": "Say nothing and lie still",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You learned to be afraid quietly, which is a skill you kept.",
+            "historyLine": "You taught yourself to be afraid quietly.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "shout",
+        "label": "Shout until somebody comes",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Somebody came. They looked under the bed and stayed until you slept.",
+            "historyLine": "You shouted about the dark and somebody came.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "look",
+        "label": "Look for yourself",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "There was nothing there. You checked twice, then went to sleep annoyed.",
+            "historyLine": "You looked under the bed yourself.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "child_broke_it",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "💥",
+      "label": "AT HOME",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 58,
+    "minAge": 4,
+    "maxAge": 9,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You broke something that mattered.",
+    "body": "It was on the shelf you were told not to climb. It is in several pieces now and nobody has come in yet.",
+    "choices": [
+      {
+        "id": "own_up",
+        "label": "Own up",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You told them before they found it. You got a look rather than a shouting.",
+            "historyLine": "You broke something and owned up to it.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              },
+              {
+                "op": "trait_add",
+                "traitId": "honest"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hide_it",
+        "label": "Hide the pieces",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "They found it in the spring. By then the lie had gone on too long to take back.",
+            "historyLine": "You broke something and hid it.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "blame",
+        "label": "Blame the dog",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "The dog took it well. You did not feel good about it for a surprisingly long time.",
+            "historyLine": "You blamed the dog for something you broke.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "child_new_kid",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🚸",
+      "label": "SCHOOL",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 60,
+    "minAge": 5,
+    "maxAge": 10,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "There is a new kid and nobody will sit with them.",
+    "body": "They have been alone at the far table for four days. You have counted.",
+    "choices": [
+      {
+        "id": "sit",
+        "label": "Go and sit with them",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It was awkward for ten minutes and then it wasn't.",
+            "historyLine": "You sat with the new kid nobody else would.",
+            "effects": [
+              {
+                "op": "spawn_npc",
+                "role": "friend",
+                "templateId": "school_friend"
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 7
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "watch",
+        "label": "Keep watching",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Someone else did it eventually. You thought about it for years.",
+            "historyLine": "You watched the new kid eat alone.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "child_the_race",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🏃",
+      "label": "SCHOOL",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 52,
+    "minAge": 5,
+    "maxAge": 11,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "Sports day, and you are faster than you thought.",
+    "body": "You are in the lead with twenty metres to go, and your friend is just behind you.",
+    "choices": [
+      {
+        "id": "win",
+        "label": "Win it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You won. Your friend was fine about it in a way that lasted about a week.",
+            "historyLine": "You won sports day.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "fitness",
+                "delta": 7
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 8
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ease_up",
+        "label": "Ease up",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You came second by half a step. Nobody knew but you.",
+            "historyLine": "You let someone else win sports day.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 5
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "child_found_money",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "💵",
+      "label": "OUT",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 50,
+    "minAge": 6,
+    "maxAge": 12,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "There is a folded note on the pavement.",
+    "body": "Nobody is looking for it. It is more money than you have ever held at once.",
+    "choices": [
+      {
+        "id": "keep",
+        "label": "Keep it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You spent it on things you cannot now remember.",
+            "historyLine": "You found money and kept it.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 4000
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hand_in",
+        "label": "Take it to the counter",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "The woman behind the counter made a fuss of you. You went slightly red.",
+            "historyLine": "You handed in money you found.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              },
+              {
+                "op": "trait_add",
+                "traitId": "honest"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "child_reading",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "📖",
+      "label": "AT HOME",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 48,
+    "minAge": 6,
+    "maxAge": 12,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You have read the same book four times.",
+    "body": "Somebody has noticed, and asked whether you would like a harder one.",
+    "choices": [
+      {
+        "id": "yes",
+        "label": "Yes",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It took you all summer and you understood about half of it, which was enough.",
+            "historyLine": "You read a book that was too old for you.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "Read the same one again",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You read it twice more. You can still quote parts of it.",
+            "historyLine": "You read the same book until it fell apart.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "stats.smarts",
+      "op": ">=",
+      "value": 45
+    }
+  },
+  {
+    "id": "child_teased_back",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "😤",
+      "label": "SCHOOL",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
+    "weightClass": "major",
+    "priority": 62,
+    "minAge": 7,
+    "maxAge": 13,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "Somebody has decided you are the funny one to pick on.",
+    "body": "It has been going on for a month. It is not violent and it is not stopping.",
+    "choices": [
+      {
+        "id": "tell",
+        "label": "Tell a teacher",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It stopped. It also got you a name that took two years to shake.",
+            "historyLine": "You told a teacher you were being picked on.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hit_back",
+        "label": "Hit back",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It stopped that afternoon. You were the one in trouble.",
+            "historyLine": "You hit back at someone who was picking on you.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              },
+              {
+                "op": "reputation",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "take_it",
+        "label": "Take it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It ran out of fuel eventually. Something in you got harder that year.",
+            "historyLine": "You took it, and it eventually stopped.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -8
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 7
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "child_parents_money",
+    "version": 1,
+    "category": "family",
+    "card": {
+      "icon": "🧾",
+      "label": "AT HOME",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 56,
+    "minAge": 7,
+    "maxAge": 14,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You worked out that money is tight.",
+    "body": "Nobody said anything. You put it together from the way they talk about the shopping.",
+    "choices": [
+      {
+        "id": "pretend",
+        "label": "Pretend you haven't noticed",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You never mentioned it. Neither did they. It sat there for years.",
+            "historyLine": "You worked out money was tight and said nothing.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask",
+        "label": "Ask about it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "They told you more than they meant to, and you were glad to be told.",
+            "historyLine": "You asked your parents about money.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "money.total",
+      "op": "<",
+      "value": 3000000
+    }
+  },
+  {
+    "id": "teen_first_job",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🧹",
+      "label": "WORK",
+      "tint": "#EAF6F0",
+      "color": "#3D7A5E"
+    },
+    "weightClass": "major",
+    "priority": 64,
+    "minAge": 14,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "There is a Saturday job going.",
+    "body": "It pays badly, it is six hours on your feet, and it is money that is yours.",
+    "choices": [
+      {
+        "id": "take",
+        "label": "Take it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You were tired every Saturday for a year and you never once regretted the money.",
+            "historyLine": "You got a Saturday job.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 180000
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 8
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dont",
+        "label": "Have your weekends",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You kept your Saturdays. They were good Saturdays.",
+            "historyLine": "You turned down a Saturday job.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teen_the_party",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🍺",
+      "label": "OUT",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
+    "weightClass": "major",
+    "priority": 66,
+    "minAge": 15,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "There is a party and the parents are away.",
+    "body": "Everyone is going. You have been told, more than once, not to.",
+    "choices": [
+      {
+        "id": "go",
+        "label": "Go anyway",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It was mostly boring and slightly frightening and you would not have missed it.",
+            "historyLine": "You went to the party you were told not to go to.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 8
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "Stay in",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You heard about it for weeks. It sounded better than it was.",
+            "historyLine": "You stayed in on the night of the party.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask",
+        "label": "Ask to go, properly",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "They said yes, with conditions, which took some of the fun out of it and none of the point.",
+            "historyLine": "You asked to go to the party, and were allowed.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 3
+              },
+              {
+                "op": "trait_add",
+                "traitId": "honest"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teen_the_test",
+    "version": 1,
+    "category": "education",
+    "card": {
+      "icon": "📝",
+      "label": "SCHOOL",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 68,
+    "minAge": 14,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "The exam that decides things is in a fortnight.",
+    "body": "You have not done nearly enough and everybody keeps saying it will be fine.",
+    "choices": [
+      {
+        "id": "cram",
+        "label": "Work like hell for two weeks",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You did better than you deserved and worse than you wanted.",
+            "historyLine": "You crammed for the exam that mattered.",
+            "effects": [
+              {
+                "op": "grades",
+                "delta": 30
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -5
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wing",
+        "label": "Wing it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It went how it went. You found out in August.",
+            "historyLine": "You did not revise for the exam that mattered.",
+            "effects": [
+              {
+                "op": "grades",
+                "delta": -25
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cheat",
+        "label": "Find a way to see it early",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You got a mark you had not earned, and spent a while waiting to be found out.",
+            "historyLine": "You cheated on the exam that mattered.",
+            "effects": [
+              {
+                "op": "grades",
+                "delta": 40
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -7
+              },
+              {
+                "op": "reputation",
+                "delta": -8
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teen_the_letter",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "💌",
+      "label": "SOMEONE",
+      "tint": "#FDE9F1",
+      "color": "#C25585"
+    },
+    "weightClass": "major",
+    "priority": 63,
+    "minAge": 13,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You have written it and not sent it.",
+    "body": "It has been in your bag for nine days. You have rewritten it twice.",
+    "choices": [
+      {
+        "id": "send",
+        "label": "Send it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "They were kind. It was not what you wanted and it was better than not knowing.",
+            "historyLine": "You told someone how you felt.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bin",
+        "label": "Bin it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You never said anything. You still think about it occasionally, which is its own answer.",
+            "historyLine": "You never sent the letter.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teen_shoplift_dare",
+    "version": 1,
+    "category": "crime",
+    "card": {
+      "icon": "🏪",
+      "label": "OUT",
+      "tint": "#FFF0E8",
+      "color": "#C4462E"
+    },
+    "weightClass": "major",
+    "priority": 60,
+    "minAge": 13,
+    "maxAge": 17,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "They are daring you to walk out with it.",
+    "body": "It is worth almost nothing. That is not really what is being asked.",
+    "choices": [
+      {
+        "id": "do_it",
+        "label": "Do it",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You got out. Your hands did not stop shaking until the bus.",
+            "historyLine": "You stole something on a dare.",
+            "effects": [
+              {
+                "op": "money",
+                "delta": 1500
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 5
+              },
+              {
+                "op": "reputation",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "refuse",
+        "label": "Say no",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "They let it go quicker than you expected. One of them was relieved.",
+            "historyLine": "You refused a dare to steal something.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": -3
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 7
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teen_what_next",
+    "version": 1,
+    "category": "education",
+    "card": {
+      "icon": "🧭",
+      "label": "SCHOOL",
+      "tint": "#EEEAFB",
+      "color": "#5F51AE"
+    },
+    "weightClass": "major",
+    "priority": 72,
+    "minAge": 16,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "Somebody asks what you are going to do.",
+    "body": "It is the first time it has been asked as though the answer matters.",
+    "choices": [
+      {
+        "id": "study",
+        "label": "Say you want to keep studying",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Saying it out loud made it more real than you meant it to be.",
+            "historyLine": "You said out loud that you wanted to keep studying.",
+            "effects": [
+              {
+                "op": "flag",
+                "key": "wants_university",
+                "value": true
+              },
+              {
+                "op": "stat",
+                "stat": "smarts",
+                "delta": 4
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "label": "Say you want to get earning",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You wanted your own money more than you wanted three more years of this.",
+            "historyLine": "You said you wanted to start earning.",
+            "effects": [
+              {
+                "op": "flag",
+                "key": "wants_work",
+                "value": true
+              },
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dunno",
+        "label": "Say you don't know",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It was the truth, and it bought you a year of not deciding.",
+            "historyLine": "You told them you did not know what you wanted.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "teen_falling_out",
+    "version": 1,
+    "category": "relationship",
+    "card": {
+      "icon": "🧊",
+      "label": "SOMEONE",
+      "tint": "#EAF2FA",
+      "color": "#2E6FA8"
+    },
+    "weightClass": "major",
+    "priority": 61,
+    "minAge": 13,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "You and {friend} have not spoken in a month.",
+    "body": "Neither of you can now remember the start of it with any confidence.",
+    "choices": [
+      {
+        "id": "go_round",
+        "label": "Go round there",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "It took four awkward minutes and then it was fine, and neither of you mentioned it again.",
+            "historyLine": "You made it up with {friend}.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "closeness",
+                "delta": 14
+              },
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "conflict",
+                "delta": -20
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "wait",
+        "label": "Wait for them",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You both waited. It has been a long time now.",
+            "historyLine": "You and {friend} never made it up.",
+            "effects": [
+              {
+                "op": "relationship",
+                "target": "friend",
+                "dimension": "closeness",
+                "delta": -18
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "conditions": {
+      "field": "count.friends",
+      "op": ">=",
+      "value": 1
+    }
+  },
+  {
+    "id": "teen_the_car",
+    "version": 1,
+    "category": "childhood",
+    "card": {
+      "icon": "🚗",
+      "label": "OUT",
+      "tint": "#FFF3D9",
+      "color": "#8A6A20"
+    },
+    "weightClass": "major",
+    "priority": 58,
+    "minAge": 16,
+    "maxAge": 18,
+    "cooldownYears": 8,
+    "participants": [],
+    "title": "Somebody who passed their test last week wants to give you a lift.",
+    "body": "There are five of you and four seats and it is raining.",
+    "choices": [
+      {
+        "id": "get_in",
+        "label": "Get in",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "Nothing happened. It very easily could have.",
+            "historyLine": "You got in a car you should not have got in.",
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "walk",
+        "label": "Walk",
+        "outcomes": [
+          {
+            "id": "o",
+            "text": "You were soaked through and home before them anyway.",
+            "historyLine": "You walked home in the rain rather than get in that car.",
+            "effects": [
+              {
+                "op": "hidden",
+                "attr": "discipline",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

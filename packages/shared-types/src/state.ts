@@ -70,6 +70,8 @@ export const LifeStateSchema = z.object({
   ribbonsEarned: z.array(z.string()),
   /** What this life is for. Chosen at the start; judged at the end. */
   ambitionId: z.string().nullable(),
+  /** Where the character was born, so "get out" can tell whether they did. */
+  bornCityId: z.string(),
   /** Consecutive years an adult has been out of work. Drives desperation. */
   yearsOutOfWork: z.number().int().min(0),
   /** Applications made this year. Cleared on age-up. */

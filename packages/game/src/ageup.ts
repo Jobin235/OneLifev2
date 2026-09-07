@@ -147,19 +147,29 @@ export const advanceYear = (
     state.character.age < 62
   ) {
     state.yearsOutOfWork += 1;
-    const desperate =
-      state.yearsOutOfWork >= 2 &&
-      state.character.finances.cash + state.character.finances.savings <
-        state.character.finances.annualExpenses;
 
-    if (desperate && rng.chance(0.55)) {
+    /*
+     * People out of work look for work, and look harder the longer it goes on.
+     * The rate rises with the years rather than being a flat coin flip, so
+     * unemployment is a stretch of a life rather than a permanent state — an
+     * earlier version required savings to run out first, which left a third of
+     * characters jobless at thirty because they happened to have a cushion.
+     *
+     * This is the floor under a player who never opens the tab. Anyone who does
+     * gets to choose, against openings that state what they want.
+     */
+    const lookingHarder = Math.min(0.7, 0.18 + state.yearsOutOfWork * 0.16);
+
+    if (rng.chance(lookingHarder)) {
       const title = takeAvailableJob(state, content, config, rng);
       if (title) {
         pushHistory(
           state,
           'career',
           '💼',
-          `You needed the money, so you took work as a ${title.toLowerCase()}.`,
+          state.yearsOutOfWork >= 3
+            ? `After a long stretch out of work, you took a job as a ${title.toLowerCase()}.`
+            : `You found work as a ${title.toLowerCase()}.`,
           40,
         );
       }
@@ -208,7 +218,18 @@ export const advanceYear = (
 
   // 8. Choose what happens this year.
   const ctx: ConditionContext = { state, world, bindings: {} };
-  const selection = selectEvents(content.events, state, ctx, config, content.traitsById, rng);
+  const ambition = state.ambitionId
+    ? content.ambitions.find((x) => x.id === state.ambitionId)
+    : undefined;
+  const selection = selectEvents(
+    content.events,
+    state,
+    ctx,
+    config,
+    content.traitsById,
+    rng,
+    ambition?.favours,
+  );
 
   let card: EventInstance | null = null;
   if (selection.major) {

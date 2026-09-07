@@ -41,8 +41,15 @@ describe('nothing happens without a reason the player can see', () => {
   it('does not let a poor life compound into millions of debt', () => {
     for (let i = 0; i < 12; i++) {
       const state = liveTo(`poor-${i}`, 75);
-      // Spending you cannot afford is going without, not borrowing.
-      expect(state.character.finances.debt).toBeLessThan(100_000_00);
+
+      /*
+       * Nothing should be bigger at the end than a person could plausibly have
+       * borrowed. A mortgage is allowed to be large; nothing is allowed to have
+       * grown large purely by compounding on somebody with no income.
+       */
+      for (const debt of state.character.finances.debts) {
+        expect(debt.balance).toBeLessThan(500_000_00);
+      }
     }
   });
 
@@ -88,8 +95,10 @@ describe('nothing happens without a reason the player can see', () => {
   it('only hires you into work you applied for, or work you were desperate for', () => {
     for (let i = 0; i < 10; i++) {
       const state = liveTo(`hire-${i}`, 45);
+      // Applied for, taken out of desperation, or offered through an event —
+      // all three are attributable; a job appearing with no line is not.
       const starts = state.history.filter((e) =>
-        /You got the job|you took work as/.test(e.line),
+        /You got the job|you took work as|You started a new job|You started at/.test(e.line),
       ).length;
       const jobsHeld = state.career.history.length + (state.career.current ? 1 : 0);
       // Promotions are not new jobs, so starts can be fewer — but never zero

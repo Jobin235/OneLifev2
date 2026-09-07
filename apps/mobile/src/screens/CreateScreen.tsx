@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CountryOption } from '../lib/api';
+import type { AmbitionOption, CountryOption } from '../lib/api';
 
 type Upbringing = 'rough' | 'getting_by' | 'comfortable';
 
@@ -25,21 +25,25 @@ const UPBRINGINGS: Array<{ id: Upbringing; label: string; tag?: string; blurb: s
 
 export const CreateScreen = ({
   countries,
+  ambitions,
   busy,
   onCreate,
 }: {
   countries: CountryOption[];
+  ambitions: AmbitionOption[];
   busy: boolean;
   onCreate: (input: {
     firstName?: string;
     countryId: string;
     cityId?: string;
     upbringing: Upbringing;
+    ambitionId: string | null;
   }) => void;
 }) => {
   const [firstName, setFirstName] = useState('');
   const [countryId, setCountryId] = useState(countries[0]?.id ?? 'us');
   const [upbringing, setUpbringing] = useState<Upbringing>('getting_by');
+  const [ambitionId, setAmbitionId] = useState<string | null>(null);
 
   const country = countries.find((c) => c.id === countryId);
 
@@ -142,6 +146,35 @@ export const CreateScreen = ({
           </div>
         </div>
 
+        {ambitions.length > 0 && (
+          <div>
+            <div className="eyebrow" style={{ marginBottom: 4 }}>
+              WHAT YOU WANT
+            </div>
+            {/*
+              The one thing this life is for. It bends which events you get from
+              the first year, and the ending answers it — so two lives with the
+              same start diverge immediately.
+            */}
+            <div className="pick-blurb" style={{ marginBottom: 10 }}>
+              Optional. It changes what happens to you.
+            </div>
+            <div className="ambition-grid">
+              {ambitions.map((option) => (
+                <button
+                  key={option.id}
+                  className={`ambition${option.id === ambitionId ? ' selected' : ''}`}
+                  onClick={() => setAmbitionId(option.id === ambitionId ? null : option.id)}
+                >
+                  <span className="ambition-emoji">{option.emoji}</span>
+                  <span className="ambition-label">{option.label}</span>
+                  <span className="ambition-pitch">{option.pitch}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div
           style={{
             background: 'var(--blue-tint-2)',
@@ -167,6 +200,7 @@ export const CreateScreen = ({
               countryId,
               ...(country?.cities[0] ? { cityId: country.cities[0].id } : {}),
               upbringing,
+              ambitionId,
             })
           }
         >

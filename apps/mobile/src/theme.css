@@ -1642,3 +1642,82 @@ button {
   color: var(--muted);
   margin-top: 3px;
 }
+
+/* ---------- What this life is for ---------- */
+
+.ambition-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.ambition {
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-tile);
+  padding: 13px 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  transition:
+    border-color 0.14s ease,
+    background 0.14s ease;
+}
+
+.ambition:hover {
+  border-color: var(--violet);
+}
+
+.ambition.selected {
+  border-color: var(--violet);
+  background: var(--violet-tint);
+}
+
+.ambition-emoji {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.ambition-label {
+  font: 800 14px/1.2 var(--display);
+  color: var(--ink);
+}
+
+.ambition-pitch {
+  font: 600 11.5px/1.4 var(--text);
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* ---------- The verdict on the ambition ---------- */
+
+.verdict {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  padding: 18px;
+  text-align: center;
+}
+
+.verdict-wanted {
+  font: 700 12.5px/1.4 var(--text);
+  color: var(--muted);
+}
+
+.verdict-line {
+  font: 700 15.5px/1.5 var(--display);
+  margin-top: 9px;
+  text-wrap: pretty;
+}
+
+.verdict.met .verdict-line {
+  color: var(--green-deep);
+}
+
+.verdict.missed .verdict-line {
+  color: var(--ink);
+}

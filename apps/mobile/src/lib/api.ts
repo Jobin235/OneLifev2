@@ -129,6 +129,14 @@ export interface Recap {
 }
 
 export interface Legacy {
+  ambition: {
+    id: string;
+    label: string;
+    emoji: string;
+    wanted: string;
+    achieved: boolean;
+    verdict: string;
+  } | null;
   ribbon: { id: string; label: string; emoji: string; line: string };
   name: string;
   bornYear: number;
@@ -284,6 +292,13 @@ export interface MoreView {
   family: { name: string; line: string };
 }
 
+export interface AmbitionOption {
+  id: string;
+  label: string;
+  emoji: string;
+  pitch: string;
+}
+
 export interface CountryOption {
   id: string;
   name: string;
@@ -304,6 +319,7 @@ export type ActOutcome = 'done' | 'overdone' | 'no_further_effect' | 'backfired'
 
 export interface Api {
   countries(): Promise<{ countries: CountryOption[] }>;
+  ambitions(): Promise<{ ambitions: AmbitionOption[] }>;
   listLives(): Promise<{ lives: Array<{ id: string; name: string; age: number; alive: boolean }> }>;
   newLife(body: {
     firstName?: string;
@@ -311,6 +327,7 @@ export interface Api {
     countryId: string;
     cityId?: string;
     upbringing: 'rough' | 'getting_by' | 'comfortable';
+    ambitionId?: string | null;
   }): Promise<{ life: LifeView }>;
   life(lifeId: string): Promise<{ life: LifeView }>;
   ageUp(lifeId: string, idempotencyKey: string): Promise<{ life: LifeView; recap: Recap; died: boolean }>;
@@ -342,6 +359,7 @@ export interface Api {
 
 export const httpApi: Api = {
   countries: () => request<{ countries: CountryOption[] }>('/content/countries'),
+  ambitions: () => request<{ ambitions: AmbitionOption[] }>('/content/ambitions'),
 
   listLives: () =>
     request<{ lives: Array<{ id: string; name: string; age: number; alive: boolean }> }>('/lives'),

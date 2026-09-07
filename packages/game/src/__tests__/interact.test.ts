@@ -26,6 +26,14 @@ describe('doing something to a specific person', () => {
     return state;
   };
 
+  /** Someone still alive to act on — relationships[0] may have died. */
+  const someone = (state: ReturnType<typeof adultWithPeople>) => {
+    const alive = new Set(state.npcs.filter((n) => n.alive).map((n) => n.id));
+    const rel = state.relationships.find((r) => alive.has(r.npcId));
+    if (!rel) throw new Error('nobody left alive in this life');
+    return rel;
+  };
+
   it('offers something to do with everyone you know', () => {
     const state = adultWithPeople('int-1');
     expect(state.relationships.length).toBeGreaterThan(0);
@@ -36,7 +44,7 @@ describe('doing something to a specific person', () => {
 
   it('writes what happened into that person\'s memory', () => {
     const state = adultWithPeople('int-2');
-    const rel = state.relationships[0]!;
+    const rel = someone(state);
     const before = rel.memories.length;
 
     const { state: after, line } = game.interact(state, rel.npcId, 'talk');
@@ -50,7 +58,7 @@ describe('doing something to a specific person', () => {
 
   it('lands differently depending on how the relationship already stands', () => {
     const state = adultWithPeople('int-3');
-    const rel = state.relationships[0]!;
+    const rel = someone(state);
 
     // Two versions of the same person: one trusted, one not.
     const warmState = structuredClone(state);
@@ -83,7 +91,7 @@ describe('doing something to a specific person', () => {
 
   it('refuses what the relationship has not earned', () => {
     const state = adultWithPeople('int-4');
-    const rel = state.relationships[0]!;
+    const rel = someone(state);
     Object.assign(rel.dimensions, {
       affection: 2, trust: 2, closeness: 2, respect: 2, conflict: 90,
     });
@@ -109,7 +117,7 @@ describe('doing something to a specific person', () => {
 
   it('limits each interaction per year, per person', () => {
     const state = adultWithPeople('int-6');
-    const rel = state.relationships[0]!;
+    const rel = someone(state);
 
     let current = state;
     for (let i = 0; i < 3; i++) current = game.interact(current, rel.npcId, 'talk').state;
