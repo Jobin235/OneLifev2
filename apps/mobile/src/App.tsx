@@ -6,7 +6,6 @@ import type {
   CountryOption,
   LifeView,
   MoneyView,
-  MoreView,
   PeopleView,
   PersonView,
   Opening,
@@ -14,8 +13,9 @@ import type {
   WorkView,
 } from './lib/api';
 import { safeStorage } from './lib/storage';
-import { Tabs, type Tab } from './components/Tabs';
-import { LifeScreen } from './screens/LifeScreen';
+import { BottomNav, Header, Sheet, StatsBar, type Slot } from './shell/Frame';
+import { LifeLog } from './shell/LifeLog';
+import { Popup, ResultToast } from './shell/Popup';
 import { PeopleScreen } from './screens/PeopleScreen';
 import { PersonScreen } from './screens/PersonScreen';
 import { DoScreen } from './screens/DoScreen';
@@ -23,11 +23,13 @@ import { SchoolScreen } from './screens/SchoolScreen';
 import { WorkScreen } from './screens/WorkScreen';
 import { JobsScreen } from './screens/JobsScreen';
 import { MoneyScreen } from './screens/MoneyScreen';
-import { MoreScreen } from './screens/MoreScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
 const LAST_LIFE = 'onelife.lastLife';
+
+/** The contextual nav slot names its own sheet, so the two can never disagree. */
+const CONTEXT_TITLE = { school: 'School', occupation: 'Occupation', prison: 'Prison' } as const;
 
 /**
  * VITE_LOCAL builds run the simulation in the browser, so the game can be played
@@ -36,10 +38,16 @@ const LAST_LIFE = 'onelife.lastLife';
  */
 const api = import.meta.env.VITE_LOCAL === '1' ? createLocalApi() : httpApi;
 
+/**
+ * The app is one screen: header, log, nav, stats. Tabs are sheets that slide
+ * over the log rather than places you go, so the life you are reading is never
+ * more than one tap away and the chrome never rearranges itself.
+ * See docs/BITLIFE-LOOP-SPEC.md §1.
+ */
 export const App = () => {
   const [countries, setCountries] = useState<CountryOption[] | null>(null);
   const [life, setLife] = useState<LifeView | null>(null);
-  const [tab, setTab] = useState<Tab>('life');
+  const [slot, setSlot] = useState<Slot | null>(null);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
@@ -50,7 +58,6 @@ export const App = () => {
   const [work, setWork] = useState<WorkView | null>(null);
   const [jobs, setJobs] = useState<{ openings: Opening[]; applicationsLeft: number } | null>(null);
   const [money, setMoney] = useState<MoneyView | null>(null);
-  const [more, setMore] = useState<MoreView | null>(null);
 
   // Design 5D: prison recolours the app's chrome.
   useEffect(() => {
@@ -64,10 +71,10 @@ export const App = () => {
 
   /** Every mutation goes through here, so failure never leaves a stale screen. */
   const run = useCallback(
-    async <T,>(work: () => Promise<T>): Promise<T | null> => {
+    async <T,>(job: () => Promise<T>): Promise<T | null> => {
       setBusy(true);
       try {
-        return await work();
+        return await job();
       } catch (error) {
         show(error instanceof ApiError ? error.message : 'Something went wrong.');
         return null;
@@ -90,8 +97,6 @@ export const App = () => {
         return;
       }
 
-      // Resuming is a convenience. If it fails, the player still gets a new life
-      // rather than a blank screen.
       try {
         const { lives } = await api.listLives();
         const remembered = safeStorage.get(LAST_LIFE);
@@ -111,33 +116,31 @@ export const App = () => {
     safeStorage.set(LAST_LIFE, next.lifeId);
   }, []);
 
-  // Refresh whichever tab is open whenever the life changes underneath it.
+  // Refresh whichever sheet is open whenever the life changes underneath it.
   const lifeId = life?.lifeId;
   const stamp = `${life?.revision}:${life?.gameState}`;
   useEffect(() => {
-    if (!lifeId) return;
+    if (!lifeId || !slot) return;
     void (async () => {
       try {
-        if (tab === 'people' && !person) setPeople(await api.people(lifeId));
-        if (tab === 'do') {
-          const [{ actions: list }, enrolled, employed, market] = await Promise.all([
-            api.actions(lifeId),
+        if (slot === 'relationships' && !person) setPeople(await api.people(lifeId));
+        if (slot === 'context') {
+          const [enrolled, employed, market] = await Promise.all([
             api.school(lifeId),
             api.work(lifeId),
             api.openings(lifeId),
           ]);
-          setActions(list);
           setSchool(enrolled);
           setWork(employed);
           setJobs(market);
         }
-        if (tab === 'money') setMoney(await api.money(lifeId));
-        if (tab === 'more') setMore(await api.more(lifeId));
+        if (slot === 'activities') setActions((await api.actions(lifeId)).actions);
+        if (slot === 'assets') setMoney(await api.money(lifeId));
       } catch {
-        /* A stale panel is better than a crash; the Life tab stays authoritative. */
+        /* A stale sheet is better than a crash; the log stays authoritative. */
       }
     })();
-  }, [lifeId, tab, stamp, person]);
+  }, [lifeId, slot, stamp, person]);
 
   // Age Up is idempotent: a retry after a dropped connection cannot age twice.
   const idempotencyKey = useRef<string>('');
@@ -147,7 +150,9 @@ export const App = () => {
     const result = await run(() => api.ageUp(life.lifeId, idempotencyKey.current));
     if (!result) return;
     setLifeAndRemember(result.life);
-    setTab('life');
+    // Ageing up is a return to the log, whatever sheet was open.
+    setSlot(null);
+    setPerson(null);
   }, [life, run, setLifeAndRemember]);
 
   const onChoose = useCallback(
@@ -172,8 +177,6 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       setPerson(result.person);
-      // The outcome is the point, so say it rather than leaving the meters to
-      // move silently.
       show(result.line);
     },
     [life, person, run, setLifeAndRemember, show],
@@ -219,13 +222,11 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
 
-      // A tap that could not help says so, rather than appearing to do nothing.
       if (result.outcome === 'no_further_effect') {
         show('That has done all it can for you this year.');
       } else if (result.outcome === 'overdone') {
         show('You overdid it.');
       } else if (result.outcome === 'backfired') {
-        // The log carries the detail; this is just so it does not pass unnoticed.
         show('That did not go the way you wanted.');
       }
     },
@@ -237,7 +238,7 @@ export const App = () => {
       const result = await run(() => api.newLife(input));
       if (result) {
         setLifeAndRemember(result.life);
-        setTab('life');
+        setSlot(null);
       }
     },
     [run, setLifeAndRemember],
@@ -251,7 +252,7 @@ export const App = () => {
         setLifeAndRemember(result.life);
         setPeople(null);
         setPerson(null);
-        setTab('life');
+        setSlot(null);
       }
     },
     [life, run, setLifeAndRemember],
@@ -293,105 +294,120 @@ export const App = () => {
     );
   }
 
+  const decisionOpen = life.activeEvent !== null;
+
   return (
     <div className="app">
-      {tab === 'life' && (
-        <LifeScreen
-          life={life}
-          busy={busy}
-          onChoose={onChoose}
-          onDismiss={onDismiss}
-          onAgeUp={onAgeUp}
-        />
-      )}
+      <Header life={life} />
 
-      {tab === 'people' &&
-        (person ? (
-          <PersonScreen
-            person={person}
-            busy={busy}
-            decisionOpen={life.activeEvent !== null}
-            onBack={() => setPerson(null)}
-            onInteract={onInteract}
-          />
-        ) : people ? (
-          <PeopleScreen people={people} onOpen={openPerson} />
-        ) : (
-          <div className="spinner">…</div>
-        ))}
+      <main className="sh-main">
+        <LifeLog life={life} />
 
-      {/*
-        School is the Do tab while you are in it. A separate tab would be dead
-        for two thirds of a life, and the design puts school behind Do (3A).
-      */}
-      {tab === 'do' && school && (
-        <SchoolScreen
-          school={school}
-          busy={busy}
-          decisionOpen={life.activeEvent !== null}
-          onAct={onAct}
-          onOpenPerson={openPerson}
-        />
-      )}
+        {slot === 'relationships' &&
+          (person ? (
+            <Sheet title={person.name} onBack={() => setPerson(null)} onClose={() => setSlot(null)}>
+              <PersonScreen
+                person={person}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onBack={() => setPerson(null)}
+                onInteract={onInteract}
+              />
+            </Sheet>
+          ) : (
+            <Sheet title="Relationships" onClose={() => setSlot(null)}>
+              {people ? <PeopleScreen people={people} onOpen={openPerson} /> : <div className="spinner">…</div>}
+            </Sheet>
+          ))}
 
-      {tab === 'do' && !school && work && (
-        <WorkScreen
-          work={work}
-          busy={busy}
-          decisionOpen={life.activeEvent !== null}
-          onAct={onAct}
-          onOpenPerson={openPerson}
-        />
-      )}
+        {/*
+          One contextual slot, and what it holds is decided by the same rule
+          that labels it: school while you are in it, work when you are not,
+          prison over everything. The player never has to hunt for the screen
+          that matters right now.
+        */}
+        {slot === 'context' && (
+          <Sheet title={CONTEXT_TITLE[life.navSlot]} onClose={() => setSlot(null)}>
+            {life.navSlot === 'school' && school && (
+              <SchoolScreen
+                school={school}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onAct={onAct}
+                onOpenPerson={openPerson}
+              />
+            )}
+            {life.navSlot === 'school' && !school && (
+              <p className="sh-empty">You are not enrolled anywhere yet.</p>
+            )}
+            {life.navSlot === 'occupation' && work && (
+              <WorkScreen
+                work={work}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onAct={onAct}
+                onOpenPerson={openPerson}
+              />
+            )}
+            {life.navSlot === 'occupation' && !work && jobs && (
+              <JobsScreen
+                openings={jobs.openings}
+                applicationsLeft={jobs.applicationsLeft}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onApply={onApply}
+              />
+            )}
+            {life.navSlot === 'occupation' && !work && !jobs && <div className="spinner">…</div>}
+            {life.navSlot === 'prison' && (
+              <p className="sh-empty">You are serving a sentence.</p>
+            )}
+          </Sheet>
+        )}
 
-      {/* Out of work and old enough: the job market is the thing to do. */}
-      {tab === 'do' && !school && !work && jobs && life.age >= 16 && (
-        <JobsScreen
-          openings={jobs.openings}
-          applicationsLeft={jobs.applicationsLeft}
-          busy={busy}
-          decisionOpen={life.activeEvent !== null}
-          onApply={onApply}
-        />
-      )}
+        {slot === 'activities' && (
+          <Sheet title="Activities" onClose={() => setSlot(null)}>
+            {actions ? (
+              <DoScreen
+                actions={actions}
+                age={life.age}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onAct={onAct}
+              />
+            ) : (
+              <div className="spinner">…</div>
+            )}
+          </Sheet>
+        )}
 
-      {tab === 'do' &&
-        !school &&
-        !work &&
-        !(jobs && life.age >= 16) &&
-        (actions ? (
-          <DoScreen
-            actions={actions}
-            age={life.age}
-            busy={busy}
-            decisionOpen={life.activeEvent !== null}
-            onAct={onAct}
-          />
-        ) : (
-          <div className="spinner">…</div>
-        ))}
+        {slot === 'assets' && (
+          <Sheet title="Assets" onClose={() => setSlot(null)}>
+            {money ? (
+              <MoneyScreen money={money} busy={busy} onBuy={onBuy} onSell={onSell} />
+            ) : (
+              <div className="spinner">…</div>
+            )}
+          </Sheet>
+        )}
+      </main>
 
-      {tab === 'money' &&
-        (money ? (
-          <MoneyScreen money={money} busy={busy} onBuy={onBuy} onSell={onSell} />
-        ) : (
-          <div className="spinner">…</div>
-        ))}
-
-      {tab === 'more' &&
-        (more ? (
-          <MoreScreen more={more} generation={life.generation} />
-        ) : (
-          <div className="spinner">…</div>
-        ))}
-
-      <Tabs
-        active={tab}
-        onChange={(next) => {
+      <BottomNav
+        life={life}
+        open={slot}
+        busy={busy}
+        onOpen={(next) => {
           setPerson(null);
-          setTab(next);
+          setSlot(next);
         }}
+        onAgeUp={onAgeUp}
       />
+      <StatsBar life={life} />
+
+      {life.activeEvent && <Popup event={life.activeEvent} busy={busy} onChoose={onChoose} />}
+      {!life.activeEvent && life.resolvedEvent && (
+        <ResultToast event={life.resolvedEvent} onDismiss={onDismiss} />
+      )}
 
       {toast && <div className="toast">{toast}</div>}
     </div>

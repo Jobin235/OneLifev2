@@ -1,5 +1,5 @@
 import type { GameConfig } from '@lineage/config';
-import type { CareerTrack, LifeState, PerformanceBand } from '@lineage/shared-types';
+import type { CareerTrack, Enrolment, LifeState, PerformanceBand } from '@lineage/shared-types';
 import { clampStat } from '@lineage/shared-types';
 import { pushHistory } from './history.js';
 import type { Rng } from './rng.js';
@@ -133,4 +133,45 @@ export const jobLine = (state: LifeState): string => {
   if (state.character.age < 5) return 'Too young for any of this';
   if (state.character.age < 18) return 'At school';
   return 'Not working';
+};
+
+/**
+ * The one line under your name in the header, BitLife-style: a station, not a
+ * sentence. "University Student", "Apprentice Moonshiner", "Unemployed",
+ * "Prisoner". It is the shortest true answer to "what are you right now".
+ */
+export const stationLine = (state: LifeState): string => {
+  if (state.character.record.incarceration) return 'Prisoner';
+  if (state.career.retired) return 'Retired';
+  const owned = state.businesses.find((b) => !b.closed && b.equity >= 50);
+  if (owned) return `Owner, ${owned.name}`;
+  if (state.career.current) return state.career.current.title;
+  const enrolled = state.education.current;
+  if (enrolled) return STATION_BY_STAGE[enrolled.stage];
+  if (state.character.age < 2) return 'Baby';
+  if (state.character.age < 5) return 'Toddler';
+  return 'Unemployed';
+};
+
+const STATION_BY_STAGE: Record<Enrolment['stage'], string> = {
+  none: 'Unemployed',
+  primary: 'Elementary School Student',
+  secondary: 'High School Student',
+  vocational: 'Trade School Student',
+  university: 'University Student',
+  graduate: 'Graduate Student',
+};
+
+/**
+ * Which of the five nav slots the contextual first one is showing. School wins
+ * over work because you cannot do both, and prison wins over everything.
+ */
+export const navSlot = (state: LifeState): 'school' | 'occupation' | 'prison' => {
+  if (state.character.record.incarceration) return 'prison';
+  if (state.education.current) return 'school';
+  // A child who is not enrolled yet is still on the school track, not looking
+  // for work. Showing them "Occupation" would be the app telling a five-year-old
+  // to get a job.
+  if (state.character.age < 18 && !state.career.current) return 'school';
+  return 'occupation';
 };

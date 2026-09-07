@@ -13,10 +13,12 @@ import {
   gpa,
   jobLine,
   monthlyLines,
+  navSlot,
   netWorth,
   performanceBand,
   PERFORMANCE_LABEL,
   relationshipLabel,
+  stationLine,
   surfacedScore,
 } from '@lineage/simulation';
 
@@ -64,7 +66,26 @@ export const lifeView = (state: LifeState, content: ContentPack) => {
       color: STAT_DISPLAY[key].color,
     })),
     jobLine: job,
+    /**
+     * The header line under the name: what you are right now, in two or three
+     * words. The longer "Interior Designer, Hollywood Design" stays on jobLine
+     * for the screens that have room for it.
+     */
+    station: stationLine(state),
+    /** Which of the five nav slots the contextual first one is showing. */
+    navSlot: navSlot(state),
     money: formatMoneyExact(character.finances.cash + character.finances.savings),
+    /*
+     * Bank Balance, and it is allowed to be negative. A student loan does not
+     * hand you cash — it puts a number in the header that follows you for a
+     * decade, and watching it climb back to zero is most of what early
+     * adulthood feels like.
+     */
+    balance: formatMoneyExact(
+      character.finances.cash +
+        character.finances.savings -
+        character.finances.debts.reduce((sum, d) => sum + d.balance, 0),
+    ),
     gameState: state.gameState,
     activeEvent: state.activeEvent,
     resolvedEvent: state.resolvedEvent,

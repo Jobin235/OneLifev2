@@ -70,15 +70,30 @@ export interface EventChoice {
   id: string;
   label: string;
   note?: string;
+  /** Raises a Confirm sheet carrying this sentence before anything happens. */
+  confirm?: string;
+  disabled?: boolean;
 }
 
 export interface ActiveEvent {
   id: string;
   definitionId: string;
-  card: { icon: string; label: string; tint: string; color: string };
+  card: {
+    icon: string;
+    label: string;
+    tint: string;
+    color: string;
+    /** Named on the popup's header band when the event is about somebody. */
+    who: { name: string; emoji: string; relation: string } | null;
+  };
   title: string;
   body: string;
+  /** The line directly above the buttons: "What will you do?" */
+  question: string;
+  /** One named quantity: "Possible Sentence: 2 years". */
+  stake: { label: string; value: string } | null;
   choices: EventChoice[];
+  outcomeTitle: string | null;
   outcomeText: string | null;
   deltas: Array<{ text: string; positive: boolean }>;
 }
@@ -107,9 +122,15 @@ export interface LifeView {
   age: number;
   avatarEmoji: string;
   subtitle: string;
+  /** Two or three words under the name: "University Student", "Prisoner". */
+  station: string;
+  /** Which of the five nav slots the contextual first one is showing. */
+  navSlot: 'school' | 'occupation' | 'prison';
   stats: StatBar[];
   jobLine: string;
   money: string;
+  /** Bank Balance, and it is allowed to be negative. */
+  balance: string;
   gameState: string;
   activeEvent: ActiveEvent | null;
   resolvedEvent: ActiveEvent | null;

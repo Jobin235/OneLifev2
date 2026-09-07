@@ -69,6 +69,9 @@ export const resolveChoice = (
   const historyLine = interpolate(outcome.historyLine, state, bindings);
 
   instance.chosenChoiceId = choiceId;
+  instance.outcomeTitle = outcome.title
+    ? interpolate(outcome.title, state, bindings)
+    : instance.title;
   instance.outcomeText = outcomeText;
   instance.historyLine = historyLine;
   instance.deltas = deltas;

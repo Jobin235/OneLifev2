@@ -6,7 +6,7 @@ import type {
   ScheduledEvent,
   TraitDefinition,
 } from '@lineage/shared-types';
-import { makeId, type Rng } from '@lineage/simulation';
+import { makeId, relationshipLabel, type Rng } from '@lineage/simulation';
 import { evaluate } from './conditions.js';
 import type { ConditionContext } from './context.js';
 import { bindParticipants } from './participants.js';
@@ -182,7 +182,17 @@ export const instantiate = (
       id: choice.id,
       label: interpolate(choice.label, state, bindings),
       ...(choice.note ? { note: interpolate(choice.note, state, bindings) } : {}),
+      ...(choice.confirm ? { confirm: interpolate(choice.confirm, state, bindings) } : {}),
     }));
+
+  /*
+   * If the event is about somebody, the popup names them and says who they are
+   * to the player. BitLife restates the relation on every single card, and that
+   * is what lets a life carry forty NPCs without a directory screen.
+   */
+  const subjectId = bindings[definition.participants[0]?.role ?? ''] ?? null;
+  const subject = subjectId ? state.npcs.find((n) => n.id === subjectId) : undefined;
+  const subjectRel = subject ? state.relationships.find((r) => r.npcId === subject.id) : undefined;
 
   return {
     id: makeId('evi', state.seed, definition.id, state.character.age, state.step),
@@ -192,12 +202,28 @@ export const instantiate = (
     card: {
       ...definition.card,
       label: interpolate(definition.card.label, state, bindings).toUpperCase(),
+      who:
+        subject && subjectRel
+          ? {
+              name: `${subject.firstName} ${subject.lastName}`,
+              emoji: subject.avatarEmoji,
+              relation: relationshipLabel(subjectRel, subject),
+            }
+          : null,
     },
     title: interpolate(definition.title, state, bindings),
     body: interpolate(definition.body, state, bindings),
+    question: interpolate(definition.question, state, bindings),
+    stake: definition.stake
+      ? {
+          label: definition.stake.label,
+          value: interpolate(definition.stake.value, state, bindings),
+        }
+      : null,
     choices,
     participants: bindings,
     chosenChoiceId: null,
+    outcomeTitle: null,
     outcomeText: null,
     historyLine: null,
     deltas: [],

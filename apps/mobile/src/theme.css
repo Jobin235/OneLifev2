@@ -2100,3 +2100,673 @@ button {
   margin-top: 3px;
 }
 
+
+/* ================================================================== *
+ * THE SHELL
+ *
+ * BitLife's structure in the LINEAGE palette: one screen, a log that
+ * fills it, chrome that never moves. Everything above this block is the
+ * design system; this is the frame it hangs on.
+ * See docs/BITLIFE-LOOP-SPEC.md §1.
+ * ================================================================== */
+
+/* ---- header: who you are, and what you're worth ---- */
+
+.sh-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(10px + var(--safe-top)) 14px 10px;
+  background: var(--surface);
+  border-bottom: 2px solid var(--ink);
+  box-shadow: 0 3px 0 rgba(42, 33, 24, 0.06);
+  z-index: 3;
+}
+
+.sh-avatar {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: var(--coral-tint);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+}
+
+.sh-who {
+  flex: 1;
+  min-width: 0;
+}
+
+.sh-name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 17px;
+  line-height: 1.15;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sh-station {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sh-bank {
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+.sh-balance {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--green-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A negative balance is the whole story of your twenties. Say it in red. */
+.sh-balance.negative {
+  color: var(--coral);
+}
+
+.sh-bank-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+/* ---- main: the log, and any sheet over it ---- */
+
+.sh-main {
+  flex: 1 1 auto;
+  position: relative;
+  overflow: hidden;
+  background: var(--app-bg);
+}
+
+.sh-log {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 16px 0;
+}
+
+.sh-year + .sh-year {
+  margin-top: 14px;
+}
+
+/*
+ * The age header is the only ornament in the log. Everything else is text,
+ * because the density is the point — a life has to read as one document.
+ */
+.sh-year-head {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--coral);
+  margin-bottom: 3px;
+}
+
+.sh-line {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.42;
+  color: var(--ink-2);
+}
+
+.sh-log-tail {
+  height: 14px;
+}
+
+/* ---- sheets: a tab is a panel over the log, not a place you go ---- */
+
+.sh-sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-bg);
+  animation: sh-rise 160ms ease-out;
+}
+
+@keyframes sh-rise {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+.sh-sheet-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: var(--ink);
+  color: #fff;
+}
+
+.sh-sheet-title {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sh-sheet-x {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sh-sheet-x.ghost {
+  background: transparent;
+  pointer-events: none;
+}
+
+.sh-sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sh-empty {
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---- nav: five slots, and the middle one is the game ---- */
+
+.sh-nav {
+  flex: 0 0 auto;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  background: var(--surface);
+  border-top: 2px solid var(--ink);
+  padding: 6px 0 4px;
+  z-index: 3;
+}
+
+.sh-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  padding: 4px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.sh-nav-btn.active {
+  color: var(--coral);
+}
+
+.sh-nav-icon {
+  font-size: 17px;
+  line-height: 1;
+}
+
+.sh-nav-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/*
+ * Age Up is pressed a hundred times a life, so it is a raised circle under the
+ * thumb rather than a bar you have to look at. It overhangs the nav on purpose.
+ */
+.sh-age {
+  justify-self: center;
+  align-self: center;
+  width: 62px;
+  height: 62px;
+  margin-top: -22px;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  border: 3px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--green);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--ink);
+  transition: transform 90ms ease, box-shadow 90ms ease;
+}
+
+.sh-age:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.sh-age.blocked,
+.sh-age:disabled {
+  background: var(--track);
+  color: var(--faint);
+  border-color: var(--line-dash);
+  box-shadow: 0 4px 0 var(--line-dash);
+  cursor: not-allowed;
+}
+
+.sh-age-plus {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 0.8;
+  margin-top: 4px;
+}
+
+.sh-age-word {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+/* ---- stats: pinned, and never hidden ---- */
+
+.sh-stats {
+  flex: 0 0 auto;
+  padding: 6px 12px calc(6px + var(--safe-bottom));
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  z-index: 3;
+}
+
+.sh-stat {
+  display: grid;
+  grid-template-columns: 16px 62px 1fr 34px;
+  align-items: center;
+  gap: 6px;
+  height: 17px;
+}
+
+.sh-stat-icon {
+  font-size: 11px;
+  text-align: center;
+}
+
+.sh-stat-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--body);
+}
+
+.sh-stat-icon.critical + .sh-stat-label {
+  color: var(--coral);
+}
+
+.sh-stat-track {
+  height: 9px;
+  border-radius: var(--r-pill);
+  background: var(--track);
+  overflow: hidden;
+}
+
+.sh-stat-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--r-pill);
+  transition: width 260ms ease;
+}
+
+.sh-stat-value {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--body);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- the popup: every interruption in the game ---- */
+
+.sh-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(42, 33, 24, 0.42);
+  animation: sh-fade 140ms ease-out;
+}
+
+@keyframes sh-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.sh-popup {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 3px solid var(--tint, var(--coral));
+  border-radius: var(--r-card);
+  box-shadow: 0 6px 0 rgba(42, 33, 24, 0.25);
+  animation: sh-pop 180ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes sh-pop {
+  from {
+    transform: scale(0.94);
+    opacity: 0;
+  }
+}
+
+/*
+ * The band names either a person and what they are to you, or the category.
+ * Naming the relation every single time is what lets forty NPCs exist without
+ * a directory screen.
+ */
+.sh-popup-band {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  background: var(--tint, var(--coral));
+  color: #fff;
+}
+
+.sh-popup-face {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--r-pill);
+}
+
+.sh-popup-whoname {
+  flex: 1;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sh-popup-cat {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.95;
+}
+
+.sh-popup-body {
+  padding: 16px 18px 18px;
+  text-align: center;
+}
+
+.sh-popup-title {
+  margin: 0 0 10px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.sh-popup-emoji {
+  font-size: 19px;
+}
+
+.sh-popup-text {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--body);
+}
+
+/* One named quantity, so the player is not doing arithmetic in their head. */
+.sh-popup-stake {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 7px 11px;
+  border-radius: var(--r-cell);
+  background: var(--amber-tint);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.sh-popup-q {
+  margin: 12px 0 12px;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.sh-popup-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sh-btn {
+  width: 100%;
+  padding: 11px 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-choice);
+  background: var(--surface);
+  font-family: var(--text);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--ink);
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+
+.sh-btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.sh-btn:disabled,
+.sh-btn.disabled {
+  background: var(--track);
+  color: var(--faint);
+  border-color: var(--line-dash);
+  box-shadow: 0 3px 0 var(--line-dash);
+  cursor: not-allowed;
+}
+
+.sh-btn-note {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/*
+ * "Surprise me!" is not decoration. A lot of players live on it, blitzing a
+ * life to see where it lands, and taking it away would change the game's speed.
+ */
+.sh-surprise {
+  margin-top: 12px;
+  border: none;
+  background: none;
+  font-family: var(--text);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--violet);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sh-confirm {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(42, 33, 24, 0.45);
+  border-radius: 20px;
+}
+
+.sh-confirm-card {
+  width: 100%;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  text-align: center;
+}
+
+.sh-confirm-title {
+  padding: 10px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.sh-confirm-text {
+  margin: 0 0 12px;
+  padding: 0 14px;
+  font-size: 13px;
+  color: var(--body);
+}
+
+.sh-confirm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--line);
+}
+
+.sh-confirm-btn {
+  padding: 11px;
+  border: none;
+  background: none;
+  font-family: var(--text);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.sh-confirm-btn.yes {
+  border-left: 1px solid var(--line);
+  color: var(--coral);
+}
+
+/* ---- the result toast: a written title, and a sentence ---- */
+
+.sh-toast {
+  width: 100%;
+  max-width: 320px;
+  padding: 18px;
+  text-align: center;
+  background: var(--surface);
+  border: 3px solid var(--blue);
+  border-radius: var(--r-card);
+  box-shadow: 0 6px 0 rgba(42, 33, 24, 0.25);
+  animation: sh-pop 180ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.sh-toast-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 19px;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.sh-toast-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--body);
+}
+
+.sh-toast-deltas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 11px;
+}
+
+.sh-delta {
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.sh-delta.up {
+  background: var(--green-tint);
+  color: var(--green-text);
+}
+
+.sh-delta.down {
+  background: var(--coral-tint);
+  color: var(--coral-deep);
+}
+
+.sh-toast-ok {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-choice);
+  background: var(--green);
+  font-family: var(--text);
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--ink);
+}
+
+.sh-toast-ok:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--ink);
+}

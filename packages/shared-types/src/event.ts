@@ -231,6 +231,12 @@ export const ChoiceSchema = z.object({
   /** Hidden gate — an unaffordable or ineligible choice is not offered. */
   requires: ConditionSchema.optional(),
   /**
+   * When set, the button raises a Confirm sheet carrying this sentence before
+   * anything happens. Reserved for choices a player would regret misfiring —
+   * insulting a cellmate, quitting a job, turning down an inheritance.
+   */
+  confirm: z.string().optional(),
+  /**
    * Branching outcomes, evaluated in order; the first whose `chance` roll and
    * `when` condition both pass is applied. The last entry should be unconditional.
    */
@@ -241,6 +247,12 @@ export const ChoiceSchema = z.object({
         when: ConditionSchema.optional(),
         /** 0..1. Omitted means certain. Rolled from the deterministic seed. */
         chance: z.number().min(0).max(1).optional(),
+        /**
+         * The headline on the result toast — "BFFL", "Denied", "A slave to my
+         * craft". Two or three words, written, and the place the game's voice
+         * lives. Omitted outcomes fall back to the event's own title.
+         */
+        title: z.string().optional(),
         /** Past-tense sentence shown on the result card. */
         text: z.string().min(1),
         /** One line for "Earlier this year" and the life history. */
@@ -269,6 +281,18 @@ export const EventDefinitionSchema = z.object({
   /** "{partner} asked what you think about kids." */
   title: z.string().min(1),
   body: z.string().min(1),
+  /**
+   * The line immediately above the buttons — "What will you do?", "How will you
+   * plead?", "What will you say?". Separated from the body because it is asked
+   * in a different voice from the description and always sits last.
+   */
+  question: z.string().default('What will you do?'),
+  /**
+   * A single named quantity shown between the body and the buttons: "Possible
+   * Sentence: 2 years", "Consultation Fee: $100". It states the stake so the
+   * player is not doing arithmetic in their head.
+   */
+  stake: z.object({ label: z.string(), value: z.string() }).nullable().default(null),
   choices: z.array(ChoiceSchema).min(1),
   /** Life years before this definition may fire again for the same character. */
   cooldownYears: z.number().int().min(0).default(5),
@@ -291,14 +315,36 @@ export const EventInstanceSchema = z.object({
   definitionId: z.string(),
   definitionVersion: z.number().int().min(1),
   atAge: z.number().int().min(0),
-  card: CardStyleSchema,
+  card: CardStyleSchema.extend({
+    /**
+     * Resolved at instantiation from the event's participants. When an event is
+     * about somebody, the popup's header band names them and says who they are
+     * to you, every time — the player is not expected to remember forty names.
+     */
+    who: z
+      .object({ name: z.string(), emoji: z.string(), relation: z.string() })
+      .nullable()
+      .default(null),
+  }),
   title: z.string(),
   body: z.string(),
-  choices: z.array(z.object({ id: z.string(), label: z.string(), note: z.string().optional() })),
+  question: z.string().default('What will you do?'),
+  stake: z.object({ label: z.string(), value: z.string() }).nullable().default(null),
+  choices: z.array(
+    z.object({
+      id: z.string(),
+      label: z.string(),
+      note: z.string().optional(),
+      confirm: z.string().optional(),
+      disabled: z.boolean().optional(),
+    }),
+  ),
   /** role → npcId */
   participants: z.record(z.string(), z.string()).default({}),
   /** Set once resolved. An instance can only be resolved once (§124). */
   chosenChoiceId: z.string().nullable(),
+  /** The written headline on the result toast: "BFFL", "Denied", "Stale mate". */
+  outcomeTitle: z.string().nullable().default(null),
   outcomeText: z.string().nullable(),
   historyLine: z.string().nullable(),
   deltas: z
