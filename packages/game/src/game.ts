@@ -1,5 +1,5 @@
 import { interact, interactionsFor } from './interact.js';
-import { schoolView, workView } from './views.js';
+import { actionsView, schoolView, workView } from './views.js';
 import { DEFAULT_CONFIG, type GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import type {
@@ -339,6 +339,11 @@ export class Game {
       Object.assign(state, before);
       throw error;
     }
+  }
+
+  /** Everything the player could do right now, with reasons where they cannot. */
+  actions(state: LifeState) {
+    return actionsView(state, this.content);
   }
 
   /** The school screen, or null when the character is not enrolled. */

@@ -150,18 +150,6 @@
     "onRepeat": "riskier"
   },
   {
-    "id": "something_illegal",
-    "icon": "🕶️",
-    "label": "Something illegal",
-    "group": "fun_and_trouble",
-    "minAge": 14,
-    "cost": 0,
-    "note": "risky",
-    "effects": [],
-    "effectiveTimes": 0,
-    "onRepeat": "riskier"
-  },
-  {
     "id": "look_at_houses",
     "icon": "🏠",
     "label": "Look at houses",
@@ -918,6 +906,265 @@
           "op": "stat",
           "stat": "happiness",
           "delta": -5
+        }
+      ]
+    }
+  },
+  {
+    "id": "porch_pirate",
+    "icon": "📦",
+    "label": "Take a parcel",
+    "group": "fun_and_trouble",
+    "minAge": 8,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "small money · small risk",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 12000
+      }
+    ],
+    "backfire": {
+      "chance": 0.3,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You were caught: theft.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Theft",
+          "sentenceYears": 0,
+          "fine": 40000,
+          "facility": "the county jail"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
+        }
+      ]
+    }
+  },
+  {
+    "id": "shoplift",
+    "icon": "🏪",
+    "label": "Shoplift",
+    "group": "fun_and_trouble",
+    "minAge": 10,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "small money · small risk",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 20000
+      }
+    ],
+    "backfire": {
+      "chance": 0.32,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You were caught: shoplifting.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Shoplifting",
+          "sentenceYears": 0,
+          "fine": 60000,
+          "facility": "the county jail"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
+        }
+      ]
+    }
+  },
+  {
+    "id": "pickpocket",
+    "icon": "🤏",
+    "label": "Pick a pocket",
+    "group": "fun_and_trouble",
+    "minAge": 12,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "a wallet · quick",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 45000
+      }
+    ],
+    "backfire": {
+      "chance": 0.35,
+      "reducedBy": "charm",
+      "reducedByMost": 0.5,
+      "line": "You were caught: pickpocketing.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Pickpocketing",
+          "sentenceYears": 1,
+          "fine": 50000,
+          "facility": "the county jail"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
+        }
+      ]
+    }
+  },
+  {
+    "id": "burglary",
+    "icon": "🔦",
+    "label": "Burgle a house",
+    "group": "fun_and_trouble",
+    "minAge": 14,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "real money · real risk",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 350000
+      }
+    ],
+    "backfire": {
+      "chance": 0.42,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You were caught: burglary.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Burglary",
+          "sentenceYears": 3,
+          "fine": 100000,
+          "facility": "the state prison"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
+        }
+      ]
+    }
+  },
+  {
+    "id": "grand_theft_auto",
+    "icon": "🚗",
+    "label": "Steal a car",
+    "group": "fun_and_trouble",
+    "minAge": 16,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "a car · serious",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 900000
+      }
+    ],
+    "backfire": {
+      "chance": 0.45,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You were caught: grand theft auto.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Grand theft auto",
+          "sentenceYears": 4,
+          "fine": 150000,
+          "facility": "the state prison"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
+        }
+      ]
+    }
+  },
+  {
+    "id": "train_robbery",
+    "icon": "🚂",
+    "label": "Rob a train",
+    "group": "fun_and_trouble",
+    "minAge": 17,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "big money · big risk",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 2400000
+      }
+    ],
+    "backfire": {
+      "chance": 0.55,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You were caught: armed robbery.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Armed robbery",
+          "sentenceYears": 7,
+          "fine": 200000,
+          "facility": "the state prison"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
+        }
+      ]
+    }
+  },
+  {
+    "id": "bank_robbery",
+    "icon": "🏦",
+    "label": "Rob a bank",
+    "group": "fun_and_trouble",
+    "minAge": 18,
+    "onlyWhen": "anywhere",
+    "effectiveTimes": 0,
+    "onRepeat": "riskier",
+    "note": "a lot · most likely prison",
+    "cost": 0,
+    "effects": [
+      {
+        "op": "money",
+        "delta": 6000000
+      }
+    ],
+    "backfire": {
+      "chance": 0.62,
+      "reducedBy": "smarts",
+      "reducedByMost": 0.5,
+      "line": "You were caught: bank robbery.",
+      "effects": [
+        {
+          "op": "convict",
+          "offence": "Bank robbery",
+          "sentenceYears": 10,
+          "fine": 400000,
+          "facility": "the federal penitentiary"
+        },
+        {
+          "op": "reputation",
+          "delta": -12
         }
       ]
     }
