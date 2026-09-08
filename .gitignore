@@ -11,3 +11,8 @@ apps/mobile/dist/
 .shots/
 apps/mobile/standalone/
 .shell-drive.mjs
+
+# Scratch drivers and servers used to check the standalone build in a browser.
+/drive-*.mjs
+/probe-*.mjs
+/serve-standalone.mjs
