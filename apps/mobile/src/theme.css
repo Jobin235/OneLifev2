@@ -4057,3 +4057,24 @@ button {
 .bj-book-value.down {
   color: #C0362C;
 }
+
+/*
+ * A submenu under the tile that opened it.
+ *
+ * "Spend time" and "Give a gift" are categories, not acts: which afternoon,
+ * and how much you spent, is the whole of the gesture. The rows read like the
+ * Activities list because they are the same kind of thing — a priced list of
+ * things you could do, with the ones you cannot afford still visible.
+ */
+.int-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--faint-bg, #EFE9DF);
+}
+
+.int-options .int-back .act-label {
+  color: var(--muted);
+}

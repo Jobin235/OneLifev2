@@ -165,6 +165,78 @@ describe('doing something to a specific person', () => {
     expect(sawFriction).toBeGreaterThan(0);
   });
 
+  it('makes an afternoon and a gift a choice, not a tap', () => {
+    /*
+     * "Spend time with her" and "Give her a gift" are categories. Resolving
+     * either in one tap throws away the only decision in them — which
+     * afternoon, and how much you spent, is the whole of the gesture.
+     */
+    const state = adultWithPeople('int-opt');
+    const rel = someone(state);
+    const cards = game.interactions(state, rel.npcId);
+
+    for (const id of ['spend_time', 'gift']) {
+      const card = cards.find((c) => c.id === id);
+      if (!card) continue;
+      expect(card.options.length).toBeGreaterThan(1);
+      // Free things and expensive things, so the price is a signal.
+      expect(card.options.some((o) => o.cost === 0 || o.cost < 5_000)).toBe(true);
+      expect(card.options.some((o) => o.cost > 50_000)).toBe(true);
+      // And the row itself does nothing.
+      expect(() => game.interact(state, rel.npcId, id)).toThrow(/choose what/);
+    }
+  });
+
+  it('charges what the option costs, not what the row costs', () => {
+    const state = adultWithPeople('int-price');
+    state.character.finances.savings = 1_000_000_00;
+    state.character.finances.cash = 0;
+    const rel = someone(state);
+    const card = game.interactions(state, rel.npcId).find((c) => c.id === 'gift');
+    if (!card) return;
+
+    const flowers = card.options.find((o) => o.id === 'flowers')!;
+    const before = state.character.finances.cash + state.character.finances.savings;
+    const after = game.interact(state, rel.npcId, 'gift', 'flowers').state;
+    const spent = before - (after.character.finances.cash + after.character.finances.savings);
+    expect(spent).toBe(flowers.cost);
+  });
+
+  it('does not let money stand in for affection', () => {
+    /*
+     * Buying a car for somebody barely in your life reads as buying *them*,
+     * and lands worse than flowers would have. Without this the gift list is a
+     * slider where richer is kinder, and there is only ever one right answer.
+     */
+    let coldWent = 0;
+    let warmWent = 0;
+
+    for (let i = 0; i < 24; i++) {
+      for (const warmth of ['cold', 'warm'] as const) {
+        const state = adultWithPeople(`int-lavish-${i}`);
+        if (!state.character.alive || state.character.record.incarceration) continue;
+        state.character.finances.savings = 100_000_000_00;
+        const rel = someone(state);
+        for (const key of ['affection', 'trust', 'closeness', 'respect'] as const) {
+          rel.dimensions[key] = warmth === 'warm' ? 92 : 30;
+        }
+        rel.dimensions.conflict = 0;
+
+        const card = game.interactions(state, rel.npcId).find((c) => c.id === 'gift');
+        const car = card?.options.find((o) => o.id === 'car');
+        if (!car) continue;
+
+        const result = game.interact(state, rel.npcId, 'gift', 'car');
+        if (result.warm) {
+          if (warmth === 'warm') warmWent += 1;
+          else coldWent += 1;
+        }
+      }
+    }
+
+    expect(warmWent).toBeGreaterThan(coldWent * 2);
+  });
+
   it('limits each interaction per year, per person', () => {
     const state = adultWithPeople('int-6');
     const rel = someone(state);

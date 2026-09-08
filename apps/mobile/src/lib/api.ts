@@ -205,10 +205,21 @@ export interface PeopleView {
   goneLine: string | null;
 }
 
+export interface InteractionOptionCard {
+  id: string;
+  label: string;
+  note: string;
+  /** Cents. */
+  cost: number;
+  affordable: boolean;
+}
+
 export interface InteractionCard {
   id: string;
   icon: string;
   label: string;
+  /** When this has rows, the tile opens them rather than doing anything. */
+  options: InteractionOptionCard[];
   /** Cents. */
   cost: number;
   timesLeft: number | null;
@@ -712,6 +723,7 @@ export interface Api {
     lifeId: string,
     npcId: string,
     interactionId: string,
+    optionId?: string | null,
   ): Promise<{
     life: LifeView;
     person: PersonView;
@@ -875,7 +887,7 @@ export const httpApi: Api = {
   people: (lifeId: string) => request<PeopleView>(`/lives/${lifeId}/people`),
   person: (lifeId: string, npcId: string) => request<PersonView>(`/lives/${lifeId}/people/${npcId}`),
 
-  interact: (lifeId: string, npcId: string, interactionId: string) =>
+  interact: (lifeId: string, npcId: string, interactionId: string, optionId?: string | null) =>
     request<{
       life: LifeView;
       person: PersonView;
@@ -884,7 +896,7 @@ export const httpApi: Api = {
       meter: { label: string; from: number; to: number; good: boolean } | null;
     }>(
       `/lives/${lifeId}/people/${npcId}/interact`,
-      { method: 'POST', body: JSON.stringify({ interactionId }) },
+      { method: 'POST', body: JSON.stringify({ interactionId, optionId: optionId ?? null }) },
     ),
 
   actions: (lifeId: string) => request<{ actions: ActionCard[] }>(`/lives/${lifeId}/actions`),

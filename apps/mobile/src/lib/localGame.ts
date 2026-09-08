@@ -188,8 +188,13 @@ export const createLocalApi = (): Api => {
       if (!person) throw new Error('no such person in this life');
       return person as never;
     },
-    interact: async (lifeId, npcId, interactionId) => {
-      const { state, warm, line, meter } = game.interact(get(lifeId), npcId, interactionId);
+    interact: async (lifeId, npcId, interactionId, optionId) => {
+      const { state, warm, line, meter } = game.interact(
+        get(lifeId),
+        npcId,
+        interactionId,
+        optionId ?? null,
+      );
       save(state);
       return {
         ...view(state),

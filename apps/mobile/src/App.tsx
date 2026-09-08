@@ -357,9 +357,11 @@ export const App = () => {
   }, [life, run, setLifeAndRemember]);
 
   const onInteract = useCallback(
-    async (interactionId: string) => {
+    async (interactionId: string, optionId?: string | null) => {
       if (!life || !person) return;
-      const result = await run(() => api.interact(life.lifeId, person.npcId, interactionId));
+      const result = await run(() =>
+        api.interact(life.lifeId, person.npcId, interactionId, optionId ?? null),
+      );
       if (!result) return;
       setLifeAndRemember(result.life);
       setPerson(result.person);

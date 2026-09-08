@@ -3,171 +3,710 @@
     "id": "talk",
     "icon": "💬",
     "label": "Talk",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 4,
     "timesPerYear": 3,
     "baseWarmChance": 0.35,
     "allowedInPrison": true,
-    "warm": { "line": "You and {them} talked properly, and it was easy.", "dimensions": { "closeness": 4, "trust": 2 }, "stats": { "happiness": 2 }, "memoryWeight": 12 },
-    "cool": { "line": "You talked to {them}. It was work, and you both felt it.", "dimensions": { "closeness": 1, "conflict": 2 }, "memoryWeight": 14 }
+    "warm": {
+      "line": "You and {them} talked properly, and it was easy.",
+      "dimensions": {
+        "closeness": 4,
+        "trust": 2
+      },
+      "stats": {
+        "happiness": 2
+      },
+      "memoryWeight": 12
+    },
+    "cool": {
+      "line": "You talked to {them}. It was work, and you both felt it.",
+      "dimensions": {
+        "closeness": 1,
+        "conflict": 2
+      },
+      "memoryWeight": 14
+    }
   },
   {
     "id": "spend_time",
     "icon": "🕰️",
     "label": "Spend time",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 4,
-    "timesPerYear": 3,
+    "timesPerYear": 4,
     "baseWarmChance": 0.4,
-    "warm": { "line": "You spent a whole afternoon with {them} doing nothing much.", "dimensions": { "closeness": 6, "affection": 3 }, "stats": { "happiness": 3 }, "memoryWeight": 18 },
-    "cool": { "line": "You spent time with {them} and ran out of things to say.", "dimensions": { "closeness": 1 }, "stats": { "happiness": -2 }, "memoryWeight": 16 }
+    "warm": {
+      "line": "You spent a whole afternoon with {them} doing nothing much.",
+      "dimensions": {
+        "closeness": 6,
+        "affection": 3
+      },
+      "stats": {
+        "happiness": 3
+      },
+      "memoryWeight": 18
+    },
+    "cool": {
+      "line": "You spent time with {them} and ran out of things to say.",
+      "dimensions": {
+        "closeness": 1
+      },
+      "stats": {
+        "happiness": -2
+      },
+      "memoryWeight": 16
+    },
+    "options": [
+      {
+        "id": "walk",
+        "label": "Go for a walk",
+        "note": "Costs nothing, which is the point",
+        "cost": 0,
+        "minAge": 5,
+        "warm": {
+          "line": "You and {them} walked the long way round and talked about nothing.",
+          "dimensions": {
+            "closeness": 7,
+            "affection": 3
+          },
+          "memoryWeight": 18,
+          "stats": {
+            "happiness": 3,
+            "fitness": 1
+          }
+        },
+        "cool": {
+          "line": "You went for a walk with {them}. It was mostly quiet.",
+          "dimensions": {
+            "closeness": 2
+          },
+          "memoryWeight": 12,
+          "stats": {
+            "happiness": 1
+          }
+        }
+      },
+      {
+        "id": "cinema",
+        "label": "The pictures",
+        "note": "Two tickets and something to argue about after",
+        "cost": 3000,
+        "minAge": 6,
+        "warm": {
+          "line": "You took {them} to the pictures and neither of you shut up about it afterwards.",
+          "dimensions": {
+            "closeness": 6,
+            "affection": 5
+          },
+          "memoryWeight": 24,
+          "stats": {
+            "happiness": 5
+          }
+        },
+        "cool": {
+          "line": "You sat through a film with {them} and both pretended to like it.",
+          "dimensions": {
+            "closeness": 2
+          },
+          "memoryWeight": 14,
+          "stats": {
+            "happiness": 1
+          }
+        }
+      },
+      {
+        "id": "dinner",
+        "label": "Take them out to eat",
+        "note": "Somewhere with tablecloths",
+        "cost": 12000,
+        "minAge": 12,
+        "warm": {
+          "line": "You took {them} somewhere good and stayed until they turned the lights up.",
+          "dimensions": {
+            "closeness": 8,
+            "affection": 8,
+            "trust": 4
+          },
+          "memoryWeight": 34,
+          "stats": {
+            "happiness": 6
+          }
+        },
+        "cool": {
+          "line": "Dinner with {them} was fine. The food was better than the conversation.",
+          "dimensions": {
+            "closeness": 2,
+            "affection": 1
+          },
+          "memoryWeight": 16,
+          "stats": {
+            "happiness": 1
+          }
+        }
+      },
+      {
+        "id": "weekend",
+        "label": "Go away for the weekend",
+        "note": "Two nights, and nothing else in the diary",
+        "cost": 90000,
+        "minAge": 18,
+        "minWarmth": 45,
+        "warm": {
+          "line": "You and {them} went away for two nights and came back different.",
+          "dimensions": {
+            "closeness": 14,
+            "affection": 12,
+            "trust": 8
+          },
+          "memoryWeight": 55,
+          "stats": {
+            "happiness": 10
+          }
+        },
+        "cool": {
+          "line": "You went away with {them} for the weekend and spent most of it on your phone.",
+          "dimensions": {
+            "closeness": 2,
+            "conflict": 4
+          },
+          "memoryWeight": 28,
+          "stats": {
+            "happiness": -2
+          }
+        }
+      },
+      {
+        "id": "help",
+        "label": "Help them with something",
+        "note": "A whole Saturday, and a van",
+        "cost": 0,
+        "minAge": 14,
+        "warm": {
+          "line": "You gave up a Saturday for {them} and they have not forgotten it.",
+          "dimensions": {
+            "trust": 12,
+            "respect": 8,
+            "closeness": 5
+          },
+          "memoryWeight": 40,
+          "stats": {
+            "happiness": 2,
+            "fitness": 2
+          }
+        },
+        "cool": {
+          "line": "You helped {them} with something and it took all day and they barely said thanks.",
+          "dimensions": {
+            "trust": 3,
+            "conflict": 3
+          },
+          "memoryWeight": 22,
+          "stats": {
+            "happiness": -3
+          }
+        }
+      }
+    ]
   },
   {
     "id": "compliment",
     "icon": "🌟",
     "label": "Compliment",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 6,
     "timesPerYear": 2,
     "baseWarmChance": 0.4,
     "allowedInPrison": true,
-    "warm": { "line": "You said something kind to {them} and watched it land.", "dimensions": { "affection": 6, "respect": 2 }, "memoryWeight": 16 },
-    "cool": { "line": "You complimented {them}. It came out wrong.", "dimensions": { "affection": 1, "conflict": 1 }, "memoryWeight": 12 }
+    "warm": {
+      "line": "You said something kind to {them} and watched it land.",
+      "dimensions": {
+        "affection": 6,
+        "respect": 2
+      },
+      "memoryWeight": 16
+    },
+    "cool": {
+      "line": "You complimented {them}. It came out wrong.",
+      "dimensions": {
+        "affection": 1,
+        "conflict": 1
+      },
+      "memoryWeight": 12
+    }
   },
   {
     "id": "confide",
     "icon": "🤫",
     "label": "Confide in them",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 10,
     "timesPerYear": 2,
     "minWarmth": 45,
     "baseWarmChance": 0.4,
     "allowedInPrison": true,
-    "warm": { "line": "You told {them} something you had told nobody, and they kept it.", "dimensions": { "trust": 9, "closeness": 6 }, "stats": { "happiness": 4 }, "memoryWeight": 45 },
-    "cool": { "line": "You confided in {them}, and heard it repeated back to you from someone else.", "dimensions": { "trust": -14, "conflict": 8 }, "stats": { "happiness": -6 }, "memoryWeight": 60 }
+    "warm": {
+      "line": "You told {them} something you had told nobody, and they kept it.",
+      "dimensions": {
+        "trust": 9,
+        "closeness": 6
+      },
+      "stats": {
+        "happiness": 4
+      },
+      "memoryWeight": 45
+    },
+    "cool": {
+      "line": "You confided in {them}, and heard it repeated back to you from someone else.",
+      "dimensions": {
+        "trust": -14,
+        "conflict": 8
+      },
+      "stats": {
+        "happiness": -6
+      },
+      "memoryWeight": 60
+    }
   },
   {
     "id": "ask_advice",
     "icon": "🧭",
     "label": "Ask their advice",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 10,
     "timesPerYear": 2,
     "baseWarmChance": 0.45,
     "allowedInPrison": true,
-    "warm": { "line": "{them} gave you advice you actually took.", "dimensions": { "respect": 6, "trust": 3 }, "stats": { "smarts": 2 }, "memoryWeight": 20 },
-    "cool": { "line": "You asked {them} what to do and got an answer about themselves.", "dimensions": { "respect": -3 }, "memoryWeight": 14 }
+    "warm": {
+      "line": "{them} gave you advice you actually took.",
+      "dimensions": {
+        "respect": 6,
+        "trust": 3
+      },
+      "stats": {
+        "smarts": 2
+      },
+      "memoryWeight": 20
+    },
+    "cool": {
+      "line": "You asked {them} what to do and got an answer about themselves.",
+      "dimensions": {
+        "respect": -3
+      },
+      "memoryWeight": 14
+    }
   },
   {
     "id": "gift",
     "icon": "🎁",
     "label": "Give a gift",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 8,
-    "cost": 15000,
-    "timesPerYear": 2,
+    "cost": 0,
+    "timesPerYear": 3,
     "baseWarmChance": 0.5,
-    "warm": { "line": "You got {them} something they had mentioned once, months ago.", "dimensions": { "affection": 9, "closeness": 4 }, "memoryWeight": 30 },
-    "cool": { "line": "You bought {them} a present and could tell immediately it was wrong.", "dimensions": { "affection": 1 }, "stats": { "happiness": -2 }, "memoryWeight": 18 }
+    "warm": {
+      "line": "You got {them} something they had mentioned once, months ago.",
+      "dimensions": {
+        "affection": 9,
+        "closeness": 4
+      },
+      "memoryWeight": 30
+    },
+    "cool": {
+      "line": "You bought {them} a present and could tell immediately it was wrong.",
+      "dimensions": {
+        "affection": 1
+      },
+      "stats": {
+        "happiness": -2
+      },
+      "memoryWeight": 18
+    },
+    "options": [
+      {
+        "id": "flowers",
+        "label": "Flowers",
+        "note": "From the garage, but still",
+        "cost": 2000,
+        "minAge": 8,
+        "warm": {
+          "line": "You brought {them} flowers for no reason at all.",
+          "dimensions": {
+            "affection": 6,
+            "closeness": 2
+          },
+          "memoryWeight": 22
+        },
+        "cool": {
+          "line": "You brought {them} flowers and they said you should not have.",
+          "dimensions": {
+            "affection": 1
+          },
+          "memoryWeight": 14
+        }
+      },
+      {
+        "id": "book",
+        "label": "A book they mentioned",
+        "note": "You were listening, which is the gift",
+        "cost": 3500,
+        "minAge": 8,
+        "warm": {
+          "line": "You got {them} the book they mentioned once, months ago.",
+          "dimensions": {
+            "affection": 9,
+            "trust": 5,
+            "closeness": 4
+          },
+          "memoryWeight": 32
+        },
+        "cool": {
+          "line": "You got {them} a book. They already had it.",
+          "dimensions": {
+            "affection": 2
+          },
+          "memoryWeight": 16
+        }
+      },
+      {
+        "id": "jewellery",
+        "label": "Something that comes in a box",
+        "note": "Small, heavy, and the shop wrapped it",
+        "cost": 60000,
+        "minAge": 16,
+        "warm": {
+          "line": "You gave {them} something small and expensive and they still wear it.",
+          "dimensions": {
+            "affection": 14,
+            "romance": 8,
+            "closeness": 4
+          },
+          "memoryWeight": 45
+        },
+        "cool": {
+          "line": "You gave {them} something expensive and watched them try to look pleased.",
+          "dimensions": {
+            "affection": 2
+          },
+          "memoryWeight": 22,
+          "stats": {
+            "happiness": -2
+          }
+        }
+      },
+      {
+        "id": "car",
+        "label": "A car",
+        "note": "Nobody is subtle about a car",
+        "cost": 1800000,
+        "minAge": 20,
+        "extravagant": true,
+        "warm": {
+          "line": "You bought {them} a car. They cried in the driveway.",
+          "dimensions": {
+            "affection": 20,
+            "dependence": 12,
+            "closeness": 6
+          },
+          "memoryWeight": 70
+        },
+        "cool": {
+          "line": "You bought {them} a car, and something about it embarrassed them both.",
+          "dimensions": {
+            "affection": 3,
+            "conflict": 6,
+            "dependence": 10
+          },
+          "memoryWeight": 45,
+          "stats": {
+            "happiness": -3
+          }
+        }
+      }
+    ]
   },
   {
     "id": "apologise",
     "icon": "🙇",
     "label": "Apologise",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 8,
     "timesPerYear": 2,
     "baseWarmChance": 0.45,
     "allowedInPrison": true,
-    "warm": { "line": "You apologised to {them} properly, and they let it go.", "dimensions": { "conflict": -18, "trust": 5, "respect": 3 }, "memoryWeight": 35 },
-    "cool": { "line": "You apologised to {them}. They said it was fine. It was not fine.", "dimensions": { "conflict": -4 }, "memoryWeight": 22 }
+    "warm": {
+      "line": "You apologised to {them} properly, and they let it go.",
+      "dimensions": {
+        "conflict": -18,
+        "trust": 5,
+        "respect": 3
+      },
+      "memoryWeight": 35
+    },
+    "cool": {
+      "line": "You apologised to {them}. They said it was fine. It was not fine.",
+      "dimensions": {
+        "conflict": -4
+      },
+      "memoryWeight": 22
+    }
   },
   {
     "id": "argue",
     "icon": "🌩️",
     "label": "Have it out",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 10,
     "timesPerYear": 2,
     "baseWarmChance": 0.3,
     "allowedInPrison": true,
-    "warm": { "line": "You and {them} had it out, and something was better afterwards.", "dimensions": { "conflict": -10, "trust": 6, "closeness": 4 }, "memoryWeight": 40 },
-    "cool": { "line": "You and {them} said things that took a long time to unsay.", "dimensions": { "conflict": 16, "affection": -8, "trust": -6 }, "stats": { "happiness": -5 }, "memoryWeight": 50 }
+    "warm": {
+      "line": "You and {them} had it out, and something was better afterwards.",
+      "dimensions": {
+        "conflict": -10,
+        "trust": 6,
+        "closeness": 4
+      },
+      "memoryWeight": 40
+    },
+    "cool": {
+      "line": "You and {them} said things that took a long time to unsay.",
+      "dimensions": {
+        "conflict": 16,
+        "affection": -8,
+        "trust": -6
+      },
+      "stats": {
+        "happiness": -5
+      },
+      "memoryWeight": 50
+    }
   },
   {
     "id": "insult",
     "icon": "🗯️",
     "label": "Insult them",
-    "kinds": ["*"],
+    "kinds": [
+      "*"
+    ],
     "minAge": 8,
     "timesPerYear": 2,
     "baseWarmChance": 0.12,
     "allowedInPrison": true,
-    "warm": { "line": "You said something cruel to {them} and they laughed it off.", "dimensions": { "conflict": 5, "respect": -3 }, "memoryWeight": 20 },
-    "cool": { "line": "You said something cruel to {them}, and it stuck to both of you.", "dimensions": { "conflict": 22, "affection": -14, "trust": -10 }, "stats": { "happiness": -4 }, "memoryWeight": 55 }
+    "warm": {
+      "line": "You said something cruel to {them} and they laughed it off.",
+      "dimensions": {
+        "conflict": 5,
+        "respect": -3
+      },
+      "memoryWeight": 20
+    },
+    "cool": {
+      "line": "You said something cruel to {them}, and it stuck to both of you.",
+      "dimensions": {
+        "conflict": 22,
+        "affection": -14,
+        "trust": -10
+      },
+      "stats": {
+        "happiness": -4
+      },
+      "memoryWeight": 55
+    }
   },
   {
     "id": "ask_for_money",
     "icon": "🫰",
     "label": "Ask for money",
-    "kinds": ["*"],
-    "excludeKinds": ["child"],
+    "kinds": [
+      "*"
+    ],
+    "excludeKinds": [
+      "child"
+    ],
     "minAge": 16,
     "timesPerYear": 1,
     "minWarmth": 35,
     "baseWarmChance": 0.2,
-    "warm": { "line": "{them} lent you money without making you explain.", "dimensions": { "trust": -4, "dependence": 12 }, "money": 200000, "memoryWeight": 45 },
-    "cool": { "line": "You asked {them} for money and they said no, kindly, which was worse.", "dimensions": { "respect": -6, "conflict": 5 }, "stats": { "happiness": -4 }, "memoryWeight": 40 }
+    "warm": {
+      "line": "{them} lent you money without making you explain.",
+      "dimensions": {
+        "trust": -4,
+        "dependence": 12
+      },
+      "money": 200000,
+      "memoryWeight": 45
+    },
+    "cool": {
+      "line": "You asked {them} for money and they said no, kindly, which was worse.",
+      "dimensions": {
+        "respect": -6,
+        "conflict": 5
+      },
+      "stats": {
+        "happiness": -4
+      },
+      "memoryWeight": 40
+    }
   },
   {
     "id": "lend_money",
     "icon": "🫱",
     "label": "Lend them money",
-    "kinds": ["*"],
-    "excludeKinds": ["boss"],
+    "kinds": [
+      "*"
+    ],
+    "excludeKinds": [
+      "boss"
+    ],
     "minAge": 18,
     "cost": 200000,
     "timesPerYear": 1,
     "baseWarmChance": 0.45,
-    "warm": { "line": "You lent {them} money and they paid it back before you asked.", "dimensions": { "trust": 12, "respect": 6 }, "money": 200000, "memoryWeight": 45 },
-    "cool": { "line": "You lent {them} money. Neither of you has mentioned it since.", "dimensions": { "trust": -6, "conflict": 6 }, "memoryWeight": 55 }
+    "warm": {
+      "line": "You lent {them} money and they paid it back before you asked.",
+      "dimensions": {
+        "trust": 12,
+        "respect": 6
+      },
+      "money": 200000,
+      "memoryWeight": 45
+    },
+    "cool": {
+      "line": "You lent {them} money. Neither of you has mentioned it since.",
+      "dimensions": {
+        "trust": -6,
+        "conflict": 6
+      },
+      "memoryWeight": 55
+    }
   },
   {
     "id": "ask_out",
     "icon": "💐",
     "label": "Ask them out",
-    "kinds": ["friend", "best_friend", "classmate", "colleague", "acquaintance"],
+    "kinds": [
+      "friend",
+      "best_friend",
+      "classmate",
+      "colleague",
+      "acquaintance"
+    ],
     "minAge": 16,
     "timesPerYear": 1,
     "minWarmth": 40,
     "baseWarmChance": 0.15,
-    "warm": { "line": "You asked {them} out, and they said yes like they had been waiting.", "dimensions": { "romance": 45, "affection": 15 }, "stats": { "happiness": 12, "charm": 3 }, "memoryWeight": 80 },
-    "cool": { "line": "You asked {them} out. They were kind about it, and it was strange for a while.", "dimensions": { "closeness": -10, "conflict": 6 }, "stats": { "happiness": -8, "charm": -2 }, "memoryWeight": 60 }
+    "warm": {
+      "line": "You asked {them} out, and they said yes like they had been waiting.",
+      "dimensions": {
+        "romance": 45,
+        "affection": 15
+      },
+      "stats": {
+        "happiness": 12,
+        "charm": 3
+      },
+      "memoryWeight": 80
+    },
+    "cool": {
+      "line": "You asked {them} out. They were kind about it, and it was strange for a while.",
+      "dimensions": {
+        "closeness": -10,
+        "conflict": 6
+      },
+      "stats": {
+        "happiness": -8,
+        "charm": -2
+      },
+      "memoryWeight": 60
+    }
   },
   {
     "id": "romance",
     "icon": "💞",
     "label": "Be romantic",
-    "kinds": ["partner", "spouse"],
+    "kinds": [
+      "partner",
+      "spouse"
+    ],
     "minAge": 16,
     "timesPerYear": 3,
     "baseWarmChance": 0.45,
-    "warm": { "line": "You made an effort with {them}, and it was noticed.", "dimensions": { "romance": 8, "affection": 6 }, "stats": { "happiness": 5 }, "memoryWeight": 20 },
-    "cool": { "line": "You made an effort with {them} at the wrong moment.", "dimensions": { "romance": 1, "conflict": 3 }, "memoryWeight": 16 }
+    "warm": {
+      "line": "You made an effort with {them}, and it was noticed.",
+      "dimensions": {
+        "romance": 8,
+        "affection": 6
+      },
+      "stats": {
+        "happiness": 5
+      },
+      "memoryWeight": 20
+    },
+    "cool": {
+      "line": "You made an effort with {them} at the wrong moment.",
+      "dimensions": {
+        "romance": 1,
+        "conflict": 3
+      },
+      "memoryWeight": 16
+    }
   },
   {
     "id": "cut_off",
     "icon": "🚪",
     "label": "Cut them off",
-    "kinds": ["*"],
-    "excludeKinds": ["child", "mother", "father"],
+    "kinds": [
+      "*"
+    ],
+    "excludeKinds": [
+      "child",
+      "mother",
+      "father"
+    ],
     "minAge": 16,
     "timesPerYear": 1,
     "baseWarmChance": 0.25,
     "endsRelationship": true,
     "allowedInPrison": true,
-    "warm": { "line": "You ended it with {them}, and slept better for it.", "dimensions": { "closeness": -30, "conflict": -10 }, "stats": { "happiness": 4 }, "memoryWeight": 70 },
-    "cool": { "line": "You cut {them} off, and thought about it far more than you expected to.", "dimensions": { "closeness": -30, "affection": -15 }, "stats": { "happiness": -9 }, "memoryWeight": 70 }
+    "warm": {
+      "line": "You ended it with {them}, and slept better for it.",
+      "dimensions": {
+        "closeness": -30,
+        "conflict": -10
+      },
+      "stats": {
+        "happiness": 4
+      },
+      "memoryWeight": 70
+    },
+    "cool": {
+      "line": "You cut {them} off, and thought about it far more than you expected to.",
+      "dimensions": {
+        "closeness": -30,
+        "affection": -15
+      },
+      "stats": {
+        "happiness": -9
+      },
+      "memoryWeight": 70
+    }
   }
 ]

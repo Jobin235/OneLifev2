@@ -735,8 +735,14 @@ export class Game {
   }
 
   /** Does something to one specific person. */
-  interact(state: LifeState, npcId: string, interactionId: string) {
-    return interact(state, npcId, interactionId, this.content, this.config);
+  interact(
+    state: LifeState,
+    npcId: string,
+    interactionId: string,
+    /** Which row of the submenu, for the interactions that open one. */
+    optionId: string | null = null,
+  ) {
+    return interact(state, npcId, interactionId, this.content, this.config, optionId);
   }
 
   /** Dismisses the result card (design 1A "Got it"). */

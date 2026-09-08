@@ -140,6 +140,38 @@ export type InteractionResult = z.infer<typeof InteractionResultSchema>;
  * Every interaction has two outcomes rather than one fixed delta, chosen by how
  * the relationship already stands. See packages/game/src/interact.ts.
  */
+/**
+ * One row of a submenu: a thing to do together, or a thing to buy them.
+ *
+ * "Spend time with her" and "Give her a gift" are not single acts — they are
+ * categories, and flattening them into one tap each throws away the only
+ * decision in them. Which afternoon, and how much you spent, is what the
+ * gesture *is*. An option's results replace the interaction's own, so the
+ * outer row becomes a heading rather than a thing that happens.
+ */
+export const InteractionOptionSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  /** The short line under the label: "Free", "£40", "She has mentioned it". */
+  note: z.string().default(''),
+  /** Cents, on top of the interaction's own cost. */
+  cost: z.number().int().min(0).default(0),
+  minAge: z.number().int().min(0).default(0),
+  /** Only offered to somebody at least this warm. */
+  minWarmth: z.number().int().min(0).max(100).default(0),
+  /**
+   * What the money says about the gesture.
+   *
+   * Spending more is not automatically kinder. A gift far beyond what the
+   * relationship holds reads as buying somebody, and the person on the other
+   * end of it knows — see the extravagance rule in interact.ts.
+   */
+  extravagant: z.boolean().default(false),
+  warm: InteractionResultSchema,
+  cool: InteractionResultSchema,
+});
+export type InteractionOption = z.infer<typeof InteractionOptionSchema>;
+
 export const InteractionSchema = z.object({
   id: z.string().min(1),
   icon: z.string().min(1),
@@ -161,6 +193,8 @@ export const InteractionSchema = z.object({
   endsRelationship: z.boolean().default(false),
   warm: InteractionResultSchema,
   cool: InteractionResultSchema,
+  /** When present, the row opens a list instead of doing something. */
+  options: z.array(InteractionOptionSchema).default([]),
 });
 export type Interaction = z.infer<typeof InteractionSchema>;
 

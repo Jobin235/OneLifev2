@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { InteractionCard, PersonView } from '../lib/api';
 
 const money = (cents: number) =>
@@ -18,8 +19,18 @@ export const PersonScreen = ({
   busy: boolean;
   decisionOpen: boolean;
   onBack: () => void;
-  onInteract: (interactionId: string) => void;
-}) => (
+  onInteract: (interactionId: string, optionId?: string | null) => void;
+}) => {
+  /*
+   * Which submenu is open, if any. "Spend time" and "Give a gift" are
+   * categories rather than acts: which afternoon, and how much you spent, is
+   * the whole of the gesture, and a tile that resolved either of them in one
+   * tap threw away the only decision in it.
+   */
+  const [open, setOpen] = useState<string | null>(null);
+  const opened = person.interactions.find((a) => a.id === open) ?? null;
+
+  return (
   <>
     <div className="person-hero">
       <button
@@ -77,29 +88,69 @@ export const PersonScreen = ({
       {!person.gone && person.interactions.length > 0 && (
         <section>
           <div className="eyebrow" style={{ marginBottom: 12 }}>
-            WHAT YOU CAN DO
+            {opened ? opened.label.toUpperCase() : 'WHAT YOU CAN DO'}
           </div>
-          <div className="interaction-grid">
-            {person.interactions.map((action: InteractionCard) => (
-              <button
-                key={action.id}
-                className="interaction"
-                disabled={!action.available || busy}
-                onClick={() => onInteract(action.id)}
-                title={action.blockedReason ?? undefined}
-              >
-                <span className="interaction-icon">{action.icon}</span>
-                <span className="interaction-label">{action.label}</span>
-                {action.blockedReason ? (
-                  <span className="interaction-note blocked">{action.blockedReason}</span>
-                ) : action.cost > 0 ? (
-                  <span className="interaction-note">{money(action.cost)}</span>
-                ) : action.timesLeft !== null && action.timesLeft <= 1 ? (
-                  <span className="interaction-note">{action.timesLeft} left this year</span>
-                ) : null}
+
+          {/*
+            * A submenu replaces the grid rather than appearing under it. On a
+            * phone the grid is eleven tiles tall, so a list rendered beneath it
+            * opens somewhere the player cannot see — which reads as the tap
+            * having done nothing at all.
+            */}
+          {opened ? (
+            <div className="int-options">
+              {opened.options.map((option) => (
+                <button
+                  key={option.id}
+                  className="act-row"
+                  disabled={busy || !option.affordable || !opened.available}
+                  onClick={() => {
+                    onInteract(opened.id, option.id);
+                    setOpen(null);
+                  }}
+                >
+                  <span className="act-text">
+                    <span className="act-label">{option.label}</span>
+                    <span className="act-note">
+                      {option.affordable ? option.note : 'You cannot afford that'}
+                    </span>
+                  </span>
+                  <span className="mk-cost">{option.cost > 0 ? money(option.cost) : 'Free'}</span>
+                </button>
+              ))}
+              <button className="act-row int-back" onClick={() => setOpen(null)}>
+                <span className="act-text">
+                  <span className="act-label">‹ Never mind</span>
+                </span>
               </button>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="interaction-grid">
+              {person.interactions.map((action: InteractionCard) => (
+                <button
+                  key={action.id}
+                  className="interaction"
+                  disabled={!action.available || busy}
+                  onClick={() =>
+                    action.options.length > 0 ? setOpen(action.id) : onInteract(action.id)
+                  }
+                  title={action.blockedReason ?? undefined}
+                >
+                  <span className="interaction-icon">{action.icon}</span>
+                  <span className="interaction-label">{action.label}</span>
+                  {action.blockedReason ? (
+                    <span className="interaction-note blocked">{action.blockedReason}</span>
+                  ) : action.options.length > 0 ? (
+                    <span className="interaction-note">{action.options.length} to choose from</span>
+                  ) : action.cost > 0 ? (
+                    <span className="interaction-note">{money(action.cost)}</span>
+                  ) : action.timesLeft !== null && action.timesLeft <= 1 ? (
+                    <span className="interaction-note">{action.timesLeft} left this year</span>
+                  ) : null}
+                </button>
+              ))}
+            </div>
+          )}
         </section>
       )}
 
@@ -151,4 +202,5 @@ export const PersonScreen = ({
       </div>
     </div>
   </>
-);
+  );
+};

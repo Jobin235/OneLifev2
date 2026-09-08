@@ -256,10 +256,13 @@ export const registerLifeRoutes = (
    */
   app.post('/lives/:lifeId/people/:npcId/interact', async (request, reply) => {
     const { lifeId, npcId } = request.params as { lifeId: string; npcId: string };
-    const { interactionId } = request.body as { interactionId: string };
+    const { interactionId, optionId } = request.body as {
+      interactionId: string;
+      optionId?: string | null;
+    };
     try {
       return await lives.withLock(userOf(request), lifeId, (state) => {
-        const { warm, line, meter } = game.interact(state, npcId, interactionId);
+        const { warm, line, meter } = game.interact(state, npcId, interactionId, optionId ?? null);
         return {
           life: lifeView(state, game.content),
           person: personView(state, npcId, game.config, game.content),

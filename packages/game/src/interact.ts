@@ -71,6 +71,8 @@ export const interactionsFor = (
   icon: string;
   label: string;
   cost: number;
+  /** When this has rows, tapping the row opens them rather than doing anything. */
+  options: Array<{ id: string; label: string; note: string; cost: number; affordable: boolean }>;
   timesLeft: number | null;
   available: boolean;
   blockedReason: string | null;
@@ -84,11 +86,29 @@ export const interactionsFor = (
     .map((i) => {
       const reason = blockedReason(i, state, rel, npc.alive);
       const used = state.interactionUsage[`${npcId}:${i.id}`] ?? 0;
+      const warmth = warmthOf(rel);
       return {
         id: i.id,
         icon: i.icon,
         label: i.label,
         cost: i.cost,
+        /*
+         * A row with options is a heading, not an act. "Spend time with her"
+         * and "Give her a gift" are categories, and which afternoon and how
+         * much you spent is the whole of the gesture — flattening either into
+         * one tap throws away the only decision in it.
+         */
+        options: i.options
+          .filter((o) => state.character.age >= o.minAge && warmth >= o.minWarmth)
+          .map((o) => ({
+            id: o.id,
+            label: o.label,
+            note: o.note,
+            cost: i.cost + o.cost,
+            affordable:
+              i.cost + o.cost <=
+              state.character.finances.cash + state.character.finances.savings,
+          })),
         timesLeft: i.timesPerYear > 0 ? Math.max(0, i.timesPerYear - used) : null,
         available: reason === null && state.character.alive && !state.activeEvent,
         /*
@@ -188,9 +208,19 @@ export const interact = (
   interactionId: string,
   content: ContentPack,
   config: GameConfig,
+  optionId: string | null = null,
 ): InteractResult => {
   const interaction = content.interactions.find((i) => i.id === interactionId);
   if (!interaction) throw new InteractionRejected(`unknown interaction ${interactionId}`);
+
+  /*
+   * A row with options cannot be tapped on its own: there is no such thing as
+   * "spending time" in the abstract, only an afternoon you picked.
+   */
+  const option = optionId ? interaction.options.find((o) => o.id === optionId) ?? null : null;
+  if (interaction.options.length > 0 && !option) {
+    throw new InteractionRejected('choose what you are doing first');
+  }
 
   const rel = state.relationships.find((r) => r.npcId === npcId);
   const npc = state.npcs.find((n) => n.id === npcId);
@@ -204,13 +234,28 @@ export const interact = (
   const reason = blockedReason(interaction, state, rel, npc.alive);
   if (reason) throw new InteractionRejected(reason);
 
+  if (option) {
+    const liquid = state.character.finances.cash + state.character.finances.savings;
+    if (interaction.cost + option.cost > liquid) {
+      throw new InteractionRejected("You can't afford that");
+    }
+    if (state.character.age < option.minAge) throw new InteractionRejected('You are too young');
+    if (warmthOf(rel) < option.minWarmth) {
+      throw new InteractionRejected('You are not close enough for that');
+    }
+  }
+
   const before = structuredClone(state);
   const used = state.interactionUsage[`${npcId}:${interactionId}`] ?? 0;
   const rng: Rng = makeRng(state.seed, 'interact', npcId, interactionId, state.character.age, used);
 
   try {
-    if (interaction.cost > 0) {
-      state.character.finances.cash -= interaction.cost;
+    const cost = interaction.cost + (option?.cost ?? 0);
+    if (cost > 0) {
+      const f = state.character.finances;
+      const fromCash = Math.min(f.cash, cost);
+      f.cash -= fromCash;
+      f.savings -= cost - fromCash;
     }
 
     /*
@@ -218,9 +263,22 @@ export const interact = (
      * spouse you insult are different acts, and the odds should say so.
      */
     const warmth = warmthOf(rel);
-    const odds = Math.min(0.93, Math.max(0.07, interaction.baseWarmChance + warmth / 200));
+    let odds = Math.min(0.93, Math.max(0.07, interaction.baseWarmChance + warmth / 200));
+
+    /*
+     * Money is not affection, and the person on the other end knows.
+     *
+     * Buying a car for somebody who is barely in your life reads as buying
+     * *them*, and lands worse than flowers would have. The rule is what stops
+     * the gift list being a slider where richer is kinder — which would make
+     * the whole submenu pointless, since there would only ever be one right
+     * answer and it would be the top one.
+     */
+    if (option?.extravagant && warmth < 65) odds = Math.min(odds, 0.18);
+
     const warm = rng.chance(odds);
-    const result = warm ? interaction.warm : interaction.cool;
+    const source = option ?? interaction;
+    const result = warm ? source.warm : source.cool;
 
     const headline = headlineDimension(result);
     const meterFrom = headline === null ? 0 : rel.dimensions[headline];
