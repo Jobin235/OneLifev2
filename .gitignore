@@ -16,3 +16,4 @@ apps/mobile/standalone/
 /drive-*.mjs
 /probe-*.mjs
 /serve-standalone.mjs
+/shot-*.png
