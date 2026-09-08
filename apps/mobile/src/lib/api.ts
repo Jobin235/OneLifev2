@@ -249,6 +249,51 @@ export interface StockRow {
   affordable: boolean;
 }
 
+export interface VentureView {
+  id: string;
+  kind: string;
+  name: string;
+  emoji: string;
+  premises: string;
+  memberWord: string;
+  memberWordPlural: string;
+  moraleWord: string;
+  appealWord: string;
+  morale: number;
+  moraleLabel: string;
+  appeal: number;
+  members: Array<{ id: string; label: string; emoji: string; quality: number }>;
+  capacity: number;
+  lastYear: string;
+  actionsLeft: number;
+  actions: Array<{
+    id: string;
+    emoji: string;
+    label: string;
+    note: string;
+    price: string;
+    available: boolean;
+    locked: string | null;
+  }>;
+  upgrades: Array<{
+    id: string;
+    emoji: string;
+    label: string;
+    price: string;
+    owned: boolean;
+    affordable: boolean;
+  }>;
+}
+
+export interface VentureOffer {
+  kind: string;
+  label: string;
+  emoji: string;
+  buyLabel: string;
+  owned: boolean;
+  tiers: Array<{ id: string; label: string; price: string; capacity: number; affordable: boolean }>;
+}
+
 export interface MobView {
   family: string;
   title: string;
@@ -548,6 +593,12 @@ export interface Api {
     lifeId: string,
     job: string,
   ): Promise<{ life: LifeView; mob: MobView | null; line: string; cut: string | null }>;
+  /** Everything owned and run, and what could be started. */
+  ventures(lifeId: string): Promise<{ ventures: VentureView[]; offers: VentureOffer[] }>;
+  venture(
+    lifeId: string,
+    body: { action: 'start' | 'act' | 'upgrade'; kind?: string; tierId?: string; ventureId?: string; id?: string },
+  ): Promise<{ life: LifeView; ventures: VentureView[]; offers: VentureOffer[]; line: string }>;
   /** Null when there is no maze on screen. */
   escapeState(lifeId: string): Promise<EscapeView | null>;
   escapeMove(
@@ -665,6 +716,13 @@ export const httpApi: Api = {
     request<{ life: LifeView; mob: MobView | null; line: string; cut: string | null }>(
       `/lives/${lifeId}/mob`,
       { method: 'POST', body: JSON.stringify({ job }) },
+    ),
+  ventures: (lifeId: string) =>
+    request<{ ventures: VentureView[]; offers: VentureOffer[] }>(`/lives/${lifeId}/ventures`),
+  venture: (lifeId: string, body: Record<string, unknown>) =>
+    request<{ life: LifeView; ventures: VentureView[]; offers: VentureOffer[]; line: string }>(
+      `/lives/${lifeId}/ventures`,
+      { method: 'POST', body: JSON.stringify(body) },
     ),
   escapeState: (lifeId: string) =>
     request<EscapeView>(`/lives/${lifeId}/escape`).catch(() => null),

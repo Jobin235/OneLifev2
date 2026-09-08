@@ -281,6 +281,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     royal: null,
     escape: null,
     mob: null,
+    ventures: [],
     assets: [],
     businesses: [],
     flags: {

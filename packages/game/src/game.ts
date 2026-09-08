@@ -37,6 +37,13 @@ import { audition, fameView } from './fame.js';
 import { inheritTitle, royalAct, royalView, type RoyalAction } from './royalty.js';
 import { doMobJob, joinMob, mobEligibility, mobView, type MobJob } from './mob.js';
 import { escapeMove, escapeView, startEscape, surrender } from './escape.js';
+import {
+  startVenture,
+  ventureAct,
+  ventureOffers,
+  ventureUpgrade,
+  venturesView,
+} from './venture.js';
 
 export interface GameOptions {
   /**
@@ -532,6 +539,26 @@ export class Game {
 
   surrender(state: LifeState) {
     return surrender(state, this.config);
+  }
+
+  /** Everything you own and run, and what could be started. */
+  ventures(state: LifeState) {
+    return {
+      ventures: venturesView(state, this.content),
+      offers: ventureOffers(state, this.content),
+    };
+  }
+
+  startVenture(state: LifeState, kind: Parameters<typeof startVenture>[1], tierId: string) {
+    return startVenture(state, kind, tierId, this.content, this.config);
+  }
+
+  ventureAct(state: LifeState, ventureId: string, actionId: string) {
+    return ventureAct(state, ventureId, actionId, this.content, this.config);
+  }
+
+  ventureUpgrade(state: LifeState, ventureId: string, upgradeId: string) {
+    return ventureUpgrade(state, ventureId, upgradeId, this.content, this.config);
   }
 
   /** The sentence, how it is going, and what there is to do with the years. */

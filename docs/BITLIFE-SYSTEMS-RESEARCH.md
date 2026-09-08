@@ -227,9 +227,46 @@ row at the top of the prison menu.
 - The maze lives in the save, not the client: being halfway over a wall is a
   state rather than a screen, and the server decides where the guard is.
 
+## Ventures: the cult, the zoo and the spy agency
+
+Sources: [Prima Games](https://primagames.com/tips/bitlife-how-to-start-a-cult),
+[Level Winner (cult)](https://www.levelwinner.com/bitlife-cult-update-guide-everything-you-need-to-know-about-the-cult-update/),
+[Level Winner (secret agent)](https://www.levelwinner.com/bitlife-secret-agent-expansion-guide-everything-you-need-to-know-about-the-secret-agent-expansion-pack/),
+[Twinfinite](https://twinfinite.net/guides/how-to-become-a-secret-agent-bitlife/)
+
+- **Cult**: buy a plot, name it, recruit through outreach missions, hold
+  ceremonies, and invest in the compound to raise its **Appeal** — higher appeal
+  brings happier followers and people from higher classes. More followers, more
+  money a year.
+- **Zoo**: three sizes (4, 6 and 8 habitats), animals acquired one at a time
+  from a trading post, staff and enclosures to maintain, visitors to keep happy.
+- **Secret agency**: buy premises, hire agents by interviewing or poaching them
+  from rivals, buy gadgets, then run missions. Successful missions raise your
+  prestige, which raises the risk and the payout of the next ones.
+
+**Our version.** Built, and built once. `packages/game/src/venture.ts` plus
+`content/ventures.json`.
+
+All three are the same machine wearing three sets of nouns: premises with a
+capacity, things acquired one at a time, a meter that decays every year, and an
+annual payout against an upkeep. Writing that three times would have produced
+three subtly different versions of the same bugs, so the nouns, the numbers and
+the four bespoke actions apiece live in content and the engine never learns
+which one it is running. A cult says "Devotion" and "followers" exactly where a
+zoo says "Welfare" and "animals".
+
+The one rule that makes upgrades worth buying rather than a second money sink:
+**what can turn up is gated on how good the place is.** A panda will not come to
+a zoo with a car park, and a Legend will not work out of two rooms above a dry
+cleaner. Building is the only way to change that.
+
+Tuned so each is a loss while it fills and worth having once it is full and
+tended — a medium commune clears about $250k a year at capacity, a medium zoo
+about $320k on a much larger outlay, and an agency runs near break-even on the
+annual line with the missions as the actual income.
+
 ## The remaining packs
 
-Casino, black market, secret agent, racing, zoo, cult, and vampire. Each is a
-self-contained menu with its own economy; the player has asked for all of them
-in the standard game rather than as purchases. They are scoped in the task list
-and will be researched individually as they come up, rather than guessed at now.
+Casino, black market, racing, and vampire. Each is a self-contained menu with
+its own economy; the player has asked for all of them in the standard game
+rather than as purchases.

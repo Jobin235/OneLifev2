@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, AuditionRejected, EscapeRejected, MobRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
+import { ApplicationRejected, AuditionRejected, EscapeRejected, MobRejected, VentureRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -19,6 +19,14 @@ const ManageBody = z.object({ action: z.string().min(1), amenityId: z.string().o
 const AuditionBody = z.object({ trackId: z.string().min(1) });
 const RoyalBody = z.object({ action: z.string().min(1), choice: z.string().optional() });
 const MobBody = z.object({ job: z.string().min(1) });
+const VentureBody = z.object({
+  /** One of: start a venture, do one of its things, or build something. */
+  action: z.enum(['start', 'act', 'upgrade']),
+  kind: z.enum(['cult', 'zoo', 'agency']).optional(),
+  tierId: z.string().optional(),
+  ventureId: z.string().optional(),
+  id: z.string().optional(),
+});
 const EscapeBody = z.object({
   move: z.enum(['up', 'down', 'left', 'right', 'start', 'surrender']),
 });
@@ -405,6 +413,31 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.get('/lives/:lifeId/ventures', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.ventures(await load(userOf(request), lifeId));
+  });
+
+  app.post('/lives/:lifeId/ventures', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const body = VentureBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        let line = '';
+        if (body.action === 'start') {
+          game.startVenture(state, body.kind as never, body.tierId ?? '');
+        } else if (body.action === 'upgrade') {
+          game.ventureUpgrade(state, body.ventureId ?? '', body.id ?? '');
+        } else {
+          line = game.ventureAct(state, body.ventureId ?? '', body.id ?? '').line;
+        }
+        return { life: lifeView(state, game.content), ...game.ventures(state), line };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/mob', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     const state = await load(userOf(request), lifeId);
@@ -525,6 +558,7 @@ const statusFor = (error: unknown): number => {
   if (error instanceof AuditionRejected) return 409;
   if (error instanceof RoyalRejected) return 409;
   if (error instanceof MobRejected) return 409;
+  if (error instanceof VentureRejected) return 409;
   if (error instanceof EscapeRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };

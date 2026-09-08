@@ -36,6 +36,7 @@ import { advanceProperties } from './landlord.js';
 import { advanceFameYear } from './fame.js';
 import { advanceRoyalYear, royalBirth } from './royalty.js';
 import { advanceMobYear } from './mob.js';
+import { advanceVentureYear } from './venture.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -233,6 +234,7 @@ export const advanceYear = (
   royalBirth(state, content, rng);
   advanceRoyalYear(state, content, rng);
   advanceMobYear(state, rng);
+  advanceVentureYear(state, content, rng);
   serveTime(state);
   /*
    * A maze is a thing you are in the middle of, not a thing you carry. Ageing

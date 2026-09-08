@@ -1,0 +1,546 @@
+[
+  {
+    "id": "cult",
+    "kind": "cult",
+    "label": "Commune",
+    "emoji": "🕯️",
+    "memberWord": "follower",
+    "memberWordPlural": "followers",
+    "moraleWord": "Devotion",
+    "appealWord": "The compound",
+    "buyLabel": "Buy a plot and start something",
+    "names": [
+      "the Order of the Quiet Morning",
+      "the Fellowship of the Open Hand",
+      "the Second Harvest",
+      "the Congregation of Still Water",
+      "the House of the Long Field",
+      "the Children of the Third Dawn"
+    ],
+    "tiers": [
+      {
+        "id": "cult_small",
+        "label": "Twelve acres and a barn",
+        "price": 14000000,
+        "capacity": 14,
+        "appeal": 20
+      },
+      {
+        "id": "cult_medium",
+        "label": "A working farm with outbuildings",
+        "price": 68000000,
+        "capacity": 40,
+        "appeal": 38
+      },
+      {
+        "id": "cult_large",
+        "label": "A valley, and a road nobody else uses",
+        "price": 340000000,
+        "capacity": 110,
+        "appeal": 55
+      }
+    ],
+    "memberTypes": [
+      {
+        "id": "seeker",
+        "label": "Seeker",
+        "emoji": "🙂",
+        "weight": 5,
+        "quality": [
+          20,
+          55
+        ],
+        "yield": 300000,
+        "minAppeal": 0
+      },
+      {
+        "id": "devotee",
+        "label": "Devotee",
+        "emoji": "😌",
+        "weight": 3,
+        "quality": [
+          45,
+          80
+        ],
+        "yield": 900000,
+        "minAppeal": 30
+      },
+      {
+        "id": "benefactor",
+        "label": "Benefactor",
+        "emoji": "🤲",
+        "weight": 1,
+        "quality": [
+          60,
+          95
+        ],
+        "yield": 6000000,
+        "minAppeal": 55
+      }
+    ],
+    "upkeepPerMember": 250000,
+    "upgrades": [
+      {
+        "id": "cult_hall",
+        "label": "A meeting hall",
+        "emoji": "🏛️",
+        "price": 9000000,
+        "appeal": 10
+      },
+      {
+        "id": "cult_kitchen",
+        "label": "A kitchen that feeds everybody",
+        "emoji": "🍲",
+        "price": 4500000,
+        "appeal": 7
+      },
+      {
+        "id": "cult_press",
+        "label": "A printing press",
+        "emoji": "🗞️",
+        "price": 6000000,
+        "appeal": 9
+      },
+      {
+        "id": "cult_wall",
+        "label": "A wall, and a gate on it",
+        "emoji": "🧱",
+        "price": 15000000,
+        "appeal": 12
+      },
+      {
+        "id": "cult_studio",
+        "label": "A recording studio",
+        "emoji": "🎙️",
+        "price": 24000000,
+        "appeal": 15
+      }
+    ],
+    "actions": [
+      {
+        "id": "outreach",
+        "label": "Outreach",
+        "emoji": "📢",
+        "note": "Go and find people",
+        "price": 800000,
+        "morale": 4,
+        "recruits": [
+          1,
+          3
+        ]
+      },
+      {
+        "id": "ceremony",
+        "label": "Hold a ceremony",
+        "emoji": "🔥",
+        "note": "They will talk about it for years",
+        "price": 2200000,
+        "morale": 16,
+        "recruits": [
+          0,
+          1
+        ]
+      },
+      {
+        "id": "teach",
+        "label": "Teach",
+        "emoji": "📖",
+        "note": "An evening of it, every evening",
+        "price": 0,
+        "morale": 9,
+        "recruits": [
+          0,
+          0
+        ]
+      },
+      {
+        "id": "tithe",
+        "label": "Ask for everything they have",
+        "emoji": "💰",
+        "note": "It will cost you some of them",
+        "price": 0,
+        "morale": -22,
+        "recruits": [
+          0,
+          0
+        ],
+        "takes": true
+      }
+    ]
+  },
+  {
+    "id": "zoo",
+    "kind": "zoo",
+    "label": "Zoo",
+    "emoji": "🦁",
+    "memberWord": "animal",
+    "memberWordPlural": "animals",
+    "moraleWord": "Welfare",
+    "appealWord": "The grounds",
+    "buyLabel": "Buy a zoo",
+    "names": [
+      "Hollowbrook Zoo",
+      "The Marchmont Wildlife Park",
+      "Fenwater Zoological Gardens",
+      "The Coldharbour Menagerie",
+      "Ashgrove Wild Park"
+    ],
+    "tiers": [
+      {
+        "id": "zoo_small",
+        "label": "Four habitats, on the edge of town",
+        "price": 90000000,
+        "capacity": 12,
+        "appeal": 25
+      },
+      {
+        "id": "zoo_medium",
+        "label": "Six habitats and a car park",
+        "price": 380000000,
+        "capacity": 26,
+        "appeal": 42
+      },
+      {
+        "id": "zoo_large",
+        "label": "Eight habitats, and a train around them",
+        "price": 1400000000,
+        "capacity": 60,
+        "appeal": 60
+      }
+    ],
+    "memberTypes": [
+      {
+        "id": "goat",
+        "label": "Pygmy goat",
+        "emoji": "🐐",
+        "weight": 6,
+        "quality": [
+          30,
+          60
+        ],
+        "yield": 700000,
+        "minAppeal": 0
+      },
+      {
+        "id": "penguin",
+        "label": "Penguin",
+        "emoji": "🐧",
+        "weight": 4,
+        "quality": [
+          40,
+          75
+        ],
+        "yield": 2200000,
+        "minAppeal": 20
+      },
+      {
+        "id": "giraffe",
+        "label": "Giraffe",
+        "emoji": "🦒",
+        "weight": 3,
+        "quality": [
+          50,
+          85
+        ],
+        "yield": 4800000,
+        "minAppeal": 35
+      },
+      {
+        "id": "tiger",
+        "label": "Tiger",
+        "emoji": "🐅",
+        "weight": 2,
+        "quality": [
+          55,
+          90
+        ],
+        "yield": 10000000,
+        "minAppeal": 45
+      },
+      {
+        "id": "panda",
+        "label": "Panda",
+        "emoji": "🐼",
+        "weight": 1,
+        "quality": [
+          70,
+          98
+        ],
+        "yield": 28000000,
+        "minAppeal": 65
+      }
+    ],
+    "upkeepPerMember": 1400000,
+    "upgrades": [
+      {
+        "id": "zoo_cafe",
+        "label": "A café that is not terrible",
+        "emoji": "☕",
+        "price": 22000000,
+        "appeal": 8
+      },
+      {
+        "id": "zoo_vet",
+        "label": "A vet on site",
+        "emoji": "🩺",
+        "price": 40000000,
+        "appeal": 11
+      },
+      {
+        "id": "zoo_walkway",
+        "label": "A raised walkway",
+        "emoji": "🌉",
+        "price": 65000000,
+        "appeal": 13
+      },
+      {
+        "id": "zoo_aquarium",
+        "label": "An aquarium wing",
+        "emoji": "🐠",
+        "price": 120000000,
+        "appeal": 16
+      },
+      {
+        "id": "zoo_research",
+        "label": "A breeding programme",
+        "emoji": "🧬",
+        "price": 180000000,
+        "appeal": 18
+      }
+    ],
+    "actions": [
+      {
+        "id": "acquire",
+        "label": "Go to the trading post",
+        "emoji": "🚚",
+        "note": "See what anybody is parting with",
+        "price": 6000000,
+        "morale": 0,
+        "recruits": [
+          1,
+          2
+        ]
+      },
+      {
+        "id": "enrich",
+        "label": "Rebuild an enclosure",
+        "emoji": "🌿",
+        "note": "The keepers have been asking",
+        "price": 8000000,
+        "morale": 14,
+        "recruits": [
+          0,
+          0
+        ]
+      },
+      {
+        "id": "vet_round",
+        "label": "A full round of check-ups",
+        "emoji": "💉",
+        "note": "Everything, everybody, one week",
+        "price": 3500000,
+        "morale": 9,
+        "recruits": [
+          0,
+          0
+        ]
+      },
+      {
+        "id": "breed",
+        "label": "Run the breeding programme",
+        "emoji": "🥚",
+        "note": "Slow, and it works",
+        "price": 12000000,
+        "morale": 5,
+        "recruits": [
+          0,
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "id": "agency",
+    "kind": "agency",
+    "label": "Agency",
+    "emoji": "🕵️",
+    "memberWord": "agent",
+    "memberWordPlural": "agents",
+    "moraleWord": "Prestige",
+    "appealWord": "The building",
+    "buyLabel": "Take out a lease on a front",
+    "names": [
+      "Meridian Advisory",
+      "The Ashford Bureau",
+      "Coldfield Analytics",
+      "The Quillon Office",
+      "Harrowgate Import & Export"
+    ],
+    "tiers": [
+      {
+        "id": "agency_small",
+        "label": "Two rooms above a dry cleaner",
+        "price": 30000000,
+        "capacity": 3,
+        "appeal": 18
+      },
+      {
+        "id": "agency_medium",
+        "label": "A whole floor, and a lift nobody else uses",
+        "price": 210000000,
+        "capacity": 7,
+        "appeal": 40
+      },
+      {
+        "id": "agency_large",
+        "label": "A building with no name on it",
+        "price": 900000000,
+        "capacity": 14,
+        "appeal": 62
+      }
+    ],
+    "memberTypes": [
+      {
+        "id": "runner",
+        "label": "Runner",
+        "emoji": "🏃",
+        "weight": 5,
+        "quality": [
+          25,
+          60
+        ],
+        "yield": 4000000,
+        "minAppeal": 0
+      },
+      {
+        "id": "cryptographer",
+        "label": "Cryptographer",
+        "emoji": "🔐",
+        "weight": 3,
+        "quality": [
+          45,
+          85
+        ],
+        "yield": 11000000,
+        "minAppeal": 25
+      },
+      {
+        "id": "fixer",
+        "label": "Fixer",
+        "emoji": "🧊",
+        "weight": 2,
+        "quality": [
+          55,
+          90
+        ],
+        "yield": 24000000,
+        "minAppeal": 45
+      },
+      {
+        "id": "legend",
+        "label": "Legend",
+        "emoji": "🎭",
+        "weight": 1,
+        "quality": [
+          75,
+          99
+        ],
+        "yield": 70000000,
+        "minAppeal": 65
+      }
+    ],
+    "upkeepPerMember": 3500000,
+    "upgrades": [
+      {
+        "id": "agency_comms",
+        "label": "A comms room",
+        "emoji": "📡",
+        "price": 35000000,
+        "appeal": 10
+      },
+      {
+        "id": "agency_armoury",
+        "label": "An armoury",
+        "emoji": "🗄️",
+        "price": 55000000,
+        "appeal": 12
+      },
+      {
+        "id": "agency_lab",
+        "label": "A gadget bench",
+        "emoji": "🔧",
+        "price": 80000000,
+        "appeal": 14
+      },
+      {
+        "id": "agency_server",
+        "label": "Servers nobody can find",
+        "emoji": "🖥️",
+        "price": 140000000,
+        "appeal": 17
+      },
+      {
+        "id": "agency_jet",
+        "label": "Something with wings",
+        "emoji": "✈️",
+        "price": 400000000,
+        "appeal": 20
+      }
+    ],
+    "actions": [
+      {
+        "id": "interview",
+        "label": "Interview candidates",
+        "emoji": "📋",
+        "note": "Most of them are not for this",
+        "price": 2000000,
+        "morale": 0,
+        "recruits": [
+          1,
+          1
+        ]
+      },
+      {
+        "id": "poach",
+        "label": "Poach somebody good",
+        "emoji": "🪝",
+        "note": "Expensive, and worth it",
+        "price": 40000000,
+        "morale": 3,
+        "recruits": [
+          1,
+          1
+        ],
+        "minQuality": 60
+      },
+      {
+        "id": "mission",
+        "label": "Run a mission",
+        "emoji": "🎯",
+        "note": "What the whole thing is for",
+        "price": 0,
+        "morale": 12,
+        "recruits": [
+          0,
+          0
+        ],
+        "pays": true,
+        "risk": 0.22
+      },
+      {
+        "id": "burn",
+        "label": "Burn a rival's server",
+        "emoji": "🔥",
+        "note": "They will work out it was you",
+        "price": 8000000,
+        "morale": 8,
+        "recruits": [
+          0,
+          0
+        ],
+        "pays": true,
+        "risk": 0.38
+      }
+    ]
+  }
+]

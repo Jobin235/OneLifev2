@@ -13,6 +13,8 @@ import type {
   RoyalView,
   MobView,
   EscapeView,
+  VentureView,
+  VentureOffer,
   PeopleView,
   PersonView,
   Opening,
@@ -39,6 +41,7 @@ import { PropertyScreen } from './screens/PropertyScreen';
 import { FameScreen } from './screens/FameScreen';
 import { RoyalScreen } from './screens/RoyalScreen';
 import { MobScreen } from './screens/MobScreen';
+import { VentureScreen } from './screens/VentureScreen';
 import { EscapeScreen } from './screens/EscapeScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
@@ -91,6 +94,9 @@ export const App = () => {
   );
   const [showMob, setShowMob] = useState(false);
   const [escape, setEscape] = useState<EscapeView | null>(null);
+  const [ventures, setVentures] = useState<VentureView[]>([]);
+  const [ventureOffers, setVentureOffers] = useState<VentureOffer[]>([]);
+  const [showVentures, setShowVentures] = useState(false);
   const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
@@ -199,14 +205,17 @@ export const App = () => {
           setMobOffer(family.eligibility);
         }
         if (slot === 'assets') {
-          const [worth, board, owned] = await Promise.all([
+          const [worth, board, owned, run] = await Promise.all([
             api.money(lifeId),
             api.market(lifeId),
             api.properties(lifeId),
+            api.ventures(lifeId),
           ]);
           setMoney(worth);
           setMarket(board);
           setProperties(owned);
+          setVentures(run.ventures);
+          setVentureOffers(run.offers);
         }
       } catch {
         /* A stale sheet is better than a crash; the log stays authoritative. */
@@ -417,6 +426,31 @@ export const App = () => {
         setSlot(null);
       }
       if (result.line) setToast(result.cut ? `${result.line} ${result.cut}.` : result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onVenture = useCallback(
+    async (body: {
+      action: 'start' | 'act' | 'upgrade';
+      kind?: string;
+      tierId?: string;
+      ventureId?: string;
+      id?: string;
+    }) => {
+      if (!life) return;
+      const result = await run(() => api.venture(life.lifeId, body));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setVentures(result.ventures);
+      setVentureOffers(result.offers);
+      // A charge raises the lawyer popup, which lives over the sheet.
+      if (result.life.activeEvent) {
+        setShowVentures(false);
+        setSlot(null);
+      }
+      if (result.line) setToast(result.line);
+      void api.money(life.lifeId).then(setMoney);
     },
     [life, run, setLifeAndRemember],
   );
@@ -690,8 +724,30 @@ export const App = () => {
           </Sheet>
         )}
 
+        {slot === 'assets' && !showProperties && showVentures && (
+          <Sheet
+            title="Ventures"
+            onBack={() => setShowVentures(false)}
+            onClose={() => {
+              setShowVentures(false);
+              setSlot(null);
+            }}
+          >
+            <VentureScreen
+              ventures={ventures}
+              offers={ventureOffers}
+              busy={busy}
+              decisionOpen={decisionOpen}
+              onStart={(kind, tierId) => void onVenture({ action: 'start', kind, tierId })}
+              onAct={(ventureId, id) => void onVenture({ action: 'act', ventureId, id })}
+              onUpgrade={(ventureId, id) => void onVenture({ action: 'upgrade', ventureId, id })}
+            />
+          </Sheet>
+        )}
+
         {slot === 'assets' &&
           !showProperties &&
+          !showVentures &&
           (showMarket ? (
             <Sheet
               title="Stock Market"
@@ -719,6 +775,8 @@ export const App = () => {
                   onOpenMarket={() => setShowMarket(true)}
                   properties={properties}
                   onOpenProperties={() => setShowProperties(true)}
+                  ventures={ventures}
+                  onOpenVentures={() => setShowVentures(true)}
                 />
               ) : (
                 <div className="spinner">…</div>

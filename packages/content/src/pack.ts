@@ -187,6 +187,94 @@ export const StockSchema = z.object({
 });
 export type Stock = z.infer<typeof StockSchema>;
 
+/**
+ * A venture: a cult, a zoo, or a spy agency.
+ *
+ * All three are the same machine wearing different nouns — premises with a
+ * capacity, things you acquire one at a time, a meter that decays, and an
+ * annual payout against an upkeep — so all three are one schema and three
+ * entries in one file. See packages/game/src/venture.ts.
+ */
+export const VenturePackSchema = z.object({
+  id: z.string().min(1),
+  kind: z.enum(['cult', 'zoo', 'agency']),
+  label: z.string().min(1),
+  emoji: z.string().min(1),
+  /** "follower" / "animal" / "agent", for every sentence the screen writes. */
+  memberWord: z.string().min(1),
+  memberWordPlural: z.string().min(1),
+  /** What the meter is called here: Devotion, Welfare, Prestige. */
+  moraleWord: z.string().min(1),
+  appealWord: z.string().min(1),
+  buyLabel: z.string().min(1),
+  names: z.array(z.string().min(1)).min(1),
+  tiers: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        price: z.number().int().min(0),
+        capacity: z.number().int().min(1),
+        /** What the premises are worth before anything is built on them. */
+        appeal: z.number().int().min(0).max(100),
+      }),
+    )
+    .min(1),
+  memberTypes: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        emoji: z.string().min(1),
+        /** Relative frequency when something arrives. */
+        weight: z.number().int().min(1),
+        quality: z.tuple([z.number().int(), z.number().int()]),
+        /** Cents a year this one brings in at full quality. */
+        yield: z.number().int().min(0),
+        /** The place has to be this good before this sort turns up at all. */
+        minAppeal: z.number().int().min(0).max(100),
+      }),
+    )
+    .min(1),
+  /** Cents a year, each, whatever they bring in. */
+  upkeepPerMember: z.number().int().min(0),
+  upgrades: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        emoji: z.string().min(1),
+        price: z.number().int().min(0),
+        appeal: z.number().int().min(0).max(100),
+      }),
+    )
+    .default([]),
+  actions: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().min(1),
+        emoji: z.string().min(1),
+        note: z.string().min(1),
+        price: z.number().int().min(0),
+        /** What one go does to the meter. Negative for the ones that cost you. */
+        morale: z.number().int(),
+        /** How many arrive, low and high. */
+        recruits: z.tuple([z.number().int(), z.number().int()]).default([0, 0]),
+        /** Pays out immediately rather than at the year end. */
+        pays: z.boolean().default(false),
+        /** Takes what the members have, and some of the members with it. */
+        takes: z.boolean().default(false),
+        /** Chance of it going wrong, before smarts. */
+        risk: z.number().min(0).max(1).default(0),
+        /** Nothing below this quality turns up for this one. */
+        minQuality: z.number().int().min(0).max(100).default(0),
+      }),
+    )
+    .min(1),
+});
+export type VenturePack = z.infer<typeof VenturePackSchema>;
+
 export const PurchasableSchema = z.object({
   id: z.string().min(1),
   kind: z.enum(['house', 'apartment', 'car', 'luxury', 'collectible', 'investment']),
@@ -227,6 +315,9 @@ export interface ContentPack {
   interactions: Interaction[];
   purchasables: Purchasable[];
   stocks: Stock[];
+  ventures: VenturePack[];
+  /** Keyed by kind, because there is exactly one of each. */
+  venturesById: Map<string, VenturePack>;
   npcTemplates: z.infer<typeof NpcTemplateFileSchema>[];
 }
 
@@ -253,6 +344,7 @@ export interface ContentSources {
   interactions: unknown;
   purchasables: unknown;
   stocks: unknown;
+  ventures: unknown;
   npcTemplates: unknown;
 }
 
@@ -291,6 +383,7 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
   const interactions = parseArray('interactions.json', sources.interactions, InteractionSchema);
   const purchasables = parseArray('assets.json', sources.purchasables, PurchasableSchema);
   const stocks = parseArray('stocks.json', sources.stocks, StockSchema);
+  const ventures = parseArray('ventures.json', sources.ventures, VenturePackSchema);
   const npcTemplates = parseArray('npc-templates.json', sources.npcTemplates, NpcTemplateFileSchema);
 
   const pack: ContentPack = {
@@ -308,6 +401,8 @@ export const buildContentPack = (sources: ContentSources): ContentPack => {
     interactions,
     purchasables,
     stocks,
+    ventures,
+    venturesById: new Map(ventures.map((v) => [v.kind, v])),
     npcTemplates,
   };
 

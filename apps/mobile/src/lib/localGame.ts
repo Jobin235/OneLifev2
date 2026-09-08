@@ -239,6 +239,28 @@ export const createLocalApi = (): Api => {
       };
     },
 
+    ventures: async (lifeId) => game.ventures(get(lifeId)) as never,
+
+    venture: async (lifeId, body) => {
+      const state = get(lifeId);
+      let line = '';
+      if (body.action === 'start') {
+        game.startVenture(state, body.kind as never, body.tierId ?? '');
+      } else if (body.action === 'upgrade') {
+        game.ventureUpgrade(state, body.ventureId ?? '', body.id ?? '');
+      } else {
+        line = game.ventureAct(state, body.ventureId ?? '', body.id ?? '').line;
+      }
+      save(state);
+      const view = game.ventures(state);
+      return {
+        life: lifeView(state, game.content) as never,
+        ventures: view.ventures as never,
+        offers: view.offers as never,
+        line,
+      };
+    },
+
     escapeState: async (lifeId) => game.escape(get(lifeId)) as never,
 
     escapeMove: async (lifeId, move) => {

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { DebtLine, MarketView, MoneyView, PropertyRow, ShopEntry } from '../lib/api';
+import type { DebtLine, MarketView, MoneyView, PropertyRow, ShopEntry, VentureView } from '../lib/api';
 
 /**
  * Design 3C. Money in plain language — "what you own", "every month" — with a
@@ -14,6 +14,8 @@ export const MoneyScreen = ({
   onOpenMarket,
   properties,
   onOpenProperties,
+  ventures,
+  onOpenVentures,
 }: {
   money: MoneyView;
   market: MarketView | null;
@@ -23,6 +25,9 @@ export const MoneyScreen = ({
   onOpenMarket: () => void;
   properties: PropertyRow[];
   onOpenProperties: () => void;
+  /** Things you own and run: a commune, a zoo, an agency. */
+  ventures: VentureView[];
+  onOpenVentures: () => void;
 }) => {
   /*
    * Open. The shop was behind a "+" and stayed shut, which on a screen the
@@ -98,6 +103,24 @@ export const MoneyScreen = ({
           <span className="act-chev">›</span>
         </button>
       )}
+
+      {/*
+        Not "if you own one": the row is how you find out these exist at all,
+        and a screen that only appears once you already have a zoo is a screen
+        nobody ever reaches.
+      */}
+      <button className="act-row mk-entry" onClick={onOpenVentures}>
+        <span className="act-icon">🏛️</span>
+        <span className="act-text">
+          <span className="act-label">Ventures</span>
+          <span className="act-note">
+            {ventures.length > 0
+              ? ventures.map((v) => v.name).join(' · ')
+              : 'A commune, a zoo, or a front for something else'}
+          </span>
+        </span>
+        <span className="act-chev">›</span>
+      </button>
 
       {/* The market is a place you go, the way BitLife puts it under Assets. */}
       <button className="act-row mk-entry" onClick={onOpenMarket}>

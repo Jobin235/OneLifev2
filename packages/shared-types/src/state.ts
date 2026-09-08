@@ -12,6 +12,7 @@ import { LineageSchema } from './lineage.js';
 import { RoyalStandingSchema } from './royalty.js';
 import { EscapeGameSchema } from './escape.js';
 import { MobStandingSchema } from './mob.js';
+import { VentureSchema } from './venture.js';
 
 export const FlagValueSchema = z.union([z.string(), z.number(), z.boolean()]);
 export type FlagValue = z.infer<typeof FlagValueSchema>;
@@ -53,6 +54,11 @@ export const LifeStateSchema = z.object({
    * and there is no resigning from it.
    */
   mob: MobStandingSchema.nullable().default(null),
+  /**
+   * Things you own and run: a commune, a zoo, a front for a spy agency. One of
+   * each at most, which is why this is a list rather than three fields.
+   */
+  ventures: z.array(VentureSchema).default([]),
   assets: z.array(AssetSchema),
   businesses: z.array(BusinessSchema),
 
@@ -148,6 +154,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 6-7: added a stated life goal, then removed it. See docs/COMPETITIVE-RESEARCH.md.
  * 8: added a royal standing — a title, a house, respect, and a place in line.
  * 9: added the prison maze and a place in an organisation that has no exit.
+ * 10: added ventures — a commune, a zoo, an agency — and the vampire.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 9;
+export const SCHEMA_VERSION = 10;

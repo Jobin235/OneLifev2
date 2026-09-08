@@ -38,4 +38,5 @@ export const localContent = (): ContentPack =>
     interactions: one(root, 'interactions.json'),
     purchasables: one(root, 'assets.json'),
     stocks: one(root, 'stocks.json'),
+    ventures: one(root, 'ventures.json'),
   });
