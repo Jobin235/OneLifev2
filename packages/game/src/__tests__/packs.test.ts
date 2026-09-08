@@ -50,8 +50,6 @@ describe('the casino', () => {
     for (const [which, pick] of [
       ['slots', ''],
       ['roulette', 'red:7'],
-      ['blackjack', 'book'],
-      ['blackjack', 'stick'],
       ['horses', 'Ravensworth'],
       ['horses', 'Half a Chance'],
     ]) {
@@ -62,9 +60,6 @@ describe('the casino', () => {
     }
   });
 
-  it('rewards playing blackjack properly over playing it badly', () => {
-    expect(houseEdge('blackjack', 'book')).toBeGreaterThan(houseEdge('blackjack', 'hit'));
-  });
 
   it('takes the stake before it rolls, and caps the year', () => {
     let s = adult('cas-2', 26, 100_000_00);

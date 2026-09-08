@@ -3862,3 +3862,198 @@ button {
   background: #F1EDF6;
   color: #5B4B77;
 }
+
+/*
+ * The blackjack table.
+ *
+ * A felt with the dealer at the top and the player at the bottom, because that
+ * is where they sit, and the hole card face down between them until it is not.
+ * The other casino games are rows in a list — one tap each, which is what they
+ * are — and this one gets a table because it is the only one where the decision
+ * happens after the cards are out.
+ */
+.bj-felt {
+  background: linear-gradient(#1E5C43, #174935);
+  border-radius: var(--r-panel, 18px);
+  padding: 18px 16px;
+  margin-bottom: 14px;
+  color: #F2EFE7;
+  box-shadow: inset 0 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.bj-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bj-who {
+  font: 800 10px/1 var(--text);
+  letter-spacing: 0.14em;
+  opacity: 0.6;
+}
+
+.bj-cards {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.bj-card {
+  min-width: 42px;
+  padding: 11px 8px;
+  border-radius: 7px;
+  background: #FBF9F4;
+  color: #16150F;
+  font: 800 17px/1 var(--text);
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28);
+}
+
+.bj-card.red {
+  color: #C0362C;
+}
+
+/* Face down: the whole reason the hand is worth playing a card at a time. */
+.bj-card.down {
+  background: repeating-linear-gradient(45deg, #7C4A78, #7C4A78 4px, #6B3F68 4px, #6B3F68 8px);
+  color: transparent;
+}
+
+.bj-total {
+  font: 800 13px/1 var(--text);
+  opacity: 0.85;
+}
+
+.bj-divider {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.22);
+  padding-top: 14px;
+}
+
+.bj-verdict {
+  font: 800 12.5px/1 var(--text);
+  letter-spacing: 0.03em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.bj-verdict.won {
+  background: #E9C46A;
+  color: #3B2A06;
+}
+
+.bj-verdict.idle,
+.bj-verdict.playing {
+  opacity: 0.75;
+}
+
+.bj-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-bottom: 14px;
+}
+
+.bj-act {
+  padding: 15px 8px;
+  border-radius: var(--r-choice, 14px);
+  border: 2px solid var(--ink);
+  background: #fff;
+  font: 800 14px/1 var(--text);
+  color: var(--ink);
+}
+
+.bj-act:disabled {
+  opacity: 0.35;
+  border-color: var(--faint, #C9C1B4);
+}
+
+.bj-bet {
+  padding: 14px 16px;
+  border-radius: var(--r-panel, 18px);
+  background: var(--panel, #fff);
+  margin-bottom: 10px;
+}
+
+.bj-bet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font: 800 10.5px/1 var(--text);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.bj-bet-value {
+  font: 800 17px/1 var(--text);
+  letter-spacing: 0;
+  color: var(--ink);
+}
+
+.bj-slider {
+  width: 100%;
+  accent-color: #1E5C43;
+}
+
+.bj-bet-ends {
+  display: flex;
+  justify-content: space-between;
+  font: 700 10.5px/1 var(--text);
+  color: var(--faint, #A99F90);
+  margin-top: 6px;
+}
+
+.bj-deal {
+  width: 100%;
+  padding: 17px;
+  border-radius: var(--r-choice, 14px);
+  background: var(--ink);
+  color: #fff;
+  font: 800 15px/1 var(--text);
+  margin-bottom: 16px;
+}
+
+.bj-deal:disabled {
+  opacity: 0.4;
+}
+
+.bj-books {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.bj-book {
+  padding: 12px 14px;
+  border-radius: 13px;
+  background: var(--panel, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bj-book-label {
+  font: 800 9.5px/1 var(--text);
+  letter-spacing: 0.1em;
+  color: var(--faint, #A99F90);
+}
+
+.bj-book-value {
+  font: 800 16px/1 var(--text);
+}
+
+.bj-book-value.up {
+  color: #2E7D5B;
+}
+
+.bj-book-value.down {
+  color: #C0362C;
+}

@@ -14,6 +14,7 @@ import { EscapeGameSchema } from './escape.js';
 import { MobStandingSchema } from './mob.js';
 import { VentureSchema } from './venture.js';
 import { VigilanteSchema } from './vigilante.js';
+import { BlackjackHandSchema } from './blackjack.js';
 import { WorldIndicatorsSchema } from './world.js';
 
 export const FlagValueSchema = z.union([z.string(), z.number(), z.boolean()]);
@@ -63,6 +64,13 @@ export const LifeStateSchema = z.object({
   ventures: z.array(VentureSchema).default([]),
   /** The other life, when there is one. */
   vigilante: VigilanteSchema.nullable().default(null),
+  /**
+   * The hand on the table, between one tap and the next.
+   *
+   * Blackjack is the one casino game whose decision happens *inside* the hand,
+   * so the hand has to outlive the request that dealt it.
+   */
+  blackjack: BlackjackHandSchema.nullable().default(null),
   /**
    * How much the character has been looking after themselves lately, 0..8 each.
    *
@@ -190,4 +198,4 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 12: added the habit record the drifting stats aim at.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 13;
+export const SCHEMA_VERSION = 14;

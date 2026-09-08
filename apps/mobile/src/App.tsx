@@ -15,6 +15,7 @@ import type {
   EscapeView,
   VentureView,
   VentureOffer,
+  BlackjackView,
   CasinoView,
   BlackMarketView,
   RacingView,
@@ -48,6 +49,7 @@ import { RoyalScreen } from './screens/RoyalScreen';
 import { MobScreen } from './screens/MobScreen';
 import { VentureScreen } from './screens/VentureScreen';
 import { CasinoScreen } from './screens/CasinoScreen';
+import { BlackjackScreen } from './screens/BlackjackScreen';
 import { BlackMarketScreen } from './screens/BlackMarketScreen';
 import { RacingScreen } from './screens/RacingScreen';
 import { VampireScreen } from './screens/VampireScreen';
@@ -65,6 +67,7 @@ const SPECIAL_TITLES: Record<string, string> = {
   vigilante: 'The Other Life',
   fame: 'Fame',
   casino: 'The Casino',
+  blackjack: 'Blackjack',
   blackmarket: 'The Black Market',
   racing: 'Racing',
   vampire: 'Vampire',
@@ -164,6 +167,7 @@ export const App = () => {
    */
   const [special, setSpecial] = useState<string | null>(null);
   const [casino, setCasino] = useState<CasinoView | null>(null);
+  const [table, setTable] = useState<BlackjackView | null>(null);
   const [lastBet, setLastBet] = useState<{
     detail: string;
     line: string;
@@ -278,13 +282,14 @@ export const App = () => {
           setEscape((current) => current ?? (maze && maze.outcome === null ? maze : null));
         }
         if (slot === 'activities') {
-          const [rows, known, crown, family, floor, dealers, garage, night, masked] =
+          const [rows, known, crown, family, floor, felt, dealers, garage, night, masked] =
             await Promise.all([
               api.actions(lifeId),
               api.fame(lifeId),
               api.royal(lifeId),
               api.mob(lifeId),
               api.casino(lifeId),
+              api.blackjack(lifeId),
               api.blackMarket(lifeId),
               api.racing(lifeId),
               api.vampire(lifeId),
@@ -296,6 +301,7 @@ export const App = () => {
           setMob(family.mob);
           setMobOffer(family.eligibility);
           setCasino(floor);
+          setTable(felt);
           setBlackMarket(dealers);
           setRacing(garage);
           setVampire(night);
@@ -572,6 +578,17 @@ export const App = () => {
           locked: casino.locked,
         }
       : null,
+    table
+      ? {
+          id: 'blackjack',
+          icon: '🃏',
+          label: 'Blackjack',
+          note: table.hand && !table.hand.settled
+            ? `A hand on the table for ${table.hand.stake}`
+            : table.locked ?? 'Two cards, a dealer, and a decision',
+          locked: table.hand && !table.hand.settled ? null : table.locked,
+        }
+      : null,
     blackMarket
       ? {
           id: 'blackmarket',
@@ -661,6 +678,17 @@ export const App = () => {
         netLabel: result.netLabel,
         won: result.won,
       });
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onTable = useCallback(
+    async (action: 'deal' | 'hit' | 'stand' | 'double', stake?: number) => {
+      if (!life) return;
+      const result = await run(() => api.blackjackAct(life.lifeId, { action, stake }));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setTable(result.table);
     },
     [life, run, setLifeAndRemember],
   );
@@ -926,6 +954,16 @@ export const App = () => {
             )}
             {special === 'casino' && casino && (
               <CasinoScreen casino={casino} busy={busy} last={lastBet} onBet={onBet} />
+            )}
+            {special === 'blackjack' && table && (
+              <BlackjackScreen
+                table={table}
+                busy={busy}
+                onDeal={(stake) => onTable('deal', stake)}
+                onHit={() => onTable('hit')}
+                onStand={() => onTable('stand')}
+                onDouble={() => onTable('double')}
+              />
             )}
             {special === 'blackmarket' && blackMarket && (
               <BlackMarketScreen market={blackMarket} busy={busy} onDeal={onDeal} />

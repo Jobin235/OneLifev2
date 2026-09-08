@@ -39,7 +39,8 @@ import { audition, fameView } from './fame.js';
 import { inheritTitle, royalAct, royalView, type RoyalAction } from './royalty.js';
 import { doMobJob, joinMob, mobEligibility, mobView, type MobJob } from './mob.js';
 import { escapeMove, escapeView, startEscape, surrender } from './escape.js';
-import { casinoView, play, type CasinoGame } from './casino.js';
+import { betsAYear, betsTaken, casinoView, play, type CasinoGame } from './casino.js';
+import { blackjackView, deal as dealBlackjack, doubleDown, hitCard, standPat } from './blackjack.js';
 import { blackMarketView, buyContraband, fence, haggle } from './blackmarket.js';
 import { buyGarage, buyRaceCar, modifyCar, race, racingView, type RaceStyle } from './racing.js';
 import { turnVampire, vampireAct, vampireView, type VampireAction } from './vampire.js';
@@ -650,6 +651,31 @@ export class Game {
 
   playCasino(state: LifeState, game: CasinoGame, stake: number, pick: string) {
     return play(state, game, stake, pick, this.config);
+  }
+
+  /*
+   * Blackjack is its own table because its decision happens inside the hand:
+   * the hand persists between these calls, and the dealer's hole card stays
+   * face down until there is a reason to turn it over.
+   */
+  blackjack(state: LifeState) {
+    return blackjackView(state, Math.max(0, betsAYear() - betsTaken(state)));
+  }
+
+  dealBlackjack(state: LifeState, stake: number) {
+    return dealBlackjack(state, stake, betsTaken(state), betsAYear(), this.config);
+  }
+
+  hitBlackjack(state: LifeState) {
+    return hitCard(state, this.config);
+  }
+
+  standBlackjack(state: LifeState) {
+    return standPat(state, this.config);
+  }
+
+  doubleBlackjack(state: LifeState) {
+    return doubleDown(state, this.config);
   }
 
   /** Everything you own and run, and what could be started. */

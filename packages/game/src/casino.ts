@@ -5,9 +5,12 @@ import { checkInvariants, makeRng, pushHistory, refreshDerived, type Rng } from 
 /**
  * The casino.
  *
- * Eight games in BitLife's pack; four here, chosen because they are four
- * genuinely different decisions rather than four skins on the same one. The
- * rule underneath all of them is that the house wins: every payout below is
+ * Eight games in BitLife's pack. Three of them are here, chosen because they
+ * are three genuinely different one-tap bets rather than three skins on the
+ * same one; blackjack has its own table next door, because its decision happens
+ * *inside* the hand and cannot be a single tap — see blackjack.ts.
+ *
+ * The rule underneath all of them is that the house wins: every payout below is
  * priced slightly under its true odds, and a player who keeps going long enough
  * loses, which is the only honest way to build one of these.
  * See docs/BITLIFE-SYSTEMS-RESEARCH.md.
@@ -18,7 +21,7 @@ export class CasinoRejected extends Error {}
 /** Bets a year. Without a cap the correct play is to grind the variance. */
 const BETS_A_YEAR = 6;
 
-export const CASINO_GAMES = ['slots', 'roulette', 'blackjack', 'horses'] as const;
+export const CASINO_GAMES = ['slots', 'roulette', 'horses'] as const;
 export type CasinoGame = (typeof CASINO_GAMES)[number];
 
 const money = (cents: number) => `$${Math.round(cents / 100).toLocaleString('en-US')}`;
@@ -80,55 +83,6 @@ const roulette = (rng: Rng, stake: number, pick: string) => {
       : near
         ? `${number} ${colour}. The colour, at least.`
         : `${number} ${colour}. Not that.`,
-  };
-};
-
-/**
- * Two cards against a dealer who must draw to seventeen.
- *
- * The player picks a policy rather than a card, because one tap cannot be a
- * hand of blackjack: stick on the two you were dealt, take exactly one more, or
- * play it the way the book says and draw under seventeen. The book is worth
- * about 95% back and the other two are worth considerably less, which is the
- * whole reason a book exists.
- */
-const blackjack = (rng: Rng, stake: number, policy: 'stick' | 'hit' | 'book') => {
-  const card = () => Math.min(10, rng.int(1, 13));
-  let you = card() + card();
-  const dealt = you;
-
-  if (policy === 'hit') you += card();
-  else if (policy === 'book') while (you < 17) you += card();
-
-  let dealer = card() + card();
-  while (dealer < 17) dealer += card();
-
-  const bust = you > 21;
-  const dealerBust = dealer > 21;
-  const won = bust
-    ? 0
-    : you === 21 && dealt === 21
-      ? Math.round(stake * 2.5)
-      : dealerBust || you > dealer
-        ? stake * 2
-        : you === dealer
-          ? stake
-          : 0;
-
-  return {
-    detail: `you ${you} · dealer ${dealer}`,
-    won,
-    line: bust
-      ? `${you}. Bust, and the dealer did not have to do anything.`
-      : dealt === 21
-        ? 'Blackjack, off the deal.'
-        : dealerBust
-          ? `${you} against ${dealer}. The dealer went over.`
-          : you > dealer
-            ? `${you} against ${dealer}.`
-            : you === dealer
-              ? `${you} each. Nobody won anything.`
-              : `${you} against ${dealer}. Not enough.`,
   };
 };
 
@@ -230,9 +184,7 @@ export const play = (
         ? slots(rng, stake)
         : game === 'roulette'
           ? roulette(rng, stake, pick)
-          : game === 'blackjack'
-            ? blackjack(rng, stake, pick === 'hit' ? 'hit' : pick === 'stick' ? 'stick' : 'book')
-            : horses(rng, stake, pick);
+          : horses(rng, stake, pick);
 
     f.cash += outcome.won;
     const net = outcome.won - stake;
@@ -326,17 +278,6 @@ export const casinoView = (state: LifeState): CasinoView => {
         ],
       },
       {
-        id: 'blackjack',
-        emoji: '🃏',
-        label: 'Blackjack',
-        note: 'Two cards against a dealer who has to draw to seventeen',
-        picks: [
-          { id: 'book', label: 'Play it properly' },
-          { id: 'stick', label: 'Stick on two' },
-          { id: 'hit', label: 'Take exactly one more' },
-        ],
-      },
-      {
         id: 'horses',
         emoji: '🐎',
         label: 'The horses',
@@ -354,3 +295,7 @@ export const casinoView = (state: LifeState): CasinoView => {
 export const resetCasinoYear = (state: LifeState): void => {
   delete state.flags.bets_this_year;
 };
+
+/** So the table next door can charge against the same annual allowance. */
+export const betsAYear = (): number => BETS_A_YEAR;
+export const betsTaken = (state: LifeState): number => Number(state.flags.bets_this_year ?? 0);

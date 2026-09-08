@@ -294,6 +294,36 @@ export interface CasinoView {
   }>;
 }
 
+export interface BlackjackView {
+  locked: string | null;
+  purseCents: number;
+  purse: string;
+  minimum: number;
+  maximum: number;
+  maxStake: number;
+  hand: {
+    stake: string;
+    stakeCents: number;
+    doubled: boolean;
+    you: string[];
+    /** The hole card reads "🂠" until the hand is over. */
+    dealer: string[];
+    yourTotal: string;
+    dealerTotal: string;
+    settled: boolean;
+    outcome: string | null;
+    net: string | null;
+    netPositive: boolean;
+    canHit: boolean;
+    canStand: boolean;
+    canDouble: boolean;
+  } | null;
+  session: string;
+  sessionCents: number;
+  lifetime: string;
+  lifetimeCents: number;
+}
+
 export interface BlackMarketView {
   locked: string | null;
   dealsLeft: number;
@@ -716,6 +746,12 @@ export interface Api {
     stake: number,
     pick: string,
   ): Promise<{ life: LifeView; casino: CasinoView; detail: string; line: string; netLabel: string; won: boolean }>;
+  blackjack(lifeId: string): Promise<BlackjackView>;
+  /** One move at the table: deal a hand, or play the one on it. */
+  blackjackAct(
+    lifeId: string,
+    body: { action: 'deal' | 'hit' | 'stand' | 'double'; stake?: number },
+  ): Promise<{ life: LifeView; table: BlackjackView }>;
   blackMarket(lifeId: string): Promise<BlackMarketView>;
   deal(
     lifeId: string,
@@ -868,6 +904,9 @@ export const httpApi: Api = {
       body: JSON.stringify({ action, gearId }),
     }),
   casino: (lifeId: string) => request<CasinoView>(`/lives/${lifeId}/casino`),
+  blackjack: (lifeId: string) => request<BlackjackView>(`/lives/${lifeId}/blackjack`),
+  blackjackAct: (lifeId: string, body: Record<string, unknown>) =>
+    request<never>(`/lives/${lifeId}/blackjack`, { method: 'POST', body: JSON.stringify(body) }),
   bet: (lifeId: string, game: string, stake: number, pick: string) =>
     request<never>(`/lives/${lifeId}/casino`, {
       method: 'POST',

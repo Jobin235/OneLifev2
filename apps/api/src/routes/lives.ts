@@ -20,9 +20,14 @@ const AuditionBody = z.object({ trackId: z.string().min(1) });
 const RoyalBody = z.object({ action: z.string().min(1), choice: z.string().optional() });
 const MobBody = z.object({ job: z.string().min(1) });
 const CasinoBody = z.object({
-  game: z.enum(['slots', 'roulette', 'blackjack', 'horses']),
+  game: z.enum(['slots', 'roulette', 'horses']),
   stake: z.number().int().min(1),
   pick: z.string().default(''),
+});
+const BlackjackBody = z.object({
+  action: z.enum(['deal', 'hit', 'stand', 'double']),
+  /** Only read on a deal; the bet cannot change once the cards are out. */
+  stake: z.number().int().min(1).optional(),
 });
 const BlackMarketBody = z.object({
   action: z.enum(['buy', 'haggle', 'fence']),
@@ -479,6 +484,32 @@ export const registerLifeRoutes = (
           netLabel: result.netLabel,
           won: result.net > 0,
         };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/blackjack', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.blackjack(await load(userOf(request), lifeId));
+  });
+
+  /*
+   * One move at the table. The hand lives on the state between these calls,
+   * which is the whole point: the dealer's hole card stays face down until the
+   * player has finished deciding.
+   */
+  app.post('/lives/:lifeId/blackjack', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { action, stake } = BlackjackBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        if (action === 'deal') game.dealBlackjack(state, stake ?? 0);
+        else if (action === 'hit') game.hitBlackjack(state);
+        else if (action === 'stand') game.standBlackjack(state);
+        else game.doubleBlackjack(state);
+        return { life: lifeView(state, game.content), table: game.blackjack(state) };
       });
     } catch (error) {
       return reply.code(statusFor(error)).send({ error: messageFor(error) });

@@ -285,6 +285,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     mob: null,
     ventures: [],
     vigilante: null,
+    blackjack: null,
     world: null,
     recentActivity: { fitness: 0, study: 0, charm: 0 },
     assets: [],

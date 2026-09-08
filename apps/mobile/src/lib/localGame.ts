@@ -252,6 +252,25 @@ export const createLocalApi = (): Api => {
 
     casino: async (lifeId) => game.casino(get(lifeId)) as never,
 
+    blackjack: async (lifeId) => game.blackjack(get(lifeId)) as never,
+
+    blackjackAct: async (lifeId, body) => {
+      const state = get(lifeId);
+      const next =
+        body.action === 'deal'
+          ? game.dealBlackjack(state, body.stake ?? 0)
+          : body.action === 'hit'
+            ? game.hitBlackjack(state)
+            : body.action === 'stand'
+              ? game.standBlackjack(state)
+              : game.doubleBlackjack(state);
+      save(next);
+      return {
+        life: lifeView(next, game.content) as never,
+        table: game.blackjack(next) as never,
+      } as never;
+    },
+
     bet: async (lifeId, which, stake, pick) => {
       const result = game.playCasino(get(lifeId), which as never, stake, pick);
       save(result.state);

@@ -17,5 +17,6 @@ export * from './escape.js';
 export * from './mob.js';
 export * from './venture.js';
 export * from './vigilante.js';
+export * from './blackjack.js';
 export * from './state.js';
 export * from './view.js';

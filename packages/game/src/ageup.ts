@@ -40,6 +40,7 @@ import { advanceRoyalYear, royalBirth } from './royalty.js';
 import { advanceMobYear } from './mob.js';
 import { advanceVentureYear } from './venture.js';
 import { resetCasinoYear } from './casino.js';
+import { resetBlackjackSession } from './blackjack.js';
 import { advanceMarketYear } from './blackmarket.js';
 import { resetRacingYear } from './racing.js';
 import { advanceVampireYear, vampireHoldsAge, vampireWasSlain } from './vampire.js';
@@ -291,6 +292,7 @@ export const advanceYear = (
   advanceMobYear(state, rng);
   advanceVentureYear(state, content, rng);
   resetCasinoYear(state);
+  resetBlackjackSession(state);
   resetRacingYear(state);
   advanceMarketYear(state, content, rng);
   advanceVampireYear(state, rng);
