@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../node.js';
+import { livingAdult } from './fixtures.js';
 import type { LifeState } from '@lineage/shared-types';
 
 /**
@@ -12,20 +13,8 @@ import type { LifeState } from '@lineage/shared-types';
 describe('the money adds up', () => {
   const game = createGame();
 
-  const liveTo = (seed: string, until: number): LifeState => {
-    let state = game.newLife({ countryId: 'us', upbringing: 'getting_by', seed });
-    while (state.character.alive && state.character.age < until) {
-      if (state.activeEvent) {
-        state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
-        continue;
-      }
-      state = game.ageUp(state).state;
-    }
-    while (state.activeEvent) {
-      state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
-    }
-    return game.dismiss(state);
-  };
+  const liveTo = (seed: string, until: number): LifeState =>
+    livingAdult(game, seed, { toAge: until, upbringing: 'getting_by' });
 
   it('charges a house and a child once each, not twice', () => {
     /*

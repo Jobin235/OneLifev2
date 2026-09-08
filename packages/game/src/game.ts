@@ -29,6 +29,8 @@ import {
   type EffectContext,
 } from '@lineage/event-engine';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
+import { recostLiving } from './costs.js';
+import { worldFor } from './news.js';
 import { advanceYear, applyDeferred, pushHistory, type AgeUpResult } from './ageup.js';
 import { toAncestor } from './death.js';
 import { buyShares, marketView, sellShares } from './stocks.js';
@@ -260,7 +262,7 @@ export class Game {
     if (!definition) throw new ChoiceRejected(`event ${instance.definitionId} is no longer published`);
 
     const before = structuredClone(state);
-    const ctx: ConditionContext = { state, world, bindings: instance.participants };
+    const ctx: ConditionContext = { state, world: worldFor(state, world), bindings: instance.participants };
 
     try {
       const { deferred, historyEntry, templates } = resolveChoice(
@@ -304,6 +306,9 @@ export class Game {
       state.activeEvent = chained;
       state.gameState = chained ? 'EVENT_AVAILABLE' : 'IDLE';
       refreshDerived(state, this.config);
+      // A choice can hand you a house or a child; what the year costs has to
+      // follow it out of the popup rather than waiting for the next birthday.
+      recostLiving(state, this.content, this.config);
       checkInvariants(state, before);
       return state;
     } catch (error) {
@@ -459,7 +464,7 @@ export class Game {
   }
 
   sell(state: LifeState, assetId: string) {
-    return sell(state, assetId, this.config);
+    return sell(state, assetId, this.content, this.config);
   }
 
   /** Everywhere you own that somebody could live in, and its state. */
@@ -477,7 +482,7 @@ export class Game {
 
   /** The market, what it costs, and what you are holding. */
   market(state: LifeState, world: WorldIndicators = NEUTRAL_INDICATORS) {
-    return marketView(state, this.content, world);
+    return marketView(state, this.content, worldFor(state, world));
   }
 
   buyShares(
@@ -486,7 +491,7 @@ export class Game {
     shares: number,
     world: WorldIndicators = NEUTRAL_INDICATORS,
   ) {
-    return buyShares(state, this.content, world, this.config, stockId, shares);
+    return buyShares(state, this.content, worldFor(state, world), this.config, stockId, shares);
   }
 
   sellShares(
@@ -495,7 +500,7 @@ export class Game {
     shares: number,
     world: WorldIndicators = NEUTRAL_INDICATORS,
   ) {
-    return sellShares(state, this.content, world, this.config, stockId, shares);
+    return sellShares(state, this.content, worldFor(state, world), this.config, stockId, shares);
   }
 
   /** Who knows who you are, and what there is to be seen in. */

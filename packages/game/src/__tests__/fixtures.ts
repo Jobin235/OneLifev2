@@ -18,7 +18,7 @@ export const livingAdult = (
     toAge?: number;
     countryId?: string;
     upbringing?: 'rough' | 'getting_by' | 'comfortable';
-    /** Cleared afterwards, since almost nothing is reachable from inside. */
+    /** Skip seeds that end up inside, since almost nothing is reachable there. */
     freeOfPrison?: boolean;
   } = {},
 ): LifeState => {
@@ -43,11 +43,14 @@ export const livingAdult = (
       state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
     }
     state = game.dismiss(state);
-    if (freeOfPrison) {
-      state.character.record.incarceration = null;
-      state.career.current = state.career.current;
-    }
+    /*
+     * Skipped rather than cleared. Clearing the sentence leaves a state that
+     * cannot happen — a free adult whose cost of living is still the zero it
+     * was inside — and the tests that read money off that fixture then measure
+     * something the game never produces.
+     */
+    if (freeOfPrison && state.character.record.incarceration) continue;
     return state;
   }
-  throw new Error(`no seed near "${seed}" produced somebody alive at ${toAge}`);
+  throw new Error(`no seed near "${seed}" produced somebody alive and free at ${toAge}`);
 };

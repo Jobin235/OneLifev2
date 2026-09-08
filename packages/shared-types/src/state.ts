@@ -14,6 +14,7 @@ import { EscapeGameSchema } from './escape.js';
 import { MobStandingSchema } from './mob.js';
 import { VentureSchema } from './venture.js';
 import { VigilanteSchema } from './vigilante.js';
+import { WorldIndicatorsSchema } from './world.js';
 
 export const FlagValueSchema = z.union([z.string(), z.number(), z.boolean()]);
 export type FlagValue = z.infer<typeof FlagValueSchema>;
@@ -77,6 +78,18 @@ export const LifeStateSchema = z.object({
       charm: z.number().min(0).max(8).default(0),
     })
     .default({ fitness: 0, study: 0, charm: 0 }),
+  /**
+   * The world this life is being lived in, as it stood at the last age-up.
+   *
+   * The authoritative world is global and lives on the server — this is the
+   * copy the life was measured against, kept so the next year can say what
+   * *changed*. A client with no server ticks it itself, which is how the
+   * offline build has weather at all.
+   */
+  world: z
+    .object({ indicators: WorldIndicatorsSchema, tick: z.number().int().min(0).default(0) })
+    .nullable()
+    .default(null),
   assets: z.array(AssetSchema),
   businesses: z.array(BusinessSchema),
 
@@ -177,4 +190,4 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 12: added the habit record the drifting stats aim at.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 12;
+export const SCHEMA_VERSION = 13;

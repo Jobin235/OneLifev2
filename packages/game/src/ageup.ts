@@ -1,4 +1,6 @@
 import { chronicleYear } from './chronicle.js';
+import { advanceWorldYear } from './news.js';
+import { recostLiving } from './costs.js';
 
 // Re-exported so the modules that already import it from here keep working.
 export { pushHistory } from '@lineage/simulation';
@@ -26,7 +28,6 @@ import {
   type Rng,
   settleYear,
   syncAssetLoans,
-  updateCostOfLiving,
 } from '@lineage/simulation';
 import { advanceNpcYear } from '@lineage/npc-engine';
 import { inheritanceFrom, runNpcNews } from './npcnews.js';
@@ -97,7 +98,12 @@ export const advanceYear = (
   state.resolvedEvent = null;
   state.gameState = 'PROCESSING';
 
-  // 2. Time passing, to the body and to the people.
+  /*
+   * 2. Time passing — to the world first, because how the year went for
+   * everybody is part of how it went for this person.
+   */
+  const worldNow = advanceWorldYear(state, world, config, rng);
+
   applyAgeDrift(
     state.character,
     config,
@@ -262,10 +268,10 @@ export const advanceYear = (
     state.yearsOutOfWork = 0;
   }
 
-  for (const business of state.businesses) advanceBusinessYear(business, world, rng);
+  for (const business of state.businesses) advanceBusinessYear(business, worldNow, rng);
   driftAssetValues(state, rng);
   advanceProperties(state, rng);
-  reportMarketYear(state, content, world);
+  reportMarketYear(state, content, worldNow);
   advanceFameYear(state, content, rng);
   royalBirth(state, content, rng);
   advanceRoyalYear(state, content, rng);
@@ -325,8 +331,7 @@ export const advanceYear = (
       }
     }
   }
-  const city = country?.cities.find((c) => c.id === state.character.cityId);
-  updateCostOfLiving(state, config, city?.costOfLiving ?? 1);
+  recostLiving(state, content, config);
   const money = settleYear(state, config);
   syncAssetLoans(state);
 
@@ -408,7 +413,7 @@ export const advanceYear = (
   }
 
   // 8. Choose what happens this year.
-  const ctx: ConditionContext = { state, world, bindings: {} };
+  const ctx: ConditionContext = { state, world: worldNow, bindings: {} };
   const selection = selectEvents(content.events, state, ctx, config, content.traitsById, rng);
 
   let card: EventInstance | null = null;

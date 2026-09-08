@@ -2,6 +2,7 @@ import type { GameConfig } from '@lineage/config';
 import type { ContentPack, Purchasable } from '@lineage/content';
 import type { LifeState } from '@lineage/shared-types';
 import { checkInvariants, makeId, refreshDerived } from '@lineage/simulation';
+import { recostLiving } from './costs.js';
 import { pushHistory } from './ageup.js';
 
 /**
@@ -221,6 +222,7 @@ export const buy = (
       45,
     );
     refreshDerived(state, config);
+    recostLiving(state, content, config);
     checkInvariants(state, before);
     return state;
   } catch (error) {
@@ -247,7 +249,12 @@ const checkFinance = (state: LifeState, item: Purchasable | undefined): Purchasa
   return item;
 };
 
-export const sell = (state: LifeState, assetId: string, config: GameConfig): LifeState => {
+export const sell = (
+  state: LifeState,
+  assetId: string,
+  content: ContentPack,
+  config: GameConfig,
+): LifeState => {
   const index = state.assets.findIndex((a) => a.id === assetId);
   const asset = state.assets[index];
   if (index < 0 || !asset) throw new PurchaseRejected('you do not own that');
@@ -276,6 +283,7 @@ export const sell = (state: LifeState, assetId: string, config: GameConfig): Lif
       45,
     );
     refreshDerived(state, config);
+    recostLiving(state, content, config);
     checkInvariants(state, before);
     return state;
   } catch (error) {

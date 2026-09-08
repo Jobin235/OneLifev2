@@ -78,6 +78,9 @@ const pressure = (world: WorldIndicators, key: keyof WorldIndicators): number =>
  * market state has to be persisted. It is O(years), which for a human lifetime
  * is nothing.
  */
+/** How far back today's reading of the world can honestly be said to apply. */
+const WORLD_MEMORY_YEARS = 5;
+
 export const priceOf = (
   stock: Stock,
   state: LifeState,
@@ -100,11 +103,18 @@ export const priceOf = (
     const rng = makeRng(state.seed, 'market', stock.id, age);
 
     /*
-     * The world's pull is applied at today's reading for every year, which is a
-     * simplification: we do not keep a history of the indicators. It means a
-     * long boom reads as though it were always there, which is roughly how
-     * people remember booms anyway.
+     * The world's pull is applied only to the years near today's reading.
+     *
+     * We know what the world is doing now; we do not keep what it was doing in
+     * 1994. Applying today's reading to every year of the walk was harmless
+     * while the world stood still at 100 — and stopped being harmless the
+     * moment it started moving, because up to six percent a year compounded
+     * over a whole life turns one good reading into a sixfold gain and rewrites
+     * the player's own price history behind them every time the world ticks.
+     *
+     * Five years is what a current reading can honestly reach back over.
      */
+    const worldReaches = age > state.character.age - WORLD_MEMORY_YEARS;
     /*
      * The base drift, plus what risk pays, plus the correction for volatility
      * drag.
@@ -119,8 +129,10 @@ export const priceOf = (
      * For a shock uniform on [-s, s] the drag is s²/6.
      */
     let drift = 0.04 + RISK_PREMIUM[stock.risk] + (sigma * sigma) / 6;
-    for (const [key, weight] of Object.entries(exposure)) {
-      drift += pressure(world, key as keyof WorldIndicators) * weight * 0.14;
+    if (worldReaches) {
+      for (const [key, weight] of Object.entries(exposure)) {
+        drift += pressure(world, key as keyof WorldIndicators) * weight * 0.14;
+      }
     }
 
     const shock = (rng.next() - 0.5) * 2 * sigma;

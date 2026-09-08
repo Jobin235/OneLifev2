@@ -1,6 +1,5 @@
 import { Game, actionsView, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView } from '@lineage/game';
 import { SCHEMA_VERSION, type LifeState } from '@lineage/shared-types';
-import { NEUTRAL_INDICATORS, snapshot, tickWorld } from '@lineage/world';
 import { DEFAULT_CONFIG } from '@lineage/config';
 import { localContent } from './localContent';
 import { forget, remember, rewind, rewindOptions, type Snapshot } from '@lineage/game';
@@ -65,23 +64,20 @@ export const createLocalApi = (): Api => {
   const game = new Game({ content: localContent() });
   const store = read();
 
-  // A world that has already been running a while, so indicators are not all 100.
-  let indicators = NEUTRAL_INDICATORS;
-  let seed = 20260101;
-  const random = () => {
-    seed = (seed * 1103515245 + 12345) % 2147483648;
-    return seed / 2147483648;
-  };
-  for (let tick = 0; tick < 400; tick++) {
-    indicators = tickWorld({
-      indicators,
-      activeEvents: [],
-      tick,
-      config: DEFAULT_CONFIG,
-      random,
-    }).indicators;
-  }
-  void snapshot('local', 400, indicators, []);
+  /*
+   * No world is passed in, on purpose.
+   *
+   * This used to warm a set of indicators up over 400 hourly ticks and then
+   * hand the *same frozen numbers* to every age-up for the rest of the life.
+   * The world engine was running and the world was standing still: no year ever
+   * differed from the one before it, so no world-gated content could fire and
+   * the player was never told anything had happened anywhere.
+   *
+   * Without a server there is nothing to be authoritative, so the simulation
+   * walks each life's own world instead — seeded off the life, so the same seed
+   * still replays. When there *is* a server holding the one shared world, it
+   * passes it in and that wins; see packages/game/src/news.ts.
+   */
 
   const get = (lifeId: string): LifeState => {
     const state = store.lives[lifeId];
@@ -138,7 +134,7 @@ export const createLocalApi = (): Api => {
       store.history = store.history ?? {};
       store.history[lifeId] = remember(store.history[lifeId] ?? [], before);
 
-      const result = game.ageUp(before, indicators);
+      const result = game.ageUp(before);
       save(result.state);
       return { ...view(result.state), recap: result.recap, died: result.died };
     },
@@ -160,7 +156,7 @@ export const createLocalApi = (): Api => {
     },
 
     choose: async (lifeId, eventId, choiceId, selections) => {
-      const state = game.choose(get(lifeId), eventId, choiceId, selections ?? {}, indicators);
+      const state = game.choose(get(lifeId), eventId, choiceId, selections ?? {});
       save(state);
       return view(state);
     },
@@ -206,7 +202,7 @@ export const createLocalApi = (): Api => {
 
     prison: async (lifeId) => game.prison(get(lifeId)) as never,
 
-    market: async (lifeId) => game.market(get(lifeId), indicators) as never,
+    market: async (lifeId) => game.market(get(lifeId)) as never,
 
     fame: async (lifeId) => game.fame(get(lifeId)) as never,
 
@@ -400,12 +396,12 @@ export const createLocalApi = (): Api => {
 
     trade: async (lifeId, stockId, shares, sell) => {
       const state = sell
-        ? game.sellShares(get(lifeId), stockId, shares, indicators)
-        : game.buyShares(get(lifeId), stockId, shares, indicators);
+        ? game.sellShares(get(lifeId), stockId, shares)
+        : game.buyShares(get(lifeId), stockId, shares);
       save(state);
       return {
         life: lifeView(state, game.content) as never,
-        market: game.market(state, indicators) as never,
+        market: game.market(state) as never,
       };
     },
     school: async (lifeId) => schoolView(get(lifeId), game.content) as never,

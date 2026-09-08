@@ -91,3 +91,49 @@ export const snapshot = (
   activeEvents: WorldEvent[],
   capturedAt = new Date().toISOString(),
 ): WorldSnapshot => ({ id, tick, capturedAt, indicators, activeEvents });
+
+/**
+ * A year of the world.
+ *
+ * The tick above runs on the server's hourly clock: small steps, strong
+ * reversion, tuned so the indicators a returning player sees have moved a
+ * little. Run it once per game year and the world does not move at all — a
+ * standing deviation of about one point against significance thresholds that
+ * start at five — which is why the world engine ran for entire lives without
+ * the player ever being told a single thing.
+ *
+ * This is the annual step, and it is a different animal: it can move a signal
+ * far enough to matter, and once in a while it does something a random walk
+ * would not. `anchor` is where the world is being pulled toward — the
+ * authoritative global indicators when there is a server holding them, and
+ * simply neutral when there is not.
+ */
+export const stepWorldYear = (
+  indicators: WorldIndicators,
+  anchor: WorldIndicators,
+  config: GameConfig,
+  random: () => number,
+): WorldIndicators => {
+  const { driftPerYear, reversionPerYear, shockChancePerYear } = config.world;
+  const next: WorldIndicators = { ...indicators };
+
+  for (const key of WORLD_SIGNAL_KEYS) {
+    const drift = (random() - 0.5) * 2 * driftPerYear;
+    const reversion = (anchor[key] - next[key]) * reversionPerYear;
+    let value = next[key] + drift + reversion;
+
+    /*
+     * The years people remember. A walk gives you a decade of nothing much;
+     * a crash, a boom and a bad winter are what make a life have a shape, and
+     * they are the only way the "major" band is ever reached.
+     */
+    if (random() < shockChancePerYear) {
+      const size = 12 + random() * 16;
+      value += random() < 0.5 ? -size : size;
+    }
+
+    next[key] = round2(Math.max(20, Math.min(300, value)));
+  }
+
+  return next;
+};

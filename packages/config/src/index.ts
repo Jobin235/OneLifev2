@@ -74,6 +74,19 @@ export const GameConfigSchema = z.object({
     tickHours: z.number(),
     /** Per-tick random walk applied to every indicator. */
     driftPerTick: z.number(),
+    /**
+     * A year of the world, for the life-length walk.
+     *
+     * The hourly tick is tuned for smooth intraday movement and mean-reverts to
+     * a standing deviation of about one point — it can never produce the 5%
+     * change the significance thresholds ask for, which is why the world engine
+     * ran for a whole life and the player was never told anything. These are the
+     * annual numbers, and they are meant to clear those thresholds.
+     */
+    driftPerYear: z.number(),
+    reversionPerYear: z.number(),
+    /** How often a year does something a random walk would not. */
+    shockChancePerYear: z.number(),
     /** Indicators are pulled back toward 100 at this rate. */
     meanReversion: z.number(),
   }),
@@ -162,6 +175,9 @@ export const DEFAULT_CONFIG: GameConfig = GameConfigSchema.parse({
     tickHours: 1,
     driftPerTick: 0.35,
     meanReversion: 0.01,
+    driftPerYear: 6,
+    reversionPerYear: 0.25,
+    shockChancePerYear: 0.05,
   },
   money: {
     baseAnnualExpenses: 1_900_000,

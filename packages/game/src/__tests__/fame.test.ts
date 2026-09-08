@@ -53,6 +53,9 @@ describe('being known', () => {
 
     const followers: number[] = [];
     for (let year = 0; year < 6 && state.character.alive; year++) {
+      // An account is not the thing being tested; a cell would stop it, and a
+      // life that runs six years can pick one up on the way.
+      state.character.record.incarceration = null;
       state = game.act(state, 'post_online').state;
       followers.push(state.character.fame.following);
       while (state.activeEvent) {
