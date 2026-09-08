@@ -238,6 +238,7 @@ export const settleLoveInterest = (
     sex,
     age,
     alive: true,
+    diedAtPlayerAge: null,
     avatarEmoji: sex === 'female' ? '👩' : '🧑',
     tier: 'tier1',
     descriptor: describe(craziness, smarts),

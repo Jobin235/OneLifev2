@@ -37,17 +37,23 @@ export const PersonScreen = ({
       <div className="person-hero-avatar">{person.emoji}</div>
       <div className="person-hero-name">{person.name}</div>
       <div className="person-hero-sub">{person.header}</div>
-      <div className="meters">
-        {person.meters.map((meter) => (
-          <div
-            className="meter"
-            key={meter.label}
-            style={{ color: meter.label === 'Love' ? 'var(--pink)' : 'var(--muted)' }}
-          >
-            {meter.icon} {meter.label} {meter.value}
-          </div>
-        ))}
-      </div>
+      {/*
+        * Meters are a statement about where a relationship *is*, which is not a
+        * thing a dead person has. The page becomes what is left of them.
+        */}
+      {!person.gone && (
+        <div className="meters">
+          {person.meters.map((meter) => (
+            <div
+              className="meter"
+              key={meter.label}
+              style={{ color: meter.label === 'Love' ? 'var(--pink)' : 'var(--muted)' }}
+            >
+              {meter.icon} {meter.label} {meter.value}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
 
     <div className="scroll" style={{ gap: 18 }}>
@@ -58,7 +64,17 @@ export const PersonScreen = ({
         </div>
       )}
 
-      {person.interactions.length > 0 && (
+      {person.gone && (
+        <div className="notice gone-notice">
+          <span>🕯️</span>
+          <span>
+            {person.epitaph ?? `${person.name.split(' ')[0]} is gone.`} What is here is what you
+            had, which is more than nothing.
+          </span>
+        </div>
+      )}
+
+      {!person.gone && person.interactions.length > 0 && (
         <section>
           <div className="eyebrow" style={{ marginBottom: 12 }}>
             WHAT YOU CAN DO

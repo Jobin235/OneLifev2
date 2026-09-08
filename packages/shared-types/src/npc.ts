@@ -17,6 +17,14 @@ export const NpcSchema = z.object({
   sex: SexSchema,
   age: z.number().int().min(0).max(140),
   alive: z.boolean(),
+  /**
+   * The player's age when this person died, so the game can say how long ago.
+   *
+   * The NPC's own age at death is already recorded in `fated`; this is the
+   * other half of it, and it is the half the player counts in. Null for
+   * everybody still here, and for anyone who died before it was recorded.
+   */
+  diedAtPlayerAge: z.number().int().min(0).nullable().default(null),
   avatarEmoji: z.string(),
   tier: NpcTierSchema,
   /** One-line character read: "Quick, stubborn, keeps score". */

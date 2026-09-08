@@ -200,6 +200,9 @@ export interface PeopleView {
   driftedCount: number;
   driftedLine: string | null;
   drifted: PersonRow[];
+  /** The ones who are not coming back. Still openable; the memories are there. */
+  gone: PersonRow[];
+  goneLine: string | null;
 }
 
 export interface InteractionCard {
@@ -214,6 +217,10 @@ export interface InteractionCard {
 }
 
 export interface PersonView {
+  /** Whether this person is dead. The screen is about the memories then. */
+  gone: boolean;
+  /** How it ended, for the ones who are gone. */
+  epitaph: string | null;
   npcId: string;
   name: string;
   emoji: string;

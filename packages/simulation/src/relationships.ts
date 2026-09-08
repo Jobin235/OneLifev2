@@ -345,9 +345,21 @@ export const hasMemory = (rel: Relationship, factKey: string, includeResolved = 
   rel.memories.some((m) => m.factKey === factKey && (includeResolved || !m.resolved));
 
 /** Memories the person screen shows, newest last, capped (design 2B). */
-export const displayMemories = (rel: Relationship, config: GameConfig): Memory[] =>
+export const displayMemories = (
+  rel: Relationship,
+  config: GameConfig,
+  /*
+   * Everything, for somebody who is gone.
+   *
+   * The threshold exists so a living person's page shows what stands out rather
+   * than a transcript. For the dead there is nothing else — the page *is* the
+   * transcript, and a father whose memories all fell under the bar had a page
+   * with nothing on it at all.
+   */
+  keepEverything = false,
+): Memory[] =>
   [...rel.memories]
-    .filter((m) => m.weight >= config.relationships.memoryDisplayThreshold)
+    .filter((m) => keepEverything || m.weight >= config.relationships.memoryDisplayThreshold)
     .sort((a, b) => b.weight - a.weight)
-    .slice(0, config.relationships.maxDisplayedMemories)
+    .slice(0, keepEverything ? 24 : config.relationships.maxDisplayedMemories)
     .sort((a, b) => a.atAge - b.atAge);

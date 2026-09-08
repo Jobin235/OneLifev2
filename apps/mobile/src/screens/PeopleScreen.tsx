@@ -22,6 +22,10 @@ export const PeopleScreen = ({
       <Group title="CLOSE" rows={people.close} onOpen={onOpen} />
       <Group title="AROUND" rows={people.around} small onOpen={onOpen} />
 
+      {people.gone.length > 0 && (
+        <Group title="NO LONGER WITH YOU" rows={people.gone} small gone onOpen={onOpen} />
+      )}
+
       {people.driftedLine && (
         <div>
           <div className="eyebrow" style={{ marginBottom: 10 }}>
@@ -48,11 +52,14 @@ const Group = ({
   title,
   rows,
   small,
+  gone,
   onOpen,
 }: {
   title: string;
   rows: PersonRow[];
   small?: boolean;
+  /** Dimmed, and without a score — there is nothing left to move. */
+  gone?: boolean;
   onOpen: (npcId: string) => void;
 }) => {
   if (rows.length === 0) return null;
@@ -65,7 +72,7 @@ const Group = ({
         {rows.map((row) => (
           <button
             key={row.npcId}
-            className={`person-row${small ? ' small' : ''}`}
+            className={`person-row${small ? ' small' : ''}${gone ? ' gone' : ''}`}
             onClick={() => onOpen(row.npcId)}
           >
             <div className="person-avatar">{row.emoji}</div>
@@ -73,12 +80,18 @@ const Group = ({
               <div className="person-name">{row.name}</div>
               <div className="person-sub">{row.subtitle}</div>
             </div>
-            <div className="person-score">
-              {!small && <div style={{ fontSize: 15, lineHeight: 1 }}>{row.scoreIcon}</div>}
-              <div className="person-score-value" style={{ color: row.scoreColor }}>
-                {row.score}
+            {gone ? (
+              <div className="person-score">
+                <div style={{ fontSize: 15, lineHeight: 1 }}>🕯️</div>
               </div>
-            </div>
+            ) : (
+              <div className="person-score">
+                {!small && <div style={{ fontSize: 15, lineHeight: 1 }}>{row.scoreIcon}</div>}
+                <div className="person-score-value" style={{ color: row.scoreColor }}>
+                  {row.score}
+                </div>
+              </div>
+            )}
           </button>
         ))}
       </div>

@@ -179,6 +179,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
       sex: npcSex,
       age,
       alive: true,
+    diedAtPlayerAge: null,
       avatarEmoji: emoji,
       tier: 'tier1',
       descriptor,

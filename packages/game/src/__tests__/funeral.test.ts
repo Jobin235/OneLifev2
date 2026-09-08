@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../node.js';
+import { peopleView, personView } from '../views.js';
 import type { LifeState } from '@lineage/shared-types';
 
 const game = createGame();
@@ -95,6 +96,33 @@ describe('a funeral is a decision', () => {
     // And staying home is what the rest of the family registers.
     expect(stayedDown).toBeGreaterThan(0);
     expect(wentDown).toBeGreaterThan(0);
+  });
+
+  it('keeps the ones who mattered on the list, dated, and openable', () => {
+    /*
+     * They used to be filtered out of the relationships list entirely, so
+     * losing somebody looked exactly like drifting apart from them, or like
+     * never having met them. And it is only the ones who mattered: everybody
+     * who ever dies buries a wife under a decade of managers and classmates.
+     */
+    let checked = 0;
+    for (let i = 0; i < 8 && checked < 3; i++) {
+      const { state } = run(`fun-list-${i}`, 'attend');
+      const people = peopleView(state);
+      for (const row of people.gone) {
+        expect(row.subtitle).toMatch(/died (this year|last year|\d+ years ago)/);
+        // It opens, and the screen knows what it is looking at.
+        const page = personView(state, row.npcId, game.config, game.content)!;
+        expect(page.gone).toBe(true);
+        expect(page.header).toMatch(/died/);
+        checked += 1;
+      }
+      // Nobody dead is still counted among the living.
+      for (const row of [...people.close, ...people.around, ...people.drifted]) {
+        expect(state.npcs.find((n) => n.id === row.npcId)!.alive).toBe(true);
+      }
+    }
+    expect(checked).toBeGreaterThan(2);
   });
 
   it('never buries the same person twice', () => {

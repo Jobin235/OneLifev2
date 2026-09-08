@@ -3841,3 +3841,24 @@ button {
   background: rgba(255, 255, 255, 0.85);
   transform: translateX(-1px);
 }
+
+/*
+ * Somebody who is not coming back.
+ *
+ * They used to vanish from the list, which made losing a person look exactly
+ * like drifting apart from one. The row stays, dimmed, with a candle where the
+ * score was — there is nothing left to move — and it still opens, because the
+ * memories the game kept on them are the reason to go back.
+ */
+.person-row.gone {
+  opacity: 0.62;
+}
+
+.person-row.gone .person-name {
+  font-style: italic;
+}
+
+.gone-notice {
+  background: #F1EDF6;
+  color: #5B4B77;
+}

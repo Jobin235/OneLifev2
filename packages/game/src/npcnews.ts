@@ -390,6 +390,7 @@ const spawnRelative = (
     sex: input.sex,
     age: Math.max(0, input.age),
     alive: true,
+    diedAtPlayerAge: null,
     avatarEmoji: input.age === 0 ? '👶' : input.sex === 'female' ? '👩' : '🧑',
     tier: 'tier2',
     descriptor: '',

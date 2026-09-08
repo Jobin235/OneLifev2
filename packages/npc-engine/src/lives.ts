@@ -42,6 +42,7 @@ export const advanceNpcYear = (state: LifeState, config: GameConfig, rng: Rng): 
     if (fate) {
       if (npc.age >= fate.atAge) {
         npc.alive = false;
+        npc.diedAtPlayerAge = state.character.age;
         report.deaths.push({ npc, relationship: rel, cause: fate.cause });
       }
       continue;
@@ -49,6 +50,7 @@ export const advanceNpcYear = (state: LifeState, config: GameConfig, rng: Rng): 
 
     if (rollNpcDeath(npc, rng)) {
       npc.alive = false;
+      npc.diedAtPlayerAge = state.character.age;
       report.deaths.push({ npc, relationship: rel, cause: null });
     }
   }

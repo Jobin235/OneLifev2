@@ -2,7 +2,7 @@ import type { GameConfig } from '@lineage/config';
 import type { Activity, ContentPack } from '@lineage/content';
 import { interactionsFor } from './interact.js';
 import { shopView } from './shop.js';
-import type { LifeState, Npc } from '@lineage/shared-types';
+import type { LifeState, Npc, Relationship } from '@lineage/shared-types';
 import { STAT_DISPLAY } from '@lineage/shared-types';
 import {
   displayMemories,
@@ -156,17 +156,37 @@ export const peopleView = (state: LifeState) => {
         scoreIcon: romantic ? '💞' : rel.dimensions.conflict > 50 ? '😐' : '🙂',
         score: surfacedScore(rel),
         scoreColor: BAND_COLOR[rel.band],
+        diedAtPlayerAge: npc.diedAtPlayerAge,
+        remembered: worthRemembering(rel),
+        goneSubtitle: npc.alive
+          ? null
+          : sinceDeath(state.character.age, npc.diedAtPlayerAge, relationshipLabel(rel, npc)),
       };
     })
-    .filter((row): row is NonNullable<typeof row> => !!row && row.alive);
+    .filter((row): row is NonNullable<typeof row> => !!row);
 
-  const close = rows.filter((r) => r.band === 'close');
-  const around = rows.filter((r) => r.band === 'around');
-  const drifted = rows.filter((r) => r.band === 'drifted');
+  const living = rows.filter((r) => r.alive);
+  const close = living.filter((r) => r.band === 'close');
+  const around = living.filter((r) => r.band === 'around');
+  const drifted = living.filter((r) => r.band === 'drifted');
+
+  /*
+   * The dead stay on the list.
+   *
+   * They used to be filtered out entirely, so losing somebody meant a row
+   * quietly disappearing — the same as drifting apart, the same as never having
+   * met them. A life is partly the people who are not in it any more, and the
+   * memories the game already keeps on each of them are the best writing in it.
+   * They are here, dated, and they open.
+   */
+  const gone = rows
+    .filter((r) => !r.alive && r.remembered)
+    .map((row) => ({ ...row, subtitle: row.goneSubtitle ?? 'Died' }))
+    .sort((a, b) => (b.diedAtPlayerAge ?? 0) - (a.diedAtPlayerAge ?? 0));
 
   return {
-    total: rows.length,
-    headline: `${rows.length} ${rows.length === 1 ? 'person' : 'people'} you actually know`,
+    total: living.length,
+    headline: `${living.length} ${living.length === 1 ? 'person' : 'people'} you actually know`,
     close,
     around,
     driftedCount: drifted.length,
@@ -175,7 +195,47 @@ export const peopleView = (state: LifeState) => {
         ? `${drifted.length} ${drifted.length === 1 ? 'person' : 'people'} you've lost touch with. They keep living whether you call or not.`
         : null,
     drifted,
+    gone,
+    goneLine:
+      gone.length > 0
+        ? `${gone.length} ${gone.length === 1 ? 'person' : 'people'} you have lost. You can still go and read what you had.`
+        : null,
   };
+};
+
+/**
+ * Whether this person's death belongs on the list at all.
+ *
+ * Everybody who ever dies would bury the ones who matter under a decade of
+ * managers and classmates — ten rows, of which one was your wife. Blood, the
+ * people you chose, and anybody the game actually wrote something about.
+ */
+const REMEMBERED = new Set([
+  'mother',
+  'father',
+  'spouse',
+  'partner',
+  'ex',
+  'child',
+  'sibling',
+  'grandparent',
+  'grandchild',
+  'best_friend',
+  'friend',
+]);
+
+const worthRemembering = (rel: Relationship): boolean =>
+  REMEMBERED.has(rel.kind) ||
+  rel.formerKinds.some((kind) => REMEMBERED.has(kind)) ||
+  rel.memories.length > 0;
+
+/** "Died 9 years ago", from the player's count of it. */
+const sinceDeath = (playerAge: number, diedAt: number | null, kindLabel: string): string => {
+  if (diedAt === null) return `${kindLabel} · died`;
+  const years = Math.max(0, playerAge - diedAt);
+  if (years === 0) return `${kindLabel} · died this year`;
+  if (years === 1) return `${kindLabel} · died last year`;
+  return `${kindLabel} · died ${years} years ago`;
 };
 
 /** Design 2B: a memory list, not a meter. */
@@ -196,14 +256,46 @@ export const personView = (
     npcId,
     name: `${npc.firstName} ${npc.lastName}`,
     emoji: npc.avatarEmoji,
-    header: [
-      relationshipLabel(rel, npc),
-      String(npc.age),
-      npc.occupation,
-      years >= 1 ? `together ${years} years` : null,
-    ]
-      .filter(Boolean)
-      .join(' · '),
+    /*
+     * A dead person's header is about the death, not about what they do for a
+     * living. Leaving it as "Mom · 53 · Head of security · together 20 years"
+     * for somebody who has been buried nine years reads as the game not having
+     * noticed.
+     */
+    header: npc.alive
+      ? [
+          relationshipLabel(rel, npc),
+          String(npc.age),
+          npc.occupation,
+          years >= 1 ? `together ${years} years` : null,
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : [
+          relationshipLabel(rel, npc),
+          sinceDeath(state.character.age, npc.diedAtPlayerAge, `${npc.age} when they died`),
+        ]
+          .filter(Boolean)
+          .join(' · ')
+          .replace(/ · [^·]*· died/, ' · died'),
+    gone: !npc.alive,
+    /*
+     * How it ended, in one line, on the page about them. Without it a person
+     * with no weighty memories opened to a blank screen — which is not what
+     * "you can still go and read what you had" promised.
+     */
+    epitaph: npc.alive
+      ? null
+      : (() => {
+          const fate = state.fated.find((f) => f.npcId === npc.id);
+          const when =
+            npc.diedAtPlayerAge === null
+              ? ''
+              : ` You were ${npc.diedAtPlayerAge}.`;
+          return fate
+            ? `Died at ${npc.age}, ${fate.cause}.${when}`
+            : `Died at ${npc.age}.${when}`;
+        })(),
     descriptor: npc.descriptor,
     meters: romantic
       ? [
@@ -214,7 +306,7 @@ export const personView = (
           { icon: '🤝', label: 'Trust', value: rel.dimensions.trust },
           { icon: '🫱', label: 'Closeness', value: rel.dimensions.closeness },
         ],
-    memories: displayMemories(rel, config).map((m) => ({ atAge: m.atAge, line: m.line })),
+    memories: displayMemories(rel, config, !npc.alive).map((m) => ({ atAge: m.atAge, line: m.line })),
     interactions: interactionsFor(state, npcId, content),
     onTheirMind: rel.onTheirMind,
     stats: npc.stats
