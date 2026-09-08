@@ -12,7 +12,8 @@
  */
 
 /** FNV-1a over a string, returning a 32-bit unsigned integer. */
-const hashString = (input: string): number => {
+/** FNV-1a, 32-bit. Exported because ids need a stable, deterministic digest. */
+export const hashString = (input: string): number => {
   let h = 0x811c9dc5;
   for (let i = 0; i < input.length; i++) {
     h ^= input.charCodeAt(i);
