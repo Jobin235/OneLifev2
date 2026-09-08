@@ -357,3 +357,38 @@ where it decides to. The year has a death step that sets half a dozen fields,
 tidies the card and builds the recap — reaching around it and flipping `alive`
 left the state failing its own invariant a moment later. It raises a flag and
 the death step reads it.
+
+## The other life (vigilante)
+
+Not a BitLife pack — this one was asked for directly — so it is built around the
+thing that makes a mask worth having rather than around a menu.
+
+Every other system in this game is one life doing one more thing. This is two,
+and the number that decides everything is not how many people got home. It is
+**suspicion**: how close the first life is to finding out about the second.
+
+- **The city names you.** You do not choose what this looks like from outside;
+  the alias arrives after the first night.
+- **Two meters that are not the same kind of thing.** Standing is a score —
+  what the city makes of you. Suspicion is a countdown, and it only goes one way
+  while you are working.
+- **Three answers, every time.** Hold them for the police (slow, and the city
+  likes it), make sure they do not do it again (it works, and half the city
+  decides you are the problem), or get the person out and go (costs nothing,
+  achieves nothing but the person).
+- **The failure state is not death.** It is being found out: the mask comes off,
+  everybody you know finds out at the same time as everybody else, and the
+  courts get the years the other life has been spending. Whether the city takes
+  your side is exactly what all those three-way choices were buying.
+- **Gear is why a mask lasts.** A line and a winch, a van with nothing written
+  on it: they buy quiet rather than force.
+
+Tuned against a probe, because the first numbers unmasked every character
+inside three years, which is not a second life, it is an anecdote. Now, over
+forty lives each: always handing them over lasts about nine years and the city
+forgives 31 of 40; always going hard lasts eight and the city forgives **none**;
+playing carefully and lying low when it gets warm lasts sixteen, and seven
+characters in forty are never found out at all.
+
+The one place two systems are allowed to notice each other: a vampire is simply
+better at this.

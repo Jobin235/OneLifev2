@@ -41,6 +41,7 @@ import { casinoView, play, type CasinoGame } from './casino.js';
 import { blackMarketView, buyContraband, fence, haggle } from './blackmarket.js';
 import { buyGarage, buyRaceCar, modifyCar, race, racingView, type RaceStyle } from './racing.js';
 import { turnVampire, vampireAct, vampireView, type VampireAction } from './vampire.js';
+import { buyGear, goOut, lieLow, startVigilante, vigilanteView } from './vigilante.js';
 import {
   startVenture,
   ventureAct,
@@ -543,6 +544,28 @@ export class Game {
 
   surrender(state: LifeState) {
     return surrender(state, this.config);
+  }
+
+  /** The other life: the name the city gave it, and how close it is to over. */
+  vigilante(state: LifeState) {
+    return vigilanteView(state);
+  }
+
+  startVigilante(state: LifeState) {
+    return startVigilante(state, this.config);
+  }
+
+  /** Goes out. Raises the incident rather than deciding anything. */
+  goOut(state: LifeState) {
+    return goOut(state, this.content, this.config);
+  }
+
+  buyGear(state: LifeState, gearId: string) {
+    return buyGear(state, gearId, this.config);
+  }
+
+  lieLow(state: LifeState) {
+    return lieLow(state, this.config);
   }
 
   /** Six dealers, what they are asking, and what the police have noticed. */

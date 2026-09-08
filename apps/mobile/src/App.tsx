@@ -19,6 +19,7 @@ import type {
   BlackMarketView,
   RacingView,
   VampireView,
+  VigilanteView,
   PeopleView,
   PersonView,
   Opening,
@@ -50,6 +51,7 @@ import { CasinoScreen } from './screens/CasinoScreen';
 import { BlackMarketScreen } from './screens/BlackMarketScreen';
 import { RacingScreen } from './screens/RacingScreen';
 import { VampireScreen } from './screens/VampireScreen';
+import { VigilanteScreen } from './screens/VigilanteScreen';
 import { EscapeScreen } from './screens/EscapeScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
@@ -60,6 +62,7 @@ const LAST_LIFE = 'onelife.lastLife';
 const SPECIAL_TITLES: Record<string, string> = {
   mob: 'The Family',
   royal: 'The Crown',
+  vigilante: 'The Other Life',
   fame: 'Fame',
   casino: 'The Casino',
   blackmarket: 'The Black Market',
@@ -119,6 +122,7 @@ export const App = () => {
   const [blackMarket, setBlackMarket] = useState<BlackMarketView | null>(null);
   const [racing, setRacing] = useState<RacingView | null>(null);
   const [vampire, setVampire] = useState<VampireView | null>(null);
+  const [vigilante, setVigilante] = useState<VigilanteView | null>(null);
   const [royal, setRoyal] = useState<RoyalView | null>(null);
   const [mob, setMob] = useState<MobView | null>(null);
   const [mobOffer, setMobOffer] = useState<{ open: boolean; reason: string; visible: boolean } | null>(
@@ -223,7 +227,7 @@ export const App = () => {
           setEscape((current) => current ?? (maze && maze.outcome === null ? maze : null));
         }
         if (slot === 'activities') {
-          const [rows, known, crown, family, floor, dealers, garage, night] =
+          const [rows, known, crown, family, floor, dealers, garage, night, masked] =
             await Promise.all([
               api.actions(lifeId),
               api.fame(lifeId),
@@ -233,6 +237,7 @@ export const App = () => {
               api.blackMarket(lifeId),
               api.racing(lifeId),
               api.vampire(lifeId),
+              api.vigilante(lifeId),
             ]);
           setActions(rows.actions);
           setFame(known);
@@ -243,6 +248,7 @@ export const App = () => {
           setBlackMarket(dealers);
           setRacing(garage);
           setVampire(night);
+          setVigilante(masked);
         }
         if (slot === 'assets') {
           const [worth, board, owned, run] = await Promise.all([
@@ -533,6 +539,19 @@ export const App = () => {
           locked: racing.locked,
         }
       : null,
+    vigilante
+      ? {
+          id: 'vigilante',
+          icon: '🌃',
+          label: vigilante.active ? vigilante.alias : 'The other life',
+          note: vigilante.unmasked && !vigilante.active
+            ? `Everybody knows you were ${vigilante.alias}`
+            : vigilante.active
+              ? `${vigilante.standingWord.toLowerCase()} · ${vigilante.suspicionWord.toLowerCase()}`
+              : 'Go out at night and do something about it',
+          locked: null,
+        }
+      : null,
     vampire
       ? {
           id: 'vampire',
@@ -555,6 +574,22 @@ export const App = () => {
       setSpecial(id);
     },
     [mob, onOpenMob],
+  );
+
+  const onVigilante = useCallback(
+    async (action: string, gearId?: string) => {
+      if (!life) return;
+      const result = await run(() => api.vigilanteAct(life.lifeId, action, gearId));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setVigilante(result.vigilante);
+      // Going out raises the incident, which lives over the sheet.
+      if (result.life.activeEvent) {
+        setSpecial(null);
+        setSlot(null);
+      }
+    },
+    [life, run, setLifeAndRemember],
   );
 
   const onBet = useCallback(
@@ -841,6 +876,14 @@ export const App = () => {
             )}
             {special === 'racing' && racing && (
               <RacingScreen racing={racing} busy={busy} onAct={onRacing} />
+            )}
+            {special === 'vigilante' && vigilante && (
+              <VigilanteScreen
+                vigilante={vigilante}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onAct={onVigilante}
+              />
             )}
             {special === 'vampire' && vampire && (
               <VampireScreen vampire={vampire} busy={busy} onAct={onVampire} />

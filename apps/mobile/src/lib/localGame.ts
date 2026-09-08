@@ -239,6 +239,21 @@ export const createLocalApi = (): Api => {
       };
     },
 
+    vigilante: async (lifeId) => game.vigilante(get(lifeId)) as never,
+
+    vigilanteAct: async (lifeId, action, gearId) => {
+      const state = get(lifeId);
+      if (action === 'start') game.startVigilante(state);
+      else if (action === 'out') game.goOut(state);
+      else if (action === 'gear') game.buyGear(state, gearId ?? '');
+      else game.lieLow(state);
+      save(state);
+      return {
+        life: lifeView(state, game.content) as never,
+        vigilante: game.vigilante(state) as never,
+      } as never;
+    },
+
     casino: async (lifeId) => game.casino(get(lifeId)) as never,
 
     bet: async (lifeId, which, stake, pick) => {

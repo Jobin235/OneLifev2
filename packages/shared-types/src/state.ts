@@ -13,6 +13,7 @@ import { RoyalStandingSchema } from './royalty.js';
 import { EscapeGameSchema } from './escape.js';
 import { MobStandingSchema } from './mob.js';
 import { VentureSchema } from './venture.js';
+import { VigilanteSchema } from './vigilante.js';
 
 export const FlagValueSchema = z.union([z.string(), z.number(), z.boolean()]);
 export type FlagValue = z.infer<typeof FlagValueSchema>;
@@ -59,6 +60,8 @@ export const LifeStateSchema = z.object({
    * each at most, which is why this is a list rather than three fields.
    */
   ventures: z.array(VentureSchema).default([]),
+  /** The other life, when there is one. */
+  vigilante: VigilanteSchema.nullable().default(null),
   assets: z.array(AssetSchema),
   businesses: z.array(BusinessSchema),
 
@@ -155,6 +158,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 8: added a royal standing — a title, a house, respect, and a place in line.
  * 9: added the prison maze and a place in an organisation that has no exit.
  * 10: added ventures — a commune, a zoo, an agency — and the vampire.
+ * 11: added the other life: a mask, a name the city gives it, and suspicion.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 10;
+export const SCHEMA_VERSION = 11;

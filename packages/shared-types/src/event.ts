@@ -160,6 +160,8 @@ export const EffectSchema = z.discriminatedUnion('op', [
    * none of that belongs to the activity row that raised it.
    */
   z.object({ op: z.literal('post_online') }),
+  /** Answers the incident on the vigilante card currently on screen. */
+  z.object({ op: z.literal('vigilante_settle'), how: z.enum(['police', 'hard', 'walk']) }),
   /** Answers the audition currently on screen: play it safe, or go for it. */
   z.object({ op: z.literal('audition_effort'), effort: z.enum(['safe', 'bold']) }),
   /** Picks one of the three firms on the charge sheet. */

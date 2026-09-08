@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, AuditionRejected, CasinoRejected, EscapeRejected, MarketRejected, MobRejected, RacingRejected, VampireRejected, VentureRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
+import { ApplicationRejected, AuditionRejected, CasinoRejected, EscapeRejected, MarketRejected, MobRejected, RacingRejected, VampireRejected, VentureRejected, VigilanteRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -36,6 +36,10 @@ const RacingBody = z.object({
   assetId: z.string().optional(),
   modId: z.string().optional(),
   style: z.enum(['conserve', 'steady', 'push']).default('steady'),
+});
+const VigilanteBody = z.object({
+  action: z.enum(['start', 'out', 'gear', 'low']),
+  gearId: z.string().optional(),
 });
 const VampireBody = z.object({
   action: z.enum(['turn', 'hunt', 'bank', 'hypnotise', 'coffin']),
@@ -434,6 +438,27 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.get('/lives/:lifeId/vigilante', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.vigilante(await load(userOf(request), lifeId));
+  });
+
+  app.post('/lives/:lifeId/vigilante', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { action, gearId } = VigilanteBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        if (action === 'start') game.startVigilante(state);
+        else if (action === 'out') game.goOut(state);
+        else if (action === 'gear') game.buyGear(state, gearId ?? '');
+        else game.lieLow(state);
+        return { life: lifeView(state, game.content), vigilante: game.vigilante(state) };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/casino', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     return game.casino(await load(userOf(request), lifeId));
@@ -679,6 +704,7 @@ const statusFor = (error: unknown): number => {
   if (error instanceof MarketRejected) return 409;
   if (error instanceof RacingRejected) return 409;
   if (error instanceof VampireRejected) return 409;
+  if (error instanceof VigilanteRejected) return 409;
   if (error instanceof EscapeRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };

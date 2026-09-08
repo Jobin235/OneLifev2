@@ -1,0 +1,61 @@
+[
+  {
+    "id": "vigilante_incident",
+    "version": 1,
+    "category": "crime",
+    "card": { "icon": "🌃", "label": "TONIGHT", "tint": "#EDEBF7", "color": "#3B3663" },
+    "weightClass": "major",
+    "priority": 96,
+    "minAge": 16,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "{flag.vig_title}",
+    "body": "{flag.vig_body}",
+    "question": "What do you do?",
+    "choices": [
+      {
+        "id": "police",
+        "label": "Hold them for the police",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.vig_result_title}",
+            "text": "{flag.vig_result}",
+            "historyLine": "{flag.vig_history}",
+            "effects": [{ "op": "vigilante_settle", "how": "police" }]
+          }
+        ]
+      },
+      {
+        "id": "hard",
+        "label": "Make sure they do not do it again",
+        "confirm": "The city will hear how you did this.",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.vig_result_title}",
+            "text": "{flag.vig_result}",
+            "historyLine": "{flag.vig_history}",
+            "effects": [{ "op": "vigilante_settle", "how": "hard" }]
+          }
+        ]
+      },
+      {
+        "id": "walk",
+        "label": "Get the person out and go",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.vig_result_title}",
+            "text": "{flag.vig_result}",
+            "historyLine": "{flag.vig_history}",
+            "effects": [{ "op": "vigilante_settle", "how": "walk" }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 900
+  }
+]

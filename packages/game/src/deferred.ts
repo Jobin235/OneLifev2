@@ -9,6 +9,7 @@ import { openLoveInterest, settleLoveInterest } from './love.js';
 import { openCharges, settleLawyer, settlePlea } from './justice.js';
 import { settleLetting } from './landlord.js';
 import { postOnline, settleAudition } from './fame.js';
+import { settleIncident } from './vigilante.js';
 import { hireInto } from './jobs.js';
 import { ASSET_TEMPLATES, BUSINESS_TEMPLATES, businessNameFor } from './templates.js';
 
@@ -152,6 +153,11 @@ export const applyDeferred = (
             content,
           );
         });
+        break;
+      }
+
+      case 'vigilante_settle': {
+        settleIncident(state, effect.how, content, rng);
         break;
       }
 

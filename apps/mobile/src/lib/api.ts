@@ -249,6 +249,29 @@ export interface StockRow {
   affordable: boolean;
 }
 
+export interface VigilanteView {
+  active: boolean;
+  unmasked: boolean;
+  alias: string;
+  standing: number;
+  standingWord: string;
+  suspicion: number;
+  suspicionWord: string;
+  saved: number;
+  broken: number;
+  nightsLeft: number;
+  locked: string | null;
+  gear: Array<{
+    id: string;
+    emoji: string;
+    label: string;
+    note: string;
+    price: string;
+    owned: boolean;
+    affordable: boolean;
+  }>;
+}
+
 export interface CasinoView {
   locked: string | null;
   betsLeft: number;
@@ -665,6 +688,12 @@ export interface Api {
     lifeId: string,
     job: string,
   ): Promise<{ life: LifeView; mob: MobView | null; line: string; cut: string | null }>;
+  vigilante(lifeId: string): Promise<VigilanteView>;
+  vigilanteAct(
+    lifeId: string,
+    action: string,
+    gearId?: string,
+  ): Promise<{ life: LifeView; vigilante: VigilanteView }>;
   casino(lifeId: string): Promise<CasinoView>;
   bet(
     lifeId: string,
@@ -811,6 +840,12 @@ export const httpApi: Api = {
       `/lives/${lifeId}/mob`,
       { method: 'POST', body: JSON.stringify({ job }) },
     ),
+  vigilante: (lifeId: string) => request<VigilanteView>(`/lives/${lifeId}/vigilante`),
+  vigilanteAct: (lifeId: string, action: string, gearId?: string) =>
+    request<never>(`/lives/${lifeId}/vigilante`, {
+      method: 'POST',
+      body: JSON.stringify({ action, gearId }),
+    }),
   casino: (lifeId: string) => request<CasinoView>(`/lives/${lifeId}/casino`),
   bet: (lifeId: string, game: string, stake: number, pick: string) =>
     request<never>(`/lives/${lifeId}/casino`, {

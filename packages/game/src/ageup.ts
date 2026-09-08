@@ -41,6 +41,7 @@ import { resetCasinoYear } from './casino.js';
 import { advanceMarketYear } from './blackmarket.js';
 import { resetRacingYear } from './racing.js';
 import { advanceVampireYear, vampireHoldsAge, vampireWasSlain } from './vampire.js';
+import { advanceVigilanteYear } from './vigilante.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -243,6 +244,7 @@ export const advanceYear = (
   resetRacingYear(state);
   advanceMarketYear(state, content, rng);
   advanceVampireYear(state, rng);
+  advanceVigilanteYear(state, content, rng);
   serveTime(state);
   /*
    * A maze is a thing you are in the middle of, not a thing you carry. Ageing

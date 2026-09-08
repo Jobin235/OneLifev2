@@ -19,3 +19,4 @@ export * from './casino.js';
 export * from './blackmarket.js';
 export * from './racing.js';
 export * from './vampire.js';
+export * from './vigilante.js';
