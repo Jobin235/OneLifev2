@@ -13,5 +13,7 @@ export * from './country.js';
 export * from './history.js';
 export * from './lineage.js';
 export * from './royalty.js';
+export * from './escape.js';
+export * from './mob.js';
 export * from './state.js';
 export * from './view.js';

@@ -35,6 +35,8 @@ import { buyShares, marketView, sellShares } from './stocks.js';
 import { amenitiesFor, manageProperty, propertiesView } from './landlord.js';
 import { audition, fameView } from './fame.js';
 import { inheritTitle, royalAct, royalView, type RoyalAction } from './royalty.js';
+import { doMobJob, joinMob, mobEligibility, mobView, type MobJob } from './mob.js';
+import { escapeMove, escapeView, startEscape, surrender } from './escape.js';
 
 export interface GameOptions {
   /**
@@ -483,6 +485,53 @@ export class Game {
   /** Reign, or abuse it. Either way it is spent out of the same account. */
   royalAct(state: LifeState, action: RoyalAction, choice?: string) {
     return royalAct(state, action, this.content, this.config, choice);
+  }
+
+  /** Who you answer to, when you answer to anybody. */
+  mob(state: LifeState) {
+    return mobView(state);
+  }
+
+  /**
+   * Whether anybody would have you, and why not.
+   *
+   * `visible` is separate from `open` on purpose: somebody with no record at
+   * all should not be told there is a family to be asked about, because being
+   * told is most of what getting in consists of.
+   */
+  mobEligibility(state: LifeState) {
+    const eligible = mobEligibility(state);
+    return {
+      ...eligible,
+      visible:
+        state.mob !== null ||
+        (state.character.age >= 16 && state.character.record.convictions.length > 0),
+    };
+  }
+
+  joinMob(state: LifeState) {
+    return joinMob(state, this.config);
+  }
+
+  doMobJob(state: LifeState, job: MobJob) {
+    return doMobJob(state, job, this.content, this.config);
+  }
+
+  /** The maze, while there is one. */
+  escape(state: LifeState) {
+    return escapeView(state);
+  }
+
+  startEscape(state: LifeState) {
+    return startEscape(state, this.config);
+  }
+
+  escapeMove(state: LifeState, direction: Parameters<typeof escapeMove>[1]) {
+    return escapeMove(state, direction, this.config);
+  }
+
+  surrender(state: LifeState) {
+    return surrender(state, this.config);
   }
 
   /** The sentence, how it is going, and what there is to do with the years. */

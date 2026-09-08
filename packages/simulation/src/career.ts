@@ -154,6 +154,13 @@ export const stationLine = (state: LifeState): string => {
   if (state.career.current) return state.career.current.title;
   const enrolled = state.education.current;
   if (enrolled) return STATION_BY_STAGE[enrolled.stage];
+  /*
+   * Below a real job and below school, because a soldier with a day job has a
+   * day job and that is rather the point of having one — but above
+   * "Unemployed", which is not what somebody who works three jobs a year for
+   * the Vitale family is.
+   */
+  if (state.mob) return state.mob.title;
   if (state.character.age < 2) return 'Baby';
   if (state.character.age < 5) return 'Toddler';
   return 'Unemployed';

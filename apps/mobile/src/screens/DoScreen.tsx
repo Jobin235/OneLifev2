@@ -37,6 +37,9 @@ export const DoScreen = ({
   onOpenFame,
   royalLine,
   onOpenRoyal,
+  mobLine,
+  mobLocked,
+  onOpenMob,
 }: {
   actions: ActionCard[];
   age: number;
@@ -49,6 +52,11 @@ export const DoScreen = ({
   /** The title, when there is one, for the row that opens the Crown screen. */
   royalLine: string | null;
   onOpenRoyal: () => void;
+  /** Who you answer to, when you answer to anybody. */
+  mobLine: string | null;
+  /** Shown but greyed: they know there is something and cannot reach it yet. */
+  mobLocked: boolean;
+  onOpenMob: () => void;
 }) => {
   /*
    * Everything you can do first, then everything you cannot — within each
@@ -77,6 +85,21 @@ export const DoScreen = ({
         where BitLife keeps it and because the one activity that feeds it,
         posting, is in the list below.
       */}
+      {mobLine && (
+        <button
+          className={`act-row${mobLocked ? ' locked' : ''}`}
+          disabled={busy || mobLocked}
+          onClick={onOpenMob}
+        >
+          <span className="act-icon">🕴️</span>
+          <span className="act-text">
+            <span className="act-label">The Family</span>
+            <span className="act-note">{mobLine}</span>
+          </span>
+          {mobLocked ? <span className="act-lock">🔒</span> : <span className="act-chev">›</span>}
+        </button>
+      )}
+
       {royalLine && (
         <button className="act-row" disabled={busy} onClick={onOpenRoyal}>
           <span className="act-icon">👑</span>

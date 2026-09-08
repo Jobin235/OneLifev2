@@ -14,11 +14,13 @@ export const PrisonScreen = ({
   busy,
   decisionOpen,
   onAct,
+  onEscape,
 }: {
   prison: PrisonView;
   busy: boolean;
   decisionOpen: boolean;
   onAct: (activityId: string) => void;
+  onEscape: () => void;
 }) => (
   <div className="sheet-scroll">
     {decisionOpen && (
@@ -80,6 +82,20 @@ export const PrisonScreen = ({
     )}
 
     <div className="act-list" style={{ padding: 0 }}>
+      {/*
+        Over the wall sits above the ordinary menu because it is not one of the
+        ordinary things: it is the only row in here that can end the sentence
+        today, and the only one that can make it longer.
+      */}
+      <button className="act-row" disabled={busy || decisionOpen} onClick={onEscape}>
+        <span className="act-icon">🏃</span>
+        <span className="act-text">
+          <span className="act-label">Go over the wall</span>
+          <span className="act-note">One way out. One guard, and he is quicker than you</span>
+        </span>
+        <span className="act-chev">›</span>
+      </button>
+
       {prison.actions.map((action: ActionCard) => (
         <button
           key={action.id}

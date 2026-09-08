@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, AuditionRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
+import { ApplicationRejected, AuditionRejected, EscapeRejected, MobRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -18,6 +18,10 @@ const RewindBody = z.object({ toAge: z.number().int().min(0) });
 const ManageBody = z.object({ action: z.string().min(1), amenityId: z.string().optional() });
 const AuditionBody = z.object({ trackId: z.string().min(1) });
 const RoyalBody = z.object({ action: z.string().min(1), choice: z.string().optional() });
+const MobBody = z.object({ job: z.string().min(1) });
+const EscapeBody = z.object({
+  move: z.enum(['up', 'down', 'left', 'right', 'start', 'surrender']),
+});
 const TradeBody = z.object({
   stockId: z.string().min(1),
   shares: z.number().int().min(1),
@@ -401,6 +405,68 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.get('/lives/:lifeId/mob', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const state = await load(userOf(request), lifeId);
+    return { mob: game.mob(state), eligibility: game.mobEligibility(state) };
+  });
+
+  app.post('/lives/:lifeId/mob', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { job } = MobBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        if (job === 'join') {
+          game.joinMob(state);
+          return {
+            life: lifeView(state, game.content),
+            mob: game.mob(state),
+            line: 'They took you on.',
+            cut: null,
+          };
+        }
+        const result = game.doMobJob(state, job as never);
+        return {
+          life: lifeView(state, game.content),
+          mob: game.mob(state),
+          line: result.line,
+          cut: result.cut,
+        };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/escape', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const view = game.escape(await load(userOf(request), lifeId));
+    if (!view) return reply.code(404).send({ error: 'no maze' });
+    return view;
+  });
+
+  app.post('/lives/:lifeId/escape', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { move } = EscapeBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        if (move === 'start') {
+          game.startEscape(state);
+          return { life: lifeView(state, game.content), escape: game.escape(state), line: '' };
+        }
+        const result =
+          move === 'surrender' ? game.surrender(state) : game.escapeMove(state, move);
+        return {
+          life: lifeView(state, game.content),
+          escape: game.escape(state),
+          line: result.line,
+        };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/market', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     const state = await load(userOf(request), lifeId);
@@ -458,6 +524,8 @@ const statusFor = (error: unknown): number => {
   if (error instanceof ApplicationRejected) return 409;
   if (error instanceof AuditionRejected) return 409;
   if (error instanceof RoyalRejected) return 409;
+  if (error instanceof MobRejected) return 409;
+  if (error instanceof EscapeRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };
   if (typeof withCode.statusCode === 'number') return withCode.statusCode;

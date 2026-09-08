@@ -249,6 +249,40 @@ export interface StockRow {
   affordable: boolean;
 }
 
+export interface MobView {
+  family: string;
+  title: string;
+  rank: string;
+  standing: number;
+  standingWord: string;
+  cutLine: string;
+  earned: string;
+  next: string | null;
+  made: boolean;
+  jobsLeft: number;
+  jobs: Array<{
+    id: string;
+    icon: string;
+    label: string;
+    note: string;
+    available: boolean;
+    locked: string | null;
+  }>;
+}
+
+export interface EscapeView {
+  width: number;
+  height: number;
+  /** One string per row: '#' is a wall you cannot stand on, '.' is floor. */
+  rows: string[];
+  player: { x: number; y: number };
+  guard: { x: number; y: number };
+  exit: { x: number; y: number };
+  moves: number;
+  outcome: string | null;
+  legal: string[];
+}
+
 export interface RoyalView {
   title: string;
   house: string;
@@ -501,6 +535,25 @@ export interface Api {
   fame(lifeId: string): Promise<FameView>;
   /** Null when the character holds no title. */
   royal(lifeId: string): Promise<RoyalView | null>;
+  /**
+   * The standing, plus whether they could get one. `visible` decides whether
+   * the row appears at all — somebody with a clean record is not told there is
+   * anything to be asked about.
+   */
+  mob(lifeId: string): Promise<{
+    mob: MobView | null;
+    eligibility: { open: boolean; reason: string; visible: boolean };
+  }>;
+  mobAct(
+    lifeId: string,
+    job: string,
+  ): Promise<{ life: LifeView; mob: MobView | null; line: string; cut: string | null }>;
+  /** Null when there is no maze on screen. */
+  escapeState(lifeId: string): Promise<EscapeView | null>;
+  escapeMove(
+    lifeId: string,
+    move: string,
+  ): Promise<{ life: LifeView; escape: EscapeView | null; line: string }>;
   royalAct(
     lifeId: string,
     action: string,
@@ -603,6 +656,23 @@ export const httpApi: Api = {
   fame: (lifeId: string) => request<FameView>(`/lives/${lifeId}/fame`),
   royal: (lifeId: string) =>
     request<RoyalView>(`/lives/${lifeId}/royal`).catch(() => null),
+  mob: (lifeId: string) =>
+    request<{
+      mob: MobView | null;
+      eligibility: { open: boolean; reason: string; visible: boolean };
+    }>(`/lives/${lifeId}/mob`),
+  mobAct: (lifeId: string, job: string) =>
+    request<{ life: LifeView; mob: MobView | null; line: string; cut: string | null }>(
+      `/lives/${lifeId}/mob`,
+      { method: 'POST', body: JSON.stringify({ job }) },
+    ),
+  escapeState: (lifeId: string) =>
+    request<EscapeView>(`/lives/${lifeId}/escape`).catch(() => null),
+  escapeMove: (lifeId: string, move: string) =>
+    request<{ life: LifeView; escape: EscapeView | null; line: string }>(
+      `/lives/${lifeId}/escape`,
+      { method: 'POST', body: JSON.stringify({ move }) },
+    ),
   royalAct: (lifeId: string, action: string, choice?: string) =>
     request<{ life: LifeView; royal: RoyalView | null; line: string; respectAfter: number }>(
       `/lives/${lifeId}/royal`,

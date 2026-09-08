@@ -279,6 +279,8 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
      * first age-up, before the character is old enough for it to matter.
      */
     royal: null,
+    escape: null,
+    mob: null,
     assets: [],
     businesses: [],
     flags: {

@@ -11,6 +11,8 @@ import type {
   PropertyRow,
   FameView,
   RoyalView,
+  MobView,
+  EscapeView,
   PeopleView,
   PersonView,
   Opening,
@@ -36,6 +38,8 @@ import { MarketScreen } from './screens/MarketScreen';
 import { PropertyScreen } from './screens/PropertyScreen';
 import { FameScreen } from './screens/FameScreen';
 import { RoyalScreen } from './screens/RoyalScreen';
+import { MobScreen } from './screens/MobScreen';
+import { EscapeScreen } from './screens/EscapeScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
@@ -81,6 +85,12 @@ export const App = () => {
   const [showFame, setShowFame] = useState(false);
   const [royal, setRoyal] = useState<RoyalView | null>(null);
   const [showRoyal, setShowRoyal] = useState(false);
+  const [mob, setMob] = useState<MobView | null>(null);
+  const [mobOffer, setMobOffer] = useState<{ open: boolean; reason: string; visible: boolean } | null>(
+    null,
+  );
+  const [showMob, setShowMob] = useState(false);
+  const [escape, setEscape] = useState<EscapeView | null>(null);
   const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
@@ -151,26 +161,42 @@ export const App = () => {
       try {
         if (slot === 'relationships' && !person) setPeople(await api.people(lifeId));
         if (slot === 'context') {
-          const [enrolled, employed, market, inside] = await Promise.all([
+          const [enrolled, employed, market, inside, maze] = await Promise.all([
             api.school(lifeId),
             api.work(lifeId),
             api.openings(lifeId),
             api.prison(lifeId),
+            api.escapeState(lifeId),
           ]);
           setSchool(enrolled);
           setWork(employed);
           setJobs(market);
           setPrison(inside);
+          /*
+           * A maze survives closing the app, so it has to survive closing the
+           * sheet — it lives in the save because being halfway over a wall is
+           * a state, not a screen.
+           *
+           * Only ever seeds, never clears. This effect refires on every change
+           * to the life, including the move that ends the maze, and clearing
+           * here wiped the result off the screen the instant the player earned
+           * it. Once there is one, the move handler owns it; leaving the sheet
+           * is what puts it away.
+           */
+          setEscape((current) => current ?? (maze && maze.outcome === null ? maze : null));
         }
         if (slot === 'activities') {
-          const [rows, known, crown] = await Promise.all([
+          const [rows, known, crown, family] = await Promise.all([
             api.actions(lifeId),
             api.fame(lifeId),
             api.royal(lifeId),
+            api.mob(lifeId),
           ]);
           setActions(rows.actions);
           setFame(known);
           setRoyal(crown);
+          setMob(family.mob);
+          setMobOffer(family.eligibility);
         }
         if (slot === 'assets') {
           const [worth, board, owned] = await Promise.all([
@@ -360,6 +386,53 @@ export const App = () => {
     [life, run, setLifeAndRemember],
   );
 
+  /**
+   * One row, two meanings: it joins when you are not in and opens the screen
+   * when you are. Which is roughly how it works — there is no application, only
+   * somebody deciding you are worth asking.
+   */
+  const onOpenMob = useCallback(async () => {
+    if (!life) return;
+    if (mob) {
+      setShowMob(true);
+      return;
+    }
+    const result = await run(() => api.mobAct(life.lifeId, 'join'));
+    if (!result) return;
+    setLifeAndRemember(result.life);
+    setMob(result.mob);
+    setShowMob(true);
+  }, [life, mob, run, setLifeAndRemember]);
+
+  const onMobJob = useCallback(
+    async (job: string) => {
+      if (!life) return;
+      const result = await run(() => api.mobAct(life.lifeId, job));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setMob(result.mob);
+      // A charge raises the lawyer popup, which lives over the sheet.
+      if (result.life.activeEvent) {
+        setShowMob(false);
+        setSlot(null);
+      }
+      if (result.line) setToast(result.cut ? `${result.line} ${result.cut}.` : result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onEscapeMove = useCallback(
+    async (move: string) => {
+      if (!life) return;
+      const result = await run(() => api.escapeMove(life.lifeId, move));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setEscape(result.escape);
+      if (result.line) setToast(result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
   const loadAmenities = useCallback(
     async (assetId: string): Promise<AmenityRow[]> =>
       life ? await api.amenities(life.lifeId, assetId) : [],
@@ -452,7 +525,20 @@ export const App = () => {
           prison over everything. The player never has to hunt for the screen
           that matters right now.
         */}
-        {slot === 'context' && (
+        {slot === 'context' && escape && (
+          <Sheet
+            title="Over the wall"
+            onBack={() => setEscape(null)}
+            onClose={() => {
+              setEscape(null);
+              setSlot(null);
+            }}
+          >
+            <EscapeScreen escape={escape} busy={busy} onMove={onEscapeMove} />
+          </Sheet>
+        )}
+
+        {slot === 'context' && !escape && (
           <Sheet title={CONTEXT_TITLE[life.navSlot]} onClose={() => setSlot(null)}>
             {life.navSlot === 'school' && school && (
               <SchoolScreen
@@ -492,6 +578,7 @@ export const App = () => {
                   busy={busy}
                   decisionOpen={decisionOpen}
                   onAct={onAct}
+                  onEscape={() => void onEscapeMove('start')}
                 />
               ) : (
                 <div className="spinner">…</div>
@@ -500,7 +587,23 @@ export const App = () => {
         )}
 
         {slot === 'activities' &&
-          (showRoyal && royal ? (
+          (showMob && mob ? (
+            <Sheet
+              title="The Family"
+              onBack={() => setShowMob(false)}
+              onClose={() => {
+                setShowMob(false);
+                setSlot(null);
+              }}
+            >
+              <MobScreen
+                mob={mob}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onJob={onMobJob}
+              />
+            </Sheet>
+          ) : showRoyal && royal ? (
             <Sheet
               title="The Crown"
               onBack={() => setShowRoyal(false)}
@@ -545,6 +648,17 @@ export const App = () => {
                   onOpenFame={() => setShowFame(true)}
                   royalLine={royal ? `${royal.title} · ${royal.respectWord.toLowerCase()}` : null}
                   onOpenRoyal={() => setShowRoyal(true)}
+                  mobLine={
+                    mob
+                      ? `${mob.title}, ${mob.family}`
+                      : mobOffer?.visible
+                        ? mobOffer.open
+                          ? 'Somebody has been asking about you'
+                          : mobOffer.reason
+                        : null
+                  }
+                  mobLocked={!mob && !mobOffer?.open}
+                  onOpenMob={() => void onOpenMob()}
                 />
               ) : (
                 <div className="spinner">…</div>

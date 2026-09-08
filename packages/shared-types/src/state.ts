@@ -10,6 +10,8 @@ import { EventInstanceSchema, ScheduledEventSchema } from './event.js';
 import { HistoryEntrySchema, LegacySchema } from './history.js';
 import { LineageSchema } from './lineage.js';
 import { RoyalStandingSchema } from './royalty.js';
+import { EscapeGameSchema } from './escape.js';
+import { MobStandingSchema } from './mob.js';
 
 export const FlagValueSchema = z.union([z.string(), z.number(), z.boolean()]);
 export type FlagValue = z.infer<typeof FlagValueSchema>;
@@ -40,6 +42,17 @@ export const LifeStateSchema = z.object({
    * which is the honest shape: royalty is not a career you can choose into.
    */
   royal: RoyalStandingSchema.nullable().default(null),
+  /**
+   * The maze, while one is on screen. Held in the save rather than in the
+   * client so a half-finished escape survives closing the app — and so the
+   * server, not the browser, decides where the guard is.
+   */
+  escape: EscapeGameSchema.nullable().default(null),
+  /**
+   * Who you answer to, when you answer to anybody. Null for almost everybody,
+   * and there is no resigning from it.
+   */
+  mob: MobStandingSchema.nullable().default(null),
   assets: z.array(AssetSchema),
   businesses: z.array(BusinessSchema),
 
@@ -134,6 +147,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 5: added ribbons, and the set the family line has collected.
  * 6-7: added a stated life goal, then removed it. See docs/COMPETITIVE-RESEARCH.md.
  * 8: added a royal standing — a title, a house, respect, and a place in line.
+ * 9: added the prison maze and a place in an organisation that has no exit.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 8;
+export const SCHEMA_VERSION = 9;

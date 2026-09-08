@@ -167,6 +167,26 @@ Source: [Gfinity](https://www.gfinityesports.com/article/mafia)
   through the ordinary Crime menu.
 - **Ten to twenty-five years** to the top, against police attention and your own
   health.
+- **Your cut is your rank**: 10% as an associate or soldier, 25% as a
+  caporegime, 50% as an underboss, 75% as the godfather.
+- **Soldier needs a hit and an oath.** You are not made until you have killed
+  somebody for them.
+
+**Our version.** Built. `packages/game/src/mob.ts` and the Family screen at the
+top of Activities.
+
+The gate is a conviction for the right sort of thing — theft, robbery, burglary,
+assault, a weapon, a car. Somebody with a clean record is not told there is
+anything to be asked about, because being told is most of what getting in
+consists of. Four jobs (collect a debt, move something, take a contract, sit
+down with the other family), three a year, each with its own take, its own
+standing, and its own chance of a charge — which runs through the ordinary
+justice flow, because there is no reason a mob arrest should work differently
+from any other. Promotion wants years at the rank, standing, and money brought
+in, all three; a quiet year costs standing, and standing on the floor once you
+are made is a car journey. Measured over sixty dedicated criminal lives: all
+sixty got in, most reached underboss, eight became the godfather, and there
+were 270 arrests along the way.
 
 ## Prison escape
 
@@ -181,6 +201,31 @@ Sources: [Pocket Gamer](https://www.pocketgamer.com/bitlife-life-simulator/how-t
 - **Maze size scales with the sentence**: petty crime gets a small grid,
   maximum security a large one.
 - Failing extends the sentence.
+
+**Our version.** Built. `packages/game/src/escape.ts`, `EscapeScreen`, and a
+row at the top of the prison menu.
+
+- **The grid is tiles, not a carved maze.** Walls are squares you cannot stand
+  on. The first attempt carved a maze with wall cells, which was wrong twice
+  over: it doubled the grid, so a "four by four" arrived as nine by nine on a
+  phone, and its corridors gave a player nowhere to dodge somebody who moves
+  twice.
+- **4×4 to 8×8, from the sentence** — the same information BitLife takes from
+  the security level, in the units this game already has.
+- **The guard's rule is verbatim** and is not an approximation of pathfinding:
+  toward you, horizontally first, standing still when both ways are walls. A
+  guard that took the shortest path would be unbeatable at two steps to your
+  one. He can be walked into a wall and left there, and that is how this is won.
+- **Every maze is provably winnable.** The guard is deterministic, so the game
+  is a finite graph — player square × guard square, at most 4096 states —
+  and a breadth-first search answers "can this be won" exactly. Generation
+  retries until it can. An unsolvable puzzle is not a hard puzzle, it is a bug
+  with a timer on it.
+- **One attempt a year.** Being caught adds three years and the felony
+  "Attempted escape"; giving yourself up adds one, which is the only reason the
+  surrender button is worth having.
+- The maze lives in the save, not the client: being halfway over a wall is a
+  state rather than a screen, and the server decides where the guard is.
 
 ## The remaining packs
 

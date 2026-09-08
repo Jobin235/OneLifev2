@@ -212,6 +212,56 @@ export const createLocalApi = (): Api => {
 
     royal: async (lifeId) => game.royal(get(lifeId)) as never,
 
+    mob: async (lifeId) => {
+      const state = get(lifeId);
+      return { mob: game.mob(state), eligibility: game.mobEligibility(state) } as never;
+    },
+
+    mobAct: async (lifeId, job) => {
+      const state = get(lifeId);
+      if (job === 'join') {
+        const joined = game.joinMob(state);
+        save(joined);
+        return {
+          life: lifeView(joined, game.content) as never,
+          mob: game.mob(joined) as never,
+          line: '',
+          cut: null,
+        };
+      }
+      const result = game.doMobJob(state, job as never);
+      save(result.state);
+      return {
+        life: lifeView(result.state, game.content) as never,
+        mob: game.mob(result.state) as never,
+        line: result.line,
+        cut: result.cut,
+      };
+    },
+
+    escapeState: async (lifeId) => game.escape(get(lifeId)) as never,
+
+    escapeMove: async (lifeId, move) => {
+      const state = get(lifeId);
+      if (move === 'start') {
+        const started = game.startEscape(state);
+        save(started);
+        return {
+          life: lifeView(started, game.content) as never,
+          escape: game.escape(started) as never,
+          line: '',
+        };
+      }
+      const result =
+        move === 'surrender' ? game.surrender(state) : game.escapeMove(state, move as never);
+      save(result.state);
+      return {
+        life: lifeView(result.state, game.content) as never,
+        escape: game.escape(result.state) as never,
+        line: result.line,
+      };
+    },
+
     royalAct: async (lifeId, action, choice) => {
       const result = game.royalAct(get(lifeId), action as never, choice);
       save(result.state);

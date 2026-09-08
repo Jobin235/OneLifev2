@@ -35,6 +35,7 @@ import { reportMarketYear } from './stocks.js';
 import { advanceProperties } from './landlord.js';
 import { advanceFameYear } from './fame.js';
 import { advanceRoyalYear, royalBirth } from './royalty.js';
+import { advanceMobYear } from './mob.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -231,7 +232,15 @@ export const advanceYear = (
   advanceFameYear(state, content, rng);
   royalBirth(state, content, rng);
   advanceRoyalYear(state, content, rng);
+  advanceMobYear(state, rng);
   serveTime(state);
+  /*
+   * A maze is a thing you are in the middle of, not a thing you carry. Ageing
+   * up abandons an unfinished one — the year moved on and the yard is watched
+   * again — and clears the annual attempt so next year has its own.
+   */
+  if (state.escape?.outcome !== null) state.escape = null;
+  delete state.flags.escape_attempts_this_year;
 
   // 4. Health, then money.
   /*
