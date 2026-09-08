@@ -1,6 +1,5 @@
 import { Game, actionsView, lifeView, moneyView, moreView, peopleView, personView, schoolView, workView } from '@lineage/game';
 import { SCHEMA_VERSION, type LifeState } from '@lineage/shared-types';
-import { DEFAULT_CONFIG } from '@lineage/config';
 import { localContent } from './localContent';
 import { forget, remember, rewind, rewindOptions, type Snapshot } from '@lineage/game';
 import { safeStorage } from './storage';
@@ -190,13 +189,14 @@ export const createLocalApi = (): Api => {
       return person as never;
     },
     interact: async (lifeId, npcId, interactionId) => {
-      const { state, warm, line } = game.interact(get(lifeId), npcId, interactionId);
+      const { state, warm, line, meter } = game.interact(get(lifeId), npcId, interactionId);
       save(state);
       return {
         ...view(state),
         person: personView(state, npcId, game.config, game.content) as never,
         warm,
         line,
+        meter,
       };
     },
 

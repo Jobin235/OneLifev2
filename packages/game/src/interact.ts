@@ -125,6 +125,61 @@ export interface InteractResult {
   /** Whether it landed well. The client uses this to colour the result. */
   warm: boolean;
   line: string;
+  /**
+   * The bar that moved, and where it moved from.
+   *
+   * Without this the result was a sentence and nothing else: the player tapped
+   * "Talk", read "You had a good talk", and had no way to tell whether that was
+   * worth doing again — the meters were on the screen behind the toast and
+   * changed while it covered them. Showing the bar *in the result* is what makes
+   * an interaction a move rather than a flavour text generator.
+   *
+   * One bar, not six: the dimension this interaction leaned on hardest.
+   */
+  meter: { label: string; from: number; to: number; good: boolean } | null;
+}
+
+/** How each dimension reads to somebody who is not looking at a data model. */
+const DIMENSION_LABEL: Record<keyof Relationship['dimensions'], string> = {
+  affection: 'Affection',
+  trust: 'Trust',
+  respect: 'Respect',
+  conflict: 'Friction',
+  closeness: 'Closeness',
+  romance: 'Romance',
+  dependence: 'Reliance',
+};
+
+/*
+ * Which way is up, per dimension.
+ *
+ * Friction is the one that matters: everything else is better when it rises and
+ * friction is worse, so a result that colours by direction alone congratulates
+ * the player for an argument. It is reported when it is the biggest thing that
+ * happened — "that landed badly" is worth saying — but it is never good news.
+ */
+const HIGHER_IS_BETTER: Record<keyof Relationship['dimensions'], boolean> = {
+  affection: true,
+  trust: true,
+  respect: true,
+  conflict: false,
+  closeness: true,
+  romance: true,
+  dependence: true,
+};
+
+/** The one this interaction was really about: the largest move it made. */
+const headlineDimension = (
+  result: InteractionResult,
+): keyof Relationship['dimensions'] | null => {
+  let best: keyof Relationship['dimensions'] | null = null;
+  let size = 0;
+  for (const [dimension, delta] of Object.entries(result.dimensions)) {
+    if (Math.abs(delta) <= size) continue;
+    size = Math.abs(delta);
+    best = dimension as keyof Relationship['dimensions'];
+  }
+  return best;
 }
 
 export const interact = (
@@ -167,6 +222,9 @@ export const interact = (
     const warm = rng.chance(odds);
     const result = warm ? interaction.warm : interaction.cool;
 
+    const headline = headlineDimension(result);
+    const meterFrom = headline === null ? 0 : rel.dimensions[headline];
+
     const line = applyResult(result, rel, state, npc.firstName);
 
     rel.lastContactAge = state.character.age;
@@ -191,7 +249,23 @@ export const interact = (
 
     refreshDerived(state, config);
     checkInvariants(state, before);
-    return { state, warm, line };
+    return {
+      state,
+      warm,
+      line,
+      meter:
+        headline === null
+          ? null
+          : {
+              label: `${npc.firstName}'s ${DIMENSION_LABEL[headline].toLowerCase()}`,
+              from: Math.round(meterFrom),
+              to: Math.round(rel.dimensions[headline]),
+              good:
+                rel.dimensions[headline] >= meterFrom
+                  ? HIGHER_IS_BETTER[headline]
+                  : !HIGHER_IS_BETTER[headline],
+            },
+    };
   } catch (error) {
     Object.assign(state, before);
     throw error;

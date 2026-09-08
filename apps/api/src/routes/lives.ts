@@ -254,12 +254,13 @@ export const registerLifeRoutes = (
     const { interactionId } = request.body as { interactionId: string };
     try {
       return await lives.withLock(userOf(request), lifeId, (state) => {
-        const { warm, line } = game.interact(state, npcId, interactionId);
+        const { warm, line, meter } = game.interact(state, npcId, interactionId);
         return {
           life: lifeView(state, game.content),
           person: personView(state, npcId, game.config, game.content),
           warm,
           line,
+          meter,
         };
       });
     } catch (error) {

@@ -667,7 +667,14 @@ export interface Api {
     lifeId: string,
     npcId: string,
     interactionId: string,
-  ): Promise<{ life: LifeView; person: PersonView; warm: boolean; line: string }>;
+  ): Promise<{
+    life: LifeView;
+    person: PersonView;
+    warm: boolean;
+    line: string;
+    /** The bar that moved, so the result can show it rather than just say it. */
+    meter: { label: string; from: number; to: number; good: boolean } | null;
+  }>;
   actions(lifeId: string): Promise<{ actions: ActionCard[] }>;
   /** Null when the character is not enrolled anywhere. */
   school(lifeId: string): Promise<SchoolView | null>;
@@ -818,7 +825,13 @@ export const httpApi: Api = {
   person: (lifeId: string, npcId: string) => request<PersonView>(`/lives/${lifeId}/people/${npcId}`),
 
   interact: (lifeId: string, npcId: string, interactionId: string) =>
-    request<{ life: LifeView; person: PersonView; warm: boolean; line: string }>(
+    request<{
+      life: LifeView;
+      person: PersonView;
+      warm: boolean;
+      line: string;
+      meter: { label: string; from: number; to: number; good: boolean } | null;
+    }>(
       `/lives/${lifeId}/people/${npcId}/interact`,
       { method: 'POST', body: JSON.stringify({ interactionId }) },
     ),

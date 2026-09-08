@@ -3785,3 +3785,59 @@ button {
   font-weight: 800;
   color: var(--muted);
 }
+
+/*
+ * The result of doing something to somebody.
+ *
+ * One bar, drawn where the relationship stands *after* the tap, with a tick at
+ * where it stood before. The player was previously given a sentence and nothing
+ * else, over meters the toast was covering — so an interaction read as flavour
+ * rather than as a move that had bought something.
+ */
+.toast-meter {
+  margin-top: 10px;
+}
+
+.toast-meter-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font: 800 10.5px/1 var(--text);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  margin-bottom: 6px;
+}
+
+.toast-meter-head .up {
+  color: var(--mint, #7BD3A8);
+}
+
+.toast-meter-head .down {
+  color: var(--coral, #F08A7E);
+}
+
+.toast-meter-track {
+  position: relative;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.toast-meter-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: #fff;
+  transition: width 320ms ease;
+}
+
+/* Where it stood a moment ago, so the move has something to be measured from. */
+.toast-meter-was {
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 11px;
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateX(-1px);
+}

@@ -115,6 +115,56 @@ describe('doing something to a specific person', () => {
     expect(ids).toContain('talk');
   });
 
+  it('hands back the bar it moved, so the result can be seen and not only read', () => {
+    /*
+     * The result used to be a sentence over meters the toast was covering,
+     * which gave the player no way to tell whether the tap had bought anything.
+     */
+    const state = adultWithPeople('int-meter');
+    const rel = someone(state);
+    const before = { ...rel.dimensions };
+
+    const result = game.interact(state, rel.npcId, 'talk');
+    expect(result.meter).not.toBeNull();
+    const meter = result.meter!;
+
+    // Named for the person, not for the data model.
+    expect(meter.label).toMatch(/^\S+'s /);
+    expect(meter.label).not.toMatch(/dimension|affection: /i);
+
+    // It reports the dimension that actually moved furthest.
+    const after = result.state.relationships.find((r) => r.npcId === rel.npcId)!.dimensions;
+    const moves = (Object.keys(after) as (keyof typeof after)[]).map((key) =>
+      Math.abs(after[key] - before[key]),
+    );
+    expect(meter.to - meter.from).not.toBe(0);
+    expect(Math.abs(meter.to - meter.from)).toBe(Math.max(...moves));
+    expect(meter.to).toBeGreaterThanOrEqual(0);
+    expect(meter.to).toBeLessThanOrEqual(100);
+  });
+
+  it('never calls an argument good news', () => {
+    /*
+     * Colouring by direction alone congratulated the player for a row: friction
+     * is the one dimension where up is worse, and "Lila's friction +2" was
+     * being drawn in the same green as an afternoon that went well.
+     */
+    let sawFriction = 0;
+    for (let i = 0; i < 30; i++) {
+      const state = adultWithPeople(`int-polarity-${i}`);
+      const rel = someone(state);
+      for (const id of ['talk', 'insult', 'compliment']) {
+        const card = game.interactions(state, rel.npcId).find((c) => c.id === id);
+        if (!card?.available) continue;
+        const { meter } = game.interact(state, rel.npcId, id);
+        if (!meter || !/friction/i.test(meter.label)) continue;
+        sawFriction += 1;
+        expect(meter.good).toBe(meter.to < meter.from);
+      }
+    }
+    expect(sawFriction).toBeGreaterThan(0);
+  });
+
   it('limits each interaction per year, per person', () => {
     const state = adultWithPeople('int-6');
     const rel = someone(state);

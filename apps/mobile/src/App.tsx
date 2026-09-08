@@ -86,12 +86,63 @@ const api = import.meta.env.VITE_LOCAL === '1' ? createLocalApi() : httpApi;
  * more than one tap away and the chrome never rearranges itself.
  * See docs/BITLIFE-LOOP-SPEC.md §1.
  */
+/** A result message, and optionally the bar it moved. */
+interface ToastMeter {
+  label: string;
+  from: number;
+  to: number;
+  /** Whether the move was in the player's favour — friction going up is not. */
+  good: boolean;
+}
+interface Toast {
+  text: string;
+  meter: ToastMeter | null;
+}
+
+/**
+ * The result of doing something to somebody.
+ *
+ * The bar is drawn at its value *after* the change, with the old value marked,
+ * so the player reads "this is where they are now, and this is how far you
+ * moved them" in one glance. A delta on its own would not say whether eight
+ * points was most of the way or nothing at all.
+ */
+const ToastBar = ({ toast }: { toast: Toast }) => (
+  <div className="toast">
+    <div>{toast.text}</div>
+    {toast.meter && (
+      <div className="toast-meter">
+        <div className="toast-meter-head">
+          <span>{toast.meter.label}</span>
+          <span className={toast.meter.good ? 'up' : 'down'}>
+            {toast.meter.to === toast.meter.from
+              ? 'no change'
+              : `${toast.meter.to > toast.meter.from ? '+' : ''}${toast.meter.to - toast.meter.from}`}
+          </span>
+        </div>
+        <div className="toast-meter-track">
+          <div className="toast-meter-fill" style={{ width: `${toast.meter.to}%` }} />
+          <div className="toast-meter-was" style={{ left: `${toast.meter.from}%` }} />
+        </div>
+      </div>
+    )}
+  </div>
+);
+
 export const App = () => {
   const [countries, setCountries] = useState<CountryOption[] | null>(null);
   const [life, setLife] = useState<LifeView | null>(null);
   const [slot, setSlot] = useState<Slot | null>(null);
   const [busy, setBusy] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  /*
+   * A result the player can see, not only read.
+   *
+   * BitLife's result for "Compliment her" is the sentence *and* the bar it
+   * moved. Ours was the sentence alone, over meters that were behind the toast
+   * and had already changed — so the player had no way to tell whether the tap
+   * had been worth making. The meter rides along with the message.
+   */
+  const [toast, setToast] = useState<Toast | null>(null);
 
   const [people, setPeople] = useState<PeopleView | null>(null);
   const [person, setPerson] = useState<PersonView | null>(null);
@@ -139,9 +190,9 @@ export const App = () => {
     document.documentElement.dataset.chrome = life?.incarcerated ? 'prison' : '';
   }, [life?.incarcerated]);
 
-  const show = useCallback((message: string) => {
-    setToast(message);
-    setTimeout(() => setToast(null), 2600);
+  const show = useCallback((message: string, meter: ToastMeter | null = null) => {
+    setToast({ text: message, meter });
+    setTimeout(() => setToast(null), meter ? 3400 : 2600);
   }, []);
 
   /** Every mutation goes through here, so failure never leaves a stale screen. */
@@ -306,7 +357,7 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       setPerson(result.person);
-      show(result.line);
+      show(result.line, result.meter);
     },
     [life, person, run, setLifeAndRemember, show],
   );
@@ -436,7 +487,7 @@ export const App = () => {
       setRoyal(result.royal);
       // Abdication and a revolt both end the screen you are standing on.
       if (!result.royal) setSpecial(null);
-      setToast(result.line);
+      setToast({ text: result.line, meter: null });
     },
     [life, run, setLifeAndRemember],
   );
@@ -471,7 +522,12 @@ export const App = () => {
         setSpecial(null);
         setSlot(null);
       }
-      if (result.line) setToast(result.cut ? `${result.line} ${result.cut}.` : result.line);
+      if (result.line) {
+        setToast({
+          text: result.cut ? `${result.line} ${result.cut}.` : result.line,
+          meter: null,
+        });
+      }
     },
     [life, run, setLifeAndRemember],
   );
@@ -616,7 +672,7 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       setBlackMarket(result.market);
-      if (result.line) setToast(result.line);
+      if (result.line) setToast({ text: result.line, meter: null });
     },
     [life, run, setLifeAndRemember],
   );
@@ -628,7 +684,7 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       setRacing(result.racing);
-      if (result.line) setToast(result.line);
+      if (result.line) setToast({ text: result.line, meter: null });
     },
     [life, run, setLifeAndRemember],
   );
@@ -640,7 +696,7 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       setVampire(result.vampire);
-      if (result.line) setToast(result.line);
+      if (result.line) setToast({ text: result.line, meter: null });
     },
     [life, run, setLifeAndRemember],
   );
@@ -664,7 +720,7 @@ export const App = () => {
         setShowVentures(false);
         setSlot(null);
       }
-      if (result.line) setToast(result.line);
+      if (result.line) setToast({ text: result.line, meter: null });
       void api.money(life.lifeId).then(setMoney);
     },
     [life, run, setLifeAndRemember],
@@ -677,7 +733,7 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       setEscape(result.escape);
-      if (result.line) setToast(result.line);
+      if (result.line) setToast({ text: result.line, meter: null });
     },
     [life, run, setLifeAndRemember],
   );
@@ -723,7 +779,7 @@ export const App = () => {
     return (
       <div className="app">
         <CreateScreen countries={countries} busy={busy} onCreate={onCreate} />
-        {toast && <div className="toast">{toast}</div>}
+        {toast && <ToastBar toast={toast} />}
       </div>
     );
   }
@@ -733,7 +789,7 @@ export const App = () => {
     return (
       <div className="app">
         <LegacyScreen legacy={life.legacy} busy={busy} onSucceed={onSucceed} />
-        {toast && <div className="toast">{toast}</div>}
+        {toast && <ToastBar toast={toast} />}
       </div>
     );
   }
@@ -1011,7 +1067,7 @@ export const App = () => {
         <ResultToast event={life.resolvedEvent} onDismiss={onDismiss} />
       )}
 
-      {toast && <div className="toast">{toast}</div>}
+      {toast && <ToastBar toast={toast} />}
     </div>
   );
 };
