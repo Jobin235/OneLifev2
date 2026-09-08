@@ -627,8 +627,10 @@ export const App = () => {
             ? `Everybody knows you were ${vigilante.alias}`
             : vigilante.active
               ? `${vigilante.standingWord.toLowerCase()} · ${vigilante.suspicionWord.toLowerCase()}`
-              : 'Go out at night and do something about it',
-          locked: null,
+              : (vigilante.locked ?? 'Go out at night and do something about it'),
+          // Already out there and it is only the night that is blocked: the row
+          // still opens, because the screen behind it is worth reading.
+          locked: vigilante.active ? null : vigilante.locked,
         }
       : null,
     vampire
@@ -638,8 +640,9 @@ export const App = () => {
           label: vampire.lord ? 'Vampire Lord' : vampire.turned ? 'Vampire' : 'Something in this town',
           note: vampire.turned
             ? `${vampire.essence} essence · ${vampire.notorietyWord.toLowerCase()}`
-            : 'Somebody here has been here a very long time',
-          locked: null,
+            : (vampire.locked ?? 'Somebody here has been here a very long time'),
+          // Once turned there is nothing to lock: the screen is the life now.
+          locked: vampire.turned ? null : vampire.locked,
         }
       : null,
   ].filter((row): row is SpecialRow => row !== null);

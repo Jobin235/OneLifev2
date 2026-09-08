@@ -139,7 +139,6 @@ export const startVigilante = (state: LifeState, config: GameConfig): LifeState 
   if (state.flags.unmasked) throw new VigilanteRejected('everybody knows who you are');
   const lock = vigilanteLock(state);
   if (lock) throw new VigilanteRejected(lock.toLowerCase());
-  if (state.character.age < 16) throw new VigilanteRejected('you are too young for this');
 
   const before = structuredClone(state);
   try {
@@ -525,8 +524,18 @@ const unmask = (state: LifeState, content: ContentPack, rng: Rng): void => {
  * The screen
  * ------------------------------------------------------------------ */
 
+/** You have to be old enough to be out at night doing this. */
+export const VIGILANTE_AGE = 16;
+
 export const vigilanteLock = (state: LifeState): string | null => {
   if (!state.character.alive) return 'You are dead';
+  /*
+   * The age gate lived only inside `startVigilante`, so a fourteen-year-old was
+   * shown "Go out at night and do something about it" and the refusal arrived
+   * as an error rather than as a reason. Every other locked thing in this game
+   * says why on the row itself.
+   */
+  if (state.character.age < VIGILANTE_AGE) return 'You are too young for this';
   if (state.activeEvent) return 'Answer the open decision first';
   if (state.character.record.incarceration) return 'Not from in here';
   return null;

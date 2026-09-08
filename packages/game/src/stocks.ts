@@ -178,7 +178,14 @@ export const marketView = (
   state: LifeState,
   content: ContentPack,
   world: WorldIndicators,
-): { rows: StockRow[]; total: string; totalCents: number; invested: string } => {
+): {
+  rows: StockRow[];
+  total: string;
+  totalCents: number;
+  invested: string;
+  /** Why the market is shut, when it is. */
+  locked: string | null;
+} => {
   const liquid = state.character.finances.cash + state.character.finances.savings;
   const rows = content.stocks.map((stock) => {
     const price = priceOf(stock, state, world);
@@ -215,6 +222,7 @@ export const marketView = (
     total: money(totalCents),
     totalCents,
     invested: money(investedCents),
+    locked: stockMarketLock(state),
   };
 };
 
@@ -229,11 +237,27 @@ export const portfolioValue = (
     return stock ? sum + held.shares * priceOf(stock, state, world) : sum;
   }, 0);
 
+/** You have to be an adult to hold shares in your own name. */
+export const TRADING_AGE = 18;
+
+/**
+ * Why the market is shut to this character, or null.
+ *
+ * The gate below used to be the only place this was known, so the Money screen
+ * offered "Stock Market · Buy shares in twelve companies" to a fourteen-year-old
+ * and the refusal arrived as an error. The reason belongs on the row.
+ */
+export const stockMarketLock = (state: LifeState): string | null => {
+  if (!state.character.alive) return 'You are dead';
+  if (state.character.age < TRADING_AGE) return `You have to be ${TRADING_AGE} to hold shares`;
+  if (state.character.record.incarceration) return 'Not from in here';
+  if (state.activeEvent) return 'Answer the open decision first';
+  return null;
+};
+
 const gate = (state: LifeState): void => {
-  if (!state.character.alive) throw new TradeRejected('a dead character cannot trade');
-  if (state.activeEvent) throw new TradeRejected('answer the open decision first');
-  if (state.character.record.incarceration) throw new TradeRejected('not from in here');
-  if (state.character.age < 18) throw new TradeRejected('you have to be 18 to hold shares');
+  const locked = stockMarketLock(state);
+  if (locked) throw new TradeRejected(locked.toLowerCase());
 };
 
 export const buyShares = (

@@ -376,6 +376,8 @@ export interface RacingView {
 
 export interface VampireView {
   turned: boolean;
+  /** Why you cannot go and find him. Null when you can, or already have. */
+  locked: string | null;
   lord: boolean;
   essence: number;
   essenceBar: number;
@@ -553,6 +555,8 @@ export interface MarketView {
   total: string;
   totalCents: number;
   invested: string;
+  /** Why the market is shut to this character. Null when it is open. */
+  locked: string | null;
 }
 
 export interface PrisonView {

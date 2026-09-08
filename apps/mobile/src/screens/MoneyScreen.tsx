@@ -122,18 +122,29 @@ export const MoneyScreen = ({
         <span className="act-chev">›</span>
       </button>
 
-      {/* The market is a place you go, the way BitLife puts it under Assets. */}
-      <button className="act-row mk-entry" onClick={onOpenMarket}>
+      {/*
+        * The market is a place you go, the way BitLife puts it under Assets.
+        * Locked, it stays on the list and says why — the same rule the
+        * Activities list follows, and the reason a fourteen-year-old used to
+        * walk in and be handed an error instead of an answer.
+        */}
+      <button
+        className={`act-row mk-entry${market?.locked ? ' locked' : ''}`}
+        disabled={!!market?.locked}
+        onClick={onOpenMarket}
+      >
         <span className="act-icon">📈</span>
         <span className="act-text">
           <span className="act-label">Stock Market</span>
           <span className="act-note">
-            {market && market.totalCents > 0
-              ? `${market.total} in shares · ${market.invested} put in`
-              : 'Buy shares in twelve companies'}
+            {market?.locked
+              ? market.locked
+              : market && market.totalCents > 0
+                ? `${market.total} in shares · ${market.invested} put in`
+                : 'Buy shares in twelve companies'}
           </span>
         </span>
-        <span className="act-chev">›</span>
+        <span className="act-chev">{market?.locked ? '🔒' : '›'}</span>
       </button>
 
       {money.debts.length > 0 && (

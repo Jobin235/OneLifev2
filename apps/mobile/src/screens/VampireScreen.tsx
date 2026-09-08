@@ -24,13 +24,19 @@ export const VampireScreen = ({
           find him. You would not get old after that, and something would start looking for
           you.
         </p>
-        <button className="act-row" disabled={busy} onClick={() => onAct('turn')}>
+        <button
+          className={`act-row${vampire.locked ? ' locked' : ''}`}
+          disabled={busy || !!vampire.locked}
+          onClick={() => onAct('turn')}
+        >
           <span className="act-icon">🧛</span>
           <span className="act-text">
             <span className="act-label">Go and find him</span>
-            <span className="act-note">There is no undoing this one</span>
+            <span className="act-note">
+              {vampire.locked ?? 'There is no undoing this one'}
+            </span>
           </span>
-          <span className="act-chev">›</span>
+          <span className="act-chev">{vampire.locked ? '🔒' : '›'}</span>
         </button>
       </div>
     );

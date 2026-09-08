@@ -3,7 +3,7 @@ import { SCHEMA_VERSION, type LifeState } from '@lineage/shared-types';
 import { localContent } from './localContent';
 import { forget, remember, rewind, rewindOptions, type Snapshot } from '@lineage/game';
 import { safeStorage } from './storage';
-import type { Api } from './api';
+import { ApiError, type Api } from './api';
 
 /**
  * Runs the whole simulation in the browser, behind the same interface the real
@@ -92,7 +92,7 @@ export const createLocalApi = (): Api => {
 
   const view = (state: LifeState) => ({ life: lifeView(state, game.content) as never });
 
-  return {
+  const api: Api = {
     countries: async () => ({
       countries: game.content.countries.map((c) => ({
         id: c.id,
@@ -466,4 +466,38 @@ export const createLocalApi = (): Api => {
       return legacy as never;
     },
   };
+
+  return speakingPlainly(api);
 };
+
+/**
+ * Turns a refused move into a reason the player can read.
+ *
+ * The engine says no by throwing — `TradeRejected('you have to be 18 to hold
+ * shares')`, `VampireRejected('he will not do it to a child')`. Over HTTP the
+ * server catches those and sends the message back with a status, so the real
+ * client shows the reason. This build has no server between the two, so every
+ * refusal arrived at the UI as a bare exception and was reported as "Something
+ * went wrong." — a rule working exactly as designed, presented as a crash.
+ *
+ * Wrapping every method is the right shape rather than a catch in each one:
+ * there are sixty of them and the next one added would have had the same bug.
+ */
+const speakingPlainly = (api: Api): Api =>
+  new Proxy(api, {
+    get(target, key) {
+      const value = target[key as keyof Api];
+      if (typeof value !== 'function') return value;
+      return async (...args: unknown[]) => {
+        try {
+          return await (value as (...a: unknown[]) => Promise<unknown>).apply(target, args);
+        } catch (error) {
+          if (error instanceof ApiError) throw error;
+          const message = error instanceof Error ? error.message : String(error);
+          // Sentence case: the engine writes rejections in lower case because
+          // they read as clauses ("cannot X: you are too young").
+          throw new ApiError(message.charAt(0).toUpperCase() + message.slice(1), 400);
+        }
+      };
+    },
+  });

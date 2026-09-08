@@ -47,7 +47,7 @@ export const turnVampire = (state: LifeState, config: GameConfig): LifeState => 
   if (isVampire(state)) throw new VampireRejected('you already are one');
   if (!state.character.alive) throw new VampireRejected('it is too late for that');
   if (state.activeEvent) throw new VampireRejected('answer the open decision first');
-  if (state.character.age < 18) throw new VampireRejected('he will not do it to a child');
+  if (state.character.age < TURN_AGE) throw new VampireRejected('he will not do it to a child');
 
   const before = structuredClone(state);
   try {
@@ -287,6 +287,8 @@ export const vampireHoldsAge = (state: LifeState): boolean => isVampire(state);
 export interface VampireView {
   /** Null when they are not one; the row still shows, to offer it. */
   turned: boolean;
+  /** Why you cannot go and find him. Null when you can, or already have. */
+  locked: string | null;
   lord: boolean;
   essence: number;
   /** 0..100 for the bar, since essence has no ceiling. */
@@ -313,8 +315,31 @@ const COPY: Record<VampireAction, { emoji: string; label: string; note: string }
   coffin: { emoji: '⚰️', label: 'Sleep it off', note: 'A year underground, and they forget you' },
 };
 
+/**
+ * Why you cannot go and find him, or null.
+ *
+ * The age gate lived only in `turnVampire`, so the screen offered "Go and find
+ * him" to a fourteen-year-old and the refusal arrived as an error. Every other
+ * locked thing in this game states its reason on the row it is attached to —
+ * see the casino and the black market, which say "They will not let you in" and
+ * "Nobody will deal with a child" — and this is the same rule.
+ */
+export const turnLock = (state: LifeState): string | null => {
+  if (isVampire(state)) return 'You already are one';
+  if (!state.character.alive) return 'It is too late for that';
+  if (state.character.record.incarceration) return 'Not from in here';
+  if (state.character.age < TURN_AGE) return 'He will not do it to a child';
+  if (state.activeEvent) return 'Answer the open decision first';
+  return null;
+};
+
+/** He is not interested in children, and neither is the story. */
+export const TURN_AGE = 18;
+
 export const vampireView = (state: LifeState): VampireView => ({
   turned: isVampire(state),
+  /** Why the offer is closed, when it is. */
+  locked: turnLock(state),
   lord: isLord(state),
   essence: essence(state),
   essenceBar: Math.min(100, Math.round((essence(state) / LORD_AT) * 100)),
