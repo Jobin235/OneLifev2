@@ -5,3 +5,4 @@ export * from './participants.js';
 export * from './text.js';
 export * from './selection.js';
 export * from './resolve.js';
+export * from './text.js';

@@ -1,0 +1,881 @@
+[
+  {
+    "id": "work_the_hours",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🕗",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 46,
+    "minAge": 16,
+    "maxAge": 90,
+    "conditions": {
+      "field": "career.employed",
+      "op": "==",
+      "value": true
+    },
+    "participants": [],
+    "title": "Hours",
+    "body": "Your manager at {employer} wants five more hours a week out of you. Nobody has mentioned paying for them.",
+    "question": "What do you say?",
+    "choices": [
+      {
+        "id": "yes",
+        "label": "Put in the extra hours",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "They noticed",
+            "text": "You did the hours and somebody above your manager heard about it.",
+            "historyLine": "You started putting in five unpaid hours a week at {employer}.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -5
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "no",
+        "label": "Say no, politely",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "Noted",
+            "text": "Your manager said that was fine in the tone people use when it is not.",
+            "historyLine": "You refused the extra hours at {employer}.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": -6
+              },
+              {
+                "op": "career_performance",
+                "delta": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rude",
+        "label": "Tell them what you think of the idea",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "That was said out loud",
+            "text": "It went quiet. Somebody in the next room heard all of it.",
+            "historyLine": "You told your manager at {employer} exactly what you thought of unpaid overtime.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": -18
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 8
+              },
+              {
+                "op": "karma",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 8
+  },
+  {
+    "id": "work_the_shortcut",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🤫",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 44,
+    "minAge": 16,
+    "maxAge": 90,
+    "conditions": {
+      "field": "career.employed",
+      "op": "==",
+      "value": true
+    },
+    "participants": [],
+    "title": "Nobody would know",
+    "body": "There is a part of the job at {employer} that nobody checks, and today you realise nobody has ever checked it.",
+    "question": "What do you do?",
+    "choices": [
+      {
+        "id": "properly",
+        "label": "Do it properly anyway",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You did it properly",
+            "text": "It took the extra hour it always takes. Nobody said anything, because nobody ever does.",
+            "historyLine": "You did the part of the job nobody checks, properly.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 5
+              },
+              {
+                "op": "karma",
+                "delta": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "skip",
+        "label": "Skip it",
+        "outcomes": [
+          {
+            "id": "a",
+            "title": "Nobody knew",
+            "text": "You went home an hour early and the world did not end.",
+            "historyLine": "You started skipping the part of the job nobody checks.",
+            "weight": 3,
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 5
+              },
+              {
+                "op": "karma",
+                "delta": -5
+              }
+            ]
+          },
+          {
+            "id": "b",
+            "title": "Somebody checked",
+            "text": "For the first time in eleven years, somebody checked.",
+            "historyLine": "You got caught skipping the part of the job nobody checks.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": -22
+              },
+              {
+                "op": "karma",
+                "delta": -5
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 6
+  },
+  {
+    "id": "work_the_colleague",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "☕",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 45,
+    "minAge": 18,
+    "maxAge": 90,
+    "conditions": {
+      "field": "career.employed",
+      "op": "==",
+      "value": true
+    },
+    "participants": [],
+    "title": "Somebody is struggling",
+    "body": "The person at the next desk has been getting things wrong for a month and has not told anybody. You are the only one who has noticed.",
+    "question": "What do you do?",
+    "choices": [
+      {
+        "id": "cover",
+        "label": "Quietly fix it for them",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "They never knew",
+            "text": "You did their work and yours for a month and they never worked out why it stopped going wrong.",
+            "historyLine": "You quietly covered for somebody at work for a month.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "karma",
+                "delta": 9
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -4
+              },
+              {
+                "op": "career_performance",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "tell_them",
+        "label": "Tell them, privately",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "They knew",
+            "text": "They said they knew. Then they said thank you, and meant it.",
+            "historyLine": "You told a colleague, privately, that their work was slipping.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "karma",
+                "delta": 6
+              },
+              {
+                "op": "stat",
+                "stat": "charm",
+                "delta": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "report",
+        "label": "Tell your manager",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "It was handled",
+            "text": "It was handled. They cleared their desk on the Friday and nobody has mentioned them since.",
+            "historyLine": "You reported a colleague and they were let go.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 8
+              },
+              {
+                "op": "karma",
+                "delta": -12
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 5
+  },
+  {
+    "id": "work_the_till",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "💷",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 47,
+    "minAge": 16,
+    "maxAge": 90,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.industry",
+          "op": "in",
+          "value": [
+            "Retail",
+            "Hospitality",
+            "Services",
+            "Facilities",
+            "Transport",
+            "Logistics"
+          ]
+        }
+      ]
+    },
+    "participants": [],
+    "title": "The float is short",
+    "body": "The till at {employer} is forty short and you are the one who counted it. You know exactly who took it and it was not you.",
+    "question": "What do you do?",
+    "choices": [
+      {
+        "id": "cover",
+        "label": "Make it up out of your own pocket",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You covered it",
+            "text": "You put your own forty in the drawer and said nothing, and the person who took it knows you did.",
+            "historyLine": "You covered a shortfall in the till out of your own pocket.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "money",
+                "delta": -4000
+              },
+              {
+                "op": "karma",
+                "delta": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "name",
+        "label": "Say who took it",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You said the name",
+            "text": "They were walked out before lunch. Two people have not spoken to you since.",
+            "historyLine": "You named the person who was taking from the till.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 10
+              },
+              {
+                "op": "karma",
+                "delta": -3
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "join",
+        "label": "Take some yourself",
+        "outcomes": [
+          {
+            "id": "a",
+            "title": "You took some too",
+            "text": "It is remarkably easy the second time.",
+            "historyLine": "You started taking from the till at {employer}.",
+            "weight": 3,
+            "effects": [
+              {
+                "op": "money",
+                "delta": 90000
+              },
+              {
+                "op": "karma",
+                "delta": -14
+              }
+            ]
+          },
+          {
+            "id": "b",
+            "title": "They were counting",
+            "text": "It turns out the reason the float was short was that somebody upstairs had started counting.",
+            "historyLine": "You were caught taking from the till.",
+            "weight": 2,
+            "effects": [
+              {
+                "op": "charge",
+                "offence": "Theft from an employer",
+                "sentenceYears": 2,
+                "fine": 60000,
+                "facility": "the county jail"
+              },
+              {
+                "op": "karma",
+                "delta": -14
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 5
+  },
+  {
+    "id": "work_the_patient",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🩺",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 50,
+    "minAge": 20,
+    "maxAge": 90,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.industry",
+          "op": "in",
+          "value": [
+            "Healthcare",
+            "Public service",
+            "Education"
+          ]
+        }
+      ]
+    },
+    "participants": [],
+    "title": "The one you remember",
+    "body": "Somebody came through today who should not have been your problem, and you have not stopped thinking about them since.",
+    "question": "What do you do about it?",
+    "choices": [
+      {
+        "id": "extra",
+        "label": "Stay late and sort it out",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You stayed",
+            "text": "You did what could be done, which was more than nothing and less than enough.",
+            "historyLine": "You stayed late for somebody who was not strictly your problem.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "karma",
+                "delta": 11
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -5
+              },
+              {
+                "op": "career_performance",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "protocol",
+        "label": "Follow the protocol and go home",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You went home",
+            "text": "The protocol exists because people who do not follow it stop being able to do this at all.",
+            "historyLine": "You followed the protocol and went home.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -4
+              },
+              {
+                "op": "career_performance",
+                "delta": 2
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 8
+  },
+  {
+    "id": "work_the_corner",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🔧",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 48,
+    "minAge": 18,
+    "maxAge": 90,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.industry",
+          "op": "in",
+          "value": [
+            "Construction",
+            "Engineering",
+            "Manufacturing",
+            "Automotive",
+            "Agriculture",
+            "Property"
+          ]
+        }
+      ]
+    },
+    "participants": [],
+    "title": "Cutting a corner",
+    "body": "There is a way of doing this that saves two days and a great deal of money, and the only reason not to is that it is the sort of thing that goes wrong eleven years later.",
+    "question": "What do you do?",
+    "choices": [
+      {
+        "id": "proper",
+        "label": "Do it the long way",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "Two days longer",
+            "text": "It took the two days. In eleven years nobody will know that it did.",
+            "historyLine": "You did the job the long way when nobody would have known.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "karma",
+                "delta": 8
+              },
+              {
+                "op": "career_performance",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cut",
+        "label": "Take the two days",
+        "outcomes": [
+          {
+            "id": "a",
+            "title": "Nobody will ever know",
+            "text": "It came in early and under, and everybody was very pleased.",
+            "historyLine": "You cut a corner on a job and came in early.",
+            "weight": 3,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 12
+              },
+              {
+                "op": "money",
+                "delta": 240000
+              },
+              {
+                "op": "karma",
+                "delta": -10
+              }
+            ]
+          },
+          {
+            "id": "b",
+            "title": "Eleven years is not that long",
+            "text": "It did not take eleven years. It took four, and somebody was standing under it.",
+            "historyLine": "A corner you cut years ago failed, and somebody was hurt.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "charge",
+                "offence": "Criminal negligence",
+                "sentenceYears": 5,
+                "fine": 200000,
+                "facility": "the county jail"
+              },
+              {
+                "op": "karma",
+                "delta": -20
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 6,
+    "maxPerLife": 4
+  },
+  {
+    "id": "work_the_number",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "📊",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 49,
+    "minAge": 20,
+    "maxAge": 90,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.industry",
+          "op": "in",
+          "value": [
+            "Finance",
+            "Business",
+            "Legal",
+            "Professional services",
+            "Technology",
+            "Media"
+          ]
+        }
+      ]
+    },
+    "participants": [],
+    "title": "A number that could be a different number",
+    "body": "The figure going upstairs is true and it is bad. There is another way of arriving at it that is also, if you are careful about the words, true.",
+    "question": "Which one goes up?",
+    "choices": [
+      {
+        "id": "true",
+        "label": "The bad one",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You sent the bad one",
+            "text": "It was received the way bad numbers are received. Your name is on it either way, which was rather the point.",
+            "historyLine": "You sent up the bad number rather than the other one.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "karma",
+                "delta": 9
+              },
+              {
+                "op": "career_performance",
+                "delta": -5
+              },
+              {
+                "op": "reputation",
+                "delta": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "other",
+        "label": "The other one",
+        "outcomes": [
+          {
+            "id": "a",
+            "title": "Everybody was pleased",
+            "text": "Nobody asked how it had been arrived at, which is how these things work.",
+            "historyLine": "You sent up a number that was technically true.",
+            "weight": 3,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 14
+              },
+              {
+                "op": "karma",
+                "delta": -9
+              }
+            ]
+          },
+          {
+            "id": "b",
+            "title": "Somebody asked",
+            "text": "Somebody asked how it had been arrived at.",
+            "historyLine": "You were caught massaging a figure at {employer}.",
+            "weight": 2,
+            "effects": [
+              {
+                "op": "career_leave",
+                "reason": "fired"
+              },
+              {
+                "op": "reputation",
+                "delta": -20
+              },
+              {
+                "op": "karma",
+                "delta": -9
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 5
+  },
+  {
+    "id": "work_the_night",
+    "version": 1,
+    "category": "career",
+    "card": {
+      "icon": "🌙",
+      "label": "WORK",
+      "tint": "#EAF1FA",
+      "color": "#2C5C8F"
+    },
+    "weightClass": "minor",
+    "priority": 43,
+    "minAge": 18,
+    "maxAge": 90,
+    "conditions": {
+      "all": [
+        {
+          "field": "career.employed",
+          "op": "==",
+          "value": true
+        },
+        {
+          "field": "career.years_in_role",
+          "op": ">=",
+          "value": 3
+        }
+      ]
+    },
+    "participants": [],
+    "title": "The drive home",
+    "body": "You have been doing this a long time and tonight, in the car park, you sat for a while before starting the engine.",
+    "question": "What is that about?",
+    "choices": [
+      {
+        "id": "fine",
+        "label": "Nothing. It is a job",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "It is a job",
+            "text": "You started the engine and drove home and did it again the next day.",
+            "historyLine": "You sat in the car park for a while before driving home.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "change",
+        "label": "Something has to change",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "Something has to change",
+            "text": "You do not know what yet. But you have said it to yourself now, which is how these things start.",
+            "historyLine": "You admitted to yourself that something about work had to change.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": -6
+              },
+              {
+                "op": "stat",
+                "stat": "happiness",
+                "delta": 4
+              },
+              {
+                "op": "flag",
+                "key": "wants_out",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "harder",
+        "label": "Go back in tomorrow and do it better",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "You went back in",
+            "text": "You were the first one there for a month. It helped, for a month.",
+            "historyLine": "You threw yourself back into the job.",
+            "weight": 1,
+            "effects": [
+              {
+                "op": "career_performance",
+                "delta": 11
+              },
+              {
+                "op": "stat",
+                "stat": "health",
+                "delta": -4
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 5,
+    "maxPerLife": 8
+  }
+]

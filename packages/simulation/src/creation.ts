@@ -154,6 +154,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
       annualExpenses: 0,
     },
     fame: { knownFor: null, following: 0, fans: 0, indifferent: 100, haters: 0, reach: 'none' },
+    karma: 0,
     record: { convictions: [], incarceration: null },
     conditions: [],
     habitIds: [],
@@ -283,6 +284,7 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     mob: null,
     ventures: [],
     vigilante: null,
+    recentActivity: { fitness: 0, study: 0, charm: 0 },
     assets: [],
     businesses: [],
     flags: {

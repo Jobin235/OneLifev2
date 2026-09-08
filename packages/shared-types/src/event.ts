@@ -137,6 +137,12 @@ export const EffectSchema = z.discriminatedUnion('op', [
    * illness and this particular pair of doctors, not to the definition.
    */
   z.object({ op: z.literal('treatment'), option: z.number().int().min(0).max(3) }),
+  /**
+   * Pays for whichever of the accumulated conditions the player picked off the
+   * check-up card. The condition and its price ride in flags, because they
+   * belong to this particular body rather than to the definition.
+   */
+  z.object({ op: z.literal('treat_condition') }),
   /** Answers the love-interest card currently on screen. */
   z.object({ op: z.literal('court'), askedOut: z.boolean() }),
   /** Goes looking. Raises a love-interest card rather than changing anything. */
@@ -182,6 +188,12 @@ export const EffectSchema = z.discriminatedUnion('op', [
   z.object({ op: z.literal('extend_sentence'), years: z.number().int().min(1) }),
   z.object({ op: z.literal('fame'), following: z.number().int().default(0), fans: z.number().int().default(0), haters: z.number().int().default(0), knownFor: z.string().optional() }),
   z.object({ op: z.literal('reputation'), delta: z.number().int() }),
+  /**
+   * The moral ledger. BitLife keeps one and only shows it on the gravestone;
+   * ours is read during the life as well — by juries, parole boards, the people
+   * who decide whether to forgive you, and who turns up at the end.
+   */
+  z.object({ op: z.literal('karma'), delta: z.number().int() }),
   /** Moves grade points (0..400, four points to a GPA decimal). No-op out of school. */
   z.object({ op: z.literal('grades'), delta: z.number().int() }),
   /** Standing among the other students. No-op out of school. */

@@ -802,8 +802,8 @@
         ]
       }
     ],
-    "cooldownYears": 10,
-    "maxPerLife": 1
+    "cooldownYears": 6,
+    "maxPerLife": 4
   },
   {
     "id": "fame_you_got_noticed",

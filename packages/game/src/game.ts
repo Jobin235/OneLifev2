@@ -401,6 +401,25 @@ export class Game {
       state.activityUsage[activityId] = used + 1;
       state.step += 1;
 
+      /*
+       * Doing the thing is also a record that you have been doing the thing.
+       *
+       * The drifting stats aim at a target built from this rather than at a
+       * fixed number, so training has to leave a mark that outlasts the year —
+       * otherwise fitness is a bucket with a hole in it and slides to zero by
+       * fifty-five, which is exactly what it used to do. Read generically off
+       * the effects: an activity that raises fitness is training, whatever it
+       * is called.
+       */
+      if (!backfired) {
+        for (const effect of activity.effects as Array<{ op?: string; stat?: string; delta?: number }>) {
+          if (effect.op !== 'stat' || (effect.delta ?? 0) <= 0) continue;
+          const key =
+            effect.stat === 'fitness' ? 'fitness' : effect.stat === 'smarts' ? 'study' : effect.stat === 'charm' ? 'charm' : null;
+          if (key) state.recentActivity[key] = Math.min(8, state.recentActivity[key] + 1);
+        }
+      }
+
       if (!activity.silent) {
         pushHistory(
           state,

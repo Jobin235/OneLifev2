@@ -264,8 +264,8 @@
         ]
       }
     ],
-    "cooldownYears": 8,
-    "maxPerLife": 1,
+    "cooldownYears": 9,
+    "maxPerLife": 3,
     "tags": [
       "ladder"
     ]

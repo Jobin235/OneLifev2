@@ -33,7 +33,14 @@ describe('being known', () => {
   };
 
   it('starts everybody unknown', () => {
-    const view = game.fame(adult('unknown-1'));
+    /*
+     * A life that has not gone looking for it. Twenty-two years of ordinary
+     * events can hand somebody a few thousand followers by accident, which is
+     * correct — but it is not what this is measuring.
+     */
+    const state = adult('unknown-1');
+    state.character.fame = { ...state.character.fame, following: 0, fans: 0, haters: 0, indifferent: 100 };
+    const view = game.fame(state);
     expect(view.following).toBe(0);
     expect(view.line).toBe('Nobody knows who you are.');
     expect(view.famous).toBe(false);

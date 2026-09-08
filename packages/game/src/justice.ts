@@ -209,8 +209,18 @@ export const settlePlea = (
    * nothing.
    */
   const priors = character.record.convictions.length;
+  /*
+   * And the kind of person you have been, which the character-witness half of
+   * a trial is entirely about. Worth roughly a third of a good lawyer at the
+   * extremes and nothing at all in the middle, so it rewards a life rather than
+   * a gesture.
+   */
   const defence =
-    standing * 0.75 + character.stats.charm * 0.2 + character.hidden.luck * 0.15 - priors * 9;
+    standing * 0.75 +
+    character.stats.charm * 0.2 +
+    character.hidden.luck * 0.15 +
+    character.karma * 0.22 -
+    priors * 9;
 
   const acquitChance =
     how === 'not_guilty'

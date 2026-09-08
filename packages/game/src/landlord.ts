@@ -64,6 +64,16 @@ export const AMENITIES: Amenity[] = [
  * What a place lets for in a year: a share of what it is worth, adjusted for the
  * state of it and whatever has been put in.
  */
+/**
+ * What somebody would pay to live there for a year.
+ *
+ * A little over 5% of what the place is worth, which is only a sensible number
+ * because upkeep on somewhere people live is around 2% of its value — the two
+ * are set against each other on purpose. When residential upkeep sat at 4-10%
+ * of price, a let flat lost money before a tenant had even missed a payment,
+ * and owning where you lived cost more than renting it: the shop and the
+ * whole landlord track were arithmetic traps.
+ */
 export const marketRent = (asset: Asset): number => {
   const lift = asset.amenityIds.reduce(
     (sum, id) => sum + (AMENITIES.find((a) => a.id === id)?.rentLift ?? 0),

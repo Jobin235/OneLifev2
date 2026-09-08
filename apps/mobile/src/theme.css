@@ -3768,3 +3768,20 @@ button {
   font-weight: 800;
   color: var(--muted);
 }
+
+/* The ledger on the gravestone. Shown once, at the end, and never before. */
+.karma {
+  margin: 20px auto 0;
+  max-width: 300px;
+  text-align: left;
+}
+
+.karma-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--muted);
+}

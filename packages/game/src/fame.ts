@@ -111,7 +111,14 @@ export const advanceFameYear = (state: LifeState, content: ContentPack, rng: Rng
      */
     const rung = track.rungs.findIndex((r) => r.id === job!.rungId);
     const standing = (rung + 1) / track.rungs.length;
-    const screenLift = track.auditions ? 0.6 + presence(character.stats) / 140 : 1;
+    /*
+     * Presence is a modifier, not a gate. It used to run from 0.6 to 1.3 and
+     * read the *current* stats — which was fine while charm sat at 95 for
+     * everybody and stopped being fine when charm started drifting down with
+     * age. A sixty-year-old film star is still a film star; the job is most of
+     * why anybody knows them.
+     */
+    const screenLift = track.auditions ? 0.85 + presence(character.stats) / 220 : 1;
     /*
      * Fame compounds — being known is most of how you get known — but not
      * without limit, or one good decade would carry a person past the number of
@@ -123,7 +130,7 @@ export const advanceFameYear = (state: LifeState, content: ContentPack, rng: Rng
         standing *
         standing *
         screenLift *
-        Math.min(4, 1 + fame.following / 90_000),
+        Math.min(5, 1 + fame.following / 70_000),
     );
     applyFameDelta(character, {
       following: gained,

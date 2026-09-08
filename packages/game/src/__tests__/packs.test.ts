@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../node.js';
+import { livingAdult } from './fixtures.js';
 import { LORD_AT } from '../vampire.js';
 import type { LifeState } from '@lineage/shared-types';
 
@@ -12,16 +13,7 @@ const clear = (state: LifeState): LifeState => {
 };
 
 const adult = (seed: string, age = 26, cents = 50_000_000_00): LifeState => {
-  let s = game.newLife({ countryId: 'us', upbringing: 'comfortable', seed });
-  while (s.character.alive && s.character.age < age) {
-    if (s.activeEvent) {
-      s = game.choose(s, s.activeEvent.id, s.activeEvent.choices[0]!.id);
-      continue;
-    }
-    s = game.ageUp(s).state;
-  }
-  s = clear(s);
-  s.character.record.incarceration = null;
+  const s = livingAdult(game, seed, { toAge: age });
   s.character.finances.savings = cents;
   return s;
 };

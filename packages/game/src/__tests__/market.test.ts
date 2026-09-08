@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../node.js';
+import { livingAdult } from './fixtures.js';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeState } from '@lineage/shared-types';
 
@@ -13,19 +14,7 @@ const game = createGame();
  */
 describe('the stock market', () => {
   const investor = (seed: string, cash = 300_000_00): LifeState => {
-    let state = game.newLife({ countryId: 'us', upbringing: 'comfortable', seed });
-    while (state.character.alive && state.character.age < 25) {
-      if (state.activeEvent) {
-        state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
-        continue;
-      }
-      state = game.ageUp(state).state;
-    }
-    while (state.activeEvent) {
-      state = game.choose(state, state.activeEvent.id, state.activeEvent.choices[0]!.id);
-    }
-    state = game.dismiss(state);
-    state.character.record.incarceration = null;
+    const state = livingAdult(game, seed, { toAge: 25 });
     state.character.finances.savings = cash;
     return state;
   };

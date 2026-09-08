@@ -80,7 +80,8 @@
       "field": "count.children",
       "op": ">=",
       "value": 1
-    }
+    },
+    "maxPerLife": 2
   },
   {
     "id": "late_grandchild",
@@ -96,7 +97,7 @@
     "priority": 78,
     "minAge": 55,
     "maxAge": 95,
-    "cooldownYears": 12,
+    "cooldownYears": 5,
     "participants": [],
     "title": "There is a baby, and it is yours to hold.",
     "body": "Your own child is standing there looking exactly as frightened as you remember being.",
@@ -158,7 +159,8 @@
       "field": "count.children",
       "op": ">=",
       "value": 1
-    }
+    },
+    "maxPerLife": 5
   },
   {
     "id": "late_the_diagnosis",
@@ -174,7 +176,7 @@
     "priority": 82,
     "minAge": 55,
     "maxAge": 100,
-    "cooldownYears": 9,
+    "cooldownYears": 5,
     "participants": [],
     "title": "The results came back and the doctor sat down.",
     "body": "It is treatable. Treatable is doing a lot of work in that sentence, and you both know it.",
@@ -260,7 +262,8 @@
       "field": "stats.health",
       "op": "<",
       "value": 70
-    }
+    },
+    "maxPerLife": 4
   },
   {
     "id": "late_child_asks",
@@ -276,7 +279,7 @@
     "priority": 76,
     "minAge": 50,
     "maxAge": 90,
-    "cooldownYears": 9,
+    "cooldownYears": 6,
     "participants": [],
     "title": "Your child needs money and has finally asked.",
     "body": "They have clearly rehearsed it. They are nearly forty and they hated every second of asking.",
@@ -351,7 +354,8 @@
       "field": "count.children",
       "op": ">=",
       "value": 1
-    }
+    },
+    "maxPerLife": 4
   },
   {
     "id": "late_old_friend",
@@ -367,7 +371,7 @@
     "priority": 70,
     "minAge": 58,
     "maxAge": 100,
-    "cooldownYears": 11,
+    "cooldownYears": 6,
     "participants": [],
     "title": "Somebody you have not spoken to in twenty years has died.",
     "body": "You found out from a message from somebody else. The funeral is on Thursday.",
@@ -415,7 +419,8 @@
           }
         ]
       }
-    ]
+    ],
+    "maxPerLife": 4
   },
   {
     "id": "late_the_house",
@@ -493,7 +498,8 @@
       "field": "money.total",
       "op": ">=",
       "value": 2000000
-    }
+    },
+    "maxPerLife": 2
   },
   {
     "id": "late_asked_to_speak",
@@ -509,7 +515,7 @@
     "priority": 66,
     "minAge": 60,
     "maxAge": 95,
-    "cooldownYears": 9,
+    "cooldownYears": 6,
     "participants": [],
     "title": "They want you to talk to a room of people starting out.",
     "body": "You are being introduced as someone who knows how it is done, which is not how it felt.",
@@ -579,7 +585,8 @@
           }
         ]
       }
-    ]
+    ],
+    "maxPerLife": 3
   },
   {
     "id": "late_regret",
@@ -595,7 +602,7 @@
     "priority": 68,
     "minAge": 62,
     "maxAge": 100,
-    "cooldownYears": 14,
+    "cooldownYears": 8,
     "participants": [],
     "title": "There is one thing you never did.",
     "body": "It comes back at odd hours. You are old enough now that it is either this year or never.",
@@ -647,7 +654,8 @@
           }
         ]
       }
-    ]
+    ],
+    "maxPerLife": 3
   },
   {
     "id": "late_who_visits",
@@ -663,7 +671,7 @@
     "priority": 71,
     "minAge": 68,
     "maxAge": 100,
-    "cooldownYears": 9,
+    "cooldownYears": 5,
     "participants": [],
     "title": "One of them visits every week. The others do not.",
     "body": "You have never said anything about it. You have noticed every single time.",
@@ -711,7 +719,8 @@
       "field": "count.children",
       "op": ">=",
       "value": 2
-    }
+    },
+    "maxPerLife": 5
   },
   {
     "id": "late_the_offer",
@@ -782,7 +791,8 @@
       "field": "has.business",
       "op": "==",
       "value": true
-    }
+    },
+    "maxPerLife": 2
   },
   {
     "id": "late_moving_in",
@@ -884,7 +894,8 @@
       "field": "count.children",
       "op": ">=",
       "value": 1
-    }
+    },
+    "maxPerLife": 2
   },
   {
     "id": "late_the_letter",
@@ -900,7 +911,7 @@
     "priority": 67,
     "minAge": 65,
     "maxAge": 100,
-    "cooldownYears": 14,
+    "cooldownYears": 8,
     "participants": [],
     "title": "You have started writing to somebody you fell out with.",
     "body": "It was forty years ago. You cannot now defend your side of it with a straight face.",
@@ -943,7 +954,8 @@
           }
         ]
       }
-    ]
+    ],
+    "maxPerLife": 3
   },
   {
     "id": "late_still_here",
@@ -959,7 +971,7 @@
     "priority": 64,
     "minAge": 80,
     "maxAge": 110,
-    "cooldownYears": 8,
+    "cooldownYears": 5,
     "participants": [],
     "title": "You have outlived nearly everyone you started with.",
     "body": "There is almost nobody left who remembers you young. It is a strange kind of quiet.",
@@ -1021,6 +1033,7 @@
           }
         ]
       }
-    ]
+    ],
+    "maxPerLife": 6
   }
 ]

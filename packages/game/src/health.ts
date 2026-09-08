@@ -220,3 +220,155 @@ export const settleTreatment = (state: LifeState, option: number): void => {
   }
   void pushHistory;
 };
+
+/* ------------------------------------------------------------------ *
+ * The check-up
+ * ------------------------------------------------------------------ */
+
+/**
+ * What is actually wrong with you, and which of it you are paying to fix.
+ *
+ * Conditions accumulate — measured, the median sixty-year-old is carrying four
+ * untreated ones — and until now nothing ever asked about them again. They sat
+ * in the save draining health with no decision attached, which is both the
+ * wrong shape for a life simulator and the reason our late game was empty: 92%
+ * of years after seventy had no decision in them at all.
+ *
+ * BitLife's answer is the one implemented here. The doctor reads the whole list
+ * back at you, each with a price, and you pick one. See
+ * docs/BITLIFE-SYSTEMS-RESEARCH.md.
+ */
+
+/** What one condition costs to see off, before the country's share of it. */
+const treatmentPrice = (condition: HealthCondition, index: number): number => {
+  // Something that drains more is something that costs more to stop draining.
+  const base = 18_000 + condition.annualHealthDrain * 34_000;
+  // Stable per condition rather than random per visit: a price you can save for.
+  return base + (index % 5) * 9_000;
+};
+
+const listOf = (items: string[]): string =>
+  items.length <= 1
+    ? (items[0] ?? '')
+    : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+
+/**
+ * Raises the card, when there is enough wrong to be worth an appointment.
+ *
+ * Deliberately not every year: a doctor's letter every twelve months about the
+ * same four things is nagging rather than a decision.
+ */
+export const openCheckup = (
+  state: LifeState,
+  patientShare: number,
+  content: ContentPack,
+  rng: Rng,
+): boolean => {
+  const definition = content.eventsById.get('health_checkup');
+  if (!definition) return false;
+
+  const untreated = state.character.conditions.filter((c) => !c.treated);
+  if (untreated.length === 0) return false;
+
+  const priced = untreated.map((condition, index) => ({
+    condition,
+    price: Math.max(2_000, Math.round(treatmentPrice(condition, index) * patientShare)),
+  }));
+
+  state.flags.checkup_body = `${
+    priced.length === 1
+      ? `The one thing wrong with you is ${priced[0]!.condition.label.toLowerCase()}.`
+      : `You are living with ${listOf(priced.map((p) => p.condition.label.toLowerCase()))}.`
+  } Nothing here is going to get better on its own.`;
+  state.flags.checkup_result = '';
+  state.flags.checkup_result_title = '';
+  for (const [i, row] of priced.entries()) {
+    state.flags[`checkup_id_${i}`] = row.condition.id;
+    state.flags[`checkup_price_${i}`] = row.price;
+  }
+  state.flags.checkup_count = priced.length;
+
+  const instance = instantiate({ definition, bindings: {}, score: 0, scheduled: null }, state, {
+    state,
+    world: null,
+    bindings: {},
+  } as never);
+
+  /*
+   * The options are this body's, so they are filled here rather than authored.
+   * Same shape as the university major list: content declares the dropdown,
+   * the simulation fills it.
+   */
+  instance.selects = [
+    {
+      id: 'which',
+      label: 'Pick your treatment',
+      options: priced.map((row, i) => ({
+        value: String(i),
+        label: `${row.condition.label} (${formatMoneyExact(row.price)})`,
+      })),
+    },
+  ];
+  instance.facts = [
+    { label: 'Consultation', value: formatMoneyExact(Math.round(10_000 * patientShare)) },
+    {
+      label: 'Carrying',
+      value: `${priced.length} ${priced.length === 1 ? 'thing' : 'things'}`,
+    },
+  ];
+
+  state.activeEvent = instance;
+  state.gameState = 'EVENT_AVAILABLE';
+  void rng;
+  return true;
+};
+
+/** Pays for the one they picked. Called from the deferred layer. */
+export const settleCheckup = (state: LifeState, selection: string): void => {
+  const index = Number(selection || '0');
+  const conditionId = String(state.flags[`checkup_id_${index}`] ?? '');
+  const price = Number(state.flags[`checkup_price_${index}`] ?? 0);
+  const condition = state.character.conditions.find((c) => c.id === conditionId);
+
+  const clear = () => {
+    for (const key of Object.keys(state.flags)) {
+      if (key.startsWith('checkup_id_') || key.startsWith('checkup_price_')) delete state.flags[key];
+    }
+    delete state.flags.checkup_count;
+    delete state.flags.checkup_body;
+  };
+
+  if (!condition) {
+    state.flags.checkup_result_title = 'Nothing was done';
+    state.flags.checkup_result = 'The appointment came and went.';
+    state.flags.checkup_history = 'You went to the doctor and came away with nothing.';
+    clear();
+    return;
+  }
+
+  const purse = state.character.finances.cash + state.character.finances.savings;
+  if (price > purse) {
+    state.flags.checkup_result_title = 'You could not pay for it';
+    state.flags.checkup_result = `Treating ${condition.label.toLowerCase()} costs ${formatMoneyExact(price)}, which you do not have.`;
+    state.flags.checkup_history = `You could not afford to treat your ${condition.label.toLowerCase()}.`;
+    state.character.stats.happiness = clampStat(state.character.stats.happiness - 6);
+    clear();
+    return;
+  }
+
+  const f = state.character.finances;
+  const fromCash = Math.min(f.cash, price);
+  f.cash -= fromCash;
+  f.savings -= price - fromCash;
+
+  condition.treated = true;
+  state.character.stats.health = clampStat(
+    state.character.stats.health + 4 + condition.annualHealthDrain * 2,
+  );
+  state.character.stats.happiness = clampStat(state.character.stats.happiness + 5);
+
+  state.flags.checkup_result_title = 'That is one of them dealt with';
+  state.flags.checkup_result = `${formatMoneyExact(price)}, and your ${condition.label.toLowerCase()} is somebody else's problem now.`;
+  state.flags.checkup_history = `You paid ${formatMoneyExact(price)} to have your ${condition.label.toLowerCase()} treated.`;
+  clear();
+};

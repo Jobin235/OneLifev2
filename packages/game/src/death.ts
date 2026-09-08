@@ -41,6 +41,7 @@ export const buildLegacy = (state: LifeState, content: ContentPack, config: Game
     chapters: buildChapters(state, config),
     howPeopleSawYou: howPeopleSawYou(state),
     whatYouChanged: whatYouChanged(state, lifetimeEmployees, businessYears),
+    karma: karmaVerdict(character.karma),
     numbers: [
       { value: String(age), label: 'years lived' },
       { value: formatMoney(estate), label: 'estate' },
@@ -56,6 +57,27 @@ export const buildLegacy = (state: LifeState, content: ContentPack, config: Game
     whatYouLeft: whatYouLeft(state, estate),
     heirs: heirOptions(state),
   };
+};
+
+/**
+ * The ledger, said out loud once.
+ *
+ * Never shown during the life, so this is the first time the player learns
+ * there was one — which is why the word matters more than the number.
+ */
+const karmaVerdict = (karma: number): { value: number; word: string; share: number } => {
+  const word =
+    karma >= 60
+      ? 'You were good to people'
+      : karma >= 25
+        ? 'You were mostly kind'
+        : karma >= -10
+          ? 'You were neither one thing nor the other'
+          : karma >= -45
+            ? 'You took more than you gave'
+            : 'People were right about you';
+  // 0..100 for the bar, so the middle of the ledger sits in the middle of it.
+  return { value: karma, word, share: Math.round((karma + 100) / 2) };
 };
 
 const epitaphFor = (state: LifeState): string => {

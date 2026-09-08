@@ -745,7 +745,7 @@
       }
     ],
     "cooldownYears": 6,
-    "maxPerLife": 1
+    "maxPerLife": 2
   },
   {
     "id": "school_what_next",

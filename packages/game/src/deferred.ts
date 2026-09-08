@@ -4,7 +4,7 @@ import type { CareerTrack, EducationStage, Effect, LifeState } from '@lineage/sh
 import { makeId, promote, pushHistory, type Rng } from '@lineage/simulation';
 import { bearChild, spawnNpc } from '@lineage/npc-engine';
 import { settleInterview } from './interview.js';
-import { settleTreatment } from './health.js';
+import { settleCheckup, settleTreatment } from './health.js';
 import { openLoveInterest, settleLoveInterest } from './love.js';
 import { openCharges, settleLawyer, settlePlea } from './justice.js';
 import { settleLetting } from './landlord.js';
@@ -183,6 +183,11 @@ export const applyDeferred = (
 
       case 'treatment': {
         settleTreatment(state, effect.option);
+        break;
+      }
+
+      case 'treat_condition': {
+        settleCheckup(state, bindings.which ?? '0');
         break;
       }
 

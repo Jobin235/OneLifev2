@@ -157,6 +157,16 @@ export const CharacterSchema = z.object({
   traitIds: z.array(z.string()),
   finances: FinancesSchema,
   fame: FameSchema,
+  /**
+   * Never shown until the end, −100..100.
+   *
+   * BitLife keeps a hidden Karma and reveals it on the gravestone. Ours does
+   * that and also reads it while the life is running: it moves the odds
+   * wherever another person is deciding something about you — a jury, a parole
+   * board, whether somebody forgives being found out — because a moral ledger
+   * nobody consults is a scoreboard, not a system.
+   */
+  karma: z.number().int().min(-100).max(100).default(0),
   record: CriminalRecordSchema,
   conditions: z.array(HealthConditionSchema),
   /** Habits the simulation charges interest on: smoking, drinking, overwork. */

@@ -51,6 +51,14 @@ export const LegacySchema = z.object({
   ),
   /** "What he actually changed" — only things that outlived him. */
   whatYouChanged: z.array(z.object({ icon: z.string(), line: z.string() })),
+  /**
+   * The ledger, shown for the first and only time.
+   *
+   * BitLife puts Karma on the gravestone next to Happiness and never mentions
+   * it anywhere else, which is exactly right: a number you were never shown is
+   * a verdict rather than a dial. `word` is what to call it out loud.
+   */
+  karma: z.object({ value: z.number().int(), word: z.string(), share: z.number().int() }),
   /** Six figures, exactly as the design lays them out. */
   numbers: z.array(z.object({ value: z.string(), label: z.string() })),
   /** The comparative line: wealthier than N%, happier than N%, remembered by ~N. */

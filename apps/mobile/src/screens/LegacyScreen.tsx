@@ -30,6 +30,32 @@ export const LegacyScreen = ({
         <span className="ribbon-label">{legacy.ribbon.label}</span>
       </div>
       <div className="ribbon-line">{legacy.ribbon.line}</div>
+
+      {/*
+        The ledger, shown for the first and only time. BitLife puts Karma on
+        the gravestone and never mentions it anywhere else, which is exactly
+        right — a number you were never shown is a verdict rather than a dial.
+      */}
+      <div className="karma">
+        <div className="karma-head">
+          <span>Karma</span>
+          <span>{legacy.karma.word}</span>
+        </div>
+        <div className="pr-track">
+          <div
+            className="pr-fill"
+            style={{
+              width: `${Math.max(legacy.karma.share, 2)}%`,
+              background:
+                legacy.karma.value >= 25
+                  ? 'var(--green)'
+                  : legacy.karma.value >= -10
+                    ? 'var(--amber)'
+                    : 'var(--coral)',
+            }}
+          />
+        </div>
+      </div>
       </div>
 
       <section className="legacy-panel">

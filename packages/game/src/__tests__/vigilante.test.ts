@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createGame } from '../node.js';
+import { livingAdult } from './fixtures.js';
 import type { LifeState } from '@lineage/shared-types';
 
 const game = createGame();
@@ -11,19 +12,18 @@ const clear = (state: LifeState): LifeState => {
 };
 
 const adult = (seed: string, cents = 2_000_000_00): LifeState => {
-  let s = game.newLife({ countryId: 'us', upbringing: 'getting_by', seed });
-  while (s.character.alive && s.character.age < 22) {
-    if (s.activeEvent) {
-      s = game.choose(s, s.activeEvent.id, s.activeEvent.choices[0]!.id);
-      continue;
-    }
-    s = game.ageUp(s).state;
-  }
-  s = clear(s);
-  s.character.record.incarceration = null;
+  const s = livingAdult(game, seed, { toAge: 22, upbringing: 'getting_by' });
   s.character.finances.savings = cents;
   return s;
 };
+
+/**
+ * Whether tonight can happen at all. A cell stops the second life the same way
+ * it stops the first one, and these are tests about the unmasking, not about
+ * whatever the day job talked them into.
+ */
+const free = (state: LifeState): boolean =>
+  state.vigilante !== null && state.character.record.incarceration === null;
 
 /** Goes out and answers the incident the given way. */
 const night = (state: LifeState, how: string): LifeState => {
@@ -124,7 +124,7 @@ describe('the other life', () => {
       let s = game.startVigilante(adult(`vig-end-${seed}`));
       s = game.buyGear(s, 'mask');
       for (let year = 0; year < 40 && s.character.alive && s.vigilante; year++) {
-        for (let i = 0; i < 3 && s.vigilante; i++) s = night(s, 'police');
+        for (let i = 0; i < 3 && free(s); i++) s = night(s, 'police');
         s = clear(game.ageUp(s).state);
       }
       if (s.flags.unmasked) {
@@ -148,7 +148,7 @@ describe('the other life', () => {
     for (let seed = 0; seed < 25; seed++) {
       let s = game.startVigilante(adult(`vig-hard-${seed}`));
       for (let year = 0; year < 40 && s.character.alive && s.vigilante; year++) {
-        for (let i = 0; i < 3 && s.vigilante; i++) s = night(s, 'hard');
+        for (let i = 0; i < 3 && free(s); i++) s = night(s, 'hard');
         s = clear(game.ageUp(s).state);
       }
       if (s.flags.unmasked) {

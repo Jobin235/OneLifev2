@@ -307,6 +307,12 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
       return null;
     }
 
+    case 'karma': {
+      character.karma = Math.max(-100, Math.min(100, character.karma + effect.delta));
+      // Deliberately silent: the player is never told the number.
+      return null;
+    }
+
     case 'reputation':
       // Reputation is carried by charm plus record; the pill is what matters here.
       character.stats.charm = clampStat(character.stats.charm + Math.round(effect.delta * 0.4));
@@ -365,7 +371,34 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
       const inside = character.record.incarceration;
       if (!inside) return null;
       // Parole is a door that has to be open. Appeal and escape make their own.
-      if (effect.how === 'parole' && inside.paroleEligibleIn > 0) return null;
+      if (effect.how === 'parole' && inside.paroleEligibleIn > 0) {
+        pushHistory(state, 'prison', '📋', 'You are not eligible for parole yet.', 20);
+        return null;
+      }
+
+      /*
+       * A board, not a formality. Being eligible used to be the whole of it,
+       * which made the one row on the prison screen that decides everything a
+       * button with no question in it. Behaviour inside is most of it and the
+       * kind of person the file says you were is the rest.
+       */
+      if (effect.how === 'parole') {
+        const odds = Math.max(
+          0.05,
+          Math.min(0.95, 0.15 + inside.behaviour / 160 + character.karma / 320),
+        );
+        if (!ctx.rng.chance(odds)) {
+          inside.paroleEligibleIn = 2;
+          pushHistory(
+            state,
+            'prison',
+            '📋',
+            'The board heard you out and said no. You can ask again in two years.',
+            40,
+          );
+          return { text: 'refused', positive: false };
+        }
+      }
 
       const served = inside.yearsServed;
       character.record.incarceration = null;
@@ -468,6 +501,7 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
     case 'child_born':
     case 'interview_answer':
     case 'treatment':
+    case 'treat_condition':
     case 'court':
     case 'meet_someone':
     case 'charge':

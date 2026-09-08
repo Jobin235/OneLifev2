@@ -124,7 +124,9 @@ describe('doing something to a specific person', () => {
     expect(() => game.interact(current, rel.npcId, 'talk')).toThrow(/Not again this year/);
 
     // A different person is unaffected — the limit is per relationship.
-    const other = current.relationships.find((r) => r.npcId !== rel.npcId);
+    const other = current.relationships.find(
+      (r) => r.npcId !== rel.npcId && current.npcs.some((n) => n.id === r.npcId && n.alive),
+    );
     if (other) expect(() => game.interact(current, other.npcId, 'talk')).not.toThrow();
   });
 });

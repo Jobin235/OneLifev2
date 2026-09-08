@@ -159,8 +159,8 @@
         ]
       }
     ],
-    "cooldownYears": 10,
-    "maxPerLife": 1
+    "cooldownYears": 12,
+    "maxPerLife": 2
   },
   {
     "id": "family_the_house_again",

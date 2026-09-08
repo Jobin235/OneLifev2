@@ -62,6 +62,21 @@ export const LifeStateSchema = z.object({
   ventures: z.array(VentureSchema).default([]),
   /** The other life, when there is one. */
   vigilante: VigilanteSchema.nullable().default(null),
+  /**
+   * How much the character has been looking after themselves lately, 0..8 each.
+   *
+   * Topped up when they train, study or take care of how they come across, and
+   * bled off every year. The drifting stats read it as the target they move
+   * toward, which is what stops fitness sliding to nothing and smarts and charm
+   * pinning at the ceiling — see packages/simulation/src/aging.ts.
+   */
+  recentActivity: z
+    .object({
+      fitness: z.number().min(0).max(8).default(0),
+      study: z.number().min(0).max(8).default(0),
+      charm: z.number().min(0).max(8).default(0),
+    })
+    .default({ fitness: 0, study: 0, charm: 0 }),
   assets: z.array(AssetSchema),
   businesses: z.array(BusinessSchema),
 
@@ -159,6 +174,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 9: added the prison maze and a place in an organisation that has no exit.
  * 10: added ventures — a commune, a zoo, an agency — and the vampire.
  * 11: added the other life: a mask, a name the city gives it, and suspicion.
+ * 12: added the habit record the drifting stats aim at.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 11;
+export const SCHEMA_VERSION = 12;

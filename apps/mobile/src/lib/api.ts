@@ -174,6 +174,7 @@ export interface Legacy {
   chapters: Array<{ fromAge: number; toAge: number; title: string; body: string }>;
   howPeopleSawYou: Array<{ who: string; verdict: string; line: string; score: number }>;
   whatYouChanged: Array<{ icon: string; line: string }>;
+  karma: { value: number; word: string; share: number };
   numbers: Array<{ value: string; label: string }>;
   comparison: string;
   whatYouLeft: string[];

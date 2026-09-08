@@ -30,7 +30,7 @@ import {
 } from '@lineage/simulation';
 import { advanceNpcYear } from '@lineage/npc-engine';
 import { inheritanceFrom, runNpcNews } from './npcnews.js';
-import { openSymptom } from './health.js';
+import { openCheckup, openSymptom } from './health.js';
 import { reportMarketYear } from './stocks.js';
 import { advanceProperties } from './landlord.js';
 import { advanceFameYear } from './fame.js';
@@ -42,7 +42,7 @@ import { advanceMarketYear } from './blackmarket.js';
 import { resetRacingYear } from './racing.js';
 import { advanceVampireYear, vampireHoldsAge, vampireWasSlain } from './vampire.js';
 import { advanceVigilanteYear } from './vigilante.js';
-import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
+import { instantiate, interpolate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
 import { buildLegacy } from './death.js';
@@ -98,7 +98,38 @@ export const advanceYear = (
   state.gameState = 'PROCESSING';
 
   // 2. Time passing, to the body and to the people.
-  applyAgeDrift(state.character, config, rng, vampireHoldsAge(state));
+  applyAgeDrift(
+    state.character,
+    config,
+    rng,
+    {
+      educationLevel: educationLevelOf(state),
+      recentActivity: state.recentActivity,
+      closeness: closenessOf(state),
+      comfort: comfortOf(state),
+    },
+    vampireHoldsAge(state),
+  );
+
+  /*
+   * Looking after yourself is a habit, not a purchase. What the character has
+   * been doing lately bleeds away at about a quarter a year, so a burst of
+   * training at thirty does not still be holding fitness up at sixty — but a
+   * few sessions every year does.
+   */
+  for (const key of ['fitness', 'study', 'charm'] as const) {
+    state.recentActivity[key] = Math.max(0, state.recentActivity[key] * 0.72);
+  }
+  /*
+   * Being at school is studying, whether or not the player ever taps anything,
+   * and a job is a mild version of the same. Without this a character who does
+   * nothing but attend drifts toward the smarts of somebody who does not.
+   */
+  if (state.education.current) {
+    state.recentActivity.study = Math.min(8, state.recentActivity.study + 1.6);
+  } else if (state.career.current) {
+    state.recentActivity.study = Math.min(8, state.recentActivity.study + 0.4);
+  }
   const npcYear = advanceNpcYear(state, config, rng);
   decayRelationships(state, config);
 
@@ -274,6 +305,25 @@ export const advanceYear = (
     if (condition && !state.activeEvent) {
       openSymptom(state, condition, country.healthcare.patientShare, content, rng);
     }
+
+    /*
+     * And, when there is no new symptom, the appointment about the old ones.
+     *
+     * This is what carries the late game. Conditions accumulate — the median
+     * sixty-year-old carries four — and before this nothing ever asked about
+     * them again, which is why 92% of years after seventy had no decision in
+     * them. Every two years or so, the doctor reads the list back with prices
+     * on it. See packages/game/src/health.ts.
+     */
+    if (!state.activeEvent && state.character.age >= 30) {
+      const untreated = state.character.conditions.filter((c) => !c.treated).length;
+      const since = state.character.age - Number(state.flags.last_checkup ?? -99);
+      const due = untreated >= 3 ? 2 : untreated === 2 ? 3 : 5;
+      if (untreated > 0 && since >= due && rng.chance(0.45 + untreated * 0.1)) {
+        state.flags.last_checkup = state.character.age;
+        openCheckup(state, country.healthcare.patientShare, content, rng);
+      }
+    }
   }
   const city = country?.cities.find((c) => c.id === state.character.cityId);
   updateCostOfLiving(state, config, city?.costOfLiving ?? 1);
@@ -382,7 +432,21 @@ export const advanceYear = (
     const choice = minor.definition.choices[0];
     const outcome = choice?.outcomes[choice.outcomes.length - 1];
     if (!outcome) continue;
-    pushHistory(state, minor.definition.category, minor.definition.card.icon, outcome.historyLine, 15);
+    /*
+     * Through the resolver, like everything else the player reads.
+     *
+     * This pushed the raw template, so any minor event whose history line named
+     * something — an employer, a school, a person — printed the token instead.
+     * It had gone unnoticed because no minor event happened to use one until
+     * the work pack did.
+     */
+    pushHistory(
+      state,
+      minor.definition.category,
+      minor.definition.card.icon,
+      interpolate(outcome.historyLine, state, minor.bindings),
+      15,
+    );
     (state.eventLog[minor.definition.id] ??= []).push(state.character.age);
   }
 
@@ -438,6 +502,79 @@ const die = (
 
   checkInvariants(state, before);
   return { state, event: null, recap: buildRecap(state, before, startAge), died: true };
+};
+
+/** 0..5, the ceiling that smarts drifts toward. */
+const EDUCATION_RANK: Record<string, number> = {
+  none: 0,
+  primary: 1,
+  secondary: 2,
+  vocational: 3,
+  university: 4,
+  graduate: 5,
+};
+
+/**
+ * How much of this life has people in it, from nobody to enough.
+ *
+ * Only the ones who are alive and who actually like them count — a wife you
+ * never speak to is not company — and it saturates, because the difference
+ * between three people who love you and thirty is not a difference in how
+ * lonely you are.
+ */
+const CLOSENESS_WEIGHT: Record<string, number> = {
+  spouse: 1.6,
+  partner: 1.3,
+  child: 0.7,
+  friend: 0.5,
+  best_friend: 0.8,
+  mother: 0.4,
+  father: 0.4,
+  sibling: 0.4,
+};
+
+const closenessOf = (state: LifeState): number => {
+  let weight = 0;
+  for (const rel of state.relationships) {
+    const per = CLOSENESS_WEIGHT[rel.kind];
+    if (per === undefined) continue;
+    const warmth = (rel.dimensions.affection + rel.dimensions.closeness) / 2;
+    if (warmth < 55) continue;
+    const npc = state.npcs.find((n) => n.id === rel.npcId);
+    if (!npc?.alive) continue;
+    weight += per * ((warmth - 55) / 45);
+  }
+  // A child with two parents who love them is not lonely; the world they are
+  // measured against is smaller.
+  return Math.min(1, weight / (state.character.age < 18 ? 1.2 : 2.4));
+};
+
+/**
+ * Whether money has stopped being something they think about.
+ *
+ * Not how rich they are — how many years they could stop earning for. Debt they
+ * cannot see the end of counts against it, because that is what the worry
+ * actually is.
+ */
+const comfortOf = (state: LifeState): number => {
+  const f = state.character.finances;
+  // Still somebody else's dependant: it is the household's money that decides
+  // whether money is a worry, and they have none of their own to measure.
+  if (state.character.age < 18 && f.annualExpenses === 0) {
+    const wealth = state.flags.family_wealth;
+    // `family_wealth` runs 0.25 (rough) to 3.2 (comfortable).
+    return typeof wealth === 'number' ? Math.max(0, Math.min(1, 0.15 + wealth / 4)) : 0.5;
+  }
+  const floor = Math.max(f.annualExpenses, 1_000_000);
+  const runway = (f.cash + f.savings + f.investments - f.debt) / floor;
+  return Math.max(0, Math.min(1, runway / 6));
+};
+
+const educationLevelOf = (state: LifeState): number => {
+  const done = EDUCATION_RANK[state.education.highestCompleted] ?? 0;
+  // Being in it counts for something while you are still in it.
+  const enrolled = state.education.current ? (EDUCATION_RANK[state.education.current.stage] ?? 0) - 0.5 : 0;
+  return Math.max(done, enrolled);
 };
 
 const causeOfDeath = (state: LifeState): string => {

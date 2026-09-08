@@ -1,0 +1,54 @@
+[
+  {
+    "id": "health_checkup",
+    "version": 1,
+    "category": "health",
+    "card": { "icon": "🩺", "label": "HEALTHCARE", "tint": "#EAF6F0", "color": "#1F7A56" },
+    "weightClass": "major",
+    "priority": 95,
+    "minAge": 20,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "What is actually wrong with you",
+    "body": "{flag.checkup_body}",
+    "question": "What do you want doing about it?",
+    "selects": [
+      {
+        "id": "which",
+        "label": "Pick your treatment",
+        "options": []
+      }
+    ],
+    "choices": [
+      {
+        "id": "treat",
+        "label": "Treat me",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.checkup_result_title}",
+            "text": "{flag.checkup_result}",
+            "historyLine": "{flag.checkup_history}",
+            "effects": [{ "op": "treat_condition" }]
+          }
+        ]
+      },
+      {
+        "id": "pass",
+        "label": "I'll pass for now",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "Not today",
+            "text": "You put your coat back on and said you would think about it.",
+            "historyLine": "You were told what was wrong with you and decided to live with it.",
+            "effects": [{ "op": "stat", "stat": "happiness", "delta": -2 }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]

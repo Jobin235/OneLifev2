@@ -752,8 +752,8 @@
         ]
       }
     ],
-    "cooldownYears": 10,
-    "maxPerLife": 1
+    "cooldownYears": 8,
+    "maxPerLife": 3
   },
   {
     "id": "money_windfall",

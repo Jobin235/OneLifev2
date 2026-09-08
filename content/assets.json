@@ -5,7 +5,7 @@
     "label": "A trailer on the edge of town",
     "emoji": "🚚",
     "price": 4200000,
-    "annualCost": 420000,
+    "annualCost": 140000,
     "minAge": 18
   },
   {
@@ -14,7 +14,7 @@
     "label": "A one-bed flat",
     "emoji": "🏢",
     "price": 14000000,
-    "annualCost": 900000,
+    "annualCost": 280000,
     "minAge": 18
   },
   {
@@ -23,7 +23,7 @@
     "label": "A terraced house",
     "emoji": "🏠",
     "price": 26000000,
-    "annualCost": 1500000,
+    "annualCost": 520000,
     "minAge": 18
   },
   {
@@ -32,7 +32,7 @@
     "label": "A house with a garden",
     "emoji": "🏡",
     "price": 48000000,
-    "annualCost": 2400000,
+    "annualCost": 900000,
     "minAge": 18
   },
   {
@@ -41,7 +41,7 @@
     "label": "A townhouse in a good street",
     "emoji": "🏘️",
     "price": 120000000,
-    "annualCost": 5200000,
+    "annualCost": 2200000,
     "minAge": 18
   },
   {
@@ -50,7 +50,7 @@
     "label": "A house with a name",
     "emoji": "🏰",
     "price": 420000000,
-    "annualCost": 18000000,
+    "annualCost": 8400000,
     "minAge": 18
   },
   {
