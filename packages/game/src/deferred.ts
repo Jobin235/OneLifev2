@@ -6,6 +6,7 @@ import { bearChild, spawnNpc } from '@lineage/npc-engine';
 import { settleInterview } from './interview.js';
 import { settleCheckup, settleTreatment } from './health.js';
 import { settleFuneral } from './funeral.js';
+import { drawYear } from './lottery.js';
 import { openLoveInterest, settleLoveInterest } from './love.js';
 import { openCharges, settleLawyer, settlePlea } from './justice.js';
 import { settleLetting } from './landlord.js';
@@ -194,6 +195,11 @@ export const applyDeferred = (
 
       case 'funeral': {
         settleFuneral(state, effect.going, effect.spoke);
+        break;
+      }
+
+      case 'lottery': {
+        drawYear(state, rng);
         break;
       }
 

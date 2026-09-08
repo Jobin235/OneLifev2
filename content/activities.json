@@ -150,6 +150,22 @@
     "onRepeat": "riskier"
   },
   {
+    "id": "lottery",
+    "icon": "🎫",
+    "label": "A ticket every week",
+    "group": "fun_and_trouble",
+    "minAge": 18,
+    "cost": 18000,
+    "note": "somebody has to win it",
+    "effects": [
+      {
+        "op": "lottery"
+      }
+    ],
+    "effectiveTimes": 1,
+    "onRepeat": "no_effect"
+  },
+  {
     "id": "look_at_houses",
     "icon": "🏠",
     "label": "Look at houses",

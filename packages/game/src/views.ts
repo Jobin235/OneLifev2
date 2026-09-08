@@ -3,6 +3,7 @@ import type { Activity, ContentPack } from '@lineage/content';
 import { interactionsFor } from './interact.js';
 import { shopView } from './shop.js';
 import type { LifeState, Npc, Relationship } from '@lineage/shared-types';
+import { lotteryLine } from './lottery.js';
 import { STAT_DISPLAY } from '@lineage/shared-types';
 import {
   displayMemories,
@@ -588,6 +589,15 @@ export const moneyView = (state: LifeState, config: GameConfig, content: Content
 
 /** The line at the bottom of design 3C — a human cost, not a chart. */
 const humanCostNote = (state: LifeState): string | null => {
+  /*
+   * The lottery is the one money system here that rewards nothing, and the
+   * whole point of building it is that the player gets to find that out. Once
+   * there is enough of a habit to be worth a number, this is where the number
+   * goes — on the Money screen, next to everything else that is actually true.
+   */
+  const tickets = lotteryLine(state);
+  if (tickets && Number(state.flags.lottery_years ?? 0) >= 5) return tickets;
+
   for (const rel of state.relationships) {
     const debt = rel.memories.find((m) => m.factKey === 'owes_you_money' && !m.resolved);
     if (debt) {

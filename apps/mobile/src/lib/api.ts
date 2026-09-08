@@ -696,7 +696,15 @@ export interface Api {
   ): Promise<{ life: LifeView }>;
   dismiss(lifeId: string): Promise<{ life: LifeView }>;
   /** `outcome` is 'no_further_effect' when the tap was a deliberate no-op. */
-  act(lifeId: string, activityId: string): Promise<{ life: LifeView; outcome: ActOutcome }>;
+  act(
+    lifeId: string,
+    activityId: string,
+  ): Promise<{
+    life: LifeView;
+    outcome: ActOutcome;
+    /** What this activity had to say, when it had anything specific. */
+    line: string | null;
+  }>;
   succeed(lifeId: string, heirNpcId: string | null): Promise<{ life: LifeView }>;
   people(lifeId: string): Promise<PeopleView>;
   person(lifeId: string, npcId: string): Promise<PersonView>;
@@ -853,7 +861,7 @@ export const httpApi: Api = {
     request<{ life: LifeView }>(`/lives/${lifeId}/dismiss`, { method: 'POST' }),
 
   act: (lifeId: string, activityId: string) =>
-    request<{ life: LifeView; outcome: ActOutcome }>(`/lives/${lifeId}/act`, {
+    request<{ life: LifeView; outcome: ActOutcome; line: string | null }>(`/lives/${lifeId}/act`, {
       method: 'POST',
       body: JSON.stringify({ activityId }),
     }),

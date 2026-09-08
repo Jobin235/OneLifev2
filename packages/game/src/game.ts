@@ -89,6 +89,15 @@ export type ActOutcome = 'done' | 'overdone' | 'no_further_effect' | 'backfired'
 export interface ActResult {
   state: LifeState;
   outcome: ActOutcome;
+  /**
+   * What this particular activity has to say for itself, when it has anything.
+   *
+   * Most do not: training is a stat change and the log line is the whole
+   * result. But an activity that resolves something — a year of lottery
+   * tickets, say — has a specific outcome the player should be told about
+   * where they tapped, rather than having to go and find it in the log.
+   */
+  line: string | null;
 }
 
 /**
@@ -352,7 +361,7 @@ export class Game {
 
     // Nothing left to gain, and nothing to lose: a free no-op.
     if (spent && activity.onRepeat === 'no_effect') {
-      return { state, outcome: 'no_further_effect' };
+      return { state, outcome: 'no_further_effect', line: null };
     }
 
     const before = structuredClone(state);
@@ -373,7 +382,7 @@ export class Game {
         pushHistory(state, 'random', activity.icon, overdoneLineFor(activity), 8);
         refreshDerived(state, this.config);
         checkInvariants(state, before);
-        return { state, outcome: 'overdone' };
+        return { state, outcome: 'overdone', line: null };
       }
 
       const liquid = state.character.finances.cash + state.character.finances.savings;
@@ -402,7 +411,9 @@ export class Game {
       } else {
         applyEffects(activity.effects as never, effectCtx);
       }
+      const linesBefore = state.history.length;
       applyDeferred(effectCtx.deferred, state, this.content, this.config, rng, {});
+      const said = state.history.slice(linesBefore).at(-1)?.line ?? null;
 
       state.activityUsage[activityId] = used + 1;
       state.step += 1;
@@ -438,7 +449,7 @@ export class Game {
 
       refreshDerived(state, this.config);
       checkInvariants(state, before);
-      return { state, outcome: backfired ? 'backfired' : 'done' };
+      return { state, outcome: backfired ? 'backfired' : 'done', line: said };
     } catch (error) {
       Object.assign(state, before);
       throw error;

@@ -414,6 +414,10 @@ export const App = () => {
         show('You overdid it.');
       } else if (result.outcome === 'backfired') {
         show('That did not go the way you wanted.');
+      } else if (result.line) {
+        // Most activities are a stat change and the log line is the whole
+        // result. The ones that resolve something say so where you tapped.
+        show(result.line);
       }
     },
     [life, run, setLifeAndRemember, show],

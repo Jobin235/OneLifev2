@@ -212,8 +212,8 @@ export const registerLifeRoutes = (
     const { activityId } = ActBody.parse(request.body);
     try {
       return await lives.withLock(userOf(request), lifeId, (state) => {
-        const { outcome } = game.act(state, activityId);
-        return { life: lifeView(state, game.content), outcome };
+        const { outcome, line } = game.act(state, activityId);
+        return { life: lifeView(state, game.content), outcome, line };
       });
     } catch (error) {
       return reply.code(statusFor(error)).send({ error: messageFor(error) });

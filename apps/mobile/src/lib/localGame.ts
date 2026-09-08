@@ -167,9 +167,9 @@ export const createLocalApi = (): Api => {
     },
 
     act: async (lifeId, activityId) => {
-      const { state, outcome } = game.act(get(lifeId), activityId);
+      const { state, outcome, line } = game.act(get(lifeId), activityId);
       save(state);
-      return { ...view(state), outcome };
+      return { ...view(state), outcome, line };
     },
 
     succeed: async (lifeId, heirNpcId) => {
