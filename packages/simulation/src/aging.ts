@@ -11,7 +11,20 @@ import type { Rng } from './rng.js';
  * decisions moving the numbers far more than time does. The one exception is
  * fitness, which always falls, so that "Get in shape" has a job to do every year.
  */
-export const applyAgeDrift = (character: Character, config: GameConfig, rng: Rng): void => {
+export const applyAgeDrift = (
+  character: Character,
+  config: GameConfig,
+  rng: Rng,
+  /**
+   * Whether time has stopped mattering to this body.
+   *
+   * A vampire keeps drifting toward what their life supports — a vampire who
+   * never trains still gets soft — but the part of the target that is simply
+   * being old is removed, which is the whole of what being one buys. What can
+   * still end the life is elsewhere, and is a person with a stake.
+   */
+  ageless = false,
+): void => {
   const { aging } = config;
   const { stats, age } = character;
 
@@ -31,20 +44,21 @@ export const applyAgeDrift = (character: Character, config: GameConfig, rng: Rng
     (sum, id) => sum + (HABIT_ANNUAL_COST[id]?.health ?? 0) * 4,
     0,
   );
-  const agePenalty = Math.max(0, age - aging.healthDeclineFromAge) * aging.healthDeclinePerYear;
-  const accelerated =
-    Math.max(0, age - 60) ** 2 * aging.healthDeclineAcceleration;
+  const agePenalty = ageless
+    ? 0
+    : Math.max(0, age - aging.healthDeclineFromAge) * aging.healthDeclinePerYear;
+  const accelerated = ageless ? 0 : Math.max(0, age - 60) ** 2 * aging.healthDeclineAcceleration;
 
   const target = clampStat(
     52 + stats.fitness * 0.45 - agePenalty - accelerated - conditionDrag - habitDrag,
   );
   stats.health = clampStat(stats.health + (target - stats.health) * 0.28 + rng.jitter());
 
-  if (age >= aging.smartsDeclineFromAge) {
+  if (!ageless && age >= aging.smartsDeclineFromAge) {
     stats.smarts = clampStat(stats.smarts - aging.smartsDeclinePerYear);
   }
 
-  if (age > aging.charmPeakAge) {
+  if (!ageless && age > aging.charmPeakAge) {
     stats.charm = clampStat(stats.charm - aging.charmDeclinePerYear + rng.jitter() * 0.4);
   } else if (age < aging.charmPeakAge) {
     stats.charm = clampStat(stats.charm + 0.5);

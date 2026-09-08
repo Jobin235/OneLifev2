@@ -249,6 +249,78 @@ export interface StockRow {
   affordable: boolean;
 }
 
+export interface CasinoView {
+  locked: string | null;
+  betsLeft: number;
+  purse: string;
+  purseCents: number;
+  games: Array<{
+    id: string;
+    emoji: string;
+    label: string;
+    note: string;
+    picks: Array<{ id: string; label: string }>;
+  }>;
+}
+
+export interface BlackMarketView {
+  locked: string | null;
+  dealsLeft: number;
+  heat: number;
+  heatWord: string;
+  dealers: Array<{
+    id: string;
+    name: string;
+    emoji: string;
+    trade: string;
+    attitude: number;
+    attitudeWord: string;
+    fakeRisk: number;
+    items: Array<{ id: string; label: string; emoji: string; price: string; affordable: boolean }>;
+  }>;
+  holdings: Array<{ id: string; label: string; emoji: string; value: string }>;
+}
+
+export interface RacingView {
+  locked: string | null;
+  garage: boolean;
+  garagePrice: string;
+  garageAffordable: boolean;
+  raceClass: string;
+  points: number;
+  pointsNeeded: number;
+  racesLeft: number;
+  cars: Array<{
+    id: string;
+    label: string;
+    emoji: string;
+    speed: number;
+    grip: number;
+    tough: number;
+    mods: Array<{ id: string; label: string; emoji: string; price: string; owned: boolean; affordable: boolean }>;
+  }>;
+  forSale: Array<{ id: string; label: string; emoji: string; price: string; speed: number; grip: number; tough: number; affordable: boolean }>;
+}
+
+export interface VampireView {
+  turned: boolean;
+  lord: boolean;
+  essence: number;
+  essenceBar: number;
+  notoriety: number;
+  notorietyWord: string;
+  progeny: number;
+  nightsLeft: number;
+  actions: Array<{
+    id: string;
+    emoji: string;
+    label: string;
+    note: string;
+    available: boolean;
+    locked: string | null;
+  }>;
+}
+
 export interface VentureView {
   id: string;
   kind: string;
@@ -593,6 +665,28 @@ export interface Api {
     lifeId: string,
     job: string,
   ): Promise<{ life: LifeView; mob: MobView | null; line: string; cut: string | null }>;
+  casino(lifeId: string): Promise<CasinoView>;
+  bet(
+    lifeId: string,
+    game: string,
+    stake: number,
+    pick: string,
+  ): Promise<{ life: LifeView; casino: CasinoView; detail: string; line: string; netLabel: string; won: boolean }>;
+  blackMarket(lifeId: string): Promise<BlackMarketView>;
+  deal(
+    lifeId: string,
+    body: { action: 'buy' | 'haggle' | 'fence'; dealerId?: string; itemId?: string; assetId?: string },
+  ): Promise<{ life: LifeView; market: BlackMarketView; line: string }>;
+  racing(lifeId: string): Promise<RacingView>;
+  racingAct(
+    lifeId: string,
+    body: { action: 'garage' | 'car' | 'mod' | 'race'; carId?: string; assetId?: string; modId?: string; style?: string },
+  ): Promise<{ life: LifeView; racing: RacingView; line: string }>;
+  vampire(lifeId: string): Promise<VampireView>;
+  vampireAct(
+    lifeId: string,
+    action: string,
+  ): Promise<{ life: LifeView; vampire: VampireView; line: string }>;
   /** Everything owned and run, and what could be started. */
   ventures(lifeId: string): Promise<{ ventures: VentureView[]; offers: VentureOffer[] }>;
   venture(
@@ -717,6 +811,24 @@ export const httpApi: Api = {
       `/lives/${lifeId}/mob`,
       { method: 'POST', body: JSON.stringify({ job }) },
     ),
+  casino: (lifeId: string) => request<CasinoView>(`/lives/${lifeId}/casino`),
+  bet: (lifeId: string, game: string, stake: number, pick: string) =>
+    request<never>(`/lives/${lifeId}/casino`, {
+      method: 'POST',
+      body: JSON.stringify({ game, stake, pick }),
+    }),
+  blackMarket: (lifeId: string) => request<BlackMarketView>(`/lives/${lifeId}/blackmarket`),
+  deal: (lifeId: string, body: Record<string, unknown>) =>
+    request<never>(`/lives/${lifeId}/blackmarket`, { method: 'POST', body: JSON.stringify(body) }),
+  racing: (lifeId: string) => request<RacingView>(`/lives/${lifeId}/racing`),
+  racingAct: (lifeId: string, body: Record<string, unknown>) =>
+    request<never>(`/lives/${lifeId}/racing`, { method: 'POST', body: JSON.stringify(body) }),
+  vampire: (lifeId: string) => request<VampireView>(`/lives/${lifeId}/vampire`),
+  vampireAct: (lifeId: string, action: string) =>
+    request<never>(`/lives/${lifeId}/vampire`, {
+      method: 'POST',
+      body: JSON.stringify({ action }),
+    }),
   ventures: (lifeId: string) =>
     request<{ ventures: VentureView[]; offers: VentureOffer[] }>(`/lives/${lifeId}/ventures`),
   venture: (lifeId: string, body: Record<string, unknown>) =>

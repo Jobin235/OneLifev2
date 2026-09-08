@@ -37,6 +37,10 @@ import { audition, fameView } from './fame.js';
 import { inheritTitle, royalAct, royalView, type RoyalAction } from './royalty.js';
 import { doMobJob, joinMob, mobEligibility, mobView, type MobJob } from './mob.js';
 import { escapeMove, escapeView, startEscape, surrender } from './escape.js';
+import { casinoView, play, type CasinoGame } from './casino.js';
+import { blackMarketView, buyContraband, fence, haggle } from './blackmarket.js';
+import { buyGarage, buyRaceCar, modifyCar, race, racingView, type RaceStyle } from './racing.js';
+import { turnVampire, vampireAct, vampireView, type VampireAction } from './vampire.js';
 import {
   startVenture,
   ventureAct,
@@ -539,6 +543,66 @@ export class Game {
 
   surrender(state: LifeState) {
     return surrender(state, this.config);
+  }
+
+  /** Six dealers, what they are asking, and what the police have noticed. */
+  blackMarket(state: LifeState) {
+    return blackMarketView(state);
+  }
+
+  buyContraband(state: LifeState, dealerId: string, itemId: string) {
+    return buyContraband(state, dealerId, itemId, this.content, this.config);
+  }
+
+  haggle(state: LifeState, dealerId: string) {
+    return haggle(state, dealerId, this.config);
+  }
+
+  fence(state: LifeState, assetId: string) {
+    return fence(state, assetId, this.config);
+  }
+
+  /** The garage, the cars, and what class you are in. */
+  racing(state: LifeState) {
+    return racingView(state);
+  }
+
+  buyGarage(state: LifeState) {
+    return buyGarage(state, this.config);
+  }
+
+  buyRaceCar(state: LifeState, carId: string) {
+    return buyRaceCar(state, carId, this.config);
+  }
+
+  modifyCar(state: LifeState, assetId: string, modId: string) {
+    return modifyCar(state, assetId, modId, this.config);
+  }
+
+  race(state: LifeState, assetId: string, style: RaceStyle) {
+    return race(state, assetId, style, this.config);
+  }
+
+  /** Essence, notoriety, and how long it has been since anybody came for you. */
+  vampire(state: LifeState) {
+    return vampireView(state);
+  }
+
+  turnVampire(state: LifeState) {
+    return turnVampire(state, this.config);
+  }
+
+  vampireAct(state: LifeState, action: VampireAction) {
+    return vampireAct(state, action, this.config);
+  }
+
+  /** The floor, and what it will take a bet on. */
+  casino(state: LifeState) {
+    return casinoView(state);
+  }
+
+  playCasino(state: LifeState, game: CasinoGame, stake: number, pick: string) {
+    return play(state, game, stake, pick, this.config);
   }
 
   /** Everything you own and run, and what could be started. */

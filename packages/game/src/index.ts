@@ -15,3 +15,7 @@ export * from './royalty.js';
 export * from './escape.js';
 export * from './mob.js';
 export * from './venture.js';
+export * from './casino.js';
+export * from './blackmarket.js';
+export * from './racing.js';
+export * from './vampire.js';

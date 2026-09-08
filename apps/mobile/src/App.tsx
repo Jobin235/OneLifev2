@@ -15,6 +15,10 @@ import type {
   EscapeView,
   VentureView,
   VentureOffer,
+  CasinoView,
+  BlackMarketView,
+  RacingView,
+  VampireView,
   PeopleView,
   PersonView,
   Opening,
@@ -29,7 +33,7 @@ import { LifeLog } from './shell/LifeLog';
 import { Popup, ResultToast } from './shell/Popup';
 import { PeopleScreen } from './screens/PeopleScreen';
 import { PersonScreen } from './screens/PersonScreen';
-import { DoScreen } from './screens/DoScreen';
+import { DoScreen, type SpecialRow } from './screens/DoScreen';
 import { SchoolScreen } from './screens/SchoolScreen';
 import { WorkScreen } from './screens/WorkScreen';
 import { JobsScreen } from './screens/JobsScreen';
@@ -42,11 +46,26 @@ import { FameScreen } from './screens/FameScreen';
 import { RoyalScreen } from './screens/RoyalScreen';
 import { MobScreen } from './screens/MobScreen';
 import { VentureScreen } from './screens/VentureScreen';
+import { CasinoScreen } from './screens/CasinoScreen';
+import { BlackMarketScreen } from './screens/BlackMarketScreen';
+import { RacingScreen } from './screens/RacingScreen';
+import { VampireScreen } from './screens/VampireScreen';
 import { EscapeScreen } from './screens/EscapeScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
 const LAST_LIFE = 'onelife.lastLife';
+
+/** What the header of each system's own sheet says. */
+const SPECIAL_TITLES: Record<string, string> = {
+  mob: 'The Family',
+  royal: 'The Crown',
+  fame: 'Fame',
+  casino: 'The Casino',
+  blackmarket: 'The Black Market',
+  racing: 'Racing',
+  vampire: 'Vampire',
+};
 
 /** The contextual nav slot names its own sheet, so the two can never disagree. */
 const CONTEXT_TITLE = { school: 'School', occupation: 'Occupation', prison: 'Prison' } as const;
@@ -85,14 +104,26 @@ export const App = () => {
   const [properties, setProperties] = useState<PropertyRow[]>([]);
   const [showProperties, setShowProperties] = useState(false);
   const [fame, setFame] = useState<FameView | null>(null);
-  const [showFame, setShowFame] = useState(false);
+  /**
+   * Which of the systems-with-their-own-screen is open, if any. One field
+   * rather than one boolean each: there are seven of them now.
+   */
+  const [special, setSpecial] = useState<string | null>(null);
+  const [casino, setCasino] = useState<CasinoView | null>(null);
+  const [lastBet, setLastBet] = useState<{
+    detail: string;
+    line: string;
+    netLabel: string;
+    won: boolean;
+  } | null>(null);
+  const [blackMarket, setBlackMarket] = useState<BlackMarketView | null>(null);
+  const [racing, setRacing] = useState<RacingView | null>(null);
+  const [vampire, setVampire] = useState<VampireView | null>(null);
   const [royal, setRoyal] = useState<RoyalView | null>(null);
-  const [showRoyal, setShowRoyal] = useState(false);
   const [mob, setMob] = useState<MobView | null>(null);
   const [mobOffer, setMobOffer] = useState<{ open: boolean; reason: string; visible: boolean } | null>(
     null,
   );
-  const [showMob, setShowMob] = useState(false);
   const [escape, setEscape] = useState<EscapeView | null>(null);
   const [ventures, setVentures] = useState<VentureView[]>([]);
   const [ventureOffers, setVentureOffers] = useState<VentureOffer[]>([]);
@@ -192,17 +223,26 @@ export const App = () => {
           setEscape((current) => current ?? (maze && maze.outcome === null ? maze : null));
         }
         if (slot === 'activities') {
-          const [rows, known, crown, family] = await Promise.all([
-            api.actions(lifeId),
-            api.fame(lifeId),
-            api.royal(lifeId),
-            api.mob(lifeId),
-          ]);
+          const [rows, known, crown, family, floor, dealers, garage, night] =
+            await Promise.all([
+              api.actions(lifeId),
+              api.fame(lifeId),
+              api.royal(lifeId),
+              api.mob(lifeId),
+              api.casino(lifeId),
+              api.blackMarket(lifeId),
+              api.racing(lifeId),
+              api.vampire(lifeId),
+            ]);
           setActions(rows.actions);
           setFame(known);
           setRoyal(crown);
           setMob(family.mob);
           setMobOffer(family.eligibility);
+          setCasino(floor);
+          setBlackMarket(dealers);
+          setRacing(garage);
+          setVampire(night);
         }
         if (slot === 'assets') {
           const [worth, board, owned, run] = await Promise.all([
@@ -375,7 +415,7 @@ export const App = () => {
       if (!result) return;
       setLifeAndRemember(result.life);
       // The audition itself is a popup; get out of its way.
-      setShowFame(false);
+      setSpecial(null);
       setSlot(null);
     },
     [life, run, setLifeAndRemember],
@@ -389,7 +429,7 @@ export const App = () => {
       setLifeAndRemember(result.life);
       setRoyal(result.royal);
       // Abdication and a revolt both end the screen you are standing on.
-      if (!result.royal) setShowRoyal(false);
+      if (!result.royal) setSpecial(null);
       setToast(result.line);
     },
     [life, run, setLifeAndRemember],
@@ -403,14 +443,14 @@ export const App = () => {
   const onOpenMob = useCallback(async () => {
     if (!life) return;
     if (mob) {
-      setShowMob(true);
+      setSpecial('mob');
       return;
     }
     const result = await run(() => api.mobAct(life.lifeId, 'join'));
     if (!result) return;
     setLifeAndRemember(result.life);
     setMob(result.mob);
-    setShowMob(true);
+    setSpecial('mob');
   }, [life, mob, run, setLifeAndRemember]);
 
   const onMobJob = useCallback(
@@ -422,10 +462,150 @@ export const App = () => {
       setMob(result.mob);
       // A charge raises the lawyer popup, which lives over the sheet.
       if (result.life.activeEvent) {
-        setShowMob(false);
+        setSpecial(null);
         setSlot(null);
       }
       if (result.line) setToast(result.cut ? `${result.line} ${result.cut}.` : result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  /**
+   * The rows at the top of Activities, and what each one says about itself.
+   *
+   * A row appears when there is something behind it worth opening — the mob
+   * shows once there is a record, the crown only when there is a title — so the
+   * list is also how a player discovers these exist.
+   */
+  const specials: SpecialRow[] = [
+    mob
+      ? { id: 'mob', icon: '🕴️', label: 'The Family', note: `${mob.title}, ${mob.family}`, locked: null }
+      : mobOffer?.visible
+        ? {
+            id: 'mob',
+            icon: '🕴️',
+            label: 'The Family',
+            note: mobOffer.open ? 'Somebody has been asking about you' : mobOffer.reason,
+            locked: mobOffer.open ? null : mobOffer.reason,
+          }
+        : null,
+    royal
+      ? {
+          id: 'royal',
+          icon: '👑',
+          label: 'The Crown',
+          note: `${royal.title} · ${royal.respectWord.toLowerCase()}`,
+          locked: null,
+        }
+      : null,
+    fame && life && life.age >= 10
+      ? { id: 'fame', icon: '🌟', label: 'Fame', note: fame.line, locked: null }
+      : null,
+    casino
+      ? {
+          id: 'casino',
+          icon: '🎰',
+          label: 'The Casino',
+          note: casino.locked ?? `${casino.betsLeft} goes left this year`,
+          locked: casino.locked,
+        }
+      : null,
+    blackMarket
+      ? {
+          id: 'blackmarket',
+          icon: '🕶️',
+          label: 'The Black Market',
+          note:
+            blackMarket.holdings.length > 0
+              ? `${blackMarket.holdings.length} in the house · ${blackMarket.heatWord.toLowerCase()}`
+              : 'Six people who will sell you something',
+          locked: blackMarket.locked,
+        }
+      : null,
+    racing
+      ? {
+          id: 'racing',
+          icon: '🏁',
+          label: 'Racing',
+          note: racing.garage
+            ? `${racing.raceClass} · ${racing.cars.length} in the garage`
+            : 'A unit with a roller door, and everything after it',
+          locked: racing.locked,
+        }
+      : null,
+    vampire
+      ? {
+          id: 'vampire',
+          icon: '🧛',
+          label: vampire.lord ? 'Vampire Lord' : vampire.turned ? 'Vampire' : 'Something in this town',
+          note: vampire.turned
+            ? `${vampire.essence} essence · ${vampire.notorietyWord.toLowerCase()}`
+            : 'Somebody here has been here a very long time',
+          locked: null,
+        }
+      : null,
+  ].filter((row): row is SpecialRow => row !== null);
+
+  const onOpenSpecial = useCallback(
+    async (id: string) => {
+      if (id === 'mob' && !mob) {
+        void onOpenMob();
+        return;
+      }
+      setSpecial(id);
+    },
+    [mob, onOpenMob],
+  );
+
+  const onBet = useCallback(
+    async (which: string, stake: number, pick: string) => {
+      if (!life) return;
+      const result = await run(() => api.bet(life.lifeId, which, stake, pick));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setCasino(result.casino);
+      setLastBet({
+        detail: result.detail,
+        line: result.line,
+        netLabel: result.netLabel,
+        won: result.won,
+      });
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onDeal = useCallback(
+    async (body: { action: 'buy' | 'haggle' | 'fence'; dealerId?: string; itemId?: string; assetId?: string }) => {
+      if (!life) return;
+      const result = await run(() => api.deal(life.lifeId, body));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setBlackMarket(result.market);
+      if (result.line) setToast(result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onRacing = useCallback(
+    async (body: { action: 'garage' | 'car' | 'mod' | 'race'; carId?: string; assetId?: string; modId?: string; style?: string }) => {
+      if (!life) return;
+      const result = await run(() => api.racingAct(life.lifeId, body));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setRacing(result.racing);
+      if (result.line) setToast(result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
+  const onVampire = useCallback(
+    async (action: string) => {
+      if (!life) return;
+      const result = await run(() => api.vampireAct(life.lifeId, action));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setVampire(result.vampire);
+      if (result.line) setToast(result.line);
     },
     [life, run, setLifeAndRemember],
   );
@@ -620,85 +800,71 @@ export const App = () => {
           </Sheet>
         )}
 
-        {slot === 'activities' &&
-          (showMob && mob ? (
-            <Sheet
-              title="The Family"
-              onBack={() => setShowMob(false)}
-              onClose={() => {
-                setShowMob(false);
-                setSlot(null);
-              }}
-            >
-              <MobScreen
-                mob={mob}
-                busy={busy}
-                decisionOpen={decisionOpen}
-                onJob={onMobJob}
-              />
-            </Sheet>
-          ) : showRoyal && royal ? (
-            <Sheet
-              title="The Crown"
-              onBack={() => setShowRoyal(false)}
-              onClose={() => {
-                setShowRoyal(false);
-                setSlot(null);
-              }}
-            >
+        {/*
+          One sheet per system, chosen by name. This started as a boolean per
+          screen and a chain of ternaries, which was already unreadable at three
+          and does not survive seven.
+        */}
+        {slot === 'activities' && special !== null && (
+          <Sheet
+            title={SPECIAL_TITLES[special] ?? 'Yours'}
+            onBack={() => setSpecial(null)}
+            onClose={() => {
+              setSpecial(null);
+              setSlot(null);
+            }}
+          >
+            {special === 'mob' && mob && (
+              <MobScreen mob={mob} busy={busy} decisionOpen={decisionOpen} onJob={onMobJob} />
+            )}
+            {special === 'royal' && royal && (
               <RoyalScreen
                 royal={royal}
                 busy={busy}
                 decisionOpen={decisionOpen}
                 onAct={onRoyalAct}
               />
-            </Sheet>
-          ) : showFame && fame ? (
-            <Sheet
-              title="Fame"
-              onBack={() => setShowFame(false)}
-              onClose={() => {
-                setShowFame(false);
-                setSlot(null);
-              }}
-            >
+            )}
+            {special === 'fame' && fame && (
               <FameScreen
                 fame={fame}
                 busy={busy}
                 decisionOpen={decisionOpen}
                 onAudition={onAudition}
               />
-            </Sheet>
-          ) : (
-            <Sheet title="Activities" onClose={() => setSlot(null)}>
-              {actions ? (
-                <DoScreen
-                  actions={actions}
-                  age={life.age}
-                  busy={busy}
-                  decisionOpen={decisionOpen}
-                  onAct={onAct}
-                  fameLine={fame && life.age >= 10 ? fame.line : null}
-                  onOpenFame={() => setShowFame(true)}
-                  royalLine={royal ? `${royal.title} · ${royal.respectWord.toLowerCase()}` : null}
-                  onOpenRoyal={() => setShowRoyal(true)}
-                  mobLine={
-                    mob
-                      ? `${mob.title}, ${mob.family}`
-                      : mobOffer?.visible
-                        ? mobOffer.open
-                          ? 'Somebody has been asking about you'
-                          : mobOffer.reason
-                        : null
-                  }
-                  mobLocked={!mob && !mobOffer?.open}
-                  onOpenMob={() => void onOpenMob()}
-                />
-              ) : (
-                <div className="spinner">…</div>
-              )}
-            </Sheet>
-          ))}
+            )}
+            {special === 'casino' && casino && (
+              <CasinoScreen casino={casino} busy={busy} last={lastBet} onBet={onBet} />
+            )}
+            {special === 'blackmarket' && blackMarket && (
+              <BlackMarketScreen market={blackMarket} busy={busy} onDeal={onDeal} />
+            )}
+            {special === 'racing' && racing && (
+              <RacingScreen racing={racing} busy={busy} onAct={onRacing} />
+            )}
+            {special === 'vampire' && vampire && (
+              <VampireScreen vampire={vampire} busy={busy} onAct={onVampire} />
+            )}
+          </Sheet>
+        )}
+
+        {slot === 'activities' && special === null && (
+          <Sheet title="Activities" onClose={() => setSlot(null)}>
+            {actions ? (
+              <DoScreen
+                actions={actions}
+                age={life.age}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onAct={onAct}
+                specials={specials}
+                onSpecial={onOpenSpecial}
+              />
+            ) : (
+              <div className="spinner">…</div>
+            )}
+          </Sheet>
+        )}
 
         {timeMachine && (
           <Sheet title="Time Machine" onClose={() => setTimeMachine(false)}>

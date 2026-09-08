@@ -239,6 +239,75 @@ export const createLocalApi = (): Api => {
       };
     },
 
+    casino: async (lifeId) => game.casino(get(lifeId)) as never,
+
+    bet: async (lifeId, which, stake, pick) => {
+      const result = game.playCasino(get(lifeId), which as never, stake, pick);
+      save(result.state);
+      return {
+        life: lifeView(result.state, game.content) as never,
+        casino: game.casino(result.state) as never,
+        detail: result.detail,
+        line: result.line,
+        netLabel: result.netLabel,
+        won: result.net > 0,
+      } as never;
+    },
+
+    blackMarket: async (lifeId) => game.blackMarket(get(lifeId)) as never,
+
+    deal: async (lifeId, body) => {
+      const state = get(lifeId);
+      const result =
+        body.action === 'buy'
+          ? game.buyContraband(state, body.dealerId ?? '', body.itemId ?? '')
+          : body.action === 'haggle'
+            ? game.haggle(state, body.dealerId ?? '')
+            : game.fence(state, body.assetId ?? '');
+      save(result.state);
+      return {
+        life: lifeView(result.state, game.content) as never,
+        market: game.blackMarket(result.state) as never,
+        line: result.line,
+      } as never;
+    },
+
+    racing: async (lifeId) => game.racing(get(lifeId)) as never,
+
+    racingAct: async (lifeId, body) => {
+      const state = get(lifeId);
+      let line = '';
+      if (body.action === 'garage') game.buyGarage(state);
+      else if (body.action === 'car') game.buyRaceCar(state, body.carId ?? '');
+      else if (body.action === 'mod') game.modifyCar(state, body.assetId ?? '', body.modId ?? '');
+      else line = game.race(state, body.assetId ?? '', (body.style ?? 'steady') as never).line;
+      save(state);
+      return {
+        life: lifeView(state, game.content) as never,
+        racing: game.racing(state) as never,
+        line,
+      } as never;
+    },
+
+    vampire: async (lifeId) => game.vampire(get(lifeId)) as never,
+
+    vampireAct: async (lifeId, action) => {
+      const state = get(lifeId);
+      let line = '';
+      if (action === 'turn') {
+        game.turnVampire(state);
+        line = 'Somebody came up the stairs.';
+      } else {
+        line = game.vampireAct(state, action as never).line;
+      }
+      save(state);
+      return {
+        life: lifeView(state, game.content) as never,
+        vampire: game.vampire(state) as never,
+        line,
+      } as never;
+    },
+
     ventures: async (lifeId) => game.ventures(get(lifeId)) as never,
 
     venture: async (lifeId, body) => {

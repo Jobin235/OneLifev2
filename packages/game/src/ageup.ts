@@ -37,6 +37,10 @@ import { advanceFameYear } from './fame.js';
 import { advanceRoyalYear, royalBirth } from './royalty.js';
 import { advanceMobYear } from './mob.js';
 import { advanceVentureYear } from './venture.js';
+import { resetCasinoYear } from './casino.js';
+import { advanceMarketYear } from './blackmarket.js';
+import { resetRacingYear } from './racing.js';
+import { advanceVampireYear, vampireHoldsAge, vampireWasSlain } from './vampire.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -93,7 +97,7 @@ export const advanceYear = (
   state.gameState = 'PROCESSING';
 
   // 2. Time passing, to the body and to the people.
-  applyAgeDrift(state.character, config, rng);
+  applyAgeDrift(state.character, config, rng, vampireHoldsAge(state));
   const npcYear = advanceNpcYear(state, config, rng);
   decayRelationships(state, config);
 
@@ -235,6 +239,10 @@ export const advanceYear = (
   advanceRoyalYear(state, content, rng);
   advanceMobYear(state, rng);
   advanceVentureYear(state, content, rng);
+  resetCasinoYear(state);
+  resetRacingYear(state);
+  advanceMarketYear(state, content, rng);
+  advanceVampireYear(state, rng);
   serveTime(state);
   /*
    * A maze is a thing you are in the middle of, not a thing you carry. Ageing
@@ -334,8 +342,16 @@ export const advanceYear = (
   state.interactionUsage = {};
   state.applicationsThisYear = 0;
 
-  // 7. Death check, before events — a dead character gets no card.
-  if (rng.chance(mortalityChance(state.character, config))) {
+  /*
+   * 7. Death check, before events — a dead character gets no card.
+   *
+   * A vampire is exempt from the ordinary roll, which is the whole of what
+   * being one buys, and is not exempt from the hunter who was waiting outside.
+   */
+  if (vampireWasSlain(state)) {
+    return die(state, content, config, before, startAge);
+  }
+  if (!vampireHoldsAge(state) && rng.chance(mortalityChance(state.character, config))) {
     return die(state, content, config, before, startAge);
   }
 
@@ -423,6 +439,7 @@ const die = (
 };
 
 const causeOfDeath = (state: LifeState): string => {
+  if (state.flags.vamp_slain) return 'a hunter, with something wooden';
   const untreated = state.character.conditions.filter((c) => !c.treated);
   if (state.character.stats.health < 20 && untreated.length > 0) return untreated[0]!.label.toLowerCase();
   if (state.character.age >= 80) return 'age';

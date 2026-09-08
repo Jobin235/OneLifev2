@@ -27,36 +27,37 @@ const GROUP_ORDER = [
   'bigger_moves',
 ];
 
+/** A row that opens a screen of its own rather than doing something. */
+export interface SpecialRow {
+  id: string;
+  icon: string;
+  label: string;
+  note: string;
+  /** Shown greyed with this as the note, or null when it can be opened. */
+  locked: string | null;
+}
+
 export const DoScreen = ({
   actions,
   age,
   busy,
   decisionOpen,
   onAct,
-  fameLine,
-  onOpenFame,
-  royalLine,
-  onOpenRoyal,
-  mobLine,
-  mobLocked,
-  onOpenMob,
+  specials,
+  onSpecial,
 }: {
   actions: ActionCard[];
   age: number;
   busy: boolean;
   decisionOpen: boolean;
   onAct: (activityId: string) => void;
-  /** One line about who knows you, for the row that opens the Fame screen. */
-  fameLine: string | null;
-  onOpenFame: () => void;
-  /** The title, when there is one, for the row that opens the Crown screen. */
-  royalLine: string | null;
-  onOpenRoyal: () => void;
-  /** Who you answer to, when you answer to anybody. */
-  mobLine: string | null;
-  /** Shown but greyed: they know there is something and cannot reach it yet. */
-  mobLocked: boolean;
-  onOpenMob: () => void;
+  /**
+   * The systems that have their own screens — the family, the crown, fame, the
+   * casino, and the rest. Seven separate props for seven of them was how this
+   * started and was not going to survive the eighth.
+   */
+  specials: SpecialRow[];
+  onSpecial: (id: string) => void;
 }) => {
   /*
    * Everything you can do first, then everything you cannot — within each
@@ -79,47 +80,29 @@ export const DoScreen = ({
         </div>
       )}
 
-      {/*
-        Fame is a screen, not an activity: casting is a list of doors rather
-        than a thing you tap. It sits at the top of this sheet because that is
-        where BitLife keeps it and because the one activity that feeds it,
-        posting, is in the list below.
-      */}
-      {mobLine && (
-        <button
-          className={`act-row${mobLocked ? ' locked' : ''}`}
-          disabled={busy || mobLocked}
-          onClick={onOpenMob}
-        >
-          <span className="act-icon">🕴️</span>
-          <span className="act-text">
-            <span className="act-label">The Family</span>
-            <span className="act-note">{mobLine}</span>
-          </span>
-          {mobLocked ? <span className="act-lock">🔒</span> : <span className="act-chev">›</span>}
-        </button>
-      )}
-
-      {royalLine && (
-        <button className="act-row" disabled={busy} onClick={onOpenRoyal}>
-          <span className="act-icon">👑</span>
-          <span className="act-text">
-            <span className="act-label">The Crown</span>
-            <span className="act-note">{royalLine}</span>
-          </span>
-          <span className="act-chev">›</span>
-        </button>
-      )}
-
-      {fameLine && (
-        <button className="act-row" disabled={busy} onClick={onOpenFame}>
-          <span className="act-icon">🌟</span>
-          <span className="act-text">
-            <span className="act-label">Fame</span>
-            <span className="act-note">{fameLine}</span>
-          </span>
-          <span className="act-chev">›</span>
-        </button>
+      {specials.length > 0 && (
+        <section>
+          <h3 className="act-group">Yours</h3>
+          {specials.map((special) => (
+            <button
+              key={special.id}
+              className={`act-row${special.locked ? ' locked' : ''}`}
+              disabled={busy || special.locked !== null}
+              onClick={() => onSpecial(special.id)}
+            >
+              <span className="act-icon">{special.icon}</span>
+              <span className="act-text">
+                <span className="act-label">{special.label}</span>
+                <span className="act-note">{special.locked ?? special.note}</span>
+              </span>
+              {special.locked ? (
+                <span className="act-lock">🔒</span>
+              ) : (
+                <span className="act-chev">›</span>
+              )}
+            </button>
+          ))}
+        </section>
       )}
 
       {grouped.map(({ group, items }) => (

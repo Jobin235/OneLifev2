@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, AuditionRejected, EscapeRejected, MobRejected, VentureRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
+import { ApplicationRejected, AuditionRejected, CasinoRejected, EscapeRejected, MarketRejected, MobRejected, RacingRejected, VampireRejected, VentureRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -19,6 +19,27 @@ const ManageBody = z.object({ action: z.string().min(1), amenityId: z.string().o
 const AuditionBody = z.object({ trackId: z.string().min(1) });
 const RoyalBody = z.object({ action: z.string().min(1), choice: z.string().optional() });
 const MobBody = z.object({ job: z.string().min(1) });
+const CasinoBody = z.object({
+  game: z.enum(['slots', 'roulette', 'blackjack', 'horses']),
+  stake: z.number().int().min(1),
+  pick: z.string().default(''),
+});
+const BlackMarketBody = z.object({
+  action: z.enum(['buy', 'haggle', 'fence']),
+  dealerId: z.string().optional(),
+  itemId: z.string().optional(),
+  assetId: z.string().optional(),
+});
+const RacingBody = z.object({
+  action: z.enum(['garage', 'car', 'mod', 'race']),
+  carId: z.string().optional(),
+  assetId: z.string().optional(),
+  modId: z.string().optional(),
+  style: z.enum(['conserve', 'steady', 'push']).default('steady'),
+});
+const VampireBody = z.object({
+  action: z.enum(['turn', 'hunt', 'bank', 'hypnotise', 'coffin']),
+});
 const VentureBody = z.object({
   /** One of: start a venture, do one of its things, or build something. */
   action: z.enum(['start', 'act', 'upgrade']),
@@ -413,6 +434,101 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.get('/lives/:lifeId/casino', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.casino(await load(userOf(request), lifeId));
+  });
+
+  app.post('/lives/:lifeId/casino', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { game: which, stake, pick } = CasinoBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        const result = game.playCasino(state, which, stake, pick);
+        return {
+          life: lifeView(state, game.content),
+          casino: game.casino(state),
+          detail: result.detail,
+          line: result.line,
+          netLabel: result.netLabel,
+          won: result.net > 0,
+        };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/blackmarket', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.blackMarket(await load(userOf(request), lifeId));
+  });
+
+  app.post('/lives/:lifeId/blackmarket', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const body = BlackMarketBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        const result =
+          body.action === 'buy'
+            ? game.buyContraband(state, body.dealerId ?? '', body.itemId ?? '')
+            : body.action === 'haggle'
+              ? game.haggle(state, body.dealerId ?? '')
+              : game.fence(state, body.assetId ?? '');
+        return {
+          life: lifeView(state, game.content),
+          market: game.blackMarket(state),
+          line: result.line,
+        };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/racing', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.racing(await load(userOf(request), lifeId));
+  });
+
+  app.post('/lives/:lifeId/racing', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const body = RacingBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        let line = '';
+        if (body.action === 'garage') game.buyGarage(state);
+        else if (body.action === 'car') game.buyRaceCar(state, body.carId ?? '');
+        else if (body.action === 'mod') game.modifyCar(state, body.assetId ?? '', body.modId ?? '');
+        else line = game.race(state, body.assetId ?? '', body.style).line;
+        return { life: lifeView(state, game.content), racing: game.racing(state), line };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
+  app.get('/lives/:lifeId/vampire', async (request) => {
+    const { lifeId } = request.params as { lifeId: string };
+    return game.vampire(await load(userOf(request), lifeId));
+  });
+
+  app.post('/lives/:lifeId/vampire', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { action } = VampireBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        const line =
+          action === 'turn'
+            ? (game.turnVampire(state), 'Somebody came up the stairs.')
+            : game.vampireAct(state, action).line;
+        return { life: lifeView(state, game.content), vampire: game.vampire(state), line };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/ventures', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     return game.ventures(await load(userOf(request), lifeId));
@@ -559,6 +675,10 @@ const statusFor = (error: unknown): number => {
   if (error instanceof RoyalRejected) return 409;
   if (error instanceof MobRejected) return 409;
   if (error instanceof VentureRejected) return 409;
+  if (error instanceof CasinoRejected) return 409;
+  if (error instanceof MarketRejected) return 409;
+  if (error instanceof RacingRejected) return 409;
+  if (error instanceof VampireRejected) return 409;
   if (error instanceof EscapeRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };

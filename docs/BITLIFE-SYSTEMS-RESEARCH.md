@@ -265,8 +265,95 @@ tended — a medium commune clears about $250k a year at capacity, a medium zoo
 about $320k on a much larger outlay, and an agency runs near break-even on the
 annual line with the missions as the actual income.
 
-## The remaining packs
+## The casino
 
-Casino, black market, racing, and vampire. Each is a self-contained menu with
-its own economy; the player has asked for all of them in the standard game
-rather than as purchases.
+Sources: [Pro Game Guides](https://progameguides.com/bitlife/all-bitlife-casino-games-and-how-to-play-them/),
+[Gamezebo](https://www.gamezebo.com/walkthroughs/bitlife-mini-game-guide-how-to-commit-a-burglary-how-to-escape-prison-how-to-win-at-casino-blackjack-and-how-to-win-at-the-horse-races/)
+
+Eight games in BitLife's pack. Slots pay up to three times a stake on three
+matching wheels; roulette pays the colour and ten times the exact number;
+blackjack is hit-or-stick against a dealer drawing to seventeen; the horses are
+five runners paying five to one.
+
+**Our version.** Four games, chosen because they are four different decisions
+rather than four skins on one. Every payout is **measured**, not reasoned
+about — a probe of eight thousand rounds per game per choice, and the numbers
+were wrong three times over on the first pass:
+
+- Slots paid four times a line and returned **69%**, which is worse than any
+  machine that has ever been allowed on a floor. Now 85%.
+- Roulette paid the colour *and* the number on the same stake — two bets priced
+  as one — and returned **114%**, a wheel that pays the player. Now the number
+  pays ten times, the colour alone pays one and a half, and it comes to 92%.
+- The horses used round-number payouts and returned 68–81% depending on which
+  horse you backed. Now priced off each horse's actual odds, at a consistent 88%.
+
+Blackjack asks for a policy rather than a card, because one tap cannot be a hand
+of blackjack: playing it by the book returns 89% and the two bad policies return
+78% and 62%, so there is a right answer and it is worth knowing.
+
+## The black market
+
+Sources: [GameSkinny](https://www.gameskinny.com/tips/bitlife-how-to-use-the-black-market/),
+[Level Winner](https://www.levelwinner.com/bitlife-black-market-update-guide-everything-you-need-to-know-about-the-black-market-expansion-pack/)
+
+- **Six dealers**: the Antique Peddler, the Arms Dealer, the Art Thief, the
+  Jewel Fencer, the Street Chemist and the Wildlife Smuggler.
+- Each has an **Attitude bar**, and a dealer with a red one is more likely to
+  sell you fakes and more likely to refuse you.
+- **Possession** is what gets you arrested.
+
+**Our version.** All three of those, plus the thing that makes it a system: a
+fence pays less than a dealer asks, so **flipping always loses** (measured at
+49% back) and the money is in **holding**, which is the only thing the police
+can find. Tuned against a probe until both strategies were real: buying every
+year returns 114% with a raid in 21 lives out of 50; buying every third year
+returns 170% with 4. The first numbers had a patient buyer raided in 38 lives
+out of 40, which left no play at all, and an earlier version let a well-liked
+dealer undercut the fence and printed $56M a life.
+
+## Racing
+
+Sources: [Pro Game Guides](https://progameguides.com/bitlife/how-to-win-car-races-in-bitlife-racing-expansion-pack/),
+[Pro Game Guides (career)](https://progameguides.com/bitlife/how-to-become-a-racecar-driver-in-bitlife-racing-pack/)
+
+- A **garage**, cars from $400k up, and **mods** for speed and durability.
+- **Bronze, silver and gold**, climbed on points from wins.
+- Races are a throttle slider: full speed on the straights, slow for the corners
+  or the car breaks.
+
+**Our version.** The slider does not survive being one tap, so what survives is
+the decision underneath it — how hard to lean on the car — and the car's
+durability decides what that costs. Measured, the curve came out exactly as
+intended: a hot hatch podiums in bronze and never wins; a coupe wins a quarter
+of bronze and **nothing at all** in silver; a GT takes silver and is nowhere in
+gold; only a prototype competes in gold, at 16% wins. Leaning on a coupe in
+bronze takes it from 25% wins to 75%, and from a 9% chance of breaking to 18%.
+
+## The vampire
+
+Sources: [Pro Game Guides](https://progameguides.com/bitlife/complete-bitlife-vampire-guide-progeny-hunt-more/),
+[Pro Game Guides (Lord)](https://progameguides.com/bitlife/how-to-become-a-vampire-lord-in-bitlife/)
+
+- Turned at 18 by a vampire in a coffin. **Essence** levels your abilities.
+- **Hunt** for the most of it, or take **blood banks** for a safer, smaller
+  amount. **Hypnotise** the weak. Turn people into **progeny**.
+- **Notoriety** brings hunters. The **coffin** sleeps it off.
+- **Vampire Lord** is permanent.
+
+**Our version.** The only system here that changes the rules of the life rather
+than adding a screen to it: a vampire is exempt from the ordinary mortality
+roll and from the part of ageing that is simply being old, and in exchange the
+one thing that can still end the life is a person with a stake.
+
+Survival is essence **against** notoriety, not essence alone — the first pass
+did essence alone and a vampire who fed constantly became unkillable, since
+feeding is also what raises essence. Now feeding constantly is how you get
+strong and how you get found: across sixty lives that hunted every year, 45 were
+killed by hunters, 15 survived ninety years, and 15 reached Lord.
+
+One implementation note worth keeping: the hunter does not kill the character
+where it decides to. The year has a death step that sets half a dozen fields,
+tidies the card and builds the recap — reaching around it and flipping `alive`
+left the state failing its own invariant a moment later. It raises a flag and
+the death step reads it.
