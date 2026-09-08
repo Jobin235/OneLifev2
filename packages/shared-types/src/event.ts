@@ -143,6 +143,7 @@ export const EffectSchema = z.discriminatedUnion('op', [
    * belong to this particular body rather than to the definition.
    */
   z.object({ op: z.literal('treat_condition') }),
+  z.object({ op: z.literal('funeral'), going: z.boolean(), spoke: z.boolean() }),
   /** Answers the love-interest card currently on screen. */
   z.object({ op: z.literal('court'), askedOut: z.boolean() }),
   /** Goes looking. Raises a love-interest card rather than changing anything. */

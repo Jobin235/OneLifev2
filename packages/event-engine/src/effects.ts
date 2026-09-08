@@ -502,6 +502,7 @@ const applyEffect = (effect: Effect, ctx: EffectContext): AppliedDelta | null =>
     case 'interview_answer':
     case 'treatment':
     case 'treat_condition':
+    case 'funeral':
     case 'court':
     case 'meet_someone':
     case 'charge':

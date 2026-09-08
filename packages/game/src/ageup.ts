@@ -6,7 +6,7 @@ import { recostLiving } from './costs.js';
 export { pushHistory } from '@lineage/simulation';
 import type { GameConfig } from '@lineage/config';
 import type { ContentPack } from '@lineage/content';
-import type { EventInstance, LifeState, Npc, WorldIndicators } from '@lineage/shared-types';
+import type { EventInstance, LifeState, Npc, Relationship, WorldIndicators } from '@lineage/shared-types';
 import {
   advanceBusinessYear,
   advanceCareerYear,
@@ -32,6 +32,7 @@ import {
 import { advanceNpcYear } from '@lineage/npc-engine';
 import { inheritanceFrom, runNpcNews } from './npcnews.js';
 import { openCheckup, openSymptom } from './health.js';
+import { openFuneral } from './funeral.js';
 import { reportMarketYear } from './stocks.js';
 import { advanceProperties } from './landlord.js';
 import { advanceFameYear } from './fame.js';
@@ -163,6 +164,18 @@ export const advanceYear = (
       relationship.band === 'close' ? 75 : 40,
     );
     inheritanceFrom(state, npc, relationship, rng);
+
+    /*
+     * And for the ones whose absence is the point, the year stops.
+     *
+     * The death is a fact and stays a line; the funeral is a decision and gets
+     * a card. Before this the largest thing that can happen to a person scrolled
+     * past at the same weight as a promotion at work — the player was told, and
+     * never asked. See packages/game/src/funeral.ts.
+     */
+    if (!state.activeEvent && state.character.age >= 4 && worthStopping(relationship)) {
+      openFuneral(state, npc, relationship, manner, content);
+    }
   }
 
   /*
@@ -412,28 +425,40 @@ export const advanceYear = (
     return die(state, content, config, before, startAge);
   }
 
-  // 8. Choose what happens this year.
+  /*
+   * 8. Choose what happens this year — unless the year has already decided.
+   *
+   * A card raised earlier in the year (a funeral, the doctor reading your
+   * conditions back) was silently thrown away here whenever the selector also
+   * found a major, because this assigned `activeEvent` unconditionally. The
+   * year only has one slot, and the thing that already claimed it claimed it
+   * for a reason.
+   */
   const ctx: ConditionContext = { state, world: worldNow, bindings: {} };
-  const selection = selectEvents(content.events, state, ctx, config, content.traitsById, rng);
+  let card: EventInstance | null = state.activeEvent;
+  let minors: ReturnType<typeof selectEvents>['minor'] = [];
 
-  let card: EventInstance | null = null;
-  if (selection.major) {
-    card = instantiate(selection.major, state, ctx);
-    state.activeEvent = card;
-    state.gameState = 'EVENT_AVAILABLE';
-    // A scheduled event is consumed whether or not it is resolved this instant.
-    if (selection.major.scheduled) {
-      state.pending = state.pending.filter((p) => p.id !== selection.major!.scheduled!.id);
+  if (!card) {
+    const selection = selectEvents(content.events, state, ctx, config, content.traitsById, rng);
+    if (selection.major) {
+      card = instantiate(selection.major, state, ctx);
+      state.activeEvent = card;
+      state.gameState = 'EVENT_AVAILABLE';
+      // A scheduled event is consumed whether or not it is resolved this instant.
+      if (selection.major.scheduled) {
+        state.pending = state.pending.filter((p) => p.id !== selection.major!.scheduled!.id);
+      }
+    } else {
+      state.gameState = 'IDLE';
     }
-  } else {
-    state.gameState = 'IDLE';
+    minors = selection.minor;
   }
 
   // The texture of the year, around whatever the events did.
   chronicleYear(state, content, config, rng);
 
   // Minor events resolve themselves; they are recap lines, not decisions (§19).
-  for (const minor of selection.minor) {
+  for (const minor of minors) {
     const choice = minor.definition.choices[0];
     const outcome = choice?.outcomes[choice.outcomes.length - 1];
     if (!outcome) continue;
@@ -510,6 +535,30 @@ const die = (
 };
 
 /** 0..5, the ceiling that smarts drifts toward. */
+/**
+ * Whether this death is one the year should stop for.
+ *
+ * Not everybody's is, and pretending otherwise would be worse than saying
+ * nothing: a life knows a hundred people, and a card for the death of a
+ * colleague you spoke to twice makes the card mean nothing when it is your
+ * mother. Blood and the people you chose, and only while you were still close.
+ */
+const STOPS_THE_YEAR = new Set([
+  'mother',
+  'father',
+  'spouse',
+  'partner',
+  'child',
+  'sibling',
+  'best_friend',
+]);
+
+const worthStopping = (rel: Relationship): boolean => {
+  if (STOPS_THE_YEAR.has(rel.kind)) return true;
+  // Anybody else has to have actually been in the life lately.
+  return rel.band === 'close' && rel.dimensions.affection >= 60;
+};
+
 const EDUCATION_RANK: Record<string, number> = {
   none: 0,
   primary: 1,

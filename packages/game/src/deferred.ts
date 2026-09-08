@@ -5,6 +5,7 @@ import { makeId, promote, pushHistory, type Rng } from '@lineage/simulation';
 import { bearChild, spawnNpc } from '@lineage/npc-engine';
 import { settleInterview } from './interview.js';
 import { settleCheckup, settleTreatment } from './health.js';
+import { settleFuneral } from './funeral.js';
 import { openLoveInterest, settleLoveInterest } from './love.js';
 import { openCharges, settleLawyer, settlePlea } from './justice.js';
 import { settleLetting } from './landlord.js';
@@ -188,6 +189,11 @@ export const applyDeferred = (
 
       case 'treat_condition': {
         settleCheckup(state, bindings.which ?? '0');
+        break;
+      }
+
+      case 'funeral': {
+        settleFuneral(state, effect.going, effect.spoke);
         break;
       }
 

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "family_funeral",
+    "version": 1,
+    "category": "family",
+    "card": { "icon": "🕯️", "label": "A DEATH", "tint": "#EFEAF4", "color": "#5B4B77" },
+    "weightClass": "major",
+    "priority": 99,
+    "minAge": 4,
+    "maxAge": 120,
+    "scheduledOnly": true,
+    "participants": [],
+    "title": "{flag.funeral_name} is gone.",
+    "body": "{flag.funeral_body}",
+    "question": "What do you do?",
+    "choices": [
+      {
+        "id": "speak",
+        "label": "Stand up and speak",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.funeral_result_title}",
+            "text": "{flag.funeral_result}",
+            "historyLine": "{flag.funeral_history}",
+            "effects": [{ "op": "funeral", "going": true, "spoke": true }]
+          }
+        ]
+      },
+      {
+        "id": "attend",
+        "label": "Go, and say nothing",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.funeral_result_title}",
+            "text": "{flag.funeral_result}",
+            "historyLine": "{flag.funeral_history}",
+            "effects": [{ "op": "funeral", "going": true, "spoke": false }]
+          }
+        ]
+      },
+      {
+        "id": "stay",
+        "label": "Don't go",
+        "outcomes": [
+          {
+            "id": "o",
+            "title": "{flag.funeral_result_title}",
+            "text": "{flag.funeral_result}",
+            "historyLine": "{flag.funeral_history}",
+            "effects": [{ "op": "funeral", "going": false, "spoke": false }]
+          }
+        ]
+      }
+    ],
+    "cooldownYears": 0,
+    "maxPerLife": 400
+  }
+]
