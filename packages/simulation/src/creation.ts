@@ -273,6 +273,12 @@ export const createLife = (input: CreateLifeInput, config: GameConfig): LifeStat
     relationships,
     career: { current: null, totalExperience: 0, retired: false, history: [], closedTrackIds: [] },
     education: { highestCompleted: 'none', current: null, history: [] },
+    /*
+     * Set later, if at all: a royal birth needs the country pack, which this
+     * layer does not hold. `packages/game/src/royalty.ts` decides it at the
+     * first age-up, before the character is old enough for it to matter.
+     */
+    royal: null,
     assets: [],
     businesses: [],
     flags: {

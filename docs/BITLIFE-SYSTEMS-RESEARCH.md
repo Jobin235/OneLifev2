@@ -84,9 +84,39 @@ Sources: [Prima Games](https://primagames.com/tips/how-to-become-royalty-in-bitl
   the position, respect falls, and if it falls far enough the subjects revolt
   and the monarch is overthrown.
 
-**Our version.** A royal birth in monarchy countries, a marriage route through
-the dating app, the succession line, and respect as the meter that decides
-whether the reign ends on a throne or at the end of a rope.
+**Our version.** Built. `packages/game/src/royalty.ts`, the `monarchy` block on
+the country pack, and the Crown screen at the top of Activities.
+
+- **Denmark is the monarchy**, and it is the only one of our five countries that
+  is. A royal birth is 4% there — one Danish life in twenty-five — which is
+  rarer than most systems in this game and still findable if you pick Denmark
+  on purpose.
+- **The ladder** is Baron, Viscount, Earl, Marquess, Duke, Prince, and then the
+  crown, weighted heavily toward the bottom. BitLife puts only princes in the
+  succession; a duke is in the line here too, seven to eighteen places back,
+  because a duke of the same house waiting behind nobody at all reads as a
+  cliff rather than a rule.
+- **Marrying in** works, and is the only route open to somebody not born to it.
+  About one candidate in twenty on the love card is a royal in a monarchy
+  country; a player who declines everybody else meets one in 80% of lives and
+  marries in about a third of them. The title conferred is one rank below the
+  spouse's, because you married in and everybody knows it.
+- **Respect** is the whole system: 0–100, decaying toward 50 every year so no
+  single good year carries a reign. Royal duties and knighthoods raise it,
+  chaos and executions spend it, three actions a year so a bad decision cannot
+  be undone the same afternoon. At zero the subjects revolt, the title goes,
+  and 85% of the estate goes with it. Abdication is the same exit taken calmly:
+  you keep the title's money, minus the half that was the position.
+- **The title descends** to the eldest child, at the parent's rank rather than
+  on the throne — a crown is inherited next, not instantly — with the parent's
+  respect halved toward the middle. You inherit the position, not the goodwill.
+
+One bug fell out of building this: `applyFameDelta` normalised its three
+opinion shares by rounding fans and haters independently, which can overshoot
+by one, and the `Math.max(0, …)` on the indifferent share turned that into a
+state summing to 101. The invariant then threw a year later, in a life that had
+nothing to do with royalty. The second share now takes whatever the first one's
+rounding leaves.
 
 ## Fame
 

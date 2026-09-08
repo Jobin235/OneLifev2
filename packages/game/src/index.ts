@@ -11,3 +11,4 @@ export * from './timemachine.js';
 export * from './stocks.js';
 export * from './landlord.js';
 export * from './fame.js';
+export * from './royalty.js';

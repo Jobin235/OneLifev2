@@ -210,6 +210,19 @@ export const createLocalApi = (): Api => {
 
     fame: async (lifeId) => game.fame(get(lifeId)) as never,
 
+    royal: async (lifeId) => game.royal(get(lifeId)) as never,
+
+    royalAct: async (lifeId, action, choice) => {
+      const result = game.royalAct(get(lifeId), action as never, choice);
+      save(result.state);
+      return {
+        life: lifeView(result.state, game.content) as never,
+        royal: game.royal(result.state) as never,
+        line: result.line,
+        respectAfter: result.respectAfter,
+      };
+    },
+
     audition: async (lifeId, trackId) => {
       const state = game.audition(get(lifeId), trackId);
       save(state);

@@ -57,6 +57,29 @@ export const CountryPackSchema = z.object({
     expectationToHouseParents: z.number().int().min(0).max(100),
     typicalSiblings: z.number().int().min(0).max(8),
   }),
+  /**
+   * The crown, where there is one.
+   *
+   * Seventeen of BitLife's countries have a monarchy and the rest do not, which
+   * is what makes a royal birth a fact about where you were born rather than a
+   * dice roll everybody gets. Null is the ordinary case.
+   */
+  monarchy: z
+    .object({
+      /** "the House of Rosenholm" — what a royal belongs to. */
+      house: z.string().min(1),
+      /** What the crown is called here: King, Emperor, Emir. */
+      crown: z.object({ male: z.string().min(1), female: z.string().min(1) }),
+      /** Chance a character born here is born into it at all. */
+      birthChance: z.number().min(0).max(1),
+      /**
+       * Whether the lesser titles exist here. Outside Europe BitLife grants only
+       * the top rank, so a royal birth is a prince or nothing.
+       */
+      lesserTitles: z.boolean().default(true),
+    })
+    .nullable()
+    .default(null),
   /** Career tracks available here on top of the universal set. */
   extraTrackIds: z.array(z.string()).default([]),
   /** Baseline national salary multiplier vs. the content's reference figures. */

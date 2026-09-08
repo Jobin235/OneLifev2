@@ -35,6 +35,8 @@ export const DoScreen = ({
   onAct,
   fameLine,
   onOpenFame,
+  royalLine,
+  onOpenRoyal,
 }: {
   actions: ActionCard[];
   age: number;
@@ -44,6 +46,9 @@ export const DoScreen = ({
   /** One line about who knows you, for the row that opens the Fame screen. */
   fameLine: string | null;
   onOpenFame: () => void;
+  /** The title, when there is one, for the row that opens the Crown screen. */
+  royalLine: string | null;
+  onOpenRoyal: () => void;
 }) => {
   /*
    * Everything you can do first, then everything you cannot — within each
@@ -72,6 +77,17 @@ export const DoScreen = ({
         where BitLife keeps it and because the one activity that feeds it,
         posting, is in the list below.
       */}
+      {royalLine && (
+        <button className="act-row" disabled={busy} onClick={onOpenRoyal}>
+          <span className="act-icon">👑</span>
+          <span className="act-text">
+            <span className="act-label">The Crown</span>
+            <span className="act-note">{royalLine}</span>
+          </span>
+          <span className="act-chev">›</span>
+        </button>
+      )}
+
       {fameLine && (
         <button className="act-row" disabled={busy} onClick={onOpenFame}>
           <span className="act-icon">🌟</span>

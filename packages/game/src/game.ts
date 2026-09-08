@@ -34,6 +34,7 @@ import { toAncestor } from './death.js';
 import { buyShares, marketView, sellShares } from './stocks.js';
 import { amenitiesFor, manageProperty, propertiesView } from './landlord.js';
 import { audition, fameView } from './fame.js';
+import { inheritTitle, royalAct, royalView, type RoyalAction } from './royalty.js';
 
 export interface GameOptions {
   /**
@@ -194,6 +195,18 @@ export class Game {
       `${previous.character.firstName} died at ${previous.character.deathAge}. You are ${heirNpc.firstName}, and it is your turn.`,
       100,
     );
+
+    /*
+     * The title goes with the estate.
+     *
+     * BitLife passes a royal title to the oldest child, and it is the one thing
+     * a heir inherits that is not money — which is what makes playing on as the
+     * child of a monarch different from playing on as the child of anybody
+     * else. The heir starts at the parent's rank, at the front of the line
+     * rather than on the throne: a crown is not inherited the instant it falls
+     * vacant, it is inherited next.
+     */
+    inheritTitle(state, previous, heirNpc.id);
 
     refreshDerived(state, this.config);
     checkInvariants(state);
@@ -460,6 +473,16 @@ export class Game {
   /** Go up for a part. Raises the audition rather than deciding anything. */
   audition(state: LifeState, trackId: string) {
     return audition(state, trackId, this.content, this.config);
+  }
+
+  /** The title, the respect, and what a royal can do that nobody else can. */
+  royal(state: LifeState) {
+    return royalView(state);
+  }
+
+  /** Reign, or abuse it. Either way it is spent out of the same account. */
+  royalAct(state: LifeState, action: RoyalAction, choice?: string) {
+    return royalAct(state, action, this.content, this.config, choice);
   }
 
   /** The sentence, how it is going, and what there is to do with the years. */

@@ -9,6 +9,7 @@ import { AssetSchema, BusinessSchema } from './assets.js';
 import { EventInstanceSchema, ScheduledEventSchema } from './event.js';
 import { HistoryEntrySchema, LegacySchema } from './history.js';
 import { LineageSchema } from './lineage.js';
+import { RoyalStandingSchema } from './royalty.js';
 
 export const FlagValueSchema = z.union([z.string(), z.number(), z.boolean()]);
 export type FlagValue = z.infer<typeof FlagValueSchema>;
@@ -34,6 +35,11 @@ export const LifeStateSchema = z.object({
   relationships: z.array(RelationshipSchema),
   career: CareerStateSchema,
   education: EducationStateSchema,
+  /**
+   * A title, when there is one. Null for the overwhelming majority of lives,
+   * which is the honest shape: royalty is not a career you can choose into.
+   */
+  royal: RoyalStandingSchema.nullable().default(null),
   assets: z.array(AssetSchema),
   businesses: z.array(BusinessSchema),
 
@@ -127,6 +133,7 @@ export type LifeState = z.infer<typeof LifeStateSchema>;
  * 4: added per-person interactions and their annual limits.
  * 5: added ribbons, and the set the family line has collected.
  * 6-7: added a stated life goal, then removed it. See docs/COMPETITIVE-RESEARCH.md.
+ * 8: added a royal standing — a title, a house, respect, and a place in line.
  * There is no migration path; an older save is discarded rather than loaded.
  */
-export const SCHEMA_VERSION = 7;
+export const SCHEMA_VERSION = 8;

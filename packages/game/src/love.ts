@@ -3,6 +3,36 @@ import type { CountryPack, LifeState, Npc, Sex } from '@lineage/shared-types';
 import { clampStat } from '@lineage/shared-types';
 import { makeId, makeRng, type Rng } from '@lineage/simulation';
 import { instantiate } from '@lineage/event-engine';
+import { ROYAL_TITLES, type RoyalRank } from '@lineage/shared-types';
+
+/**
+ * Whether this candidate is somebody's cousin with a title, and which one.
+ *
+ * Weighted hard toward the bottom of the ladder for the same reason a royal
+ * birth is: there are a great many barons and one monarch, and marrying the
+ * monarch is meant to be the thing that almost never happens.
+ */
+const royalCandidate = (state: LifeState, country: CountryPack, rng: Rng): RoyalRank | null => {
+  const monarchy = country.monarchy;
+  if (!monarchy) return null;
+  if (state.character.age < 18) return null;
+  if (!rng.chance(0.05)) return null;
+  if (!monarchy.lesserTitles) return 'prince';
+  return rng.pick<RoyalRank>([
+    'baron',
+    'baron',
+    'baron',
+    'viscount',
+    'viscount',
+    'earl',
+    'marquess',
+    'duke',
+    'prince',
+  ]);
+};
+
+const royalTitleOf = (rank: RoyalRank, sex: Sex): string =>
+  sex === 'female' ? ROYAL_TITLES[rank].female : ROYAL_TITLES[rank].male;
 
 /**
  * Meeting somebody.
@@ -83,7 +113,28 @@ export const openLoveInterest = (
   state.flags.love_smarts = smarts;
   state.flags.love_money = money;
   state.flags.love_craziness = craziness;
-  state.flags.love_job = age < 22 && rng.chance(0.5) ? 'Student' : rng.pick(TRADES);
+  /*
+   * A royal, once in a while, where there is a crown to be near.
+   *
+   * This is the second way into royalty and the only one available to somebody
+   * who was not born to it. It is rare on purpose — a candidate list where one
+   * in six is a duke is a fantasy, and the whole point of marrying in is that
+   * you have to actually go looking.
+   */
+  const royalRank = royalCandidate(state, country, rng);
+  state.flags.love_job =
+    royalRank !== null
+      ? royalTitleOf(royalRank, sex)
+      : age < 22 && rng.chance(0.5)
+        ? 'Student'
+        : rng.pick(TRADES);
+  if (royalRank !== null) {
+    state.flags.love_royal_rank = royalRank;
+    state.flags.love_money = clampStat(rng.int(84, 99));
+    state.flags.love_home = 'a wing of somewhere with a name';
+  } else {
+    delete state.flags.love_royal_rank;
+  }
   state.flags.love_home = rng.pick(HOMES);
   state.flags.love_result = '';
   state.flags.love_result_title = '';
@@ -114,7 +165,7 @@ export const openLoveInterest = (
   instance.meters = [
     { label: 'Looks', value: looks },
     { label: 'Smarts', value: smarts },
-    { label: 'Money', value: money },
+    { label: 'Money', value: Number(state.flags.love_money ?? money) },
     { label: 'Craziness', value: craziness },
   ];
 
@@ -210,6 +261,15 @@ export const settleLoveInterest = (
   };
 
   state.npcs.push(npc);
+  /*
+   * Who they are survives the popup. The flags this card rode in on are wiped
+   * at the end of it, so a title has to be written against the person before
+   * that happens — `royalty.ts` reads it years later, when a partner becomes a
+   * spouse.
+   */
+  if (typeof state.flags.love_royal_rank === 'string') {
+    state.flags[`royal_npc_${npc.id}`] = state.flags.love_royal_rank;
+  }
   state.relationships.push({
     npcId: npc.id,
     kind: 'partner',

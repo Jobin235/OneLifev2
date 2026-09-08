@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { ApplicationRejected, AuditionRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
+import { ApplicationRejected, AuditionRejected, RoyalRejected, ChoiceRejected, InteractionRejected, PurchaseRejected, Game, lifeView, moneyView, moreView, peopleView, personView, prisonView, schoolView, workView, actionsView, forget, remember, rewind, rewindOptions } from '@lineage/game';
 import { InvariantViolation } from '@lineage/simulation';
 import { NEUTRAL_INDICATORS } from '@lineage/world';
 import type { LifeRepository, WorldRepository } from '../store/repository.js';
@@ -17,6 +17,7 @@ const NewLifeBody = z.object({
 const RewindBody = z.object({ toAge: z.number().int().min(0) });
 const ManageBody = z.object({ action: z.string().min(1), amenityId: z.string().optional() });
 const AuditionBody = z.object({ trackId: z.string().min(1) });
+const RoyalBody = z.object({ action: z.string().min(1), choice: z.string().optional() });
 const TradeBody = z.object({
   stockId: z.string().min(1),
   shares: z.number().int().min(1),
@@ -374,6 +375,32 @@ export const registerLifeRoutes = (
     }
   });
 
+  app.get('/lives/:lifeId/royal', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const view = game.royal(await load(userOf(request), lifeId));
+    if (!view) return reply.code(404).send({ error: 'not royalty' });
+    return view;
+  });
+
+  app.post('/lives/:lifeId/royal', async (request, reply) => {
+    const { lifeId } = request.params as { lifeId: string };
+    const { action, choice } = RoyalBody.parse(request.body);
+    try {
+      return await lives.withLock(userOf(request), lifeId, (state) => {
+        const result = game.royalAct(state, action as never, choice);
+        return {
+          life: lifeView(state, game.content),
+          royal: game.royal(state),
+          line: result.line,
+          respectBefore: result.respectBefore,
+          respectAfter: result.respectAfter,
+        };
+      });
+    } catch (error) {
+      return reply.code(statusFor(error)).send({ error: messageFor(error) });
+    }
+  });
+
   app.get('/lives/:lifeId/market', async (request) => {
     const { lifeId } = request.params as { lifeId: string };
     const state = await load(userOf(request), lifeId);
@@ -430,6 +457,7 @@ const statusFor = (error: unknown): number => {
   if (error instanceof PurchaseRejected) return 409;
   if (error instanceof ApplicationRejected) return 409;
   if (error instanceof AuditionRejected) return 409;
+  if (error instanceof RoyalRejected) return 409;
   if (error instanceof InvariantViolation) return 500;
   const withCode = error as { statusCode?: number; message?: string };
   if (typeof withCode.statusCode === 'number') return withCode.statusCode;

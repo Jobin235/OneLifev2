@@ -3488,3 +3488,41 @@ button {
   font-weight: 700;
   color: var(--muted);
 }
+
+/* ------------------------------------------------------------------ *
+ * Royalty
+ *
+ * The title, then the one meter that decides whether it is kept.
+ * ------------------------------------------------------------------ */
+.ry-head {
+  padding: 16px 16px 14px;
+}
+
+.ry-title {
+  margin: 0;
+  font: 800 22px/1.15 var(--display);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.ry-house {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.ry-line {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.ry-warn {
+  margin: 8px 0 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--coral);
+  line-height: 1.4;
+}

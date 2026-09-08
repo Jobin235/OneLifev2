@@ -22,13 +22,19 @@ export const applyFameDelta = (
     fans = Math.max(0, fans);
     haters = Math.max(0, haters);
     if (fans + haters > 100) {
-      const scale = 100 / (fans + haters);
-      fans = Math.round(fans * scale);
-      haters = Math.round(haters * scale);
+      /*
+       * The second share takes whatever the first one's rounding leaves.
+       * Rounding both independently can overshoot by one — 105 fans and 15
+       * haters scale to 88 and 13 — and the `Math.max(0, …)` that used to guard
+       * the indifferent share turned that into a state where the three summed
+       * to 101 and the invariant threw a year later.
+       */
+      fans = Math.min(100, Math.round(fans * (100 / (fans + haters))));
+      haters = 100 - fans;
     }
     fame.fans = fans;
     fame.haters = haters;
-    fame.indifferent = Math.max(0, 100 - fans - haters);
+    fame.indifferent = 100 - fans - haters;
   }
 
   fame.reach =

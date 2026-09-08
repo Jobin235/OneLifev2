@@ -34,6 +34,7 @@ import { openSymptom } from './health.js';
 import { reportMarketYear } from './stocks.js';
 import { advanceProperties } from './landlord.js';
 import { advanceFameYear } from './fame.js';
+import { advanceRoyalYear, royalBirth } from './royalty.js';
 import { instantiate, selectEvents, type ConditionContext } from '@lineage/event-engine';
 import { applyDeferred, takeAvailableJob } from './deferred.js';
 import { quietYearLine } from '@lineage/narrative';
@@ -228,6 +229,8 @@ export const advanceYear = (
   advanceProperties(state, rng);
   reportMarketYear(state, content, world);
   advanceFameYear(state, content, rng);
+  royalBirth(state, content, rng);
+  advanceRoyalYear(state, content, rng);
   serveTime(state);
 
   // 4. Health, then money.

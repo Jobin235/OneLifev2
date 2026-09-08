@@ -10,6 +10,7 @@ import type {
   MoneyView,
   PropertyRow,
   FameView,
+  RoyalView,
   PeopleView,
   PersonView,
   Opening,
@@ -34,6 +35,7 @@ import { MoneyScreen } from './screens/MoneyScreen';
 import { MarketScreen } from './screens/MarketScreen';
 import { PropertyScreen } from './screens/PropertyScreen';
 import { FameScreen } from './screens/FameScreen';
+import { RoyalScreen } from './screens/RoyalScreen';
 import { LegacyScreen } from './screens/LegacyScreen';
 import { CreateScreen } from './screens/CreateScreen';
 
@@ -77,6 +79,8 @@ export const App = () => {
   const [showProperties, setShowProperties] = useState(false);
   const [fame, setFame] = useState<FameView | null>(null);
   const [showFame, setShowFame] = useState(false);
+  const [royal, setRoyal] = useState<RoyalView | null>(null);
+  const [showRoyal, setShowRoyal] = useState(false);
   const [timeMachine, setTimeMachine] = useState(false);
 
   // Design 5D: prison recolours the app's chrome.
@@ -159,9 +163,14 @@ export const App = () => {
           setPrison(inside);
         }
         if (slot === 'activities') {
-          const [rows, known] = await Promise.all([api.actions(lifeId), api.fame(lifeId)]);
+          const [rows, known, crown] = await Promise.all([
+            api.actions(lifeId),
+            api.fame(lifeId),
+            api.royal(lifeId),
+          ]);
           setActions(rows.actions);
           setFame(known);
+          setRoyal(crown);
         }
         if (slot === 'assets') {
           const [worth, board, owned] = await Promise.all([
@@ -337,6 +346,20 @@ export const App = () => {
     [life, run, setLifeAndRemember],
   );
 
+  const onRoyalAct = useCallback(
+    async (action: string) => {
+      if (!life) return;
+      const result = await run(() => api.royalAct(life.lifeId, action));
+      if (!result) return;
+      setLifeAndRemember(result.life);
+      setRoyal(result.royal);
+      // Abdication and a revolt both end the screen you are standing on.
+      if (!result.royal) setShowRoyal(false);
+      setToast(result.line);
+    },
+    [life, run, setLifeAndRemember],
+  );
+
   const loadAmenities = useCallback(
     async (assetId: string): Promise<AmenityRow[]> =>
       life ? await api.amenities(life.lifeId, assetId) : [],
@@ -477,7 +500,23 @@ export const App = () => {
         )}
 
         {slot === 'activities' &&
-          (showFame && fame ? (
+          (showRoyal && royal ? (
+            <Sheet
+              title="The Crown"
+              onBack={() => setShowRoyal(false)}
+              onClose={() => {
+                setShowRoyal(false);
+                setSlot(null);
+              }}
+            >
+              <RoyalScreen
+                royal={royal}
+                busy={busy}
+                decisionOpen={decisionOpen}
+                onAct={onRoyalAct}
+              />
+            </Sheet>
+          ) : showFame && fame ? (
             <Sheet
               title="Fame"
               onBack={() => setShowFame(false)}
@@ -504,6 +543,8 @@ export const App = () => {
                   onAct={onAct}
                   fameLine={fame && life.age >= 10 ? fame.line : null}
                   onOpenFame={() => setShowFame(true)}
+                  royalLine={royal ? `${royal.title} · ${royal.respectWord.toLowerCase()}` : null}
+                  onOpenRoyal={() => setShowRoyal(true)}
                 />
               ) : (
                 <div className="spinner">…</div>

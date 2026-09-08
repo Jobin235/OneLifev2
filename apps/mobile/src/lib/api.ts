@@ -249,6 +249,25 @@ export interface StockRow {
   affordable: boolean;
 }
 
+export interface RoyalView {
+  title: string;
+  house: string;
+  line: string | null;
+  respect: number;
+  respectWord: string;
+  monarch: boolean;
+  origin: string;
+  dutiesLeft: number;
+  actions: Array<{
+    id: string;
+    icon: string;
+    label: string;
+    note: string;
+    available: boolean;
+    locked: string | null;
+  }>;
+}
+
 export interface AuditionRow {
   trackId: string;
   label: string;
@@ -480,6 +499,13 @@ export interface Api {
   prison(lifeId: string): Promise<PrisonView | null>;
   market(lifeId: string): Promise<MarketView>;
   fame(lifeId: string): Promise<FameView>;
+  /** Null when the character holds no title. */
+  royal(lifeId: string): Promise<RoyalView | null>;
+  royalAct(
+    lifeId: string,
+    action: string,
+    choice?: string,
+  ): Promise<{ life: LifeView; royal: RoyalView | null; line: string; respectAfter: number }>;
   audition(lifeId: string, trackId: string): Promise<{ life: LifeView }>;
   properties(lifeId: string): Promise<PropertyRow[]>;
   amenities(lifeId: string, assetId: string): Promise<AmenityRow[]>;
@@ -575,6 +601,13 @@ export const httpApi: Api = {
 
   market: (lifeId: string) => request<MarketView>(`/lives/${lifeId}/market`),
   fame: (lifeId: string) => request<FameView>(`/lives/${lifeId}/fame`),
+  royal: (lifeId: string) =>
+    request<RoyalView>(`/lives/${lifeId}/royal`).catch(() => null),
+  royalAct: (lifeId: string, action: string, choice?: string) =>
+    request<{ life: LifeView; royal: RoyalView | null; line: string; respectAfter: number }>(
+      `/lives/${lifeId}/royal`,
+      { method: 'POST', body: JSON.stringify({ action, choice }) },
+    ),
   audition: (lifeId: string, trackId: string) =>
     request<{ life: LifeView }>(`/lives/${lifeId}/audition`, {
       method: 'POST',

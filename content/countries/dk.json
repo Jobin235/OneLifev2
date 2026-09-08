@@ -74,6 +74,12 @@
       "expectationToHouseParents": 10,
       "typicalSiblings": 1
     },
+    "monarchy": {
+      "house": "the House of Rosenholm",
+      "crown": { "male": "King", "female": "Queen" },
+      "birthChance": 0.04,
+      "lesserTitles": true
+    },
     "extraTrackIds": [],
     "wageMultiplier": 1.05,
     "nationalSportTrackId": "sport_football_us",

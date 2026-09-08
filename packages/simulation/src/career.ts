@@ -142,6 +142,12 @@ export const jobLine = (state: LifeState): string => {
  */
 export const stationLine = (state: LifeState): string => {
   if (state.character.record.incarceration) return 'Prisoner';
+  /*
+   * A title outranks a job, and outranks retirement. A king who happens to own
+   * a haulage firm is not "Owner, Olsen Hauling" to anybody, including himself.
+   * Prison still wins: it outranks everything, which is rather the point of it.
+   */
+  if (state.royal) return state.royal.title;
   if (state.career.retired) return 'Retired';
   const owned = state.businesses.find((b) => !b.closed && b.equity >= 50);
   if (owned) return `Owner, ${owned.name}`;
